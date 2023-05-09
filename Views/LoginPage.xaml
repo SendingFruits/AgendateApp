@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Agendate_App.Converters"
+    x:Class="Agendate_App.Views.LoginPage"  
+    Shell.NavBarIsVisible="False"
+    Title="LoginPage">
+
+    <!--xmlns:me="clr-namespace:Microsoft.Maui.Essentials;assembly=Microsoft.Maui.Essentials"-->
+    
+    <ContentPage.Resources>
+        <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
+    </ContentPage.Resources>
+    
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="220"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Polygon 
+            HorizontalOptions="FillAndExpand"
+            Fill="#2ECC71" 
+            />
+
+        <!--Points="0,0 0,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}} 40,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.175} 100,{Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.19}  150,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.2} 195,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.205} 245,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.2}  300,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.19} 325,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}, 
+            ConverterParameter=0.175} 390,
+            {Binding Source={me:DeviceInfo}, 
+            Path=Width, 
+            Converter={StaticResource StringToDoubleConverter}}, 390,0"-->
+        
+        <StackLayout>
+            <Frame 
+                BackgroundColor="White" 
+                HeightRequest="60" 
+                WidthRequest="60" 
+                CornerRadius="30"
+                Padding="0"
+                Margin="0,100,0,0"
+                HorizontalOptions="Center"
+                >
+                <Image Source="user_login_2.png" Aspect="AspectFill" Margin="0" HorizontalOptions="Center"/>
+            </Frame>
+        </StackLayout>
+
+        <Grid RowSpacing="5" Grid.Row="1" Margin="20,20,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label 
+                Grid.Row="1" 
+                Text="Bienvenido" 
+                HorizontalOptions="Center" 
+                FontSize="Title"
+                FontAttributes="Bold"
+                Padding="0"
+                Margin="0"
+                />
+            <Label 
+                Grid.Row="2" 
+                Text="Inicia sesión para continuar" 
+                HorizontalOptions="Center" 
+                FontSize="Subtitle"
+                />
+
+            <StackLayout 
+                Grid.Row="3" 
+                Orientation="Vertical" 
+                HorizontalOptions="CenterAndExpand">
+                <Frame 
+                    BackgroundColor="Transparent" 
+                    BorderColor="LightGreen"
+                    Padding="0"
+                    HorizontalOptions="FillAndExpand"
+                    CornerRadius="30"
+                    >
+                    <StackLayout Orientation="Horizontal">
+                        <Frame 
+                            BackgroundColor="Aquamarine" 
+                            HeightRequest="40" 
+                            WidthRequest="40" 
+                            CornerRadius="30"
+                            Padding="0"
+                            Margin="5"
+                            HorizontalOptions="Center">
+                            
+                            <Image Source="user_login_1.png" Aspect="AspectFill" Margin="0"/>
+                        </Frame>
+                        <Entry 
+                            Text="{Binding Username}"
+                            Placeholder="Usuario" 
+                            TextColor="Black" 
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0,0,20,0"
+                            />
+                    </StackLayout>
+                </Frame>
+                <Frame 
+                    BackgroundColor="Transparent" 
+                    BorderColor="LightGreen"
+                    Padding="0"
+                    Margin="0,15,0,0"
+                    HorizontalOptions="FillAndExpand"
+                    CornerRadius="30"
+                    >
+                    <StackLayout Orientation="Horizontal">
+                        <Frame 
+                            BackgroundColor="Aquamarine" 
+                            HeightRequest="40" 
+                            WidthRequest="40" 
+                            CornerRadius="30"
+                            Padding="0"
+                            Margin="5"
+                            HorizontalOptions="Center">
+
+                            <Image Source="pass_login_1.png" Aspect="AspectFill" Margin="0"/>
+                        </Frame>
+                        <Entry 
+                            Text="{Binding Password}"
+                            Placeholder="Contraseña" 
+                            TextColor="Black" 
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0,0,20,0"
+                            IsPassword="True"
+                            />
+                    </StackLayout>
+                </Frame>
+
+                <StackLayout Orientation="Horizontal" Margin="7,10,7,5" Padding="0">
+                    <CheckBox IsChecked="False"/>
+                    <Label Text="Recuerdame" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                    <Label Text="¿Olvidó su contraseña?" TextColor="#2ECC71" FontAttributes="Bold" HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/> 
+                </StackLayout>
+
+                <Button
+                    Text="Iniciar Sesión"
+                    BackgroundColor="#2ECC71"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="30"
+                    WidthRequest="200"
+                    Margin="0,15,0,0"
+                    Command="{Binding LoginCommand}"
+                    />
+
+                <!--Command="{Binding LoginCommand}"-->
+                
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,60,0,0" Padding="0">
+                    <Label Text="¿Eres nuevo aquí?" TextColor="DarkGray" FontSize="Small" Margin="0,0,4,0"/>
+                    <Label Text="Registrate" TextColor="#2ECC71" FontAttributes="Bold" FontSize="Small"/>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+        
+        
+    </Grid>
+
+</ContentPage>
