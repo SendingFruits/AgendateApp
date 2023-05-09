@@ -1,7 +1,6 @@
 ﻿using Agendate_App.Models;
 using Agendate_App.Services;
 using Agendate_App.Views;
-using Android.Widget;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Newtonsoft.Json;
@@ -51,8 +50,8 @@ namespace Agendate_App.ViewModels
             }
             else
             {
-                var toast = Toast.MakeText("Credenciales Incorrectas", CommunityToolkit.Maui.Core.ToastDuration.Short, 12);
-                void toast.Show();
+                //var toast = Toast.MakeText("Credenciales Incorrectas", CommunityToolkit.Maui.Core.ToastDuration.Short, 12);
+                //void toast.Show();
             }
         }
     }
