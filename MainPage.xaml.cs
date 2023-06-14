@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using AgendateApp.Controls;
+using AgendateApp.MAP.Controls;
 
 namespace AgendateApp;
 
@@ -8,6 +8,12 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+
+        map.IsShowingUser = true;
+        map.HasTrafficEnabled = true; 
+        map.HasZoomEnabled = true;
+        map.HasScrollEnabled = true;
+
     }
 
     protected override async void OnAppearing()

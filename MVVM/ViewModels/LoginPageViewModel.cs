@@ -1,41 +1,36 @@
-﻿using AgendateApp.Models;
-using AgendateApp.Services;
-using AgendateApp.Views;
+﻿using AgendateApp.API.Services;
+using AgendateApp.MVVM.Models;
+using AgendateApp.MVVM.Views;
 using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
+using AgendateApp.API.Services.Intefaces;
 
-namespace AgendateApp.ViewModels
+namespace AgendateApp.MVVM.ViewModels
 {
     public partial class LoginPageViewModel : BaseViewModel
     {
+        readonly IUsersServices serviceLogin = new UsersServices();
+
         [ObservableProperty]
         private string username;
-
         [ObservableProperty]
         private string password;
-
-
-        public Usuario User { get; set; }
 
         public LoginPageViewModel()
         {
 
         }
 
-
-        readonly ILoginServices serviceLogin = new LoginServices();
-
-
-
+   
         [RelayCommand]
         public async void Login()
         {
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                Usuario userCredentials = await serviceLogin.Login(Username, Password);
+                User userCredentials = await serviceLogin.Login(Username, Password);
 
                 if (Preferences.ContainsKey(nameof(App.userCredentials)))
                 {
@@ -43,19 +38,27 @@ namespace AgendateApp.ViewModels
                 }
 
                 string userDetails = JsonConvert.SerializeObject(userCredentials);
+
                 Preferences.Set(nameof(App.userCredentials), userDetails);
                 App.userCredentials = userCredentials;
-
                 AppShell.Current.FlyoutHeader = new FlyoutUserControl();
 
-                //Debug.WriteLine(Current);
-                await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                if (userCredentials != null)
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                }
             }
             else
             {
-                //var toast = Toast.MakeText("Credenciales Incorrectas", CommunityToolkit.Maui.Core.ToastDuration.Short, 12);
-                //void toast.Show();
+                await Application.Current.MainPage.DisplayAlert("Mensaje", "Credenciales incorrectas", "Aceptar");
             }
+        }
+
+        [RelayCommand]
+        public async void Register()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(RegisterPage)}");   
+         
         }
     }
 }

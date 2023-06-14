@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using AgendateApp.Handlers;
+using AgendateApp.MAP.Handlers;
 
 namespace AgendateApp;
 

@@ -1,10 +1,11 @@
-﻿using AgendateApp.Models;
+﻿using AgendateApp.MVVM.Models;
 
 namespace AgendateApp;
 
 public partial class App : Application
 {
-    public static Usuario userCredentials;
+    public static User userCredentials;
+	public static Ubicacion userCoordinates;
 
     public App()
 	{
@@ -12,4 +13,10 @@ public partial class App : Application
 
 		MainPage = new AppShell();
 	}
+}
+
+public class Ubicacion
+{
+    public double Latitud { get; set; }
+    public double Longitud { get; set; }
 }

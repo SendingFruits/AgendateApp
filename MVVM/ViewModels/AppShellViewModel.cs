@@ -1,11 +1,11 @@
-﻿using AgendateApp.Views;
+﻿using AgendateApp.MVVM.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgendateApp.ViewModels
+namespace AgendateApp.MVVM.ViewModels
 {
     public partial class AppShellViewModel : BaseViewModel
     {

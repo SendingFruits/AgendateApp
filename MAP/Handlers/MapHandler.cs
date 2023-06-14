@@ -9,9 +9,9 @@ using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
 using PlatformView = System.Object;
 #endif
 using Microsoft.Maui.Handlers;
-using IMap = AgendateApp.Controls.IMap;
+using IMap = AgendateApp.MAP.Controls.IMap;
 
-namespace AgendateApp.Handlers;
+namespace AgendateApp.MAP.Handlers;
 
 public partial class MapHandler : IMapHandler
 {

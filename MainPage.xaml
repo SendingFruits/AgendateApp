@@ -2,32 +2,90 @@
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:AgendateApp.Controls"
+    xmlns:controls="clr-namespace:AgendateApp.MAP.Controls"
     x:Class="AgendateApp.MainPage"
     Unloaded="OnContentPageUnloaded"
     >
 
-    <Grid 
-        RowDefinitions="*,Auto,Auto,Auto"
-        ColumnDefinitions="0.3*,0.2*,0.3*,0.2*"
-        Margin="10"
-        >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!--<Style TargetType="SearchBar" x:Key="NoUnderlineSearchBarStyle">
+                <Setter Property="UnderlineColor" Value="Transparent" />
+            </Style>-->
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ScrollView>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Frame BackgroundColor="White"/>
-        <SearchBar
-            x:Name="searchBar"
-            Placeholder="Buscar Empresa"
-            VerticalOptions="Center" 
-            />
+            <controls:Map
+                x:Name="map"
+                Grid.Row="0"
+                BackgroundColor="LightGray" 
+                ZIndex="0"
+            
+                IsShowingUser="{Binding IsToggled}"
+                HasTrafficEnabled="{Binding IsToggled}"
+                HasZoomEnabled="{Binding IsToggled}"
+                HasScrollEnabled="{Binding IsToggled}" 
+                
+                />
 
-        <controls:Map 
-            x:Name="map" 
-            Grid.ColumnSpan="4"
+            <!--<Frame
+                BackgroundColor="White"
+                HeightRequest="40"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                Margin="20"
+                Grid.Row="0"
+                ZIndex="1"
+                >
+            </Frame>-->
+
+            <Frame
+                BackgroundColor="White"
+                BorderColor="Gray"
+                CornerRadius="10"
+                Padding="0"
+                Margin="6">
+                <SearchBar
+                    Keyboard="Text"
+                    Margin="6"
+                    VerticalOptions="Start"
+                    x:Name="searchBar"
+                    Placeholder="Buscar Empresa" 
+                    BackgroundColor="White"
+                    ZIndex="1"
+                    />
+            </Frame>
+            
+            <!--<SearchBar
+                Keyboard="Text"
+                Margin="6"
+                VerticalOptions="Start"
+                x:Name="searchBar"
+                Placeholder="Buscar Empresa" 
+                BackgroundColor="White"
+                ZIndex="1"
+                />-->
+
+        </Grid>
+
+        
+    </ScrollView>
+
+    
+
+    <!--  
             IsShowingUser="{Binding IsToggled, Source={x:Reference showUserSwitch}}"
             HasTrafficEnabled="{Binding IsToggled, Source={x:Reference showTrafficSwitch}}"
             HasZoomEnabled="{Binding IsToggled, Source={x:Reference zoomEnabledSwitch}}"
             HasScrollEnabled="{Binding IsToggled, Source={x:Reference scrollEnabledSwitch}}" 
-            />
+        
         
         <Label Grid.Row="1"
                Text="Show user:" />
@@ -85,7 +143,6 @@
                     <x:String>Hybrid</x:String>
                 </x:Array>
             </Picker.ItemsSource>
-        </Picker>
-    </Grid>
+        </Picker>-->
 
 </ContentPage>

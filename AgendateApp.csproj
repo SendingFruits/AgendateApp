@@ -55,10 +55,6 @@
 	  <None Remove="Resources\Images\user_login_2.png" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="API\" />
-	</ItemGroup>
-
 	<ItemGroup Condition="$(TargetFramework.StartsWith('net6.0-android')) != true">
 		<Compile Remove="**\**\*.Android.cs" />
 		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
@@ -75,9 +71,16 @@
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+		
+	  <!--<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData" Version="2.6.1.2" />-->
+
 	  <PackageReference Include="Xamarin.GooglePlayServices.Maps">
 	    <Version>118.0.2.1</Version>
 	  </PackageReference>
+
+	  <!--<PackageReference Include="Xamarin.GooglePlayServices.Maps">
+		<Version>118.0.2.1</Version>
+	  </PackageReference>-->
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -92,10 +95,10 @@
 	  <MauiXaml Update="MVVM\Views\FlyoutUserControl.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\HomePage.xaml">
+	  <MauiXaml Update="MVVM\Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\LoginPage.xaml">
+	  <MauiXaml Update="MVVM\Views\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\AppStyles.xaml">

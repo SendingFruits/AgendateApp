@@ -1,10 +1,10 @@
 ﻿using CoreLocation;
-using AgendateApp.Controls;
+using AgendateApp.MAP.Controls;
 using MapKit;
 using Microsoft.Maui.Handlers;
-using IMap = AgendateApp.Controls.IMap;
+using IMap = AgendateApp.MAP.Controls.IMap;
 
-namespace AgendateApp.Handlers
+namespace AgendateApp.MAP.Handlers
 {
     public partial class MapHandler : ViewHandler<IMap, MKMapView>
     {

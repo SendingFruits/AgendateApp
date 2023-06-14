@@ -1,4 +1,4 @@
-namespace AgendateApp.Views;
+namespace AgendateApp.MVVM.Views;
 
 public partial class BookingsPage : ContentPage
 {

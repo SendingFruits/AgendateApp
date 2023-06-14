@@ -8,9 +8,9 @@ using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0 && !IOS && !ANDROID)
 using PlatformView = System.Object;
 #endif
-using IMap = AgendateApp.Controls.IMap;
+using IMap = AgendateApp.MAP.Controls.IMap;
 
-namespace AgendateApp.Handlers
+namespace AgendateApp.MAP.Handlers
 {
     public interface IMapHandler : IViewHandler
     {

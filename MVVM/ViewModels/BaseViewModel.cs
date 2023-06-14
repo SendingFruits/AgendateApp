@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AgendateApp.ViewModels
+namespace AgendateApp.MVVM.ViewModels
 {
     public partial class BaseViewModel : ObservableObject
     {

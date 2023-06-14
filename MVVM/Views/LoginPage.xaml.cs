@@ -1,6 +1,6 @@
-using AgendateApp.ViewModels;
+using AgendateApp.MVVM.ViewModels;
 
-namespace AgendateApp.Views;
+namespace AgendateApp.MVVM.Views;
 
 public partial class LoginPage : ContentPage
 {

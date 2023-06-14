@@ -2,12 +2,12 @@
 using Android.Content.PM;
 using Android.Gms.Maps;
 using AndroidX.Core.Content;
-using AgendateApp.Controls;
+using AgendateApp.MAP.Controls;
 using Microsoft.Maui.Handlers;
 using Debug = System.Diagnostics.Debug;
-using IMap = AgendateApp.Controls.IMap;
+using IMap = AgendateApp.MAP.Controls.IMap;
 
-namespace AgendateApp.Handlers
+namespace AgendateApp.MAP.Handlers
 {
     public partial class MapHandler : ViewHandler<IMap, MapView>
     {

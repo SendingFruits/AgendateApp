@@ -1,8 +1,8 @@
 ﻿using Microsoft.Maui.Handlers;
 using Microsoft.UI.Xaml;
-using IMap = AgendateApp.Controls.IMap;
+using IMap = AgendateApp.MAP.Controls.IMap;
 
-namespace AgendateApp.Handlers
+namespace AgendateApp.MAP.Handlers
 {
     public partial class MapHandler : ViewHandler<IMap, FrameworkElement>
     {

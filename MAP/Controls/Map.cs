@@ -1,4 +1,4 @@
-﻿namespace AgendateApp.Controls
+﻿namespace AgendateApp.MAP.Controls
 {
     public partial class Map : View, IMap
     {

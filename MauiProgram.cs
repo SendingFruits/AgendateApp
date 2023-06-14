@@ -1,7 +1,7 @@
-﻿using AgendateApp.ViewModels;
-using AgendateApp.Views;
-using AgendateApp.Handlers;
-using Map = AgendateApp.Controls.Map;
+﻿using AgendateApp.MVVM.ViewModels;
+using AgendateApp.MVVM.Views;
+using AgendateApp.MAP.Handlers;
+using Map = AgendateApp.MAP.Controls.Map;
 
 namespace AgendateApp;
 
@@ -23,6 +23,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<LoginPage>();
+        builder.Services.AddSingleton<RegisterPage>();
         builder.Services.AddSingleton<BookingsPage>();
 
         builder.Services.AddSingleton<LoginPageViewModel>();

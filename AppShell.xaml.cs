@@ -1,5 +1,5 @@
-﻿using AgendateApp.ViewModels;
-using AgendateApp.Views;
+﻿using AgendateApp.MVVM.ViewModels;
+using AgendateApp.MVVM.Views;
 
 namespace AgendateApp;
 

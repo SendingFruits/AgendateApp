@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgendateApp.Converters
+namespace AgendateApp.API.Converters
 {
     public class StringToDoubleConverter : IValueConverter
     {

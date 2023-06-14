@@ -2,13 +2,11 @@
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converters="clr-namespace:AgendateApp.Converters"
-    x:Class="AgendateApp.Views.LoginPage"  
+    xmlns:converters="clr-namespace:AgendateApp.API.Converters"
+    x:Class="AgendateApp.MVVM.Views.LoginPage"  
     Shell.NavBarIsVisible="False"
     Title="LoginPage">
 
-    <!--xmlns:me="clr-namespace:Microsoft.Maui.Essentials;assembly=Microsoft.Maui.Essentials"-->
-    
     <ContentPage.Resources>
         <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
     </ContentPage.Resources>
@@ -25,40 +23,6 @@
             Fill="#2ECC71" 
             />
 
-        <!--Points="0,0 0,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}} 40,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.175} 100,{Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.19}  150,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.2} 195,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.205} 245,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.2}  300,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.19} 325,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}, 
-            ConverterParameter=0.175} 390,
-            {Binding Source={me:DeviceInfo}, 
-            Path=Width, 
-            Converter={StaticResource StringToDoubleConverter}}, 390,0"-->
-        
         <StackLayout>
             <Frame 
                 BackgroundColor="White" 
@@ -169,8 +133,19 @@
 
                 <StackLayout Orientation="Horizontal" Margin="7,10,7,5" Padding="0">
                     <CheckBox IsChecked="False"/>
-                    <Label Text="Recuerdame" TextColor="DarkGray" FontSize="Small" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                    <Label Text="¿Olvidó su contraseña?" TextColor="#2ECC71" FontAttributes="Bold" HorizontalOptions="EndAndExpand" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/> 
+                    <Label 
+                        Text="Recuerdame" 
+                        TextColor="DarkGray" 
+                        FontSize="Small" 
+                        VerticalTextAlignment="Center" 
+                        HorizontalTextAlignment="Center"/>
+                    <Label 
+                        Text="¿Olvidó su contraseña?" 
+                        TextColor="#2ECC71" 
+                        FontAttributes="Bold" 
+                        HorizontalOptions="EndAndExpand" 
+                        VerticalTextAlignment="Center" 
+                        HorizontalTextAlignment="Center"/> 
                 </StackLayout>
 
                 <Button
@@ -184,11 +159,18 @@
                     Command="{Binding LoginCommand}"
                     />
 
-                <!--Command="{Binding LoginCommand}"-->
-                
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,60,0,0" Padding="0">
                     <Label Text="¿Eres nuevo aquí?" TextColor="DarkGray" FontSize="Small" Margin="0,0,4,0"/>
-                    <Label Text="Registrate" TextColor="#2ECC71" FontAttributes="Bold" FontSize="Small"/>
+                    <Label 
+                        Text="Registrarse" 
+                        TextColor="#2ECC71" 
+                        FontAttributes="Bold" 
+                        FontSize="Small"
+                        >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RegisterCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
             </StackLayout>
         </Grid>

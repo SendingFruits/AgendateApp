@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgendateApp.Models
+namespace AgendateApp.MVVM.Models
 {
     public class Icons
     {
