@@ -18,6 +18,7 @@
         Route="LoginPage" />
 
     <FlyoutItem Route="MainPage" FlyoutDisplayOptions="AsMultipleItems">
+        
         <ShellContent
             Title="Principal"
             Icon="{x:Static models:Icons.Dashboard}"
@@ -29,18 +30,11 @@
             ContentTemplate="{DataTemplate views:BookingsPage}"
             />
 
-
-        <!--<ShellContent
-            Title="Salir"
-            Icon="{x:Static models:Icons.Dashboard}"
-            ContentTemplate="{Binding OutCommand}"
-            />-->
-
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20">
-            <Button Text="Salir" Command="{Binding SingOutCommand}" BackgroundColor="#103029"/>
+            <Button Text="Salir" Command="{Binding SignOutCommand}" BackgroundColor="#2ECC71"/>
         </StackLayout>
     </Shell.FlyoutFooter>
 </Shell>

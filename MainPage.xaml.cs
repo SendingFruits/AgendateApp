@@ -8,20 +8,41 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
-
-        map.IsShowingUser = true;
-        map.HasTrafficEnabled = true; 
-        map.HasZoomEnabled = true;
-        map.HasScrollEnabled = true;
-
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
 
+        //map.IsShowingUser = true;
+        //map.HasTrafficEnabled = true;
+        //map.HasZoomEnabled = true;
+        //map.HasScrollEnabled = true;
+
         PermissionStatus result = await CheckAndRequestLocationPermission();
         Debug.WriteLine("Location permissions: " + result.ToString());
+
+        //try
+        //{
+        //    var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+        //    var location = await Geolocation.GetLocationAsync(request);
+        //    Debug.WriteLine("request: " + request.ToString());
+        //    Debug.WriteLine("location: " + location.ToString());
+        //    if (location != null)
+        //    {
+        //        //map.Latitude = location.Latitude;
+        //        //map.Longitude = location.Longitude;
+        //        LatLng ubicacion = new LatLng(location.Latitude, location.Longitude);
+        //        MarkerOptions markerOptions = new MarkerOptions()
+        //            .SetPosition(ubicacion)
+        //            .SetTitle("Mi ubicación");
+        //        map.AddMarker(markerOptions);
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine($"Error al obtener la ubicación: {ex.Message}");
+        //}
     }
 
     async Task<PermissionStatus> CheckAndRequestLocationPermission()
@@ -31,20 +52,14 @@ public partial class MainPage : ContentPage
         if (status == PermissionStatus.Granted)
             return status;
 
-        if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
-        {
-            // Prompt the user to turn on in settings
-            // On iOS once a permission has been denied it may not be requested again from the application
+        if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)  
             return status;
-        }
-
+        
         if (Permissions.ShouldShowRationale<Permissions.LocationWhenInUse>())
         {
-            // Prompt the user with additional information as to why the permission is needed
+            // Solicitar al usuario información adicional sobre por qué se necesita el permiso
         }
-
         status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-
         return status;
     }
 

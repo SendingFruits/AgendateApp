@@ -27,51 +27,26 @@
                 Grid.Row="0"
                 BackgroundColor="LightGray" 
                 ZIndex="0"
-            
-                IsShowingUser="{Binding IsToggled}"
-                HasTrafficEnabled="{Binding IsToggled}"
-                HasZoomEnabled="{Binding IsToggled}"
-                HasScrollEnabled="{Binding IsToggled}" 
-                
                 />
-
-            <!--<Frame
-                BackgroundColor="White"
-                HeightRequest="40"
-                VerticalOptions="Start"
-                HorizontalOptions="FillAndExpand"
-                Margin="20"
-                Grid.Row="0"
-                ZIndex="1"
-                >
-            </Frame>-->
 
             <Frame
                 BackgroundColor="White"
                 BorderColor="Gray"
                 CornerRadius="10"
                 Padding="0"
-                Margin="6">
+                Margin="6"
+                VerticalOptions="Start"
+                >
                 <SearchBar
                     Keyboard="Text"
                     Margin="6"
-                    VerticalOptions="Start"
                     x:Name="searchBar"
                     Placeholder="Buscar Empresa" 
                     BackgroundColor="White"
                     ZIndex="1"
                     />
             </Frame>
-            
-            <!--<SearchBar
-                Keyboard="Text"
-                Margin="6"
-                VerticalOptions="Start"
-                x:Name="searchBar"
-                Placeholder="Buscar Empresa" 
-                BackgroundColor="White"
-                ZIndex="1"
-                />-->
+           
 
         </Grid>
 

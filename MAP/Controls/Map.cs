@@ -26,25 +26,25 @@
         public bool HasScrollEnabled
         {
             get { return (bool)GetValue(HasScrollEnabledProperty); }
-            set { SetValue(HasScrollEnabledProperty, value); }
+            set { SetValue(HasScrollEnabledProperty, true); }
         }
 
         public bool HasZoomEnabled
         {
             get { return (bool)GetValue(HasZoomEnabledProperty); }
-            set { SetValue(HasZoomEnabledProperty, value); }
+            set { SetValue(HasZoomEnabledProperty, true); }
         }
 
         public bool IsShowingUser
         {
             get { return (bool)GetValue(IsShowingUserProperty); }
-            set { SetValue(IsShowingUserProperty, value); }
+            set { SetValue(IsShowingUserProperty, true); }
         }
 
         public bool HasTrafficEnabled
         {
             get => (bool)GetValue(HasTrafficEnabledProperty);
-            set => SetValue(HasTrafficEnabledProperty, value);
+            set => SetValue(HasTrafficEnabledProperty, true);
         }
     }
 }
