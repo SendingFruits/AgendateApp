@@ -1,7 +1,6 @@
 ﻿using AgendateApp.API.Services;
 using AgendateApp.MVVM.Models;
 using AgendateApp.MVVM.Views;
-using System.Diagnostics;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,25 +11,25 @@ namespace AgendateApp.MVVM.ViewModels
 {
     public partial class LoginPageViewModel : BaseViewModel
     {
-        readonly IUsersServices serviceLogin = new UsersServices();
+        readonly IUsersServices serviceUser = new UsersServices();
 
         [ObservableProperty]
         private string username;
         [ObservableProperty]
         private string password;
 
+
         public LoginPageViewModel()
         {
-
+            // ...
         }
 
-   
         [RelayCommand]
         public async void Login()
         {
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                User userCredentials = await serviceLogin.Login(Username, Password);
+                User userCredentials = await serviceUser.Login(Username, Password);
 
                 if (Preferences.ContainsKey(nameof(App.userCredentials)))
                 {
@@ -54,10 +53,11 @@ namespace AgendateApp.MVVM.ViewModels
             }
         }
 
+
         [RelayCommand]
         public async void Register()
         {
-            await Shell.Current.GoToAsync($"//{nameof(RegisterPage)}");   
+            await Shell.Current.GoToAsync(nameof(RegisterPage));   
          
         }
     }

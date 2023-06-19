@@ -33,6 +33,7 @@ namespace AgendateApp.MVVM.ViewModels
                 Preferences.Remove(nameof(App.userCredentials));
             }
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            await Application.Current.MainPage.DisplayAlert("", "Cerró Sesión", "Aceptar");
         }
     }
 }
