@@ -11,10 +11,10 @@ namespace AgendateApp.MAP.Handlers
 {
     public partial class MapHandler : ViewHandler<IMap, MapView>
     {
-        MapView? _mapView;
-        MapCallbackHandler? _mapReady;
+        MapView _mapView;
+        MapCallbackHandler _mapReady;
         
-        public GoogleMap? Map { get; set; }
+        public GoogleMap Map { get; set; }
 
         protected override MapView CreatePlatformView()
         {
@@ -57,7 +57,7 @@ namespace AgendateApp.MAP.Handlers
 
         public static void MapIsShowingUser(IMapHandler handler, IMap map)
         {
-            GoogleMap? googleMap = handler?.Map;
+            GoogleMap googleMap = handler?.Map;
             if (googleMap == null)
                 return;
 
@@ -85,7 +85,7 @@ namespace AgendateApp.MAP.Handlers
 
         public static void MapHasScrollEnabled(IMapHandler handler, IMap map)
         {
-            GoogleMap? googleMap = handler?.Map;
+            GoogleMap googleMap = handler?.Map;
             if (googleMap == null)
                 return;
 
@@ -94,7 +94,7 @@ namespace AgendateApp.MAP.Handlers
 
         public static void MapHasTrafficEnabled(IMapHandler handler, IMap map)
         {
-            GoogleMap? googleMap = handler?.Map;
+            GoogleMap googleMap = handler?.Map;
             if (googleMap == null)
                 return;
 
@@ -103,7 +103,7 @@ namespace AgendateApp.MAP.Handlers
 
         public static void MapHasZoomEnabled(IMapHandler handler, IMap map)
         {
-            GoogleMap? googleMap = handler?.Map;
+            GoogleMap googleMap = handler?.Map;
             if (googleMap == null)
                 return;
 
@@ -123,7 +123,7 @@ namespace AgendateApp.MAP.Handlers
     class MapCallbackHandler : Java.Lang.Object, IOnMapReadyCallback
     {
         MapHandler _handler;
-        GoogleMap? _googleMap;
+        GoogleMap _googleMap;
 
         public MapCallbackHandler(MapHandler mapHandler)
         {

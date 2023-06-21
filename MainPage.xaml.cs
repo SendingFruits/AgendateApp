@@ -14,10 +14,11 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
 
-        //map.IsShowingUser = true;
-        //map.HasTrafficEnabled = true;
-        //map.HasZoomEnabled = true;
-        //map.HasScrollEnabled = true;
+        map.IsShowingUser = true;
+        map.HasTrafficEnabled = true;
+        map.HasZoomEnabled = true;
+        map.HasScrollEnabled = true;
+        Debug.WriteLine("IsShowingUser: " + map.IsShowingUser.ToString());
 
         PermissionStatus result = await CheckAndRequestLocationPermission();
         Debug.WriteLine("Location permissions: " + result.ToString());

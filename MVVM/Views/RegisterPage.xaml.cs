@@ -220,6 +220,8 @@ public partial class RegisterPage : ContentPage
         }
         catch (Exception ex)
         {
+            await Application.Current.MainPage.DisplayAlert("Error",
+                ex.Message, "Aceptar");
             // Maneja cualquier excepción que pueda ocurrir durante la selección de archivos
             // ...
         }

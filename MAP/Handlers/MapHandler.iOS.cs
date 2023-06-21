@@ -8,8 +8,8 @@ namespace AgendateApp.MAP.Handlers
 {
     public partial class MapHandler : ViewHandler<IMap, MKMapView>
     {
-        MKMapView? _mkMapView;
-        CLLocationManager? _locationManager;
+        MKMapView _mkMapView;
+        CLLocationManager _locationManager;
 
         protected override MKMapView CreatePlatformView()
         {
@@ -51,7 +51,7 @@ namespace AgendateApp.MAP.Handlers
 #if !MACCATALYST
             if (map.IsShowingUser)
             {
-                MapHandler? mapHandler = handler as MapHandler;
+                MapHandler mapHandler = handler as MapHandler;
                 mapHandler?._locationManager?.RequestWhenInUseAuthorization();
             }
 #endif

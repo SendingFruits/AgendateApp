@@ -17,7 +17,7 @@ namespace AgendateApp.MAP.Handlers
         new IMap VirtualView { get; }
         new PlatformView PlatformView { get; }
 #if ANDROID
-		GoogleMap? Map { get; set; }
+		GoogleMap Map { get; set; }
 #endif
     }
 }
