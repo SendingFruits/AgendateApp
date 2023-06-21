@@ -40,31 +40,35 @@
                         />
                 </Grid>
 
-                <!--BODY-->
+                
+                <!--BODY USERS-->
                 <Grid 
+                    x:Name="bodyUserData"
                     Grid.Row="1" 
                     Padding="10,20,10,10"
                     BackgroundColor="White" 
+                    IsVisible="false"
                     >
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="100" />
                     </Grid.RowDefinitions>
-                    
+
                     <StackLayout 
                         Grid.Row="0" 
                         Orientation="Vertical" 
                         HorizontalOptions="CenterAndExpand">
-                        
+
                         <Frame 
                             Padding="1"
                             BackgroundColor="Transparent" 
                             BorderColor="LightGreen"
                             HorizontalOptions="FillAndExpand"
-                            >   
+                            >
                             <StackLayout Orientation="Horizontal">
                                 <Entry 
+                                    x:Name="entryUsername"
                                     Placeholder="Usuario" 
                                     Text="{Binding Username}" 
                                     TextColor="Black" 
@@ -84,6 +88,7 @@
                             >
                             <StackLayout Orientation="Horizontal">
                                 <Entry 
+                                    x:Name="entryPassword"
                                     Placeholder="Contraseña" 
                                     Text="{Binding Password}" 
                                     TextColor="Black" 
@@ -152,7 +157,7 @@
                                     />
                             </StackLayout>
                         </Frame>
-                       
+
                         <Frame 
                             Padding="1"
                             Margin="0,15,0,0"
@@ -172,16 +177,14 @@
 
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
-                                        <x:String> Empresa</x:String>
-                                        <x:String> Cliente</x:String>
+                                        <x:String>Empresa</x:String>
+                                        <x:String>Cliente</x:String>
                                     </x:Array>
                                 </Picker.ItemsSource>
 
                             </Picker>
                         </Frame>
                     </StackLayout>
-
-                  
 
                     <StackLayout 
                         Grid.Row="1" 
@@ -202,6 +205,234 @@
                             HorizontalTextAlignment="Center"/>
                     </StackLayout>
                 </Grid>
+
+                <!--BODY CUSTOMERS-->
+                <Grid 
+                    x:Name="bodyCustomerData"
+                    Grid.Row="1" 
+                    Padding="10,20,10,10"
+                    BackgroundColor="White" 
+                    IsVisible="true"
+                    >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="100" />
+                    </Grid.RowDefinitions>
+
+                    <StackLayout 
+                        Grid.Row="0" 
+                        Orientation="Vertical" 
+                        HorizontalOptions="CenterAndExpand">
+
+                        <Frame 
+                            Padding="1"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    Placeholder="Documento de Identidad" 
+                                    Text="{Binding Document}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                    />
+                            </StackLayout>
+                        </Frame>
+                        <Frame 
+                            Padding="1"
+                            Margin="30,35,30,0"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+
+                                <ImageButton 
+                                    x:Name="btnPhotoUpload"
+                                    Source="{Binding PhotoPath}" 
+                                    Clicked="btnPhotoUpload_Clicked" 
+                                    />
+
+                            </StackLayout>
+                        </Frame>
+                        <!--<Frame 
+                            Padding="1"
+                            Margin="10,25,10,10"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Image 
+                                    Source="{Binding PhotoPath}" 
+                                    WidthRequest="200" 
+                                    HeightRequest="200" />
+                            </StackLayout>
+                        </Frame>-->
+                      
+                    </StackLayout>
+
+                </Grid>
+
+                <!--BODY COMPANIES-->
+                <Grid 
+                    x:Name="bodyCompanyData"
+                    Grid.Row="1" 
+                    Padding="10,20,10,10"
+                    BackgroundColor="White" 
+                    IsVisible="false"
+                    >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="100" />
+                    </Grid.RowDefinitions>
+
+                    <StackLayout 
+                        Grid.Row="0" 
+                        Orientation="Vertical" 
+                        HorizontalOptions="CenterAndExpand">
+
+                        <!--
+                        public double BusinessName { get; set; } // Razon social
+                        public string Area { get; set; } // rubro
+                        public string Logo { get; set; }
+                        public string Description { get; set; }
+                        public string Street { get; set; }
+                        public string DoorNumber { get; set; }
+                        public string City { get; set; }
+                        -->
+
+                        <Frame 
+                            Padding="1"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <Picker 
+                                x:Name="pDocuType"
+                                Margin="5,0,0,0"
+                                TextColor="DimGray" 
+                                Title="¿Eres un Cliente o una Empresa?"
+                                SelectedItem="{Binding SelectedDocumentOption}"
+                                >
+                                <Picker.ItemsSource>
+                                    <!--<x:Array Type="{x:DocuType x:String}">
+                                        <x:String>CI</x:String>
+                                        <x:String>RUT</x:String>
+                                    </x:Array>-->
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Frame>
+
+                        <Frame 
+                            Padding="1"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    x:Name="entryRUT"
+                                    Placeholder="RUT" 
+                                    Text="{Binding Rut}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                    />
+                            </StackLayout>
+                        </Frame>
+                        <Frame 
+                            Padding="1"
+                            Margin="0,15,0,0"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    x:Name="entryBusinessName"
+                                    Placeholder="Razón Social" 
+                                    Text="{Binding BusinessName}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                    IsPassword="True"
+                                    />
+                            </StackLayout>
+                        </Frame>
+                        
+                        <Frame 
+                            Padding="1"
+                            Margin="0,15,0,0"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    Placeholder="Nombre" 
+                                    Text="{Binding Firstname}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                />
+                            </StackLayout>
+                        </Frame>
+                        <Frame 
+                            Padding="1"
+                            Margin="0,15,0,0"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    Placeholder="Apellido" 
+                                    Text="{Binding Lastname}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                    />
+                            </StackLayout>
+                        </Frame>
+                        <Frame 
+                            Padding="1"
+                            Margin="0,15,0,0"
+                            BackgroundColor="Transparent" 
+                            BorderColor="LightGreen"
+                            HorizontalOptions="FillAndExpand"
+                            >
+                            <StackLayout Orientation="Horizontal">
+                                <Entry 
+                                    Placeholder=" Correo" 
+                                    Text="{Binding Email}" 
+                                    TextColor="Black" 
+                                    FontAttributes="Bold"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Margin="5,0,20,0"
+                                    />
+                            </StackLayout>
+                        </Frame>
+
+                    </StackLayout>
+
+                </Grid>
+
 
                 <!--FOOTER-->
                 <Grid 

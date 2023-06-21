@@ -11,7 +11,7 @@ namespace AgendateApp.API.Services.Intefaces
     {
         Task<User> Login(string username, string password);
 
-        Task<User> Register(User userdata);
+        Task<bool> Register(User userdata);
 
 
     }

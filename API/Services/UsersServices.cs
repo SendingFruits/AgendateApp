@@ -1,30 +1,57 @@
 ﻿using AgendateApp.MVVM.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Net.Http.Json;
 using AgendateApp.API.Services.Intefaces;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace AgendateApp.API.Services
 {
     public class UsersServices : IUsersServices
     {
-        User usuario = new User
-        {
-            Id = 1,
-            Username = "Admin",
-            Password = "admin123",
-            Longitud = -34.603722,
-            Latitud = -58.38159,
-        };
+        public List<User> users = new List<User>();
+        public List<Company> companies = new List<Company>();
+        public List<Customer> customers = new List<Customer>();
 
         HttpClient client = new HttpClient();
         string urlBase = "http://"; // metodo getUserLogin de la API
 
-
+        public UsersServices()
+        {
+            User u = null;
+            for (int i=0; i<3; i++)
+            {
+                if (i == 0)
+                {
+                    u = new User
+                    {
+                        Id = 1,
+                        Username = "Admin",
+                        Password = "admin123",
+                        Email = "admin.app@gmail.com",
+                        Firstname = "Administrador",
+                        Lastname = "App",
+                        Movil = "456789",
+                        Longitud = -34.603722,
+                        Latitud = -58.38159,
+                    };
+                }
+                else
+                {
+                    u = new User
+                    {
+                        Id = i+1,
+                        Username = "Usuario" + (i + 1),
+                        Password = "Usuario" + (i + 1),
+                        Email = "usuario" + (i + 1) + "@gmail.com",
+                        Firstname = "Nombre Usuario " + (i + 1),
+                        Lastname = "Apellido Usuario " + (i + 1),
+                        Movil = "123456789" + (i + 1),
+                        Longitud = -34.603722 * (i + 1),
+                        Latitud = -58.38159 * (i + 1),
+                    };
+                }
+                users.Add(u);
+            }
+        }
 
         public async Task<User> Login(string username, string password)
         {
@@ -32,27 +59,24 @@ namespace AgendateApp.API.Services
 			{
 				if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
 				{
-                    // usuario = new Usuario();
-                    // var url = $"{urlBase}/users/25";
-                    // client.BaseAddress = new Uri(url);
-                    // HttpResponseMessage response = await client.GetAsync(url);
-                    // if (response.IsSuccessStatusCode)
-                    // {
-                    //	 usuario = await response.Content.ReadAsStringAsync<Usuario>();
-                    //	 return await Task.FromResult(usuario);
-                    // }
-                    // else
-                    // {
-                    //	 return null;
-                    // }
+                    User userResult = null;
 
-                    if (username == usuario.Username && password == usuario.Password)
+                    foreach (User user in users)
                     {
-                        JsonSerializerOptions serializer = new JsonSerializerOptions
+                        Debug.WriteLine("user in for: " + user.Firstname.ToString());
+
+                        if (username == user.Username && password == user.Password)
                         {
-                            WriteIndented = true,
-                        };
-                        return await Task.FromResult(usuario);
+                            Debug.WriteLine("username: " + username.ToString());
+                            userResult = user;
+                            break;
+                        }
+                    }
+
+                    //Debug.WriteLine("userResult: " + JsonConvert.SerializeObject(userResult));
+                    if (userResult != null)
+                    {
+                        return await Task.FromResult(userResult);
                     }
                     else
                     {
@@ -73,42 +97,45 @@ namespace AgendateApp.API.Services
                 }
 
             }
-			catch (Exception)
+			catch (Exception ex)
 			{
-				throw new Exception("Error al querer loguear");
+				throw new Exception("Error al querer loguear " + ex);
 			}
         }
 
-        public async Task<User> Register(User userData)
+        public async Task<bool> Register(User userData)
         {
+            Debug.WriteLine("userData: " + JsonConvert.SerializeObject(userData));
+
             try
             {
                 if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
                 {
                     if (userData != null)
                     {
-                        usuario = new User
+                        User newUser = new User
                         {
-                            Id = 2,
+                            Id = users.Count + 1,
                             Username = userData.Username,
                             Password = userData.Password,
+                            Email = userData.Email,
+                            Firstname = userData.Firstname,
+                            Lastname = userData.Lastname,
+                            Movil = userData.Movil,
                             Longitud = userData.Longitud,
                             Latitud = userData.Latitud,
                         };
+                        users.Add(newUser);
 
-                        JsonSerializerOptions serializer = new JsonSerializerOptions
-                        {
-                            WriteIndented = true,
-                        };
-                        return await Task.FromResult(usuario);
+                        return await Task.FromResult(true);
                     }
                     else
                     {
                         await Application.Current.MainPage.DisplayAlert(
                             "Error de registro",
-                            "Credenciales incorrectas",
+                            "Datos incorrectos",
                             "OK");
-                        return null;
+                        return false;
                     }
                 }
                 else
@@ -117,13 +144,13 @@ namespace AgendateApp.API.Services
                         "Error de conexión",
                         "No hay conexión a Internet",
                         "OK");
-                    return null;
+                    return false;
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Error al querer registrarse");
+                throw new Exception("Error al intentar registrarse " + ex);
             }
         }
     }
