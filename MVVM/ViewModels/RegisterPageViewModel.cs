@@ -67,8 +67,15 @@ namespace AgendateApp.MVVM.ViewModels
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Mensaje", "Debe completar todos los datos", "Aceptar");
+                await Application.Current.MainPage.DisplayAlert("Mensaje", 
+                    "Debe completar todos los datos", "Aceptar");
             }
         }
+
+        //[RelayCommand]
+        //public async void Next()
+        //{
+        // ...  
+        //}
     }
 }

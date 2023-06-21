@@ -29,10 +29,163 @@ public partial class RegisterPage : ContentPage
 	{
 		InitializeComponent();
         this.BindingContext = new RegisterPageViewModel();
-
-        //btnNext.IsEnabled = false;
-
         PhotoPath = "Resources/Images/dotnet_bot.svg";
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        initialStatus();
+        // Lógica que deseas ejecutar al volver a la página anterior
+    }
+
+    private void initialStatus()
+    {
+        lblTitle.Text = "Datos de Usuario";
+        // Users
+        entryUsername.Text = "";
+        entryPassword.Text = "";
+        entryFirstname.Text = "";
+        entryLastname.Text = "";
+        entryEmail.Text = "";
+        // Customers
+        entryDocument.Text = "";
+        // Companies
+        pDocuType.SelectedIndex = 0;
+        entryRUT.Text = "";
+        entryBusiName.Text = "";
+        entryArea.Text = "";
+
+        bodyUserData.IsVisible = true;
+        bodyCustomerData.IsVisible = false;
+        bodyCompanyData.IsVisible = false;
+
+        //pType.Items.Clear();
+
+        btnNext.IsEnabled = true;
+        //btnSend.IsEnabled = false;
+    }
+
+    
+    private async void btnNext_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (entryUsername.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Usuario", "Aceptar");
+                entryUsername.Focus();
+                return;
+            }
+            if (entryPassword.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar una Contraseña", "Aceptar");
+                entryPassword.Focus();
+                return;
+            }
+            if (entryFirstname.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Nombre", "Aceptar");
+                entryFirstname.Focus();
+                return;
+            }
+            if (entryLastname.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Apellido", "Aceptar");
+                entryLastname.Focus();
+                return;
+            }
+            if (entryEmail.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Correo", "Aceptar");
+                entryEmail.Focus();
+                return;
+            }
+
+            string selectedValue = "";
+            if (pType.SelectedItem is not null)
+            {
+                selectedValue = pType.SelectedItem as string;
+            }
+            bool checkTerms = cbTerms.IsChecked;
+
+            if (selectedValue != "")
+            {
+                if (checkTerms is true)
+                {
+                    btnNext.IsVisible = false;
+                    btnSend.IsVisible = true;
+                    bodyUserData.IsVisible = false;
+
+                    if (selectedValue == "Cliente")
+                    {
+                        lblTitle.Text = "Datos de Cliente";
+                        bodyCustomerData.IsVisible = true;
+                    }
+                    if (selectedValue == "Empresa")
+                    {
+                        lblTitle.Text = "Datos de Empresa";
+                        bodyCompanyData.IsVisible = true;
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert(" ",
+                        "Debe aceptar los terminos y condiciones", "Aceptar");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe seleccionar un Tipo", "Aceptar");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error",
+                ex.Message, "Aceptar");
+        }
+    }
+
+    private async void btnSend_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            // pDocuType
+
+            if (entryRUT.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Usuario", "Aceptar");
+                entryUsername.Focus();
+                return;
+            }
+            if (entryPassword.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar una Contraseña", "Aceptar");
+                entryPassword.Focus();
+                return;
+            }
+            if (entryFirstname.Text == "")
+            {
+                await Application.Current.MainPage.DisplayAlert("Datos Incompletos",
+                    "Debe ingresar un Nombre", "Aceptar");
+                entryFirstname.Focus();
+                return;
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error",
+                ex.Message, "Aceptar");
+        }
     }
 
 
@@ -45,35 +198,6 @@ public partial class RegisterPage : ContentPage
         {
             //btnNext.IsEnabled = true;
         }
-    }
-
-    private async void btnNext_Clicked(object sender, EventArgs e)
-    {
-        //string selectedValue = "";
-        ////string selectedValue = pType.SelectedItem as string;
-        ////Debug.WriteLine("selectedValue: " + selectedValue.ToString());
-
-        //bool checkTerms = cbTerms.IsChecked;
-        ////Debug.WriteLine("checkTerms: " + checkTerms.ToString());
-
-
-        //if (selectedValue != null)
-        //{
-        //    //if (selectedValue == "Cliente")
-        //    //{
-        //    //    await Shell.Current.GoToAsync(nameof(RegisterPageCompany));
-        //    //}
-        //    //if (selectedValue == "Empresa")
-        //    //{
-        //    //    await Shell.Current.GoToAsync(nameof(RegisterPageCompany));
-        //    //}
-        //}
-        //else
-        //{
-        //    await Application.Current.MainPage.DisplayAlert("Datos Incompletos", "Debe seleccionar un Tipo", "Aceptar");
-        //}
-
-
     }
 
     private async void btnPhotoUpload_Clicked(object sender, EventArgs e)

@@ -12,7 +12,7 @@ namespace AgendateApp.API.Services
         public List<Customer> customers = new List<Customer>();
 
         HttpClient client = new HttpClient();
-        string urlBase = "http://"; // metodo getUserLogin de la API
+        //string urlBase = "http://"; // metodo getUserLogin de la API
 
         public UsersServices()
         {
