@@ -1,8 +1,5 @@
 using AgendateApp.MVVM.ViewModels;
 using System.Diagnostics;
-
-//using Microsoft.Maui.Essentials;
-
 namespace AgendateApp.MVVM.Views;
 
 public partial class RegisterPage : ContentPage
@@ -36,7 +33,6 @@ public partial class RegisterPage : ContentPage
     {
         base.OnAppearing();
         initialStatus();
-        // Lógica que deseas ejecutar al volver a la página anterior
     }
 
     private void initialStatus()
@@ -62,11 +58,12 @@ public partial class RegisterPage : ContentPage
 
         //pType.Items.Clear();
 
-        btnNext.IsEnabled = true;
-        //btnSend.IsEnabled = false;
+        btnNext.IsVisible = true;
+        btnSend.IsVisible = false;
+        btnBack.IsVisible = false;
     }
 
-    
+
     private async void btnNext_Clicked(object sender, EventArgs e)
     {
         try
@@ -119,7 +116,9 @@ public partial class RegisterPage : ContentPage
                 if (checkTerms is true)
                 {
                     btnNext.IsVisible = false;
-                    btnSend.IsVisible = true;
+                    btnSend.IsVisible = false;
+                    btnBack.IsVisible = true;
+
                     bodyUserData.IsVisible = false;
 
                     if (selectedValue == "Cliente")
@@ -187,6 +186,29 @@ public partial class RegisterPage : ContentPage
                 ex.Message, "Aceptar");
         }
     }
+
+    private async void btnBack_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            lblTitle.Text = "Datos de Usuario";
+
+            btnNext.IsVisible = true;
+            btnBack.IsVisible = false;
+            btnSend.IsVisible = false;
+
+            bodyUserData.IsVisible = true;
+            bodyCustomerData.IsVisible = false;
+            bodyCompanyData.IsVisible = false;
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error",
+                ex.Message, "Aceptar");
+        }
+    }
+
+
 
 
     private void Picker_SelectionChanged(object sender, EventArgs e)

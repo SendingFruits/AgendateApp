@@ -1,13 +1,14 @@
-﻿#if IOS || MACCATALYST
-using PlatformView = MapKit.MKMapView;
-#elif ANDROID
+﻿#if ANDROID
 using Android.Gms.Maps;
 using PlatformView = Android.Gms.Maps.MapView;
 #elif WINDOWS
 using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
+#elif IOS || MACCATALYST
+using PlatformView = MapKit.MKMapView;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0 && !IOS && !ANDROID)
 using PlatformView = System.Object;
 #endif
+
 using Microsoft.Maui.Handlers;
 using IMap = AgendateApp.MAP.Controls.IMap;
 

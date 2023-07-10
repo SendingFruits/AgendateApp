@@ -4,6 +4,7 @@ using Android.Gms.Maps;
 using AndroidX.Core.Content;
 using AgendateApp.MAP.Controls;
 using Microsoft.Maui.Handlers;
+
 using Debug = System.Diagnostics.Debug;
 using IMap = AgendateApp.MAP.Controls.IMap;
 
@@ -42,7 +43,7 @@ namespace AgendateApp.MAP.Handlers
 
         public static void MapMapType(IMapHandler handler, IMap map)
         {
-            GoogleMap? googleMap = handler?.Map;
+            GoogleMap googleMap = handler?.Map;
             if (googleMap == null)
                 return;
 

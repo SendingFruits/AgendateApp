@@ -20,6 +20,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <local:Map
@@ -27,6 +28,10 @@
                 Grid.Row="0"
                 BackgroundColor="LightGray" 
                 ZIndex="0"
+                IsShowingUser="{Binding IsToggled, Source={x:Reference showUserSwitch}}"
+                HasTrafficEnabled="{Binding IsToggled, Source={x:Reference showTrafficSwitch}}"
+                HasZoomEnabled="{Binding IsToggled, Source={x:Reference zoomEnabledSwitch}}"
+                HasScrollEnabled="{Binding IsToggled, Source={x:Reference scrollEnabledSwitch}}" 
                 />
 
             <Frame
@@ -46,14 +51,58 @@
                     ZIndex="1"
                     />
             </Frame>
-           
 
-        </Grid>
-
-        
+            <StackLayout 
+                IsVisible="false"
+                Grid.Row="3"
+                ZIndex="3"
+                >
+                <Label 
+                    Text="Show user:" 
+                    />
+                <Switch 
+                    x:Name="showUserSwitch"
+                    IsToggled="True"
+                    />
+                <Label 
+                    Text="Show traffic:"
+                    />
+                <Switch 
+                    x:Name="showTrafficSwitch"
+                    IsToggled="True"
+                    />
+                <Label 
+                    Text="Zoom enabled:"
+                    />
+                <Switch 
+                    x:Name="zoomEnabledSwitch"
+                    IsToggled="True"
+                    />
+                <Label 
+                    Text="Scroll enabled:"
+                    />
+                <Switch 
+                    x:Name="scrollEnabledSwitch"
+                    IsToggled="True"
+                    />
+                <Label 
+                    Text="Map type:" 
+                    />
+                <Picker 
+                    Title="Select map type"
+                    SelectedIndexChanged="OnMapTypePickerSelectedIndexChanged">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Street</x:String>
+                            <x:String>Satellite</x:String>
+                            <x:String>Hybrid</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </StackLayout>
+            
+        </Grid> 
     </ScrollView>
-
-    
 
     <!--  
             IsShowingUser="{Binding IsToggled, Source={x:Reference showUserSwitch}}"

@@ -444,7 +444,6 @@
                         WidthRequest="200"
                         HeightRequest="40"
                         HorizontalOptions="Center"
-                        IsVisible="true"
                         IsEnabled="true"
                         Clicked="btnNext_Clicked"
                         />
@@ -459,11 +458,24 @@
                         WidthRequest="200"
                         HeightRequest="40"
                         HorizontalOptions="Center"
-                        IsVisible="false"
                         IsEnabled="false"
                         Command="{Binding SendCommand}"
                         />
-                        <!--Clicked="btnSend_Clicked"-->
+                    
+                    <Button 
+                        x:Name="btnBack"
+                        Text="Atras"
+                        BackgroundColor="#2ECC71"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="30"
+                        WidthRequest="200"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        IsEnabled="true"
+                        Clicked="btnBack_Clicked"
+                        />
+                    <!--Clicked="btnSend_Clicked"-->
                 </Grid>
             </Grid>
         </Frame>

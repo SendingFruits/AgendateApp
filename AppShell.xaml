@@ -10,13 +10,22 @@
     BackgroundColor="#2ECC71"
     >
 
-    <ShellContent
+    <!--<ShellContent
         Title="Inicio"
         ContentTemplate="{DataTemplate views:LoginPage}"
         FlyoutItemIsVisible="False"
         Shell.FlyoutBehavior="Disabled"
-        Route="LoginPage" />
+        Route="LoginPage" />-->
 
+    <Shell.FlyoutHeader Route="MainPage">
+        <StackLayout Padding="18.5" BackgroundColor="#2ECC71">
+            <Label 
+                Text="Menu"
+                TextColor="White"
+                />
+        </StackLayout>
+    </Shell.FlyoutHeader>
+    
     <FlyoutItem Route="MainPage" FlyoutDisplayOptions="AsMultipleItems">
         
         <ShellContent
@@ -24,17 +33,35 @@
             Icon="{x:Static models:Icons.Dashboard}"
             ContentTemplate="{DataTemplate home:MainPage}"
             />
+
         <ShellContent
+            Title="Iniciar Sesión"
+            Icon="{x:Static models:Icons.Dashboard}"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            />
+
+        <ShellContent
+            Title="Registrarse"
+            Icon="{x:Static models:Icons.Dashboard}"
+            ContentTemplate="{DataTemplate views:RegisterPage}"
+            />
+        
+        <!--<ShellContent
             Title="Reservas"
             Icon="{x:Static models:Icons.Dashboard}"
             ContentTemplate="{DataTemplate views:BookingsPage}"
-            />
+            />-->
 
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20">
-            <Button Text="Salir" Command="{Binding SignOutCommand}" BackgroundColor="#2ECC71"/>
+            <Label 
+                Text="Menu"
+                TextColor="White"
+                />
+            <!--<Button Text="Salir" Command="{Binding SignOutCommand}" BackgroundColor="#2ECC71"/>-->
         </StackLayout>
     </Shell.FlyoutFooter>
+    
 </Shell>

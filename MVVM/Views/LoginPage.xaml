@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:AgendateApp.API.Converters"
     x:Class="AgendateApp.MVVM.Views.LoginPage"  
-    Shell.NavBarIsVisible="False"
-    Title="LoginPage">
+    Shell.NavBarIsVisible="True"
+    Title="Inicio de Sesión">
 
     <ContentPage.Resources>
         <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
@@ -57,12 +57,12 @@
                 Padding="0"
                 Margin="0"
                 />
-            <Label 
+            <!--<Label 
                 Grid.Row="2" 
                 Text="Inicia sesión para continuar" 
                 HorizontalOptions="Center" 
                 FontSize="Subtitle"
-                />
+                />-->
 
             <StackLayout 
                 Grid.Row="3" 
