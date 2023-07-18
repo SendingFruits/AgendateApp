@@ -15,9 +15,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": 
+          "Necesita usar la ubiación del dispositivo.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": 
+          "Necesita usar la ubiación del dispositivo."
+      }
     },
     "android": {
+      "permissions": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -25,6 +36,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": 
+            "Permite a $(PRODUCT_NAME) utilizar tu ubicación."
+        }
+      ]
+    ]
   }
 }

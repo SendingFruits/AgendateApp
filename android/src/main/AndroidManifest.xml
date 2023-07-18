@@ -1,0 +1,17 @@
+<manifest 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+	<!-- package="com.rnmshowcase" -->
+
+	<!-- Added permissions -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<!-- Optional permissions -->
+	<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+	
+	<!-- <meta-data
+		android:name="com.google.android.geo.API_KEY"
+		android:value="AIzaSyAw3URXc5f3Ita-qPGumWSZPa6v0SbhS94"/> -->
+		
+</manifest>
