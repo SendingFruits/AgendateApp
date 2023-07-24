@@ -5,30 +5,30 @@ import {
 	Image, 
 	TextInput, 
 	Button, 
-	StyleSheet 
+	StyleSheet ,
+	TouchableOpacity
 } from 'react-native';
 
-// import CheckBox from '@react-native-community/checkbox';
+import { useNavigation } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import UsersController from '../../controllers/UsersController';
 
-import LoginController from '../../controllers/LoginController';
+const Drawer = createDrawerNavigator();
 
 const LoginView = () => {
+
+	const navigation = useNavigation();
 
     const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
 
 	const handleLogin = () => {
-		LoginController.handleLogin(username, password);
-	};
-
-	const handleRegister = () => {
-		// Lógica para registrarse
+		UsersController.handleLogin(username, password);
 	};
 
 	return (
 		<View style={styles.container}>
-
 			<View style={styles.body}>
 				<Image source={require('../../resources/images/user_login_2.png')} style={styles.avatar} />
 
@@ -57,15 +57,19 @@ const LoginView = () => {
 
 				<View style={styles.checkboxContainer}>
 					{/* <CheckBox value={rememberMe} onValueChange={setRememberMe} /> */}
-					<Text style={styles.checkboxText}>Recuérdame</Text>
-					<Text style={styles.forgotPasswordText}>¿Olvidó su contraseña?</Text>
+					{/* <Text style={styles.checkboxText}>Recordar mi usuario</Text> */}
+					{/* <Text style={styles.forgotPasswordText}>¿Olvidaste la contraseña?</Text> */}
 				</View>
 
 				<Button title="Iniciar Sesión" onPress={handleLogin} />
 
 				<View style={styles.registerContainer}>
-					<Text style={styles.registerText}>¿Eres nuevo aquí?</Text>
-					<Button title="Registrarse" onPress={handleRegister} color="#2ECC71" />
+					<Text style={styles.registerText}>¿Sos nuevo?</Text>
+					<Button 
+						title="Registrate" 
+						onPress = { () => navigation.navigate('Registro de Usuario')} 
+						color="#2ECC71"
+						/>
 				</View>
 			</View>
 		</View>

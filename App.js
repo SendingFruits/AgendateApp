@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import AsideMenu from './src/views/home/AsideMenu';
+import MenuAside from './src/views/home/MenuAside';
 
 const App = () => {
 	return (
-		<AsideMenu/>
+		<MenuAside/>
 	);
 };
 

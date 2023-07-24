@@ -17,32 +17,14 @@ from 'react-native-maps';
 
 import {
 	requestLocationPermission, 
-	getLocation
+	getLocation,
+	companyLocations
 } from '../../controllers/MapController';
 
 
 const HomeView = () => {
 
-	let companyLocations = [
-		{
-			title: 'Antel Arena',
-			location: {
-				"latitude": -34.863847713411204,
-				"longitude": -56.15342052653432,
-			},
-			description: 'Lugar de Eventos'
-		},
-		{
-			title: 'Terminal Belloni',
-			location: {
-				"latitude": -34.855488761673755,
-				"longitude": -56.13270649686456,
-			},
-			description: 'Terminal de Ombibus'
-		}
-	];
-
-	// estado de ubicación
+	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
 
 	useEffect(() => {
@@ -85,12 +67,6 @@ const HomeView = () => {
 		});
 	};
 
-	// let initialRegion = {
-	// 	"latitude": -34.90477156839922, 
-	// 	"latitudeDelta": 0.20354241619580193, 
-	// 	"longitude": -56.180862206965685, 
-	// 	"longitudeDelta": 0.13483230024576187
-	// }
 
 	return (
 		<View style={styles.container}>

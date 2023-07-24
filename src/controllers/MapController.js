@@ -14,7 +14,7 @@ export const requestLocationPermission = async () => {
 };
 
 export const getLocation = async () => {
-    console.log('getLocation');
+    // console.log('getLocation');
     try {
         const locationOptions = {
             accuracy: Location.Accuracy.BestForNavigation,
@@ -32,7 +32,7 @@ export const getLocation = async () => {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
         };
-        console.log(initialRegion);
+        // console.log(initialRegion);
         return initialRegion;
     } catch (error) {
         console.log('Error al obtener la ubicación:', error);
@@ -41,47 +41,22 @@ export const getLocation = async () => {
 };
 
 
-// import Geolocation from 'react-native-geolocation-service';
 
-export const requestLocationPermissionPA = async () => {
-	try {
-	  	const granted = await PermissionsAndroid.request(
-			PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-			{
-				title: 'Permitir Ubicación',
-				message: '¿Permites a la App utilizar tu ubicación?',
-				buttonNeutral: 'Más Tarde',
-				buttonNegative: 'Cancelar',
-				buttonPositive: 'Aceptar',
-			},
-		);
-		if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-			console.log('Ya puedes utilizar la ubicación');
-		} else {
-			console.log('Permiso denegado');
-		}
-	} catch (err) {
-	  	console.warn(err);
-	}
-};
-
-export const getLocationGEO = () => {
-	return new Promise((resolve, reject) => {
-		Geolocation.getCurrentPosition(
-            position => {
-                const { latitude, longitude } = position.coords;
-                const initialRegion = {
-                    latitude,
-                    longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                };
-                resolve(initialRegion);
-            },
-            error => {
-                reject(error.message);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-	});
-};
+export let companyLocations = [
+    {
+        title: 'Antel Arena',
+        location: {
+            "latitude": -34.863847713411204,
+            "longitude": -56.15342052653432,
+        },
+        description: 'Lugar de Eventos'
+    },
+    {
+        title: 'Terminal Belloni',
+        location: {
+            "latitude": -34.855488761673755,
+            "longitude": -56.13270649686456,
+        },
+        description: 'Terminal de Ombibus'
+    }
+];
