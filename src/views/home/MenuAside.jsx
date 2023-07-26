@@ -31,7 +31,7 @@ import RegisterView from '../users/RegisterView';
 
 const drawerAside = createDrawerNavigator();
 
-const MenuAside = () => {
+const MenuAside = (currentUser) => {
 	return (
 		<NavigationContainer style={styles.barMenu}>
 			<drawerAside.Navigator 

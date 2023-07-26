@@ -1,0 +1,19 @@
+0. Tener instalado Node JS v18.16.1
+    - si ya tenes uno y no en esa version, actualizarlo
+    - node -v en cmd para ver version
+    - tener npm en variables de entorno configurada
+
+1. Actualizar Dependencias
+    - ir al directorio de la app agendate-app/
+    - ejecutar npm install
+
+2. Iniciar Servicio
+    - ejecutar npm start, puede sugerir iniciar con expo, es lo mismo
+
+3. Iniciar Emulador
+    - hay que configurar la variable de entorno para que funcione
+        C:\Program Files (x86)\Android\android-sdk\emulator
+    - ejecutar emulator -list-avds -> lista los emuladores disponibles
+    - ejecutar emulator -avd 'nombre_emulador' -> inicia el emulador
+
+4. Utilizar Ngrok

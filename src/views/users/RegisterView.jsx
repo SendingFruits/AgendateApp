@@ -114,7 +114,11 @@ const RegisterView = () => {
 			description,
 		};
 
-		UsersController.handleRegister(formData);
+		try {
+			UsersController.handleRegister(formData);
+		} catch (error) {
+			alert(error.message);
+		}
 	};
 
 	return (

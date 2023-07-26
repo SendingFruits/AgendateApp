@@ -1,0 +1,67 @@
+{
+	"Create View": {
+		"prefix": "rnView",
+		"body": [
+			"import { Text, StyleSheet, View } from 'react-native';",
+			"",
+			"const $TM_FILENAME_BASE = () => {",
+			"\treturn (",
+			"\t\t<View style={styles.container}>",
+			"\t\t\t<Text>$TM_FILENAME_BASE</Text>",
+			"\t\t</View>",
+			"\t);",
+			"}",
+			"",
+			"const styles = StyleSheet.create({",
+			"\tcontainer: {",
+			"\t\tflex: 1,",
+			"\t\tbackgroundColor: '#fff',",
+			"\t\talignItems: 'center',",
+			"\t\tjustifyContent: 'center',",
+			"\t}",
+			"})",
+			"",
+			"export default $TM_FILENAME_BASE;"
+		],
+		"description": "Crear Vista"
+	},
+	"Create Service": {
+		"prefix": "rnService",
+		"body": [
+			"const $API_BASE_URL = 'https://example.com/api';",
+			"export const getUsers = async () => {",
+			"\ttry {",
+			"\t\tconst response = await fetch(`${API_BASE_URL}/get`);",
+			"\t\tif (!response.ok) {",
+			"\t\t\tthrow new Error('Network response was not ok');",
+			"\t\t}",
+			"\t\tconst data = await response.json();",
+			"\t\treturn data;",
+			"\t} catch (error) {",
+			"\t\tconsole.error('Error fetching users:', error);",
+			"\t\tthrow error;",
+			"\t}",
+			"};"
+		],
+		"description": "Crear Servicio"
+	},
+	"Create Model": {
+		"prefix": "rnModel",
+		"body": [
+			"class $API_BASE_URL {",
+			"\tconstructor() {",
+			"\t\tthis.attrUno = '';",
+			"\t\tthis.attrDos = '';",
+			"\t}",
+			"\tsetAttrUno(attrUno) {",
+			"\t\tthis.attrUno = attrUno;",
+			"\t}",
+			"\tsetAttrUno(attrDos) {",
+			"\t\tthis.attrDos = attrDos;",
+			"\t}",
+			"}",
+			"export default CustomerModel;"
+		],
+		"description": "Crear Modelo"
+	}
+}

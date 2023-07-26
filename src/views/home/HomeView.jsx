@@ -21,6 +21,7 @@ import {
 	companyLocations
 } from '../../controllers/MapController';
 
+import SearchPanel from './SearchPanel';
 
 const HomeView = () => {
 
@@ -62,30 +63,43 @@ const HomeView = () => {
 					coordinate={item.location}
 					title={item.title}
 					description={item.description}
+					image={require('../../resources/images/dashboard_1.png')}
+					style={{ width: 10, height: 10 }}
 				/>
 			)
 		});
 	};
 
+	console.log(Platform.OS);
 
 	return (
 		<View style={styles.container}>
-			<MapView
-				style={styles.map}
-				onRegionChange={onRegionChange}
-				initialRegion={location}
-				zoomEnabled={true}
-				zoomControlEnabled={true}
-			>
-				{showCompanyLocations()}
+			<SearchPanel onSearch={(query) => handleSearch(query)} />
 
-				{/* <Marker
-					draggable
-					pinColor='#0000ff'
-					coordinate={draggableMarkerCoord}
-					onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
-				/> */}
-			</MapView>
+		
+			{Platform.OS === 'android' ? (
+				<MapView
+					style={styles.map}
+					onRegionChange={onRegionChange}
+					initialRegion={location}
+					zoomEnabled={true}
+					zoomControlEnabled={true}
+				>
+					{showCompanyLocations()}
+	
+					{/* <Marker
+						draggable
+						pinColor='#0000ff'
+						coordinate={draggableMarkerCoord}
+						onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
+					/> */}
+				</MapView>
+			) : (
+				<View>
+					<Text>Mapa web</Text>
+				</View>
+			)}
+
 		</View>
 	);
 };

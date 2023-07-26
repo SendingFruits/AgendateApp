@@ -2,9 +2,24 @@ import React, { useState } from 'react';
 
 import MenuAside from './src/views/home/MenuAside';
 
-const App = () => {
+let globals = [
+	{
+		'current_user' : {
+			'user':'admin',
+			'pass':'12345',
+		},
+		'connection' : {
+			'string':'admin',
+			'pass':'12345',
+		},
+	}
+];
+
+const App = (globals) => {
 	return (
-		<MenuAside/>
+		<MenuAside 
+			currentUser = {globals['current_user']}
+		/>
 	);
 };
 
