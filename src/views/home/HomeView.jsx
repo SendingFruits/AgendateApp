@@ -8,12 +8,22 @@ import {
 	View, 
 	Alert, 
 	StyleSheet, 
-	Platform
+	Platform,
+	Button
 } from 'react-native';
 
 import 
-	MapView, { Marker } 
+	MapView, { 
+		Marker, 
+		Polyline,
+		Callout,
+		Overlay
+	} 
 from 'react-native-maps';
+
+import { 
+	faBuilding
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
 	requestLocationPermission, 
@@ -22,6 +32,7 @@ import {
 } from '../../controllers/MapController';
 
 import SearchPanel from './SearchPanel';
+import ServicesView from '../services/ServicesView';
 
 const HomeView = () => {
 
@@ -51,6 +62,14 @@ const HomeView = () => {
 	// 	longitudeDelta: 0.13483230024576187
 	// });
 
+	var otherLocation = {
+		latitude: -34.90477156839922,
+		latitudeDelta: 0.20354241619580193,
+		longitude: -56.180862206965685,
+		longitudeDelta: 0.13483230024576187
+	};
+
+
 	const onRegionChange = (region) => {
 		// console.log(region);
 	};
@@ -61,22 +80,27 @@ const HomeView = () => {
 				<Marker
 					key={index}
 					coordinate={item.location}
-					title={item.title}
-					description={item.description}
-					image={require('../../resources/images/dashboard_1.png')}
-					style={{ width: 10, height: 10 }}
-				/>
+					// title={item.title}
+					// description={item.description}
+					// image={{faBuilding}}
+					// style={{ width: 10, height: 10 }}
+					>
+					
+					<Callout style={styles.popup}>
+						<ServicesView item={item} />
+					</Callout>
+
+				</Marker>
 			)
 		});
 	};
 
-	console.log(Platform.OS);
+	// console.log(Platform.OS);
 
 	return (
 		<View style={styles.container}>
 			<SearchPanel onSearch={(query) => handleSearch(query)} />
 
-		
 			{Platform.OS === 'android' ? (
 				<MapView
 					style={styles.map}
@@ -84,15 +108,23 @@ const HomeView = () => {
 					initialRegion={location}
 					zoomEnabled={true}
 					zoomControlEnabled={true}
-				>
+					>
+						
 					{showCompanyLocations()}
 	
 					{/* <Marker
-						draggable
+						draggable --> esto es para arrastrar el marcador
 						pinColor='#0000ff'
 						coordinate={draggableMarkerCoord}
 						onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
 					/> */}
+
+					{/* <Polyline 
+						coordinates={[location,companyLocations[0].location]}
+						strokeColor="red"
+						strokeWidth={6}
+					/> */}
+
 				</MapView>
 			) : (
 				<View>
@@ -110,13 +142,17 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
+		margin: 8,
+		marginBottom: 65,
 	},
 	map: {
-		width: '100%',
-		height: '100%',
-		margin: '1%',
-		padding: '1%',
-		borderRadius: '3',
+		width: '99%',
+		height: '95%',
+		margin: 1,
+		padding: 1,
+	},
+	popup: {
+		flex: 1,
 	}
 })
 

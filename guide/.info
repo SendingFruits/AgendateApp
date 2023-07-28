@@ -14,6 +14,7 @@
     - hay que configurar la variable de entorno para que funcione
         C:\Program Files (x86)\Android\android-sdk\emulator
     - ejecutar emulator -list-avds -> lista los emuladores disponibles
-    - ejecutar emulator -avd 'nombre_emulador' -> inicia el emulador
+    - ejecutar emulator -avd 'nombre_emulador' -> inicia el emulador 
+        [emulator -avd pixel_5_-_api_30]
 
 4. Utilizar Ngrok

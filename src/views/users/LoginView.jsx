@@ -9,6 +9,14 @@ import {
 	TouchableOpacity
 } from 'react-native';
 
+import { 
+	faUser, 
+	faLock
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import UsersController from '../../controllers/UsersController';
@@ -23,9 +31,13 @@ const LoginView = () => {
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
 
-	const handleLogin = () => {
+	
+
+	const login = () => {
 		UsersController.handleLogin(username, password);
 	};
+
+	// console.log(currentUser);
 
 	return (
 		<View style={styles.container}>
@@ -35,7 +47,8 @@ const LoginView = () => {
 				<Text style={styles.title}>Bienvenido</Text>
 
 				<View style={styles.inputContainer}>
-					<Image source={require('../../resources/images/user_login_1.png')} style={styles.inputIcon} />
+					{/* <Image source={require('../../resources/images/user_login_1.png')} style={styles.inputIcon} /> */}
+					<FontAwesomeIcon icon={faUser} style={styles.icon} />
 					<TextInput
 						style={styles.input}
 						value={username}
@@ -45,7 +58,8 @@ const LoginView = () => {
 				</View>
 
 				<View style={styles.inputContainer}>
-					<Image source={require('../../resources/images/pass_login_1.png')} style={styles.inputIcon} />
+					{/* <Image source={require('../../resources/images/pass_login_1.png')} style={styles.inputIcon} /> */}
+					<FontAwesomeIcon icon={faLock} style={styles.icon} />
 					<TextInput
 						style={styles.input}
 						value={password}
@@ -61,7 +75,11 @@ const LoginView = () => {
 					{/* <Text style={styles.forgotPasswordText}>¿Olvidaste la contraseña?</Text> */}
 				</View>
 
-				<Button title="Iniciar Sesión" onPress={handleLogin} />
+				<Button 
+					title="Iniciar Sesión" 
+					onPress={login}
+					color='#69ACDD' 
+					/>
 
 				<View style={styles.registerContainer}>
 					<Text style={styles.registerText}>¿Sos nuevo?</Text>
@@ -77,13 +95,19 @@ const LoginView = () => {
 };
 
 const styles = StyleSheet.create({
+	icon: {
+		flex: 1,
+		color: 'black',
+		fon: 3,
+		marginRight: 5,
+	},
 	container: {
 		flex: 1,
 		backgroundColor: 'white',
 	},
 	header: {
 		height: 220,
-		backgroundColor: '#2ECC71',
+		backgroundColor: 'lightgreen',
 	},
 	body: {
 		flex: 1,
@@ -108,8 +132,8 @@ const styles = StyleSheet.create({
 		borderColor: 'lightgreen',
 		borderWidth: 1,
 		borderRadius: 30,
-		marginRight: 13,
-		marginLeft: 13,
+		marginRight: 18,
+		marginLeft: 18,
 		marginBottom: 10,
 	  	paddingHorizontal: 15,
 		paddingVertical:2,

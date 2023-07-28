@@ -7,17 +7,22 @@ class UsersController {
 	}
 
 	handleLogin(username, password) {
-		if (data.username == '') {
-			alert('Por favor ingrese el username.');
-			return;
+		try {
+			if (data.username == '') {
+				alert('Por favor ingrese el username.');
+				return;
+			}
+			if (data.password == '') {
+				alert('Por favor ingrese la contraseña.');
+				return;
+			}
+			UserModel.setUsername(username);
+			UserModel.setPassword(password);
+			// loguar contra la api <-----------
+
+		} catch (error) {
+			alert('Credenciales Incorrectas');
 		}
-		if (data.password == '') {
-			alert('Por favor ingrese la contraseña.');
-			return;
-		}
-		UserModel.setUsername(username);
-		UserModel.setPassword(password);
-		// loguar contra la api <-----------
 	}
 
 	handleRegister(data) {
@@ -63,6 +68,25 @@ class UsersController {
 	
 		// crear el objeto json y enviarlo
 	}
+
+	getUser(username){
+		var user;
+		return user;
+	}
 }
 
 export default new UsersController();
+
+
+export var userList = [
+	{
+		1:{
+			'user':'admin',
+			'pass':'admin',
+		},
+		2:{
+			'user':'usuario2',
+			'pass':'usuario2',
+		},
+	}
+];

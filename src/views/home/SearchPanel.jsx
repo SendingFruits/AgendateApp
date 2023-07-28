@@ -26,7 +26,7 @@ const SearchPanel = () => {
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 />
-            <Button title="Buscar" color="lightgreen" onPress={handleSearch} />
+            <Button title="Buscar" color="#69ACDD" onPress={handleSearch} />
         </View>
     );
 }
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 10,
-        backgroundColor: '#f2f2f2',
-        marginTop:65,
+        backgroundColor: '#2ECC71',
+        marginTop:60,
     },
     input: {
         flex: 1,
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         padding: 5,
         borderWidth: 1,
         borderColor: '#ccc',
+        backgroundColor: '#f2f2f2',
         borderRadius: 5,
     },
 });
