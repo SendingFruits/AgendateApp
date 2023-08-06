@@ -31,6 +31,7 @@ import MenuButtonItem from './MenuButtonItem';
 
 import DiaryView from '../bookings/DiaryView';
 import BookingsView from '../bookings/BookingsView';
+import MakeReservation from '../bookings/MakeReservation';
 import AboutView from './AboutView';
 
 import LoginView from '../users/LoginView';
@@ -41,7 +42,7 @@ const drawerAside = createDrawerNavigator();
 
 // let userLogin = {};
 
-const MenuAside = (
+const Main = (
 	params
 ) => {
 	var userLogin = params.userPreferences.current_user;
@@ -57,6 +58,7 @@ const MenuAside = (
 				<drawerAside.Screen name="Inicio" component={HomeView} />
 				<drawerAside.Screen name="Agenda" component={DiaryView} />
 				<drawerAside.Screen name="Reservas" component={BookingsView} />
+				<drawerAside.Screen name="Realizar Reserva" component={MakeReservation} />
 				{/* <drawerAside.Screen name="Acerca de..." component={AboutView} /> */}
 				
 				<drawerAside.Screen name="Login" component={LoginView} />
@@ -66,9 +68,13 @@ const MenuAside = (
 	);
 };
 
-const MenuItems = ({navigation,userLogin}) => {
-
-	console.log(userLogin);
+const MenuItems = (
+	{
+		navigation,
+		userLogin
+	}
+) => {
+	// console.log(userLogin);
 	const profile = () => {
 		console.log('profile');
 	};
@@ -220,4 +226,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default MenuAside;
+export default Main;

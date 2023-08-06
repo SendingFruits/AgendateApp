@@ -1,0 +1,137 @@
+import React, { useState } from 'react';
+import { View, Button, StyleSheet, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+
+import { formatDate } from '../utils/Functions'
+
+const ScheduleList = ({ availableTimes, selectedDate }) => {
+
+	const filteredTimes = availableTimes.filter(horario => horario.date === selectedDate);
+
+	const [colorSchedule, setColorSchedule] = useState('green');
+	const [showModal, setShowModal] = useState(false);
+
+	// var list = (availableTimes) => {
+    //     for (const key in availableTimes) {
+	// 		console.log(availableTimes[key]);
+	// 	}
+    // };
+
+	const confirmReservation = (item) => {
+        console.log(item);
+        setShowModal(true);
+    };
+
+	return ( 
+		<View style={styles.container}>
+			<Text style={styles.title}>Horarios para el dia {formatDate(selectedDate)}</Text>
+			<ScrollView>
+				{filteredTimes.map((item, index) => (
+					item.available ? 
+					<TouchableOpacity 
+						key={index}
+						onPress={(day) => confirmReservation(item)}
+						>
+						<View style={styles.scheduleItem}>
+							<Text style={styles.hourItem}> Anotarse para las {item.hour} </Text>
+							<Text style={[styles.statusItem, 
+								{ color: item.available ? 'green' : 'red' }] } >  
+								{ item.available ? 'Libre' : 'Ocupado' }
+							</Text>
+						</View>
+					</TouchableOpacity> 
+					:
+					<View 
+						key={index}
+						>
+						<View style={styles.scheduleItem}>
+							<Text style={styles.hourItem}> Anotarse para las {item.hour} </Text>
+							<Text style={[styles.statusItem, 
+								{ color: item.available ? 'green' : 'red' }] } >  
+								{ item.available ? 'Libre' : 'Ocupado' }
+							</Text>
+						</View>
+					</View> 
+				))}
+			</ScrollView>
+
+			<Modal
+				animationType="slide"
+				visible={showModal}
+				transparent={true}
+				>
+				<View style={styles.modal}>
+					<TouchableOpacity 
+						style={styles.closeModal}
+						onPress={() => setShowModal(false)}
+						> 
+						<Text style={styles.cross}>X</Text>
+					</TouchableOpacity> 
+				</View>
+			</Modal>
+		</View>
+	);
+};
+
+const styles = StyleSheet.create({
+	container: {
+		backgroundColor: '#e3e0ef',
+	},
+	title: {
+		alignSelf:'center',
+		marginTop: 3,
+		padding: 2,
+		color:'#000000',
+		fontWeight:'bold',
+	},
+	scheduleItem: {
+        flexDirection: 'row',
+        paddingVertical: 4,
+        paddingHorizontal: 20,
+        marginTop: 5,
+		marginBottom: 5,
+		borderBottomColor: '#8DA9A4',
+		borderBottomWidth: 1,
+		borderBottomLeftRadius:10,
+		borderBottomRightRadius:10,
+    },
+	hourItem: {
+		fontWeight:'normal',
+		marginRight:20,
+    },
+	statusItem: {
+		fontWeight:'bold',
+		textAlign:'right',
+    },
+	modal: {
+		width:320,
+		height:180,
+		alignSelf:'center',
+		marginHorizontal:40,
+		marginVertical:220,
+		paddingHorizontal:10,
+		paddingVertical:20,
+		borderRadius: 20,
+		borderColor: 'green',
+		borderWidth: 1,
+		backgroundColor:'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+    },
+	closeModal: {
+		position: 'absolute',
+		top: 10,
+		right: 10,
+		borderRadius: 15,
+		width: 30,
+		height: 30,
+		justifyContent: 'center',
+		alignItems: 'center',
+		
+    },
+	cross: {
+		color:'green',
+    },
+});
+
+export default ScheduleList;

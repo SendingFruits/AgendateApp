@@ -8,7 +8,6 @@ import {
 	StyleSheet ,
 	TouchableOpacity
 } from 'react-native';
-
 import { 
 	faUser, 
 	faLock
@@ -16,9 +15,9 @@ import {
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
-
 import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+
 import UsersController from '../../controllers/UsersController';
 
 const Drawer = createDrawerNavigator();

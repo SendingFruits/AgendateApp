@@ -2,37 +2,32 @@ import {
 	useState, 
 	useEffect
 } from 'react';
-
 import { 
 	Text, 
 	View, 
 	Alert, 
 	StyleSheet, 
 	Platform,
-	Button
+	Button,
+	TouchableOpacity,
 } from 'react-native';
-
 import 
 	MapView, { 
 		Marker, 
-		Polyline,
 		Callout,
-		Overlay
 	} 
 from 'react-native-maps';
-
 import { 
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
-
 import {
 	requestLocationPermission, 
 	getLocation,
 	companyLocations
 } from '../../controllers/MapController';
+import { useNavigation } from '@react-navigation/native';
 
 import SearchPanel from './SearchPanel';
-import ServicesView from '../services/ServicesView';
 
 const HomeView = () => {
 
@@ -55,12 +50,7 @@ const HomeView = () => {
 		fetchData();
 	}, []);
 
-	// const [draggableMarkerCoord, setDraggableMarkerCoord] = useState({
-	// 	latitude: -34.90477156839922,
-	// 	latitudeDelta: 0.20354241619580193,
-	// 	longitude: -56.180862206965685,
-	// 	longitudeDelta: 0.13483230024576187
-	// });
+	const navigation = useNavigation();
 
 	var otherLocation = {
 		latitude: -34.90477156839922,
@@ -69,36 +59,33 @@ const HomeView = () => {
 		longitudeDelta: 0.13483230024576187
 	};
 
-
 	const onRegionChange = (region) => {
+		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
 		// console.log(region);
 	};
-
+	
 	const showCompanyLocations = () => {
 		return companyLocations.map((item, index) => {
 			return (
 				<Marker
 					key={index}
+					pinColor='#00ffff'
 					coordinate={item.location}
-					// title={item.title}
-					// description={item.description}
-					// image={{faBuilding}}
-					// style={{ width: 10, height: 10 }}
 					>
-					
-					<Callout style={styles.popup}>
-						<ServicesView item={item} />
+					<Callout 
+						style={styles.callout}
+						onPress={() => navigation.navigate('Realizar Reserva', { item })} >
+						<Text style={styles.title}>{item.title}</Text>
+						<Text style={styles.description}>{item.description}</Text>
 					</Callout>
-
 				</Marker>
 			)
 		});
 	};
 
-	// console.log(Platform.OS);
-
 	return (
 		<View style={styles.container}>
+
 			<SearchPanel onSearch={(query) => handleSearch(query)} />
 
 			{Platform.OS === 'android' ? (
@@ -147,13 +134,36 @@ const styles = StyleSheet.create({
 	},
 	map: {
 		width: '99%',
-		height: '95%',
+		height: '93%',
 		margin: 1,
 		padding: 1,
 	},
-	popup: {
+	modal: {
 		flex: 1,
-	}
+		width: 200,
+		height: 200,
+		backgroundColor: '#888',
+	},
+	callout: {
+		flex: 1,
+		width: 160,
+		height: 120,
+	},
+	title: {
+		flex: 1,
+		alignSelf:'center',
+		marginTop: 3,
+		padding: 2,
+		color: '#21B081'
+	},
+	description: {
+		flex: 1,
+		alignSelf:'flex-start',
+		marginLeft: 3,
+		marginRight: 3,
+		paddingBottom: 1,
+		color: '#61A2DC'
+	},
 })
 
 export default HomeView;

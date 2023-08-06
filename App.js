@@ -4,7 +4,7 @@ import {
 	StyleSheet
 } from 'react-native';
 
-import MenuAside from './src/views/home/MenuAside';
+import Main from './src/views/home/Main';
 
 let userPreferences = {
 	'current_user' : {
@@ -26,7 +26,7 @@ let userPreferences = {
  
 const App = (config) => {
 	return (
-		<MenuAside 
+		<Main 
 			style={styles.background}
 			userPreferences = {userPreferences}
 		/>

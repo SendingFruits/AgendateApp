@@ -44,6 +44,7 @@ export const getLocation = async () => {
 
 export let companyLocations = [
     {
+        id: 1,
         title: 'Antel Arena',
         location: {
             "latitude": -34.863847713411204,
@@ -52,11 +53,23 @@ export let companyLocations = [
         description: 'Lugar de Eventos'
     },
     {
+        id: 2,
         title: 'Terminal Belloni',
         location: {
             "latitude": -34.855488761673755,
             "longitude": -56.13270649686456,
         },
         description: 'Terminal de Ombibus'
+    },
+    {
+        id: 3,
+        title: 'Peluqueria X',
+        location: {
+            "latitude": -34.87917915703534,
+            "longitude": -56.16783572360873,
+        },
+        description: 'Cortes, brushing y mas, todo unisex\nasdasdasd asdasdasda sdasdasdsads sdasdas dsdsad s ad\nwqewqeqwe qwewqeq wesddf.'
     }
+
+    // {"latitude": -34.87917915703534, "latitudeDelta": 0.04610008092625151, "longitude": -56.16783572360873, "longitudeDelta": 0.03395508974790573}
 ];
