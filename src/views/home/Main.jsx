@@ -96,7 +96,7 @@ const MenuItems = (
 					onPress = { () => navigation.navigate('Inicio')}
 				/>
 
-				{(userLogin.type === 'none') ? (
+				{(userLogin.type !== 'none') ? (
 					<View>
 						<MenuButtonItem 
 							icon = {faCalendar}

@@ -9,6 +9,8 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 	const filteredTimes = availableTimes.filter(horario => horario.date === selectedDate);
 
 	const [colorSchedule, setColorSchedule] = useState('green');
+	const [selectedItem, setSelectedItem] = useState(null);
+	const [selectedHour, setSelectedHour] = useState(null);
 	const [showModal, setShowModal] = useState(false);
 
 	// var list = (availableTimes) => {
@@ -19,7 +21,14 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 
 	const confirmReservation = (item) => {
         console.log(item);
-        setShowModal(true);
+        setSelectedItem(item);
+		setSelectedHour(item.hour);
+		setShowModal(true);
+    };
+
+	const createReservation = (item) => {
+        console.log(item);
+        
     };
 
 	return ( 
@@ -67,6 +76,17 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 						> 
 						<Text style={styles.cross}>X</Text>
 					</TouchableOpacity> 
+					<View>
+						<Text style={styles.textConfirm}>
+							Anotarse para el dia {formatDate(selectedDate)} a las {selectedHour}
+						</Text>
+						<Button 
+							title="Confirmar" 
+							onPress={ () => {
+								createReservation(item);
+								setShowModal(false);
+							}} />
+					</View>
 				</View>
 			</Modal>
 		</View>
@@ -104,8 +124,8 @@ const styles = StyleSheet.create({
 		textAlign:'right',
     },
 	modal: {
-		width:320,
-		height:180,
+		width:360,
+		height:220,
 		alignSelf:'center',
 		marginHorizontal:40,
 		marginVertical:220,
@@ -131,6 +151,13 @@ const styles = StyleSheet.create({
     },
 	cross: {
 		color:'green',
+    },
+	textConfirm: {
+		fontSize:21,
+		marginHorizontal:2,
+		marginVertical:2,
+		paddingHorizontal:6,
+		paddingVertical:6,
     },
 });
 

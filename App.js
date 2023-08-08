@@ -4,6 +4,7 @@ import {
 	StyleSheet
 } from 'react-native';
 
+import Globals from './src/Globals';
 import Main from './src/views/home/Main';
 
 let userPreferences = {
@@ -23,7 +24,9 @@ let userPreferences = {
 		'menuButttons': '#a8ffe5'
 	},
 };
- 
+
+Globals.userPreferences = userPreferences;
+
 const App = (config) => {
 	return (
 		<Main 

@@ -1,0 +1,91 @@
+{
+    "Users": [
+      {
+        "Username": "john_doe",
+        "Password": "password123",
+        "Email": "john@example.com",
+        "firstname": "John",
+        "lastname": "Doe",
+        "movil": "1234567890",
+        "type": "customer",
+        "location": {
+          "latitude": 37.7749,
+          "longitude": -122.4194,
+          "latitudeDelta": 0.0922,
+          "longitudeDelta": 0.0421
+        }
+      },
+      {
+        "Username": "company1",
+        "Password": "company123",
+        "Email": "company@example.com",
+        "firstname": "Company",
+        "lastname": "One",
+        "movil": "9876543210",
+        "type": "company",
+        "location": {
+          "latitude": 34.0522,
+          "longitude": -118.2437,
+          "latitudeDelta": 0.0922,
+          "longitudeDelta": 0.0421
+        }
+      }
+    ],
+    "Customers": [
+      {
+        "document": "123456789",
+        "picture": "/path/to/customer/picture.jpg"
+      }
+    ],
+    "Companies": [
+      {
+        "RUT": 123456789,
+        "socialReason": "Company Inc.",
+        "address": "123 Main St, City",
+        "itemCompany": "Some Item",
+        "logo": "/path/to/company/logo.jpg",
+        "description": "A description of the company"
+      }
+    ],
+    "Bookings": [
+      {
+        "Status": "confirmed",
+        "DateTime": "2023-08-01T14:30:00Z"
+      }
+    ],
+    "Services": [
+      {
+        "name": "Service A",
+        "type": "Type A",
+        "dateInit": "2023-08-01",
+        "dateEnd": "2023-08-15",
+        "cost": 100.00,
+        "frequency": 7,
+        "quota": 20
+      }
+    ],
+    "Schedules": [
+      {
+        "date": "2023-08-01",
+        "hour": "10:00",
+        "available": true
+      }
+    ],
+    "Notifications": [
+      {
+        "addressee": "john_doe",
+        "subject": "Notification Subject",
+        "datetime": "2023-08-01T09:00:00Z",
+        "body": "Notification body text"
+      }
+    ],
+    "Promotions": [
+      {
+        "title": "Special Offer",
+        "description": "Get 20% off on Service A",
+        "dateInit": "2023-08-01",
+        "dateEnd": "2023-08-15",
+        "interval": "weekly"
+      }
+    ]
+  }
