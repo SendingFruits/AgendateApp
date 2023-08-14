@@ -1,6 +1,8 @@
 import { 
+	useRef,
 	useState, 
-	useEffect
+	useEffect,
+	useContext
 } from 'react';
 import { 
 	Text, 
@@ -23,13 +25,21 @@ import {
 import {
 	requestLocationPermission, 
 	getLocation,
-	companyLocations
+	companyLocations,
+	companyLocationsOld
 } from '../../controllers/MapController';
 import { useNavigation } from '@react-navigation/native';
 
+import { UserContext } from '../../../App';
+
 import SearchPanel from './SearchPanel';
 
-const HomeView = () => {
+const HomeView = ( params ) => {
+
+	const mapRef = useRef(null);
+	const { userPreferences, setUserPreferences } = useContext(UserContext);
+	var userLogin = userPreferences.current_user;
+	// console.log(userLogin);
 
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
@@ -51,6 +61,7 @@ const HomeView = () => {
 	}, []);
 
 	const navigation = useNavigation();
+	console.log(companyLocations);
 
 	var otherLocation = {
 		latitude: -34.90477156839922,
@@ -65,7 +76,7 @@ const HomeView = () => {
 	};
 	
 	const showCompanyLocations = () => {
-		return companyLocations.map((item, index) => {
+		return companyLocationsOld.map((item, index) => {
 			return (
 				<Marker
 					key={index}
@@ -87,9 +98,10 @@ const HomeView = () => {
 		<View style={styles.container}>
 
 			<SearchPanel onSearch={(query) => handleSearch(query)} />
-
+			
 			{Platform.OS === 'android' ? (
 				<MapView
+					ref={mapRef}
 					style={styles.map}
 					onRegionChange={onRegionChange}
 					initialRegion={location}

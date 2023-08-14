@@ -34,6 +34,7 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 	return ( 
 		<View style={styles.container}>
 			<Text style={styles.title}>Horarios para el dia {formatDate(selectedDate)}</Text>
+			{/* <Text>{selectedItem}</Text> */}
 			<ScrollView>
 				{filteredTimes.map((item, index) => (
 					item.available ? 
@@ -78,7 +79,7 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 					</TouchableOpacity> 
 					<View>
 						<Text style={styles.textConfirm}>
-							Anotarse para el dia {formatDate(selectedDate)} a las {selectedHour}
+							Anotarse para el dia {"\n"} {formatDate(selectedDate)} a las {selectedHour}
 						</Text>
 						<Button 
 							title="Confirmar" 
@@ -154,6 +155,7 @@ const styles = StyleSheet.create({
     },
 	textConfirm: {
 		fontSize:21,
+		textAlign:'center',
 		marginHorizontal:2,
 		marginVertical:2,
 		paddingHorizontal:6,

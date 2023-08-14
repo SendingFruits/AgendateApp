@@ -1,9 +1,41 @@
-import { 
-	PermissionsAndroid
-} from 'react-native';
-
-
 import * as Location from 'expo-location';
+import databaseData from '../services/database/database.json';
+
+class MapController {
+
+    companyLocations = async () => {
+        const usersList = databaseData.Users;
+        const companiesList = databaseData.Companies;
+    
+        const organizedCompanies = companiesList.map(company => {
+            const user = usersList.find(user => user.Id === company.UserId);
+    
+            var title = user.firstname +' '+ user.lastname;
+    
+            return {
+                userId: company.UserId,
+                rut: company.RUT,
+                socialReason: company.socialReason,
+                address: company.address,
+                itemCompany: company.itemCompany,
+                logo: company.logo,
+                description: company.description,
+                location: user.location,
+                username: user.Username,
+                email: user.Email,
+                movil: user.movil,
+                userType: user.type,
+                title: title
+            };
+        });
+    
+        console.log(organizedCompanies);
+        return organizedCompanies;
+    };
+}
+
+export default new MapController();
+
 
 export const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -40,9 +72,58 @@ export const getLocation = async () => {
     }
 };
 
+export const searchCompany = async (company) => {
+    try {
+        
+    } catch (error) {
+        console.log('Error al obtener la Empresa:', error);
+        throw error;
+    }
 
+    // necesito, en la siguiente funcion
+    // export const searchCompany = async (company) => {
+    //     try {
+            
+    //     } catch (error) {
+    //         console.log('Error al obtener la Empresa:', error);
+    //         throw error;
+    //     }
+    // };
 
-export let companyLocations = [
+    // hacer una logica que me perita buscar en mi database.json todas las Companies 
+};
+
+export const companyLocations = async () => {
+    const usersList = databaseData.Users;
+    const companiesList = databaseData.Companies;
+
+    const organizedCompanies = companiesList.map(company => {
+        const user = usersList.find(user => user.Id === company.UserId);
+
+        var title = user.firstname +' '+ user.lastname;
+
+        return {
+            userId: company.UserId,
+            rut: company.RUT,
+            socialReason: company.socialReason,
+            address: company.address,
+            itemCompany: company.itemCompany,
+            logo: company.logo,
+            description: company.description,
+            location: user.location,
+            username: user.Username,
+            email: user.Email,
+            movil: user.movil,
+            userType: user.type,
+            title: title
+        };
+    });
+
+    console.log(organizedCompanies);
+    return organizedCompanies;
+};
+
+export let companyLocationsOld = [
     {
         id: 1,
         title: 'Antel Arena',
@@ -70,6 +151,8 @@ export let companyLocations = [
         },
         description: 'Cortes, brushing y mas, todo unisex\nasdasdasd asdasdasda sdasdasdsads sdasdas dsdsad s ad\nwqewqeqwe qwewqeq wesddf.'
     }
-
-    // {"latitude": -34.87917915703534, "latitudeDelta": 0.04610008092625151, "longitude": -56.16783572360873, "longitudeDelta": 0.03395508974790573}
 ];
+
+function getServicesForCompany(idCompany) {
+
+}

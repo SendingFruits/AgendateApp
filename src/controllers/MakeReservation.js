@@ -16,7 +16,7 @@ export var typesService = [
 
 export var availableTimes = [
 
-    { date: '2023-08-07', hour: '10:00', available: true },
+    { companyId: 1, date: '2023-08-07', hour: '10:00', available: true },
     { date: '2023-08-07', hour: '12:00', available: false },
     { date: '2023-08-07', hour: '14:00', available: true },
     { date: '2023-08-07', hour: '15:00', available: false },

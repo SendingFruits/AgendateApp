@@ -1,50 +1,117 @@
 {
     "Users": [
       {
-        "Username": "john_doe",
-        "Password": "password123",
+        "Id":1,
+        "Username": "admin",
+        "Password": "12345",
         "Email": "john@example.com",
         "firstname": "John",
         "lastname": "Doe",
         "movil": "1234567890",
         "type": "customer",
         "location": {
-          "latitude": 37.7749,
-          "longitude": -122.4194,
-          "latitudeDelta": 0.0922,
-          "longitudeDelta": 0.0421
+          "latitude": -34.90206599457251,
+          "longitude": -56.12724719569087,
+          "latitudeDelta": 0.09217474208934107,
+          "longitudeDelta": 0.0693817064166069
         }
       },
       {
-        "Username": "company1",
-        "Password": "company123",
+        "Id":2,
+        "Username": "SendingCode",
+        "Password": "SendingCode",
         "Email": "company@example.com",
-        "firstname": "Company",
-        "lastname": "One",
+        "firstname": "SendingCode",
+        "lastname": "SendingCode",
         "movil": "9876543210",
         "type": "company",
         "location": {
-          "latitude": 34.0522,
-          "longitude": -118.2437,
-          "latitudeDelta": 0.0922,
-          "longitudeDelta": 0.0421
+          "latitude": -34.84784073123643,
+          "longitude": -56.17782158777118,
+          "latitudeDelta": 0.0922355614972119,
+          "longitudeDelta": 0.0693817064166069
+        }
+      },
+      {
+        "Id":3,
+        "Username": "antel",
+        "Password": "antel",
+        "Email": "antel@example.com",
+        "firstname": "Antel",
+        "lastname": "Arena",
+        "movil": "9876543210",
+        "type": "company",
+        "location": {
+          "latitude": -34.863847713411204,
+          "longitude": -56.15342052653432,
+          "latitudeDelta": 0.0922355614972119,
+          "longitudeDelta": 0.0693817064166069
+        }
+      },
+      {
+        "Id":4,
+        "Username": "Terminal",
+        "Password": "Terminal",
+        "Email": "Terminal@example.com",
+        "firstname": "Terminal",
+        "lastname": "Belloni",
+        "movil": "9876543210",
+        "type": "company",
+        "location": {
+          "latitude": -34.855488761673755,
+          "longitude": -56.13270649686456,
+          "latitudeDelta": 0.0922355614972119,
+          "longitudeDelta": 0.0693817064166069
+        }
+      },
+      {
+        "Id":5,
+        "Username": "Peluqueria",
+        "Password": "Peluqueria",
+        "Email": "Peluqueria@example.com",
+        "firstname": "Peluqueria",
+        "lastname": "X",
+        "movil": "9876543210",
+        "type": "company",
+        "location": {
+          "latitude": -34.87917915703534,
+          "longitude": -56.16783572360873,
+          "latitudeDelta": 0.0922355614972119,
+          "longitudeDelta": 0.0693817064166069
         }
       }
     ],
     "Customers": [
       {
+        "UserId":1,
         "document": "123456789",
         "picture": "/path/to/customer/picture.jpg"
       }
     ],
     "Companies": [
       {
-        "RUT": 123456789,
-        "socialReason": "Company Inc.",
-        "address": "123 Main St, City",
-        "itemCompany": "Some Item",
+        "UserId":2,
+        "RUT": 10000500123456789,
+        "socialReason": "EKG S.A.",
+        "address": "Calle 123",
+        "itemCompany": "Software y Tecnologia",
         "logo": "/path/to/company/logo.jpg",
         "description": "A description of the company"
+      },
+      {
+        "UserId":3,
+        "title": "Antel Arena",
+        "description": "Lugar de Eventos"
+      },
+      {
+        "UserId":4,
+        "title": "Terminal Belloni",
+        "description": "Terminal de Ombibus"
+      },
+      {
+        "UserId":5,
+        "title": "Peluqueria X",
+        "description": "Cortes, brushing y mas, todo unisex\nasdasdasd asdasdasda sdasdasdsads sdasdas dsdsad s ad\nwqewqeqwe qwewqeq wesddf."
       }
     ],
     "Bookings": [
@@ -55,37 +122,72 @@
     ],
     "Services": [
       {
-        "name": "Service A",
-        "type": "Type A",
-        "dateInit": "2023-08-01",
-        "dateEnd": "2023-08-15",
+        "name": "Cortes, Brashings y peinados para fiestas.",
+        "type": "Estetica",
+        "dateInit": null,
+        "dateEnd": null,
+        "cost": 2000.00,
+        "frequency": 7,
+        "quota": 20
+      },
+      {
+        "name": "Chapista Pepe.",
+        "type": "Autos",
+        "dateInit": null,
+        "dateEnd": null,
         "cost": 100.00,
+        "frequency": 7,
+        "quota": 20
+      },
+      {
+        "name": "Vendo Empanadas",
+        "type": "Gastronimia",
+        "dateInit": null,
+        "dateEnd": null,
+        "cost": 2000.00,
         "frequency": 7,
         "quota": 20
       }
     ],
     "Schedules": [
-      {
-        "date": "2023-08-01",
-        "hour": "10:00",
-        "available": true
-      }
+      { "date": "2023-08-07", "hour": "10:00", "available": true },
+      { "date": "2023-08-07", "hour": "12:00", "available": false },
+      { "date": "2023-08-07", "hour": "14:00", "available": true },
+      { "date": "2023-08-07", "hour": "15:00", "available": false },
+  
+      { "date": "2023-08-09", "hour": "10:00", "available": true },
+      { "date": "2023-08-09", "hour": "13:00", "available": true },
+  
+      { "date": "2023-08-10", "hour": "14:00", "available": true },
+      { "date": "2023-08-10", "hour": "16:00", "available": false },
+  
+      { "date": "2023-08-11", "hour": "10:00", "available": true },
+      { "date": "2023-08-12", "hour": "10:00", "available": false },
+      { "date": "2023-08-13", "hour": "10:00", "available": false },
+      { "date": "2023-08-01", "hour": "10:00", "available": true }
     ],
     "Notifications": [
       {
-        "addressee": "john_doe",
-        "subject": "Notification Subject",
+        "addressee": "estebanpiccardo1989@gmail.com",
+        "subject": "Notificacion!",
         "datetime": "2023-08-01T09:00:00Z",
-        "body": "Notification body text"
+        "body": "Se le recuerda la reserva hecha para el martes a las 22"
       }
     ],
     "Promotions": [
       {
-        "title": "Special Offer",
-        "description": "Get 20% off on Service A",
+        "title": "Oferta Especial 1",
+        "description": "20% la peinada",
         "dateInit": "2023-08-01",
         "dateEnd": "2023-08-15",
         "interval": "weekly"
+      },
+      {
+        "title": "Oferta Especial 2",
+        "description": "Boleto Diario gratis los domingos durante el mes de agosto",
+        "dateInit": "2023-08-01",
+        "dateEnd": "2023-09-30",
+        "interval": "monthly"
       }
     ]
   }

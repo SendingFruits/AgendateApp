@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { 
 	View, 
 	Text, 
@@ -20,11 +20,14 @@ import {
 	faStar, 
 	faDoorOpen, 
 	faRegistered,
-	faCalendar
+	faCalendar,
+	faRightFromBracket
 } from '@fortawesome/free-solid-svg-icons';
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
+
+import { UserContext } from '../../../App';
 
 import HomeView from './HomeView';
 import MenuButtonItem from './MenuButtonItem';
@@ -40,22 +43,24 @@ import ProfileView from '../users/ProfileView';
 
 const drawerAside = createDrawerNavigator();
 
-// let userLogin = {};
+const Main = () => {
 
-const Main = (
-	params
-) => {
-	var userLogin = params.userPreferences.current_user;
-	
+	const { userPreferences, setUserPreferences } = useContext(UserContext);
+	var userLogin = userPreferences.current_user;
+
 	return (
 		<NavigationContainer style={styles.barMenu}>
 			<drawerAside.Navigator 
 				initialRouteName="Home"
 				drawerContent = { 
-					(props) => <MenuItems { ...props} userLogin={userLogin} />
+					(props) => <MenuItems { ...props} params={''} />
 				}
 			>
-				<drawerAside.Screen name="Inicio" component={HomeView} />
+				<drawerAside.Screen 
+					name="Inicio" 
+					component={HomeView} 
+					params={{ userLogin: '' }}
+					/>
 				<drawerAside.Screen name="Agenda" component={DiaryView} />
 				<drawerAside.Screen name="Reservas" component={BookingsView} />
 				<drawerAside.Screen name="Realizar Reserva" component={MakeReservation} />
@@ -68,15 +73,29 @@ const Main = (
 	);
 };
 
-const MenuItems = (
-	{
-		navigation,
-		userLogin
-	}
-) => {
-	// console.log(userLogin);
-	const profile = () => {
-		console.log('profile');
+const MenuItems = ( { navigation } ) => {
+
+	const { userPreferences, setUserPreferences } = useContext(UserContext);
+	var userLogin = userPreferences.current_user;
+	const [viewProfileVisible, setViewProfileVisible] = useState(false);
+	
+	const logout = () => {
+
+		if (userLogin != null) {
+			setUserPreferences({
+                current_user: {
+                    name: 'none',
+					user: 'none',
+                    pass: 'none',
+                    type: 'none',
+					pick: '',
+					data: null,
+                },
+            });
+			
+			alert('Ha dejado la sesión');
+            navigation.navigate('Inicio');
+        }
 	};
 
 	return (
@@ -96,7 +115,7 @@ const MenuItems = (
 					onPress = { () => navigation.navigate('Inicio')}
 				/>
 
-				{(userLogin.type !== 'none') ? (
+				{(userLogin.type === 'Empresa') ? (
 					<View>
 						<MenuButtonItem 
 							icon = {faCalendar}
@@ -104,19 +123,19 @@ const MenuItems = (
 							onPress = { () => navigation.navigate('Agenda')}
 						/>
 						
+					</View>
+				) : (
+					<View>
 						<MenuButtonItem 
 							icon = {faDoorOpen}
 							text = "Reservas"
 							onPress = { () => navigation.navigate('Reservas')}
 						/>
-					</View>
-				) : (
-					<View>
-						
+
+					
 					</View>
 				)}
 				
-
 				{/* <MenuButtonItem 
 					icon = {faStar}
 					text = "Acerca de... "
@@ -163,7 +182,7 @@ const MenuItems = (
 					<View>
 						<TouchableOpacity 
 							style={styles.btnLogin}
-							onPress={profile}
+							onPress={() => setViewProfileVisible(!viewProfileVisible)}
 							>
 							{/* <Image 
 								source = {{uri:'../resources/images/user_login_2.png'}}
@@ -171,12 +190,36 @@ const MenuItems = (
 							/> */}
 							<FontAwesomeIcon icon={faUser} />
 							<Text style={styles.textLogin}>
-								{userLogin.user}
+								{userLogin.name}
 							</Text>
 						</TouchableOpacity>
+
+						<View>
+							<TouchableOpacity 
+								style={styles.btnLogout} 
+								onPress={() => logout()}
+								>
+								<FontAwesomeIcon icon={faRightFromBracket} />
+							</TouchableOpacity>
+						</View>
 					</View>
 				)}
+					
+				{ (viewProfileVisible && userLogin.user !== 'none') ? (
+					<View>
+						{ (userLogin.type == 'customer') ? (
+							<View>
+								<Text>Perfil Cliente</Text>
+							</View>
+						) : null }
 
+						{ (userLogin.type == 'company') ? (
+							<View>
+								<Text>Perfil Empresa</Text>
+							</View>
+						) : null }
+					</View>
+				) : null }
 			</View>
 		</DrawerContentScrollView>
 	)
@@ -215,6 +258,11 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		alignItems: 'center',
 		flexDirection: 'row'
+	},
+	btnLogout:{
+		position:'absolute',
+		bottom:26,
+		left:220,
 	},
 	textLogin: {
 		marginStart: 7,

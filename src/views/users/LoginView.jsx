@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
 	View, 
 	Text, 
@@ -20,23 +20,41 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import UsersController from '../../controllers/UsersController';
 
+import { UserContext } from '../../../App';
+
 const Drawer = createDrawerNavigator();
 
 const LoginView = () => {
 
 	const navigation = useNavigation();
+	const { setUserPreferences } = useContext(UserContext);
 
     const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
 
 	
-
 	const login = () => {
-		UsersController.handleLogin(username, password);
-	};
+        const userReturn = UsersController.handleLogin(username, password);
 
-	// console.log(currentUser);
+		if (userReturn != null) {
+			// console.log('userReturn: ');
+			// console.log(userReturn);
+
+			setUserPreferences({
+                current_user: {
+                    name: userReturn.firstname,
+					user: userReturn.Username,
+                    pass: userReturn.Password,
+                    type: userReturn.type,
+                },
+                
+            });
+			console.log(setUserPreferences);
+
+            navigation.navigate('Inicio');
+        }
+	};
 
 	return (
 		<View style={styles.container}>

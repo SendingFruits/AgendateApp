@@ -1,4 +1,4 @@
-import UserModel from '../models/UserModel';
+import databaseData from '../services/database/database.json';
 
 class UsersController {
 
@@ -7,21 +7,34 @@ class UsersController {
 	}
 
 	handleLogin(username, password) {
+
+		const userReturn = null;
+		const usersList = databaseData.Users;
+
 		try {
-			if (data.username == '') {
-				alert('Por favor ingrese el username.');
+			if (username == '') {
+				alert('Por favor ingrese el Usuario.');
 				return;
 			}
-			if (data.password == '') {
-				alert('Por favor ingrese la contraseña.');
+			if (password == '') {
+				alert('Por favor ingrese la Contraseña.');
 				return;
 			}
-			UserModel.setUsername(username);
-			UserModel.setPassword(password);
-			// loguar contra la api <-----------
+		
+			const userReturn = usersList.find(user => user.Username === username);
+
+			if (userReturn && userReturn.Password === password) {
+				alert('Bienvenido '+ userReturn.firstname);
+				return userReturn;
+			} else {
+				alert('Credenciales Incorrectas');
+				return null;
+			}
 
 		} catch (error) {
-			alert('Credenciales Incorrectas');
+			console.log(error);
+			alert('ERROR - Login: ' + error);
+			return null;
 		}
 	}
 
@@ -69,24 +82,6 @@ class UsersController {
 		// crear el objeto json y enviarlo
 	}
 
-	getUser(username){
-		var user;
-		return user;
-	}
 }
 
 export default new UsersController();
-
-
-export var userList = [
-	{
-		1:{
-			'user':'admin',
-			'pass':'admin',
-		},
-		2:{
-			'user':'usuario2',
-			'pass':'usuario2',
-		},
-	}
-];
