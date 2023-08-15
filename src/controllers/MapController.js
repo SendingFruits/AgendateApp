@@ -1,41 +1,6 @@
 import * as Location from 'expo-location';
 import databaseData from '../services/database/database.json';
 
-class MapController {
-
-    companyLocations = async () => {
-        const usersList = databaseData.Users;
-        const companiesList = databaseData.Companies;
-    
-        const organizedCompanies = companiesList.map(company => {
-            const user = usersList.find(user => user.Id === company.UserId);
-    
-            var title = user.firstname +' '+ user.lastname;
-    
-            return {
-                userId: company.UserId,
-                rut: company.RUT,
-                socialReason: company.socialReason,
-                address: company.address,
-                itemCompany: company.itemCompany,
-                logo: company.logo,
-                description: company.description,
-                location: user.location,
-                username: user.Username,
-                email: user.Email,
-                movil: user.movil,
-                userType: user.type,
-                title: title
-            };
-        });
-    
-        console.log(organizedCompanies);
-        return organizedCompanies;
-    };
-}
-
-export default new MapController();
-
 
 export const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -101,26 +66,18 @@ export const companyLocations = async () => {
         const user = usersList.find(user => user.Id === company.UserId);
 
         var title = user.firstname +' '+ user.lastname;
-
         return {
-            userId: company.UserId,
-            rut: company.RUT,
-            socialReason: company.socialReason,
-            address: company.address,
-            itemCompany: company.itemCompany,
-            logo: company.logo,
+            id: company.UserId,
+            title: title,
+            location: company.location,
             description: company.description,
-            location: user.location,
-            username: user.Username,
-            email: user.Email,
-            movil: user.movil,
-            userType: user.type,
-            title: title
         };
     });
 
+
+    console.log('organizedCompanies:');
     console.log(organizedCompanies);
-    return organizedCompanies;
+    return organizedCompanies
 };
 
 export let companyLocationsOld = [
@@ -156,3 +113,28 @@ export let companyLocationsOld = [
 function getServicesForCompany(idCompany) {
 
 }
+
+class MapController {
+
+    // companyLocations = async () => {
+    //     const usersList = databaseData.Users;
+    //     const companiesList = databaseData.Companies;
+    
+    //     const organizedCompanies = companiesList.map(company => {
+    //         const user = usersList.find(user => user.UserId === company.UserId);
+    //         var title = user.firstname +' '+ user.lastname;
+    //         return {
+    //             id: company.UserId,
+    //             title: title,
+    //             location: company.location,
+    //             description: company.description,
+    //         };
+    //     });
+    
+    //     console.log('organizedCompanies:');
+    //     console.log(organizedCompanies);
+    //     return organizedCompanies
+    // };
+}
+
+export default new MapController();

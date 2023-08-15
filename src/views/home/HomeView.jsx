@@ -61,8 +61,7 @@ const HomeView = ( params ) => {
 	}, []);
 
 	const navigation = useNavigation();
-	console.log(companyLocations);
-
+	console.log(companyLocationsOld);
 	var otherLocation = {
 		latitude: -34.90477156839922,
 		latitudeDelta: 0.20354241619580193,
