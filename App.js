@@ -1,12 +1,11 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Main from './src/views/home/Main';
-
-export const UserContext = createContext();
+import { UserContext } from './src/services/context/context'; 
 
 const App = (config) => {
 
-	const [userPreferences, setUserPreferences] = useState({
+	var preferences = {
 		'current_user' : {
 			'name':'none',
 			'user':'none',
@@ -40,8 +39,10 @@ const App = (config) => {
 			'asideColor':'#69ACDD',
 			'backgroundColor':'#69ACDD',
 			'menuButttons': '#a8ffe5'
-		},
-    });
+		}
+	}
+
+	const [userPreferences, setUserPreferences] = useState(preferences);
 
 	return (
 		<UserContext.Provider value={{ userPreferences, setUserPreferences }}>

@@ -1,4 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { 
+	useContext, 
+	useState 
+} from 'react';
+import { UserContext } from '../../services/context/context'; 
+
 import { 
 	View, 
 	Text, 
@@ -27,7 +32,7 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
-import { UserContext } from '../../../App';
+
 
 import HomeView from './HomeView';
 import MenuButtonItem from './MenuButtonItem';
@@ -208,14 +213,14 @@ const MenuItems = ( { navigation } ) => {
 				{ (viewProfileVisible && userLogin.user !== 'none') ? (
 					<View>
 						{ (userLogin.type == 'customer') ? (
-							<View>
-								<Text>Perfil Cliente</Text>
+							<View style={styles.profile}>
+								<ProfileView param={userLogin} />
 							</View>
 						) : null }
 
 						{ (userLogin.type == 'company') ? (
-							<View>
-								<Text>Perfil Empresa</Text>
+							<View style={styles.profile}>
+								<ProfileView param={userLogin}/>
 							</View>
 						) : null }
 					</View>
@@ -257,12 +262,14 @@ const styles = StyleSheet.create({
 		backgroundColor: '#a8ffe5',
 		borderRadius: 10,
 		alignItems: 'center',
-		flexDirection: 'row'
+		flexDirection: 'row',
+		zIndex: 3,
 	},
 	btnLogout:{
 		position:'absolute',
 		bottom:26,
 		left:220,
+		zIndex: 4,
 	},
 	textLogin: {
 		marginStart: 7,
@@ -271,6 +278,12 @@ const styles = StyleSheet.create({
 	pickImage: {
 		width: 5,
 		height: 5,
+	},
+	profile: {
+		bottom: 5,
+		paddingVertical: 15,
+		backgroundColor:'#ffffff',
+		borderRadius: 15,
 	}
 });
 

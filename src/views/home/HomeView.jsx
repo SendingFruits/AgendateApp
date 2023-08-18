@@ -4,6 +4,8 @@ import {
 	useEffect,
 	useContext
 } from 'react';
+import { UserContext } from '../../services/context/context'; 
+
 import { 
 	Text, 
 	View, 
@@ -25,24 +27,24 @@ import {
 import {
 	requestLocationPermission, 
 	getLocation,
-	companyLocations,
-	companyLocationsOld
+	companyLocations
 } from '../../controllers/MapController';
 import { useNavigation } from '@react-navigation/native';
 
-import { UserContext } from '../../../App';
-
 import SearchPanel from './SearchPanel';
+import ServiceView from './ServiceView';
 
 const HomeView = ( params ) => {
 
 	const mapRef = useRef(null);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
+	// console.log('userLogin');
 	// console.log(userLogin);
 
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
+	const [companies, setCompanies] = useState([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -50,6 +52,8 @@ const HomeView = ( params ) => {
 				if (await requestLocationPermission() === 'granted') {
 					const region = await getLocation();
 					setLocation(region);
+					const organizedCompanies = await companyLocations();
+					setCompanies(organizedCompanies);
 				} else {
 					alert('No tiene permisos para obtener la ubicación.');
 				}
@@ -60,8 +64,8 @@ const HomeView = ( params ) => {
 		fetchData();
 	}, []);
 
+	// console.log(companies);
 	const navigation = useNavigation();
-	console.log(companyLocationsOld);
 	var otherLocation = {
 		latitude: -34.90477156839922,
 		latitudeDelta: 0.20354241619580193,
@@ -69,13 +73,13 @@ const HomeView = ( params ) => {
 		longitudeDelta: 0.13483230024576187
 	};
 
-	const onRegionChange = (region) => {
+	const onRegionChange = (region, gesture) => {
 		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
-		// console.log(region);
+		// console.log(region, gesture);
 	};
 	
 	const showCompanyLocations = () => {
-		return companyLocationsOld.map((item, index) => {
+		return companies.map((item, index) => {
 			return (
 				<Marker
 					key={index}
@@ -95,41 +99,47 @@ const HomeView = ( params ) => {
 
 	return (
 		<View style={styles.container}>
-
-			<SearchPanel onSearch={(query) => handleSearch(query)} />
-			
 			{Platform.OS === 'android' ? (
-				<MapView
-					ref={mapRef}
-					style={styles.map}
-					onRegionChange={onRegionChange}
-					initialRegion={location}
-					zoomEnabled={true}
-					zoomControlEnabled={true}
-					>
-						
-					{showCompanyLocations()}
-	
-					{/* <Marker
-						draggable --> esto es para arrastrar el marcador
-						pinColor='#0000ff'
-						coordinate={draggableMarkerCoord}
-						onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
-					/> */}
+				userLogin.type === 'company' ? (
+					<View style={styles.conrolPanel}>
+						<Text>Panel de Control</Text>
+						<ServiceView />
+					</View>
+				) : (
+					<View style={styles.viewMap}>
+						<SearchPanel onSearch={(query) => handleSearch(query)} />
+						<MapView
+							ref={mapRef}
+							style={styles.map}
+							onRegionChange={onRegionChange}
+							initialRegion={location}
+							zoomEnabled={true}
+							zoomControlEnabled={true}
+							>
+								
+							{showCompanyLocations()}
 
-					{/* <Polyline 
-						coordinates={[location,companyLocations[0].location]}
-						strokeColor="red"
-						strokeWidth={6}
-					/> */}
+							{/* <Marker
+								draggable --> esto es para arrastrar el marcador
+								pinColor='#0000ff'
+								coordinate={draggableMarkerCoord}
+								onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
+							/> */}
 
-				</MapView>
+							{/* <Polyline 
+								coordinates={[location,companyLocations[0].location]}
+								strokeColor="red"
+								strokeWidth={6}
+							/> */}
+
+						</MapView>
+					</View>
+				)
 			) : (
 				<View>
 					<Text>Mapa web</Text>
 				</View>
 			)}
-
 		</View>
 	);
 };
@@ -141,7 +151,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		margin: 8,
-		marginBottom: 65,
+		marginBottom: 16,
+	},
+	viewMap: {
+		width: '100%',
+		height: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor:'#355B54',
 	},
 	map: {
 		width: '99%',
@@ -175,6 +192,9 @@ const styles = StyleSheet.create({
 		paddingBottom: 1,
 		color: '#61A2DC'
 	},
+	conrolPanel: {
+		flex: 1,
+	}
 })
 
 export default HomeView;

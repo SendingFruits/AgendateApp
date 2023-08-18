@@ -1,6 +1,9 @@
 import databaseData from '../services/database/database.json';
+import UserServices from '../services/UserServices';
 
 class UsersController {
+
+	API_BASE_URL = 'https://example.com/api';
 
 	constructor(navigation) {
 		this.navigation = navigation;
@@ -8,8 +11,10 @@ class UsersController {
 
 	handleLogin(username, password) {
 
-		const userReturn = null;
+		var userReturn = null;
 		const usersList = databaseData.Users;
+		const customersList = databaseData.Customers;
+		const companiesList = databaseData.Companies;
 
 		try {
 			if (username == '') {
@@ -21,9 +26,28 @@ class UsersController {
 				return;
 			}
 		
-			const userReturn = usersList.find(user => user.Username === username);
-
+			userReturn = usersList.find(user => user.Username === username);
+			
 			if (userReturn && userReturn.Password === password) {
+
+				var data = {};
+
+				if (userReturn.type === 'customer') {
+					const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
+					data = {
+						'customer': customerData,
+					};
+				}
+
+				if (userReturn.type === 'company') {
+					const companyData = companiesList.find(company => company.UserId === userReturn.Id);
+					data = {
+						'company': companyData,
+					};
+				}
+
+				userReturn.data = data;
+				
 				alert('Bienvenido '+ userReturn.firstname);
 				return userReturn;
 			} else {
@@ -32,14 +56,12 @@ class UsersController {
 			}
 
 		} catch (error) {
-			console.log(error);
-			alert('ERROR - Login: ' + error);
+			alert('ERROR - Login ' + error);
 			return null;
 		}
 	}
 
 	handleRegister(data) {
-		console.log(data);
 	
 		if (data.username == '') {
 			throw new Error('Por favor ingrese el username.');
@@ -56,6 +78,7 @@ class UsersController {
 		if (data.email == '') {
 			throw new Error('Por favor ingrese el correo electrónico.');
 		}
+
 		if (data.userType === 'Cliente' && data.documento == '') {
 			throw new Error('Por favor ingrese el número de documento.');
 		} else {
@@ -79,9 +102,8 @@ class UsersController {
 		  	}
 		}
 	
-		// crear el objeto json y enviarlo
+		UserServices.postUserRegister(data);
 	}
-
 }
 
 export default new UsersController();

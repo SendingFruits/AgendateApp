@@ -36,9 +36,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 10,
+        padding: 9,
         backgroundColor: '#2ECC71',
-        marginTop:60,
     },
     input: {
         flex: 1,

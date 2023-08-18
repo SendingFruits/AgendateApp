@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import databaseData from '../services/database/database.json';
-
+import UserServices from '../services/UserServices';
 
 export const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -59,63 +59,38 @@ export const searchCompany = async (company) => {
 };
 
 export const companyLocations = async () => {
-    const usersList = databaseData.Users;
-    const companiesList = databaseData.Companies;
 
-    const organizedCompanies = companiesList.map(company => {
-        const user = usersList.find(user => user.Id === company.UserId);
-
-        var title = user.firstname +' '+ user.lastname;
-        return {
-            id: company.UserId,
-            title: title,
-            location: company.location,
-            description: company.description,
-        };
-    });
-
-
-    console.log('organizedCompanies:');
-    console.log(organizedCompanies);
-    return organizedCompanies
+    // const usersList = databaseData.Users;
+    // const companiesList = databaseData.Companies;
+    // const organizedCompanies = companiesList.map(company => {
+    //     const user = usersList.find(user => user.Id === company.UserId);
+    //     var title = user.firstname +' '+ user.lastname;
+    //     return {
+    //         id: company.UserId,
+    //         title: company.socialReason,
+    //         location: company.location,
+    //         description: company.description,
+    //     };
+    // });
+    // // console.log('organizedCompanies:');
+    // // console.log(organizedCompanies);
+    // return organizedCompanies
+    var list = UserServices.getCompanies();
+    console.log(list);
+    return  list;
 };
 
-export let companyLocationsOld = [
-    {
-        id: 1,
-        title: 'Antel Arena',
-        location: {
-            "latitude": -34.863847713411204,
-            "longitude": -56.15342052653432,
-        },
-        description: 'Lugar de Eventos'
-    },
-    {
-        id: 2,
-        title: 'Terminal Belloni',
-        location: {
-            "latitude": -34.855488761673755,
-            "longitude": -56.13270649686456,
-        },
-        description: 'Terminal de Ombibus'
-    },
-    {
-        id: 3,
-        title: 'Peluqueria X',
-        location: {
-            "latitude": -34.87917915703534,
-            "longitude": -56.16783572360873,
-        },
-        description: 'Cortes, brushing y mas, todo unisex\nasdasdasd asdasdasda sdasdasdsads sdasdas dsdsad s ad\nwqewqeqwe qwewqeq wesddf.'
-    }
-];
+export const getServicesForCompany = async (idCompany) =>  {
 
-function getServicesForCompany(idCompany) {
+}
 
+export const getCompanies = async () =>  {
+    return UserServices.getCompanies();
 }
 
 class MapController {
 
+    // companyLocations = [];
     // companyLocations = async () => {
     //     const usersList = databaseData.Users;
     //     const companiesList = databaseData.Companies;

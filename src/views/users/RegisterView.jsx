@@ -15,8 +15,6 @@ import {
 import { Picker } from '@react-native-picker/picker';
 
 import * as ImagePicker from "expo-image-picker";
-import * as Sharing from "expo-sharing";
-import * as uploadToAnonymousFilesAsync from "anonymous-files";
 
 import UsersController from '../../controllers/UsersController';
 
