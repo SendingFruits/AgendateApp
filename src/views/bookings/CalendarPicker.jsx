@@ -7,7 +7,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
 	typesService, 
 	availableTimes
-} from '../../controllers/MakeReservation';
+} from '../../controllers/BookingController';
 
 import AlertModal from '../utils/AlertModal';
 import ScheduleList from './ScheduleList';

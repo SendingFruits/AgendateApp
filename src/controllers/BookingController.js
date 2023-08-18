@@ -1,11 +1,12 @@
 // import ServiceModel from '../models/ServiceModel';
 // import UsersController from '../../controllers/UsersController';
 
-class MakeReservation {
+
+class BookingController {
 
 }
 
-export default new MakeReservation();
+export default new BookingController();
 
 
 export var typesService = [

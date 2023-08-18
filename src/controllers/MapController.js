@@ -2,6 +2,52 @@ import * as Location from 'expo-location';
 import databaseData from '../services/database/database.json';
 import UserServices from '../services/UserServices';
 
+class MapController {
+
+    API_BASE_URL = 'https://example.com/api';
+
+	// constructor(search) {
+	// 	this.organizedCompanies = this.searchCompany(search);
+	// }
+
+    // companyLocations = async () => {
+    //     const usersList = databaseData.Users;
+    //     const companiesList = databaseData.Companies;
+    //     const organizedCompanies = companiesList.map(company => {
+    //         const user = usersList.find(user => user.Id === company.UserId);
+    //         var title = user.firstname +' '+ user.lastname;
+    //         return {
+    //             id: company.UserId,
+    //             title: company.socialReason,
+    //             location: company.location,
+    //             description: company.description,
+    //         };
+    //     });
+    //     return organizedCompanies
+    // };
+
+    // searchCompany = async (company) => {
+    //     try {
+    //         organizedCompanies.map(company => {
+    //             const user = usersList.find(user => user.Id === company.UserId);
+    //             var title = user.firstname +' '+ user.lastname;
+    //             return {
+    //                 id: company.UserId,
+    //                 title: company.socialReason,
+    //                 location: company.location,
+    //                 description: company.description,
+    //             };
+    //         });
+    //     } catch (error) {
+    //         console.log('Error al obtener la Empresa:', error);
+    //         throw error;
+    //     }
+    // };
+}
+
+export default new MapController();
+
+
 export const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -55,29 +101,29 @@ export const searchCompany = async (company) => {
     //     }
     // };
 
-    // hacer una logica que me perita buscar en mi database.json todas las Companies 
+    // hacer una logica que me permita buscar en mi database.json todas las Companies 
 };
 
 export const companyLocations = async () => {
 
-    // const usersList = databaseData.Users;
-    // const companiesList = databaseData.Companies;
-    // const organizedCompanies = companiesList.map(company => {
-    //     const user = usersList.find(user => user.Id === company.UserId);
-    //     var title = user.firstname +' '+ user.lastname;
-    //     return {
-    //         id: company.UserId,
-    //         title: company.socialReason,
-    //         location: company.location,
-    //         description: company.description,
-    //     };
-    // });
-    // // console.log('organizedCompanies:');
-    // // console.log(organizedCompanies);
-    // return organizedCompanies
-    var list = UserServices.getCompanies();
-    console.log(list);
-    return  list;
+    const usersList = databaseData.Users;
+    const companiesList = databaseData.Companies;
+    const organizedCompanies = companiesList.map(company => {
+        const user = usersList.find(user => user.Id === company.UserId);
+        var title = user.firstname +' '+ user.lastname;
+        return {
+            id: company.UserId,
+            title: company.socialReason,
+            location: company.location,
+            description: company.description,
+        };
+    });
+    // console.log('organizedCompanies:');
+    // console.log(organizedCompanies);
+    return organizedCompanies
+    // var list = UserServices.getCompanies();
+    // console.log(list);
+    // return  list;
 };
 
 export const getServicesForCompany = async (idCompany) =>  {
@@ -87,29 +133,3 @@ export const getServicesForCompany = async (idCompany) =>  {
 export const getCompanies = async () =>  {
     return UserServices.getCompanies();
 }
-
-class MapController {
-
-    // companyLocations = [];
-    // companyLocations = async () => {
-    //     const usersList = databaseData.Users;
-    //     const companiesList = databaseData.Companies;
-    
-    //     const organizedCompanies = companiesList.map(company => {
-    //         const user = usersList.find(user => user.UserId === company.UserId);
-    //         var title = user.firstname +' '+ user.lastname;
-    //         return {
-    //             id: company.UserId,
-    //             title: title,
-    //             location: company.location,
-    //             description: company.description,
-    //         };
-    //     });
-    
-    //     console.log('organizedCompanies:');
-    //     console.log(organizedCompanies);
-    //     return organizedCompanies
-    // };
-}
-
-export default new MapController();

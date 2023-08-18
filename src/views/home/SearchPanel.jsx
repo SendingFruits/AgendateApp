@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 9,
         backgroundColor: '#2ECC71',
+        borderColor: '#355B54',
+        borderWidth: 1,
     },
     input: {
         flex: 1,

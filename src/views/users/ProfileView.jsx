@@ -13,22 +13,22 @@ import UsersController from '../../controllers/UsersController';
 
 const ProfileView = (userLogin) => {
 
-    // const [user, setUser] = useState(userLogin);
+    const [user, setUser] = useState(userLogin);
 
-	// const [isValidEmail, setIsValidEmail] = useState(true);
-	// const validateEmail = (email) => {
-	// 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	// 	return emailRegex.test(email);
-	// };
+	const [isValidEmail, setIsValidEmail] = useState(true);
+	const validateEmail = (email) => {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return emailRegex.test(email);
+	};
 
-	// const handleEmailChange = (text) => {
-	// 	setEmail(text);
-	// 	setIsValidEmail(validateEmail(text));
-	// };
+	const handleEmailChange = (text) => {
+		setEmail(text);
+		setIsValidEmail(validateEmail(text));
+	};
 
-	// // images
-	// const [selectedPicture, setSelectedPicture] = useState(null);
-	// const [selectedLogo, setSelectedLogo] = useState(null);
+	// images
+	const [selectedPicture, setSelectedPicture] = useState(null);
+	const [selectedLogo, setSelectedLogo] = useState(null);
 
 
     // return (
