@@ -81,6 +81,20 @@ class UserServices {
         //     "correo": "kmiranda@gmail.com",
         //     "tipoUsuario": "Empresa"
         // }
+
+
+        // var config = {
+        //     method: 'post',
+        //     url: 'https://01d1-2800-a4-1490-9c00-aca8-22ac-1c64-1f05.ngrok-free.app/api/Usuarios/Login?usuario=kmiranda&contrasenia=Kmiranda1234$',
+        //     headers: { }
+        // };
+        // axios(config)
+        //   .then(function (response) {
+        //     console.log(JSON.stringify(response.data));
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
     };
 
     getUsers = async () => {
