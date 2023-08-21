@@ -45,7 +45,7 @@ const HomeView = ( params ) => {
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
-
+	// console.log(location);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -62,6 +62,8 @@ const HomeView = ( params ) => {
 			}
 		};
 		fetchData();
+
+		// algun otro estdo inicial...
 	}, []);
 
 	// console.log(companies);
@@ -86,15 +88,48 @@ const HomeView = ( params ) => {
 					pinColor='#00ffff'
 					coordinate={item.location}
 					>
-					<Callout 
+					{/* <Callout 
 						style={styles.callout}
 						onPress={() => navigation.navigate('Realizar Reserva', { item })} >
 						<Text style={styles.title}>{item.title}</Text>
 						<Text style={styles.description}>{item.description}</Text>
-					</Callout>
+					</Callout> */}
+
+					{userLogin.type === 'customer' ? (
+						<Callout 
+							style={styles.callout}
+							onPress={() => navigation.navigate('Realizar Reserva', { item })} >
+							<Text style={styles.title}>{item.title}</Text>
+							<Text style={styles.description}>{item.description}</Text>
+						</Callout>
+					) : (
+						<Callout 
+							style={styles.callout}>
+							<Text style={styles.title}>{item.title}</Text>
+							<Text style={styles.description}>{item.description}</Text>
+						</Callout>
+					)}
 				</Marker>
 			)
 		});
+	};
+
+	const handleSearch = (query) => {
+		
+		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
+		const foundCompany = companies.find(company => regex.test(company.title.toLowerCase()));
+		// const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
+	
+		if (foundCompany) {
+			const newRegion = {
+				latitude: foundCompany.location.latitude,
+				longitude: foundCompany.location.longitude,
+				latitudeDelta: 0.0022,
+				longitudeDelta: 0.0121,
+			};
+			// Centra el mapa en la ubicación de la empresa encontrada
+			mapRef.current.animateToRegion(newRegion); 
+		}
 	};
 
 	return (
@@ -107,7 +142,8 @@ const HomeView = ( params ) => {
 					</View>
 				) : (
 					<View style={styles.viewMap}>
-						<SearchPanel onSearch={(query) => handleSearch(query)} />
+						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />
+						
 						<MapView
 							ref={mapRef}
 							style={styles.map}
@@ -117,12 +153,17 @@ const HomeView = ( params ) => {
 							zoomControlEnabled={true}
 							>
 								
+							{/* <Marker 
+								title="Yo" 
+								coordinates={location}
+							/> */}
+
 							{showCompanyLocations()}
 
 							{/* <Marker
 								draggable --> esto es para arrastrar el marcador
 								pinColor='#0000ff'
-								coordinate={draggableMarkerCoord}
+								coordinates={draggableMarkerCoord}
 								onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
 							/> */}
 

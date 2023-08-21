@@ -11,7 +11,7 @@ const App = (config) => {
 			'user':'none',
 			'pass':'none',
 			'type':'none',
-			'pick':'uri/: ...',
+			'mail':'none',
 			'data': {
 				'company' : {
 					'rut': '',

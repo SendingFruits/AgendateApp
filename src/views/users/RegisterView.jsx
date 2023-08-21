@@ -310,7 +310,7 @@ const RegisterView = () => {
 					<Button
 						title="Enviar"
 						onPress={sendData}
-						color="lightgreen"
+						color="#2ECC71"
 					/>
 				</View>
 			</View>
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	body: {
-		marginTop: 10,
+		marginTop: 3,
 	},
 	footer: {
 		position: 'relative',
@@ -347,12 +347,12 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: 'transparent',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
 		marginLeft: 25,
-		marginBottom: 20,
+		marginBottom: 15,
 		paddingHorizontal: 15,
 		paddingVertical: 3,
 	},
@@ -377,13 +377,13 @@ const styles = StyleSheet.create({
 	pickerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
 		marginLeft: 25,
 		marginBottom: 20,
-		marginTop: 13,
+		marginTop: 2,
 		height: 37,
 	},
 	picker: {
@@ -396,23 +396,23 @@ const styles = StyleSheet.create({
 
 	typeContainer: {
 		alignItems: 'flex-start',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
 		marginLeft: 25,
 		marginBottom: 20,
-		marginTop: 13,
+		marginTop: 1,
 	},
 
 	imageContainer: {
 		height: 75,
 		width: 90,
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		margin: 25,
 		alignSelf: 'center',
 		borderRadius: 20,
-		backgroundColor: 'lightgreen',
+		backgroundColor: '#2ECC71',
 		alignItems: 'center', // Centrar horizontalmente
 		justifyContent: 'center', // Centrar verticalmente
 	},
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
 	docpickerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginLeft: 25,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
 	},
 	inputRUTContainer: {
 		backgroundColor: 'transparent',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		height: 35,
@@ -477,15 +477,15 @@ const styles = StyleSheet.create({
 	logoContainer: {
 		height: 75,
 		width: 90,
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		marginStart: 25,
 		borderRadius: 20,
-		backgroundColor: 'lightgreen',
+		backgroundColor: '#2ECC71',
 		alignContent: 'center',
 	},
 	inputDescContainer: {
 		backgroundColor: 'transparent',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,

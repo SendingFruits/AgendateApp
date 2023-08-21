@@ -11,8 +11,10 @@
     - ejecutar npm start, puede sugerir iniciar con expo, es lo mismo
 
 3. Iniciar Emulador
-    - hay que configurar la variable de entorno para que funcione
+    - hay que configurar las variables de entorno para que funcione
         C:\Program Files (x86)\Android\android-sdk\emulator
+        C:\Program Files (x86)\Android\android-sdk\platform-tools
+        C:\Program Files (x86)\Android\android-sdk\tools\bin
     - ejecutar emulator -list-avds -> lista los emuladores disponibles
     - ejecutar emulator -avd 'nombre_emulador' -> inicia el emulador 
         [emulator -avd pixel_5_-_api_30]

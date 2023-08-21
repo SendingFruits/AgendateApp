@@ -1,5 +1,6 @@
 import React, { 
-	useState, 
+	useState,
+	useEffect, 
 	useContext 
 } from 'react';
 import { UserContext } from '../../services/context/context'; 
@@ -37,25 +38,32 @@ const LoginView = () => {
 
 	const [rememberMe, setRememberMe] = useState(false);
 
+    useEffect(() => {
+        // Al entrar en la pantalla, reiniciar los valores de estado
+        // setUsername('');
+        // setPassword('');
+    }, []);
+
 	const login = () => {
         const userReturn = UsersController.handleLogin(username, password);
 
-		if (userReturn != null) {
-			console.log('userReturn', userReturn);
-
+		if (!userReturn) {
+			// console.log('userReturn', userReturn);
 			setUserPreferences({
                 current_user: {
                     name: userReturn.firstname,
 					user: userReturn.Username,
                     pass: userReturn.Password,
+					mail: userReturn.Email,
                     type: userReturn.type,
 					data: userReturn.data,
-                },
-                
+                },   
             });
 			// console.log(setUserPreferences);
             navigation.navigate('Inicio');
-        }
+        } else {
+			alert('Credenciales Incorrectas');
+		}
 	};
 
 	return (
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		height: 220,
-		backgroundColor: 'lightgreen',
+		backgroundColor: '#2ECC71',
 	},
 	body: {
 		flex: 1,
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: 'transparent',
-		borderColor: 'lightgreen',
+		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 18,

@@ -12,9 +12,9 @@ class UsersController {
 	handleLogin(username, password) {
 
 		var userReturn = null;
-		const usersList = databaseData.Users;
-		const customersList = databaseData.Customers;
-		const companiesList = databaseData.Companies;
+		// const usersList = databaseData.Users;
+		// const customersList = databaseData.Customers;
+		// const companiesList = databaseData.Companies;
 
 		try {
 			if (username == '') {
@@ -26,34 +26,38 @@ class UsersController {
 				return;
 			}
 		
-			userReturn = usersList.find(user => user.Username === username);
-			
-			if (userReturn && userReturn.Password === password) {
+			userReturn = UserServices.doLogin(username,password);
+			// console.log('userReturn: ',userReturn);
+			return userReturn;
 
-				var data = {};
+			// esto es para usar el database.json
+			// userReturn = usersList.find(user => user.Username === username);
+			// if (userReturn && userReturn.Password === password) {
 
-				if (userReturn.type === 'customer') {
-					const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
-					data = {
-						'customer': customerData,
-					};
-				}
+			// 	var data = {};
 
-				if (userReturn.type === 'company') {
-					const companyData = companiesList.find(company => company.UserId === userReturn.Id);
-					data = {
-						'company': companyData,
-					};
-				}
+			// 	if (userReturn.type === 'customer') {
+			// 		const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
+			// 		data = {
+			// 			'customer': customerData,
+			// 		};
+			// 	}
 
-				userReturn.data = data;
+			// 	if (userReturn.type === 'company') {
+			// 		const companyData = companiesList.find(company => company.UserId === userReturn.Id);
+			// 		data = {
+			// 			'company': companyData,
+			// 		};
+			// 	}
+
+			// 	userReturn.data = data;
 				
-				alert('Bienvenido '+ userReturn.firstname);
-				return userReturn;
-			} else {
-				alert('Credenciales Incorrectas');
-				return null;
-			}
+			// 	alert('Bienvenido '+ userReturn.firstname);
+			// 	return userReturn;
+			// } else {
+			// 	alert('Credenciales Incorrectas');
+			// 	return null;
+			// }
 
 		} catch (error) {
 			alert('ERROR - Login ' + error);
@@ -103,6 +107,20 @@ class UsersController {
 		}
 	
 		UserServices.postUserRegister(data);
+	}
+
+	handleUpdate(data) {
+		if (data.username == '') {
+			throw new Error('Por favor ingrese el username.');
+		}
+		if (data.password == '') {
+			throw new Error('Por favor ingrese la contraseña.');
+		}
+		if (data.email == '') {
+			throw new Error('Por favor ingrese el correo electrónico.');
+		}
+
+		UserServices.putUserData(data);
 	}
 }
 

@@ -10,7 +10,7 @@ import {
     Button
 } from 'react-native';
 
-const SearchPanel = () => {
+const SearchPanel = ({ onSearch, mapRef }) => {
 
     const [searchQuery, setSearchQuery] = useState('');
 

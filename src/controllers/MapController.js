@@ -72,8 +72,8 @@ export const getLocation = async () => {
         const initialRegion = {
             latitude,
             longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.0122,
+            longitudeDelta: 0.0122
         };
         // console.log(initialRegion);
         return initialRegion;
@@ -105,7 +105,6 @@ export const searchCompany = async (company) => {
 };
 
 export const companyLocations = async () => {
-
     const usersList = databaseData.Users;
     const companiesList = databaseData.Companies;
     const organizedCompanies = companiesList.map(company => {

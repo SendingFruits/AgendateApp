@@ -49,12 +49,37 @@
         "lastname": "X",
         "movil": "9876543210",
         "type": "company"
+      },
+      {
+        "Id":6,
+        "Username": "User2",
+        "Password": "User2",
+        "Email": "User2@example.com",
+        "firstname": "User",
+        "lastname": "Two",
+        "movil": "545654888",
+        "type": "customer"
+      },
+      {
+        "Id":7,
+        "Username": "Empresa X",
+        "Password": "12345",
+        "Email": "empresa.x@example.com",
+        "firstname": "Empresa",
+        "lastname": "X",
+        "movil": "00546587987",
+        "type": "company"
       }
     ],
     "Customers": [
       {
         "UserId":1,
         "document": "123456789",
+        "picture": "/path/to/customer/picture.jpg"
+      },
+      {
+        "UserId":6,
+        "document": "981234566",
         "picture": "/path/to/customer/picture.jpg"
       }
     ],
@@ -118,17 +143,71 @@
           "latitudeDelta": 0.0922355614972119,
           "longitudeDelta": 0.0693817064166069
         }
+      },
+      {
+        "UserId":7,
+        "RUT": 10000500123456789,
+        "socialReason": "Pelu",
+        "address": "Calle 657987987",
+        "itemCompany": "...",
+        "logo": "/path/to/company/logo.jpg",
+        "description": "No se sabe.",
+        "location": {
+          "latitude": -34.846390668781666, 
+          "latitudeDelta": 0.09223663644971225, 
+          "longitude": -56.23299362137914, 
+          "longitudeDelta": 0.10249961167573218
+        }
       }
     ],
     "Bookings": [
       {
         "Status": "confirmed",
-        "DateTime": "2023-08-01T14:30:00Z"
+        "DateTime": "2023-08-01T14:30:00Z",
+        "Customer": {
+          "UserId":1,
+          "document": "123456789",
+          "Username": "admin",
+          "Email": "john@example.com",
+          "firstname": "John",
+          "lastname": "Doe",
+          "movil": "1234567890"
+        },
+        "Service":{
+
+        }
+      },
+      {
+        "Status": "pending",
+        "DateTime": "2023-08-01T14:30:00Z",
+        "Customer": {
+          "UserId":1,
+          "document": "123456789",
+          "Username": "admin",
+          "Email": "john@example.com",
+          "firstname": "John",
+          "lastname": "Doe",
+          "movil": "1234567890"
+        }
+      },
+      {
+        "Status": "accept",
+        "DateTime": "2023-08-01T14:30:00Z",
+        "Customer": {
+          "UserId":6,
+          "document": "981234566",
+          "Username": "User2",
+          "Email": "User2@example.com",
+          "firstname": "User",
+          "lastname": "Two",
+          "movil": "545654888"
+        }
       }
     ],
     "Services": [
       {
-        "idCompany" : 1,
+        "idService" : 1,
+        "idCompany" : 6,
         "name": "Chapista Pepe.",
         "type": "Autos",
         "dateInit": null,
@@ -138,6 +217,7 @@
         "quota": 20
       },
       {
+        "idService":2,
         "idCompany" : 2,
         "name": "Vendo Empanadas",
         "type": "Gastronimia",
@@ -148,8 +228,8 @@
         "quota": 20
       },
       {
-        "idService":5,
-        "idCompany":2,
+        "idService":3,
+        "idCompany":3,
         "name": "Cortes, Brashings y peinados para fiestas.",
         "type": "Estetica",
         "dateInit": null,

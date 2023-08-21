@@ -1,8 +1,8 @@
+import { UserContext } from '../../services/context/context'; 
 import React, { 
 	useContext, 
 	useState 
 } from 'react';
-import { UserContext } from '../../services/context/context'; 
 
 import { 
 	View, 
@@ -120,26 +120,25 @@ const MenuItems = ( { navigation } ) => {
 					onPress = { () => navigation.navigate('Inicio')}
 				/>
 
-				{(userLogin.type === 'Empresa') ? (
+				{(userLogin.type !== 'none') ? (
 					<View>
-						<MenuButtonItem 
-							icon = {faCalendar}
-							text = "Agenda"
-							onPress = { () => navigation.navigate('Agenda')}
-						/>
-						
-					</View>
-				) : (
-					<View>
-						<MenuButtonItem 
-							icon = {faDoorOpen}
-							text = "Reservas"
-							onPress = { () => navigation.navigate('Reservas')}
-						/>
+						{ (userLogin.type === 'company') ? (
+							<MenuButtonItem 
+								icon = {faCalendar}
+								text = "Agenda"
+								onPress = { () => navigation.navigate('Agenda')}
+							/>
+						) : null }
 
-					
+						{ (userLogin.type === 'customer') ? (
+							<MenuButtonItem 
+								icon = {faCalendar}
+								text = "Reservas"
+								onPress = { () => navigation.navigate('Reservas')}
+						/>
+						) : null }
 					</View>
-				)}
+				) : null }
 				
 				{/* <MenuButtonItem 
 					icon = {faStar}
@@ -250,6 +249,7 @@ const styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderTopColor: 'gray',
 		paddingVertical: 10,
+		// backgroundColor:'#'
 	},
 	title:{
 		fontSize: 20,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
 	profile: {
 		bottom: 5,
 		paddingVertical: 15,
-		backgroundColor:'#ffffff',
+		backgroundColor:'#a8ffe5',
 		borderRadius: 15,
 	}
 });

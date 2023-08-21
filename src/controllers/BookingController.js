@@ -9,6 +9,19 @@ class BookingController {
 export default new BookingController();
 
 
+export const getBookingsCustomer = async (customer) => {
+    const bookingsList = databaseData.Bookings;
+    const bookingsForCustomer = bookingsList.filter(booking => {
+        return booking.Customer.UserId === customer.UserId;
+    });
+    console.log('bookingsForCustomer:');
+    console.log(bookingsForCustomer);
+    return bookingsForCustomer
+    // var list = BookingsServices.getBookings();
+    // console.log(list);
+    // return  list;
+};
+
 export var typesService = [
     { title: 'Servicio 1', description: 'Descripción del servicio 1' },
     { title: 'Servicio 2', description: 'Descripción del servicio 2' },
