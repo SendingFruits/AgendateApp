@@ -20,12 +20,13 @@ class UserServices {
                     contrasenia: password,
                 }),
             });
+            
+            console.log('response: ',response);
 
             // if (!response.ok) {
             //     throw new Error('Credenciales Incorrectas');
             // }
 
-            console.log('response: ',response);
             const data = response.json();
             console.log(data);
         
@@ -60,6 +61,26 @@ class UserServices {
         //     console.error('Error en la solicitud:', error);
         // }
 
+
+        // retorna:
+        // {
+        //     "rutDocumento": "123456789012",
+        //     "razonSocial": "Razon Social X",
+        //     "nombrePropietario": "Kevin",
+        //     "rubro": "Peluqueria de pelados",
+        //     "calle": "Silomonto lo meo",
+        //     "numeroPuerta": "4",
+        //     "ciudad": "La Costa City",
+        //     "descripcion": "Peluquerias de peluqueria",
+        //     "id": 1,
+        //     "nombreUsuario": "kmiranda",
+        //     "nombre": "Kevin",
+        //     "apellido": "Miranda",
+        //     "contrasenia": "006A2C8BF2485DF64E9CED47D3CEE89A251CA61E7C313FF0686621F247C003CA",
+        //     "celular": "098760127",
+        //     "correo": "kmiranda@gmail.com",
+        //     "tipoUsuario": "Empresa"
+        // }
     };
 
     getUsers = async () => {
