@@ -4,97 +4,29 @@ import axios from 'axios';
 class UserServices {
 
     doLogin = async (username, password) => {
-
-        console.log('','');
-
-        try {
-            // const response = await fetch(`${API_BASE_URL}/Usuarios/Login?usuario=${username}&contrasenia=${password}`, {});
-
-            const response = await fetch(`${API_BASE_URL}/Usuarios/Login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    usuario: username,
-                    contrasenia: password,
-                }),
-            });
+        try {  
+            // Codifica los valores de los parámetros para evitar problemas con caracteres especiales
+            const usuarioCodificado = encodeURIComponent(username);
+            const contraseniaCodificada = encodeURIComponent(password);
+            // Construye la URL con los parámetros codificados
+            const urlCompleta = `${API_BASE_URL}/Usuarios/Login?usuario=${usuarioCodificado}&contrasenia=${contraseniaCodificada}`;
+            // Configura las cabeceras si es necesario (por ejemplo, Content-Type o Authorization)
+            const headers = {
+                // Agrega aquí las cabeceras requeridas por la API
+            };
             
-            console.log('response: ',response);
-
-            // if (!response.ok) {
-            //     throw new Error('Credenciales Incorrectas');
-            // }
-
-            const data = response.json();
-            console.log(data);
-        
-            // Devolver el usuario o el token de sesión
-            // return data;
+            axios.post(urlCompleta, {}, { headers })
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                return JSON.stringify(response.data);
+            })
+            .catch(function (error) {
+                throw new Error(error);
+                return null;
+            });
         } catch (error) {
-            console.error('Error during login:', error);
             throw error;
         }
-
-     
-        // try {
-        //     console.log(API_BASE_URL);
-        //     const response = await axios.post(`${API_BASE_URL}/Usuarios/Login`,  {
-        //         usuario: username,
-        //         contrasenia: encodeURIComponent(password),
-        //     }, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         }
-        //     });
-            
-        //     console.log('Respuesta:', response);
-
-        //     // Aquí puedes manejar la respuesta del servidor (response.data)
-        //     console.log('Respuesta del servidor:', response.data);
-        
-        //     // Por ejemplo, si el servidor devuelve un token JWT, puedes almacenarlo en el estado de tu aplicación o en AsyncStorage.
-        
-        // } catch (error) {
-        //     // Manejo de errores
-        //     console.error('Error en la solicitud:', error);
-        // }
-
-
-        // retorna:
-        // {
-        //     "rutDocumento": "123456789012",
-        //     "razonSocial": "Razon Social X",
-        //     "nombrePropietario": "Kevin",
-        //     "rubro": "Peluqueria de pelados",
-        //     "calle": "Silomonto lo meo",
-        //     "numeroPuerta": "4",
-        //     "ciudad": "La Costa City",
-        //     "descripcion": "Peluquerias de peluqueria",
-        //     "id": 1,
-        //     "nombreUsuario": "kmiranda",
-        //     "nombre": "Kevin",
-        //     "apellido": "Miranda",
-        //     "contrasenia": "006A2C8BF2485DF64E9CED47D3CEE89A251CA61E7C313FF0686621F247C003CA",
-        //     "celular": "098760127",
-        //     "correo": "kmiranda@gmail.com",
-        //     "tipoUsuario": "Empresa"
-        // }
-
-
-        // var config = {
-        //     method: 'post',
-        //     url: 'https://01d1-2800-a4-1490-9c00-aca8-22ac-1c64-1f05.ngrok-free.app/api/Usuarios/Login?usuario=kmiranda&contrasenia=Kmiranda1234$',
-        //     headers: { }
-        // };
-        // axios(config)
-        //   .then(function (response) {
-        //     console.log(JSON.stringify(response.data));
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
     };
 
     getUsers = async () => {
@@ -144,7 +76,6 @@ class UserServices {
             //     },
             //     body: JSON.stringify({ username, password }),
             // });
-
 
             if (!response.ok) {
                 throw new Error('Error al obtener Empresas');

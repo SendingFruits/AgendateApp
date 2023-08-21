@@ -3,8 +3,6 @@ import UserServices from '../services/UserServices';
 
 class UsersController {
 
-	API_BASE_URL = 'https://example.com/api';
-
 	constructor(navigation) {
 		this.navigation = navigation;
 	}
