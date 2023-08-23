@@ -24,4 +24,4 @@
 
 
 5. GIT
-    - 
+    - git push --force agendate-app factory:esteban
