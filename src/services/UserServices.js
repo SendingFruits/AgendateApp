@@ -4,29 +4,30 @@ import axios from 'axios';
 class UserServices {
 
     doLogin = async (username, password) => {
-        try {  
-            // Codifica los valores de los parámetros para evitar problemas con caracteres especiales
-            const usuarioCodificado = encodeURIComponent(username);
-            const contraseniaCodificada = encodeURIComponent(password);
-            // Construye la URL con los parámetros codificados
-            const urlCompleta = `${API_BASE_URL}/Usuarios/Login?usuario=${usuarioCodificado}&contrasenia=${contraseniaCodificada}`;
-            // Configura las cabeceras si es necesario (por ejemplo, Content-Type o Authorization)
-            const headers = {
-                // Agrega aquí las cabeceras requeridas por la API
-            };
-            
-            axios.post(urlCompleta, {}, { headers })
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
-                return JSON.stringify(response.data);
-            })
-            .catch(function (error) {
-                throw new Error(error);
-                return null;
-            });
-        } catch (error) {
-            throw error;
-        }
+        return new Promise((resolve, reject) => {            
+            try {  
+                // Codifica los valores de los parámetros para evitar problemas con caracteres especiales
+                const usuarioCodificado = encodeURIComponent(username);
+                const contraseniaCodificada = encodeURIComponent(password);
+                // Construye la URL con los parámetros codificados
+                const urlCompleta = `${API_BASE_URL}/Usuarios/Login?pUsuario=${usuarioCodificado}&pContrasenia=${contraseniaCodificada}`;
+                // Configura las cabeceras si es necesario (por ejemplo, Content-Type o Authorization)
+                const headers = {
+                    // Agrega aquí las cabeceras requeridas por la API
+                };
+                
+                axios.post(urlCompleta, {}, { headers })
+                .then(function (response) {
+                    // console.log('JSON: ',JSON.stringify(response.data));
+                    resolve(JSON.stringify(response.data))
+                })
+                .catch(function (error) {
+                    reject(new Error(error));
+                });
+            } catch (error) {
+                throw error;
+            }
+        });
     };
 
     getUsers = async () => {
@@ -67,22 +68,12 @@ class UserServices {
 
     getCompanies = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/Empresas`);
-
-            // const response = await fetch(`${API_BASE_URL}/login`, {
-            //     method: 'GET',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ username, password }),
-            // });
-
+            const response = await fetch(`${API_BASE_URL}/Empresas/ObtenerEmpresasMapa`);
             if (!response.ok) {
                 throw new Error('Error al obtener Empresas');
             }
             const data = await response.json();
-
-            console.log(data);
+            // console.log(data);
             return data;
         } catch (error) {
             console.error('Error:', error);

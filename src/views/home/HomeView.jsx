@@ -32,7 +32,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import SearchPanel from './SearchPanel';
-import ServiceView from './ServiceView';
+import CompanyPanel from '../users/CompanyPanel';
 
 const HomeView = ( params ) => {
 
@@ -137,13 +137,11 @@ const HomeView = ( params ) => {
 			{Platform.OS === 'android' ? (
 				userLogin.type === 'company' ? (
 					<View style={styles.conrolPanel}>
-						<Text>Panel de Control</Text>
-						<ServiceView />
+						<CompanyPanel />
 					</View>
 				) : (
 					<View style={styles.viewMap}>
-						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />
-						
+						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
 						<MapView
 							ref={mapRef}
 							style={styles.map}

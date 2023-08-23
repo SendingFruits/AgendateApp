@@ -45,25 +45,36 @@ const LoginView = () => {
     }, []);
 
 	const login = () => {
-        const userReturn = UsersController.handleLogin(username, password);
+   
+		UsersController.handleLogin(username, password)
+		.then(userReturn => {
+			// console.log(' ');
+			if (userReturn) {
+				var user = JSON.parse(userReturn);
 
-		if (!userReturn) {
-			// console.log('userReturn', userReturn);
-			setUserPreferences({
-                current_user: {
-                    name: userReturn.firstname,
-					user: userReturn.Username,
-                    pass: userReturn.Password,
-					mail: userReturn.Email,
-                    type: userReturn.type,
-					data: userReturn.data,
-                },   
-            });
-			// console.log(setUserPreferences);
-            navigation.navigate('Inicio');
-        } else {
+				if (user.tipoUsuario == 'Empresa') user.tipoUsuario = 'company';
+				if (user.tipoUsuario == 'Cliente') user.tipoUsuario = 'customer';
+
+				setUserPreferences({
+					current_user: {
+						name: user.nombre,
+						user: user.nombreUsuario,
+						pass: user.contrasenia,
+						mail: user.correo,
+						type: user.tipoUsuario,
+						// data: userReturn.data,
+					},   
+				});
+				navigation.navigate('Inicio');
+				alert('Bienvenido '+ user.nombre);
+			} else {
+				alert('Credenciales Incorrectas');
+			}
+		})
+		.catch(error => {
 			alert('Credenciales Incorrectas');
-		}
+		});
+
 	};
 
 	return (

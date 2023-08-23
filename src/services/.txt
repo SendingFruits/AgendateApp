@@ -1,14 +1,12 @@
-Credenciales para tipo Empresa:
-usuario: kmiranda
-contrasenia: Kmiranda1234$
-------X--------
-Credenciales para tipo Cliente:
-usuario: susano
-contrasenia: susanita$ 
+--usu kmiranda
+--pass kmiranda1234
 
+--usu kmiranda2
+--pass kmiranda234
 
-https://5f3b-2800-a4-1490-9c00-aca8-22ac-1c64-1f05.ngrok-free.app/api/Usuarios/Login?usuario=kmiranda&contrasenia=Kmiranda1234$
-
- ERROR  There was a problem sending log messages to your development environment [PrettyFormatPluginError: value.hasOwnProperty is not a function (it is undefined)]
- LOG  {"_h": 0, "_i": 0, "_j": null, "_k": null}
- ERROR  Error during login: [TypeErro
+--usu kmiranda2
+--pass kmiranda34
+https://e606-2800-a4-14b2-4900-d51e-55e0-2c9f-d55c.ngrok-free.app/api/
+Parametros login:
+pUsuario
+pContrasenia

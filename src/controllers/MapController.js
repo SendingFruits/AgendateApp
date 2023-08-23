@@ -105,30 +105,53 @@ export const searchCompany = async (company) => {
 };
 
 export const companyLocations = async () => {
-    const usersList = databaseData.Users;
-    const companiesList = databaseData.Companies;
-    const organizedCompanies = companiesList.map(company => {
-        const user = usersList.find(user => user.Id === company.UserId);
-        var title = user.firstname +' '+ user.lastname;
-        return {
-            id: company.UserId,
-            title: company.socialReason,
-            location: company.location,
-            description: company.description,
-        };
-    });
+
+    // const usersList = databaseData.Users;
+    // const companiesList = databaseData.Companies;
+    // const organizedCompanies = companiesList.map(company => {
+    //     const user = usersList.find(user => user.Id === company.UserId);
+    //     return {
+    //         id: company.UserId,
+    //         title: company.socialReason,
+    //         location: company.location,
+    //         description: company.description,
+    //     };
+    // });
     // console.log('organizedCompanies:');
     // console.log(organizedCompanies);
-    return organizedCompanies
-    // var list = UserServices.getCompanies();
-    // console.log(list);
-    // return  list;
+    // return organizedCompanies
+
+
+    var list = await UserServices.getCompanies();
+    // console.log('list: ',list);
+    const organizedCompanies = list.map(company => {
+        return {
+            id: company.id,
+            title: company.razonSocial,
+            location: {
+                "latitude":company.latitude,
+                "longitude":company.longitude,
+                "latitudeDelta": 0.0222,
+                "longitudeDelta":0.0222,
+            },
+            address: company.direccion,
+            description: company.descripcion,
+            itemCompany: company.company, 
+        }
+    });
+    // console.log('organizedCompanies: ',organizedCompanies);
+    return organizedCompanies;
+
+
+    // UserServices.getCompanies()
+    // .then((companies) => {
+    //     return  list;
+    // })
+    // .catch((error) => {
+    //     console.log('ERROR!');
+    // });
 };
 
 export const getServicesForCompany = async (idCompany) =>  {
 
-}
-
-export const getCompanies = async () =>  {
-    return UserServices.getCompanies();
 }
