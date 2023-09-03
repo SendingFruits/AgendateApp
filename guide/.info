@@ -3,14 +3,13 @@
     - node -v en cmd para ver version
     - tener npm en variables de entorno configurada
 
+
 1. Actualizar Dependencias
     - ir al directorio de la app agendate-app/
     - ejecutar npm install
 
-2. Iniciar Servicio
-    - ejecutar npm start, puede sugerir iniciar con expo, es lo mismo
 
-3. Iniciar Emulador
+2. Iniciar Emulador
     - hay que configurar las variables de entorno para que funcione
         C:\Program Files (x86)\Android\android-sdk\emulator
         C:\Program Files (x86)\Android\android-sdk\platform-tools
@@ -18,6 +17,11 @@
     - ejecutar emulator -list-avds -> lista los emuladores disponibles
     - ejecutar emulator -avd 'nombre_emulador' -> inicia el emulador 
         [emulator -avd pixel_5_-_api_30]
+    - emulator -avd pixel_5_-_api_30 -wipe-data sirve para cuando el emulador se tranca y no responde
+
+3. Iniciar Servicio (osea la app)
+    - ejecutar npm start, puede sugerir iniciar con expo, es lo mismo
+    - npm start -- --reset-cache (cuando necesitamos resetear el cache)
 
 4. Utilizar Ngrok
 
@@ -25,3 +29,6 @@
 
 5. GIT
     - git push --force agendate-app factory:esteban
+    subir los cambios de una rama local llamada "factory" a la rama remoto llamada "esteban"
+    en el repositorio agendate-app (este pertenece a la organizacion sending fruit)
+    el repo origin pertenece a otra organizacion

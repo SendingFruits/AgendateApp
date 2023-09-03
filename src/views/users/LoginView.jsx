@@ -1,17 +1,22 @@
+import { UserContext } from '../../services/context/context'; 
+import { useNavigation } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import UsersController from '../../controllers/UsersController';
+
 import React, { 
 	useState,
 	useEffect, 
 	useContext 
 } from 'react';
-import { UserContext } from '../../services/context/context'; 
 
 import { 
+	StyleSheet,
 	View, 
 	Text, 
-	Image, 
 	TextInput, 
+	Image, 
 	Button, 
-	StyleSheet ,
 	TouchableOpacity
 } from 'react-native';
 import { 
@@ -21,10 +26,7 @@ import {
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
-import { useNavigation } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import UsersController from '../../controllers/UsersController';
 
 const Drawer = createDrawerNavigator();
 
@@ -39,40 +41,57 @@ const LoginView = () => {
 	const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        // Al entrar en la pantalla, reiniciar los valores de estado
+        // Comentar para test
         // setUsername('');
         // setPassword('');
     }, []);
 
 	const login = () => {
-   
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
-			// console.log(' ');
-			if (userReturn) {
-				var user = JSON.parse(userReturn);
+			if (userReturn != null) {
+				console.log('userReturn: ', userReturn);
 
-				if (user.tipoUsuario == 'Empresa') user.tipoUsuario = 'company';
-				if (user.tipoUsuario == 'Cliente') user.tipoUsuario = 'customer';
+				// api
+				// var user = JSON.parse(userReturn);
+				// console.log('user: ', user);
+				
+				// if (user.tipoUsuario == 'Empresa') user.tipoUsuario = 'company';
+				// if (user.tipoUsuario == 'Cliente') user.tipoUsuario = 'customer';
 
+				// setUserPreferences({
+				// 	current_user: {
+				// 		guid: user.id,
+				// 		name: user.nombre,
+				// 		user: user.nombreUsuario,
+				// 		pass: user.contrasenia,
+				// 		mail: user.correo,
+				// 		type: user.tipoUsuario,
+				// 		// data: userReturn.data,
+				// 	},   
+				// });
+
+				// json
 				setUserPreferences({
 					current_user: {
-						name: user.nombre,
-						user: user.nombreUsuario,
-						pass: user.contrasenia,
-						mail: user.correo,
-						type: user.tipoUsuario,
-						// data: userReturn.data,
+						guid: userReturn.Id,
+						name: userReturn.firstname,
+						user: userReturn.Username,
+						pass: userReturn.Password,
+						mail: userReturn.Email,
+						type: userReturn.type,
+						data: userReturn.data,
 					},   
 				});
+
 				navigation.navigate('Inicio');
-				alert('Bienvenido '+ user.nombre);
-			} else {
-				alert('Credenciales Incorrectas');
+				alert('Bienvenido '+ 
+					(userReturn.firstname !== undefined ? 
+						userReturn.firstname : user.nombre ));
 			}
 		})
 		.catch(error => {
-			alert('Credenciales Incorrectas');
+			alert(error);
 		});
 
 	};

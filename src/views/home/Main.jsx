@@ -1,15 +1,31 @@
 import { UserContext } from '../../services/context/context'; 
+
+import HomeView from './HomeView';
+import MenuButtonItem from './MenuButtonItem';
+import AboutView from './AboutView';
+
+import DiaryView from '../diary/DiaryView';
+import BookingsView from '../bookings/BookingsView';
+import MakeReservation from '../bookings/MakeReservation';
+
+import ServicesView from '../services/ServicesView';
+import PromosView from '../promotions/PromosView';
+
+import LoginView from '../users/LoginView';
+import RegisterView from '../users/RegisterView';
+import ProfileView from '../users/ProfileView';
+
 import React, { 
 	useContext, 
 	useState 
 } from 'react';
 
 import { 
+	StyleSheet,
 	View, 
 	Text, 
-	StyleSheet,
+	Image,
 	TouchableOpacity,
-	Image
 } from 'react-native';
 import { 
 	NavigationContainer 
@@ -26,48 +42,45 @@ import {
 	faDoorOpen, 
 	faRegistered,
 	faCalendar,
-	faRightFromBracket
+	faRightFromBracket,
+	faScrewdriverWrench,
+	faTags
 } from '@fortawesome/free-solid-svg-icons';
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
 
-
-import HomeView from './HomeView';
-import MenuButtonItem from './MenuButtonItem';
-
-import DiaryView from '../bookings/DiaryView';
-import BookingsView from '../bookings/BookingsView';
-import MakeReservation from '../bookings/MakeReservation';
-import AboutView from './AboutView';
-
-import LoginView from '../users/LoginView';
-import RegisterView from '../users/RegisterView';
-import ProfileView from '../users/ProfileView';
-
 const drawerAside = createDrawerNavigator();
 
-const Main = () => {
-
+const Main = ( params ) => {
+	// console.log(params);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
-
+	// console.log('userLogin in Main: ', userLogin);
 	return (
 		<NavigationContainer style={styles.barMenu}>
 			<drawerAside.Navigator 
 				initialRouteName="Home"
-				drawerContent = { 
-					(props) => <MenuItems { ...props} params={''} />
-				}
-			>
+				drawerContent = { (props) => <MenuItems { ...props} params={''} /> }
+				>
 				<drawerAside.Screen 
 					name="Inicio" 
 					component={HomeView} 
-					params={{ userLogin: '' }}
+					initialParams={{ userLogin: '' }}
 					/>
 				<drawerAside.Screen name="Agenda" component={DiaryView} />
 				<drawerAside.Screen name="Reservas" component={BookingsView} />
+				<drawerAside.Screen 
+					name="Servicios" 
+					component={ServicesView} 
+					initialParams={{ userLogin: userLogin }} 
+					/>
+				<drawerAside.Screen 
+					name="Promociones" 
+					component={PromosView} 
+					initialParams={{ userLogin: userLogin }} 
+					/>
 				<drawerAside.Screen name="Realizar Reserva" component={MakeReservation} />
 				{/* <drawerAside.Screen name="Acerca de..." component={AboutView} /> */}
 				
@@ -123,11 +136,23 @@ const MenuItems = ( { navigation } ) => {
 				{(userLogin.type !== 'none') ? (
 					<View>
 						{ (userLogin.type === 'company') ? (
-							<MenuButtonItem 
-								icon = {faCalendar}
-								text = "Agenda"
-								onPress = { () => navigation.navigate('Agenda')}
-							/>
+							<View>
+								<MenuButtonItem 
+									icon = {faCalendar}
+									text = "Agenda"
+									onPress = { () => navigation.navigate('Agenda')}
+								/>
+								<MenuButtonItem 
+									icon = {faScrewdriverWrench}
+									text = "Servicios"
+									onPress = { () => navigation.navigate('Servicios', params={userLogin})}
+								/>
+								<MenuButtonItem 
+									icon = {faTags}
+									text = "Promociones"
+									onPress = { () => navigation.navigate('Promociones', params={userLogin})}
+								/>
+							</View>
 						) : null }
 
 						{ (userLogin.type === 'customer') ? (
@@ -139,18 +164,6 @@ const MenuItems = ( { navigation } ) => {
 						) : null }
 					</View>
 				) : null }
-				
-				{/* <MenuButtonItem 
-					icon = {faStar}
-					text = "Acerca de... "
-					onPress = { () => navigation.navigate('Acerca de...')}
-				/> */}
-				
-				{/* <MenuButtonItem 
-					icon = {faDoorOpen}
-					text = "Servicios"
-					onPress = { () => navigation.navigate('Servicios')}
-				/> */}
 			</View>
 
 			{/* Footer */}

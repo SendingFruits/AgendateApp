@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Picker } from '@react-native-picker/picker';
+
+import * as ImagePicker from "expo-image-picker";
+
+import UsersController from '../../controllers/UsersController';
+
 import {
 	Text,
 	StyleSheet,
@@ -12,11 +18,6 @@ import {
 	Alert
 } from 'react-native';
 
-import { Picker } from '@react-native-picker/picker';
-
-import * as ImagePicker from "expo-image-picker";
-
-import UsersController from '../../controllers/UsersController';
 
 const RegisterView = () => {
 
@@ -38,21 +39,10 @@ const RegisterView = () => {
 	};
 
 	const [userType, setUserType] = useState('Cliente');
-
 	// customer
-	const [foto, setFoto] = useState('');
 	const [documento, setDocumento] = useState('');
-
 	// company
 	const [rut, setRut] = useState('');
-	const [phType, setPhType] = useState('RUT');
-
-	const [razon, setRazon] = useState('');
-	const [rubro, setRubro] = useState('');
-	const [address, setAddress] = useState('');
-	const [logo, setLogo] = useState('');
-	const [description, setDescription] = useState('');
-
 	// images
 	const [selectedPicture, setSelectedPicture] = useState(null);
 	const [selectedLogo, setSelectedLogo] = useState(null);
@@ -102,14 +92,8 @@ const RegisterView = () => {
 			apellido,
 			email,
 			userType,
-			selectedPicture,
-			selectedLogo,
 			documento,
 			rut,
-			razon,
-			rubro,
-			address,
-			description,
 		};
 
 		try {
@@ -199,9 +183,8 @@ const RegisterView = () => {
 
 				{/* Campos según el tipo seleccionado */}
 				{userType === 'Cliente' ? (
-					<View style={styles.typeContainer}>
-						<View style={styles.imageContainer}>
-						
+					<View>
+						{/* <View style={styles.imageContainer}>	
 							<TouchableOpacity
 								onPress={ () => handleImagePicker(0) }
 								> 	
@@ -210,8 +193,7 @@ const RegisterView = () => {
 									source={{ uri: selectedPicture }} 
 									/>
 							</TouchableOpacity>
-							
-						</View>
+						</View> */}
 						<View style={styles.inputContainer}>
 							<TextInput
 								keyboardType="numeric"
@@ -223,10 +205,9 @@ const RegisterView = () => {
 						</View>
 					</View>
 				) : (
-					<View style={styles.typeContainer}>
-
-						<View style={styles.doctypeContainer}>
-							<View style={styles.docpickerContainer}>
+					<View>
+						<View>
+							{/* <View style={styles.docpickerContainer}>
 								<Picker
 									style={styles.pickerType}
 									placeholder="TipoDoc"
@@ -236,8 +217,8 @@ const RegisterView = () => {
 									<Picker.Item label="RUT" value="RUT" />
 									<Picker.Item label="CI" value="CI" />
 								</Picker>
-							</View>
-							<View style={styles.inputRUTContainer}>
+							</View> */}
+							<View style={styles.inputContainer}>
 								<TextInput
 									keyboardType="numeric"
 									style={styles.input}
@@ -248,7 +229,7 @@ const RegisterView = () => {
 							</View>
 						</View>
 
-						<View style={styles.inputContainer}>
+						{/* <View style={styles.inputContainer}>
 							<TextInput
 								style={styles.input}
 								placeholder="Razon Social"
@@ -273,11 +254,10 @@ const RegisterView = () => {
 								value={address}
 								onChangeText={setAddress}
 							/>
-						</View>
+						</View> */}
 
-						<View style={styles.infoContainer}>
+						{/* <View>
 							<View style={styles.logoContainer}>
-
 								<TouchableOpacity
 									onPress={ () => handleImagePicker(1) }
 									> 
@@ -297,8 +277,7 @@ const RegisterView = () => {
 									numberOfLines={4}
 								/>
 							</View>
-						</View>
-
+						</View> */}
 					</View>
 				)}
 				{/* */}
@@ -306,7 +285,7 @@ const RegisterView = () => {
 
 			<View style={styles.footer}>
 				{/* Button */}
-				<View style={styles.nextContainer}>
+				<View style={styles.sendContainer}>
 					<Button
 						title="Enviar"
 						onPress={sendData}
@@ -354,7 +333,7 @@ const styles = StyleSheet.create({
 		marginLeft: 25,
 		marginBottom: 15,
 		paddingHorizontal: 15,
-		paddingVertical: 3,
+		paddingVertical: 10,
 	},
 	inputIcon: {
 		width: 40,
@@ -384,7 +363,7 @@ const styles = StyleSheet.create({
 		marginLeft: 25,
 		marginBottom: 20,
 		marginTop: 2,
-		height: 37,
+		height: 50,
 	},
 	picker: {
 		flex: 1,
@@ -512,12 +491,12 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginTop: 20,
 	},
-	nextContainer: {
+	sendContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		margin: 20,
+		margin: 50,
 	},
-	nextText: {
+	sendText: {
 		color: 'darkgray',
 		fontSize: 12,
 		marginRight: 4,

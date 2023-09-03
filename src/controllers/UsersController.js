@@ -9,66 +9,52 @@ class UsersController {
 
 	handleLogin(username, password) {
 		return new Promise((resolve, reject) => {
+			// api
 			UserServices.doLogin(username, password)
 			.then(userReturn => {
+				userReturn.api = true;
 				resolve(userReturn);
 			})
 			.catch(error => {
 				reject(null);
 			});
-		});
 
-		// try {
-		// 	// var userReturn = null;
-		// 	// const usersList = databaseData.Users;
-		// 	// const customersList = databaseData.Customers;
-		// 	// const companiesList = databaseData.Companies;
+			// json
+			var userReturn = null;
+			const usersList = databaseData.Users;
+			const customersList = databaseData.Customers;
+			const companiesList = databaseData.Companies;
 	
-		// 	if (username == '') {
-		// 		alert('Por favor ingrese el Usuario.');
-		// 		return;
-		// 	}
-		// 	if (password == '') {
-		// 		alert('Por favor ingrese la Contraseña.');
-		// 		return;
-		// 	}
-		
-		// 	// userReturn = UserServices.doLogin(username,password);
-		// 	// console.log('userReturn: ',userReturn);
-		// 	// return userReturn;
-
-		// 	// esto es para usar el database.json
-		// 	// userReturn = usersList.find(user => user.Username === username);
-		// 	// if (userReturn && userReturn.Password === password) {
-
-		// 	// 	var data = {};
-
-		// 	// 	if (userReturn.type === 'customer') {
-		// 	// 		const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
-		// 	// 		data = {
-		// 	// 			'customer': customerData,
-		// 	// 		};
-		// 	// 	}
-
-		// 	// 	if (userReturn.type === 'company') {
-		// 	// 		const companyData = companiesList.find(company => company.UserId === userReturn.Id);
-		// 	// 		data = {
-		// 	// 			'company': companyData,
-		// 	// 		};
-		// 	// 	}
-
-		// 	// 	userReturn.data = data;
-		// 	// 	alert('Bienvenido '+ userReturn.firstname);
-		// 	// 	return userReturn;
-		// 	// } else {
-		// 	// 	alert('Credenciales Incorrectas');
-		// 	// 	return null;
-		// 	// }
-
-		// } catch (error) {
-		// 	alert('ERROR - Login ' + error);
-		// 	return null;
-		// }
+			if (username == '') {
+				reject('Por favor ingrese el Usuario.');
+				return;
+			}
+			if (password == '') {
+				reject('Por favor ingrese la Contraseña.');
+				return;
+			}
+			userReturn = usersList.find(user => user.Username === username);
+			if (userReturn && userReturn.Password === password) {
+				var data = {};
+				if (userReturn.type === 'customer') {
+					const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
+					data = {
+						'customer': customerData,
+					};
+				}
+				if (userReturn.type === 'company') {
+					const companyData = companiesList.find(company => company.UserId === userReturn.Id);
+					data = {
+						'company': companyData,
+					};
+				}
+				userReturn.data = data;
+				userReturn.api = false;
+				resolve(userReturn);
+			} else {
+				reject('Credenciales Incorrectas');
+			}
+		});
 	}
 
 	handleRegister(data) {

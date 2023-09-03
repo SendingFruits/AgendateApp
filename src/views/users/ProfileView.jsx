@@ -1,5 +1,9 @@
-import UsersController from '../../controllers/UsersController';
 import React, { useState, useEffect } from 'react';
+import { formatDate } from '../utils/Functions'
+
+import * as ImagePicker from "expo-image-picker";
+import UsersController from '../../controllers/UsersController';
+
 import { 
     Text, 
     StyleSheet, 
@@ -9,13 +13,30 @@ import {
     TouchableOpacity,
     Image } 
 from 'react-native';
+import { 
+	faEye,
+    faEyeSlash
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
 
-import * as ImagePicker from "expo-image-picker";
 
 const ProfileView = (userLogin) => {
 
     const [user, setUser] = useState(userLogin.param);
-    console.log(user);
+
+    const [username, setUsername] = useState(user.user);
+    const [password, setPassword] = useState(user.pass);
+    const [email,    setEmail]    = useState(user.mail);
+
+    const [iconEye, setIconEye] = useState(false);
+    const [secureTextEntryValue, setSecureTextEntryValue] = useState(true);
+    
+    const handleToggleIcon = () => {
+        setIconEye(!iconEye);
+        setSecureTextEntryValue(!iconEye);
+    };
 
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const validateEmail = (email) => {
@@ -28,10 +49,10 @@ const ProfileView = (userLogin) => {
 		setIsValidEmail(validateEmail(text));
 	};
 
-	// images
-	const [selectedPicture, setSelectedPicture] = useState(null);
 
-    let openImagePickerAsync = async (buttonIndex) => {
+	const [selectedPicture, setSelectedPicture] = useState(null);
+    // convertImageToBase64(url)
+    let openImagePickerAsync = async () => {
 
 		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 		// console.log(permissionResult.granted);
@@ -41,24 +62,16 @@ const ProfileView = (userLogin) => {
 		}
 
 		const pickerResult = await ImagePicker.launchImageLibraryAsync()
-	
 		// eslint-disable-next-line
 		if (!pickerResult.canceled) {
-	
 			const newSelectedImage = pickerResult.assets[0].uri;
 			console.log(newSelectedImage);
-
-			if (buttonIndex === 0) {
-				setSelectedPicture(newSelectedImage);
-			} 
-			if (buttonIndex === 1) {
-				setSelectedLogo(newSelectedImage);
-			}
+            setSelectedPicture(newSelectedImage);
 		}
 	}
 
-    const handleImagePicker = (buttonIndex) => {
-		openImagePickerAsync(buttonIndex);
+    const handleImagePicker = () => {
+		openImagePickerAsync();
 	};
 
     const update = () => {
@@ -88,18 +101,32 @@ const ProfileView = (userLogin) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        value={user.user}
-                        // onChangeText={setUsername}
+                        value={username}
+                        onChangeText={setUsername}
                     />
                 </View>
 
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        secureTextEntry
-                        value={user.pass}
-                        // onChangeText={setPassword}
+                        secureTextEntry={secureTextEntryValue}
+                        value={password}
+                        onChangeText={setPassword}
                     />
+                    <TouchableOpacity 
+                        style={styles.iconEye}
+                        onPress={handleToggleIcon}
+                        > 	
+                        { (iconEye) ? (
+                            <View>
+                                <FontAwesomeIcon icon={faEye} />
+                            </View>
+                        ) : 
+                            <View>
+                                <FontAwesomeIcon icon={faEyeSlash} />
+                            </View>
+                        }
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -127,9 +154,9 @@ const ProfileView = (userLogin) => {
                     <TextInput
                         keyboardType="email-address"
                         style={styles.input}
-                        value={user.mail}
-                        // onChangeText={setEmail}
-                        // autoCapitalize="none"
+                        value={email}
+                        onChangeText={setEmail}
+                        autoCapitalize="none"
                     />
                     {
                         !isValidEmail &&
@@ -139,17 +166,25 @@ const ProfileView = (userLogin) => {
                     }
                 </View>
 
-                <View style={styles.imageContainer}>
-                
-                    <TouchableOpacity  onPress={ () => handleImagePicker(0) } > 	
-                        <Image 
-                            style={styles.image} 
-                            source={{ uri: selectedPicture }} 
-                            />
-                    </TouchableOpacity>
-                    
-                </View>
-					
+                { (user.type === 'customer') ? (
+                    <View style={styles.imageContainer}>
+                        <TouchableOpacity 
+                            style={styles.imageButton}
+                            onPress={ () => handleImagePicker(0) } > 	
+                            <View style={styles.buttonContent}>
+                                { (!selectedPicture) ? (
+                                    <Text style={styles.imageText}>Foto</Text>
+                                ) : 
+                                    <Image 
+                                        style={styles.image} 
+                                        source={{ uri: selectedPicture }} 
+                                        />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ) : null }
+
             </ScrollView>
 
             <View style={styles.footer}>
@@ -207,6 +242,7 @@ const styles = StyleSheet.create({
         paddingVertical:10,
         fontWeight:'bold'
 	},
+
     imageContainer: {
 		height: 75,
 		width: 90,
@@ -217,12 +253,34 @@ const styles = StyleSheet.create({
 		alignItems: 'center', // Centrar horizontalmente
 		justifyContent: 'center', // Centrar verticalmente
 	},
+    imageButton: {
+        alignItems:'center'
+	},
+    imageText: {
+		marginHorizontal:20,
+	},
 	image: {
 		flex: 1,
 		height: 75,
 		width: 90,
 		borderRadius: 20,
+        resizeMode: 'cover',
 	},
+    buttonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    
+    iconEye: {
+        flex: 1,
+        position:'absolute',
+        bottom:5,
+        left:50,
+        alignSelf:'flex-end',
+        marginLeft: 140,
+        backgroundColor:'#fff',
+        padding: 5,
+    },
 })
 
 export default ProfileView;

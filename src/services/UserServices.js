@@ -5,7 +5,7 @@ class UserServices {
 
     doLogin = async (username, password) => {
         return new Promise((resolve, reject) => {            
-            try {  
+            try {
                 // Codifica los valores de los parámetros para evitar problemas con caracteres especiales
                 const usuarioCodificado = encodeURIComponent(username);
                 const contraseniaCodificada = encodeURIComponent(password);
@@ -25,23 +25,10 @@ class UserServices {
                     reject(new Error(error));
                 });
             } catch (error) {
+                console.error('Error doLogin:', error);
                 throw error;
             }
         });
-    };
-
-    getUsers = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/users`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching users:', error);
-            throw error;
-        }
     };
 
     postUserRegister = async (json) => {
@@ -61,22 +48,7 @@ class UserServices {
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error('Error fetching users:', error);
-            throw error;
-        }
-    };
-
-    getCompanies = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/Empresas/ObtenerEmpresasMapa`);
-            if (!response.ok) {
-                throw new Error('Error al obtener Empresas');
-            }
-            const data = await response.json();
-            // console.log(data);
-            return data;
-        } catch (error) {
-            console.error('Error:', error);
+            console.error('Error postUserRegister:', error);
             throw error;
         }
     };
@@ -98,7 +70,7 @@ class UserServices {
             const data = await response.json();
             return data; // Esto sería el objeto de usuario actualizado
         } catch (error) {
-            console.error('Error updating user data:', error);
+            console.error('Error putUserData:', error);
             throw error;
         }
     };

@@ -1,17 +1,25 @@
+import { UserContext } from '../../services/context/context'; 
+import { useNavigation } from '@react-navigation/native';
+
+import MapController from '../../controllers/MapController';
+
+import SearchPanel from './SearchPanel';
+import CompanyPanel from '../users/CompanyPanel';
+
 import { 
 	useRef,
 	useState, 
 	useEffect,
 	useContext
 } from 'react';
-import { UserContext } from '../../services/context/context'; 
 
 import { 
+	Platform,
+	Dimensions,
+	StyleSheet, 
 	Text, 
 	View, 
 	Alert, 
-	StyleSheet, 
-	Platform,
 	Button,
 	TouchableOpacity,
 } from 'react-native';
@@ -24,35 +32,39 @@ from 'react-native-maps';
 import { 
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
-import {
-	requestLocationPermission, 
-	getLocation,
-	companyLocations
-} from '../../controllers/MapController';
-import { useNavigation } from '@react-navigation/native';
 
-import SearchPanel from './SearchPanel';
-import CompanyPanel from '../users/CompanyPanel';
+
+var windowWidth = Dimensions.get('window').width;
+var windowHeight = Dimensions.get('window').height;
 
 const HomeView = ( params ) => {
 
 	const mapRef = useRef(null);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
-	// console.log('userLogin');
-	// console.log(userLogin);
+	// console.log('userLogin', userLogin);
 
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
-	// console.log(location);
+	const [calloutVisible, setCalloutVisible] = useState(false);
+
+	// console.log(companies);
+	const navigation = useNavigation();
+	var otherLocation = {
+		latitude: -34.90477156839922,
+		latitudeDelta: 0.20354241619580193,
+		longitude: -56.180862206965685,
+		longitudeDelta: 0.13483230024576187
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				if (await requestLocationPermission() === 'granted') {
-					const region = await getLocation();
+				if (await MapController.requestLocationPermission() === 'granted') {
+					const region = await MapController.getLocation();
 					setLocation(region);
-					const organizedCompanies = await companyLocations();
+					const organizedCompanies = await MapController.companyLocations();
 					setCompanies(organizedCompanies);
 				} else {
 					alert('No tiene permisos para obtener la ubicación.');
@@ -66,14 +78,6 @@ const HomeView = ( params ) => {
 		// algun otro estdo inicial...
 	}, []);
 
-	// console.log(companies);
-	const navigation = useNavigation();
-	var otherLocation = {
-		latitude: -34.90477156839922,
-		latitudeDelta: 0.20354241619580193,
-		longitude: -56.180862206965685,
-		longitudeDelta: 0.13483230024576187
-	};
 
 	const onRegionChange = (region, gesture) => {
 		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
@@ -124,8 +128,8 @@ const HomeView = ( params ) => {
 			const newRegion = {
 				latitude: foundCompany.location.latitude,
 				longitude: foundCompany.location.longitude,
-				latitudeDelta: 0.0022,
-				longitudeDelta: 0.0121,
+				latitudeDelta: 0.00006,
+				longitudeDelta: 0.00006,
 			};
 			// Centra el mapa en la ubicación de la empresa encontrada
 			mapRef.current.animateToRegion(newRegion); 
@@ -137,7 +141,12 @@ const HomeView = ( params ) => {
 			{Platform.OS === 'android' ? (
 				userLogin.type === 'company' ? (
 					<View style={styles.conrolPanel}>
-						<CompanyPanel />
+						<CompanyPanel 
+							idCompany={userLogin.guid} 
+							dataCompany={userLogin.data.company}
+							// windowWidth={windowWidth} 
+							// windowHeight={windowHeight}
+							/>
 					</View>
 				) : (
 					<View style={styles.viewMap}>
@@ -149,11 +158,14 @@ const HomeView = ( params ) => {
 							initialRegion={location}
 							zoomEnabled={true}
 							zoomControlEnabled={true}
+							showsUserLocation={true}
 							>
 								
+							{/* {console.log('location: ',location)} */}
+
 							{/* <Marker 
 								title="Yo" 
-								coordinates={location}
+								coordinates={{location}}
 							/> */}
 
 							{showCompanyLocations()}
