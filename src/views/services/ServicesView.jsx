@@ -62,6 +62,7 @@ const ServicesView = ( {route} ) => {
                 <ScrollView style={styles.scrollContainer}>
                     {listServices.map((service, index) => (
                         <ServiceItem 
+                            key={index}
                             service={service} 
                             onPress={handleEditService} 
                             />
@@ -79,7 +80,12 @@ const ServicesView = ( {route} ) => {
                 </View>
             }
 
-            
+            <View style={styles.footer}>
+                <Text style={styles.textVersion1}>En esta versión solo puede tener un servicio</Text>
+                <Text style={styles.textVersion2}>Necesita actualizar a la versión Premium</Text>
+                <View>        
+                </View>
+            </View>
         </View>
     );
 };
@@ -106,6 +112,21 @@ const styles = StyleSheet.create({
     },
     textCreate: {
         color:'#ffffff'
+    },
+    footer: {
+        width:'95%',
+        alignItems:'center',
+        borderTopColor:'#011',
+        borderTopWidth:0.6,
+    },
+    textVersion1: {
+        fontWeight:'bold',
+        paddingHorizontal:6,
+        paddingVertical:10,
+    },
+    textVersion2: {
+        paddingHorizontal:3,
+        paddingBottom: 5,
     },
 });
 

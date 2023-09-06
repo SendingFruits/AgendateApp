@@ -58,7 +58,7 @@ const PromosView = ( {route} ) => {
     return (
         <View style={styles.container}>
 
-            { (listServices.length > 0) ? (
+            {/* { (listServices.length > 0) ? (
                 <ScrollView style={styles.scrollContainer}>
                     {listServices.map((service, index) => (
                         <PromoItem 
@@ -77,7 +77,7 @@ const PromosView = ( {route} ) => {
                     </View>
                     
                 </View>
-            }
+            } */}
 
             
         </View>
