@@ -1,5 +1,6 @@
 import { UserContext } from '../../services/context/context'; 
 import { useNavigation } from '@react-navigation/native';
+import { getOrientation } from '../../views/utils/Functions'; 
 
 import MapController from '../../controllers/MapController';
 
@@ -34,11 +35,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 
-var windowWidth = Dimensions.get('window').width;
-var windowHeight = Dimensions.get('window').height;
-
 const HomeView = ( params ) => {
-
+	
 	const mapRef = useRef(null);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
@@ -58,6 +56,9 @@ const HomeView = ( params ) => {
 		longitudeDelta: 0.13483230024576187
 	};
 
+	const [orientation, setOrientation] = useState(getOrientation());
+
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -75,7 +76,12 @@ const HomeView = ( params ) => {
 		};
 		fetchData();
 
-		// algun otro estdo inicial...
+		const handleOrientationChange = () => {
+			const newOrientation = getOrientation();
+			setOrientation(newOrientation);
+		};
+		Dimensions.addEventListener('change', handleOrientationChange);
+
 	}, []);
 
 
@@ -150,39 +156,22 @@ const HomeView = ( params ) => {
 					</View>
 				) : (
 					<View style={styles.viewMap}>
-						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
+						
+						{orientation === 'portrait' ? (				
+							<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
+						) : (
+							<></>
+						)}
+
 						<MapView
 							ref={mapRef}
-							style={styles.map}
+							style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
 							onRegionChange={onRegionChange}
 							initialRegion={location}
 							zoomEnabled={true}
 							zoomControlEnabled={true}
 							showsUserLocation={true}
-							>
-								
-							{/* {console.log('location: ',location)} */}
-
-							{/* <Marker 
-								title="Yo" 
-								coordinates={{location}}
-							/> */}
-
-							{showCompanyLocations()}
-
-							{/* <Marker
-								draggable --> esto es para arrastrar el marcador
-								pinColor='#0000ff'
-								coordinates={draggableMarkerCoord}
-								onDragEnd={(e) => setDraggableMarkerCoord(e.nativeEvent.coordinate)}
-							/> */}
-
-							{/* <Polyline 
-								coordinates={[location,companyLocations[0].location]}
-								strokeColor="red"
-								strokeWidth={6}
-							/> */}
-
+						>
 						</MapView>
 					</View>
 				)
@@ -195,6 +184,9 @@ const HomeView = ( params ) => {
 	);
 };
 
+var windowWidth = Dimensions.get('window').width;
+var windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -203,6 +195,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		margin: 8,
 		marginBottom: 16,
+	},
+	landscape: {
+		marginTop:25,
 	},
 	viewMap: {
 		width: '100%',
@@ -214,6 +209,18 @@ const styles = StyleSheet.create({
 	map: {
 		width: '99%',
 		height: '91%',
+		margin: 1,
+		padding: 1,
+	},
+	mapPortrait: {
+		width: '99%',
+		height: '91%',
+		margin: 1,
+		padding: 1,
+	},
+	mapLandscape: {
+		width: '99%',
+		height: '97%',
 		margin: 1,
 		padding: 1,
 	},

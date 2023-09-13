@@ -2,22 +2,42 @@ import { UserContext } from './src/services/context/context';
 import { StyleSheet, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Main from './src/views/home/Main';
+import * as ScreenOrientation from "expo-screen-orientation";
+
+// Orientation.Unknown = 0
+// Orientation.PORTRAIT_UP = 1
+// Orientation.PORTRAIT_DOWN = 2
+// Orientation.LANDSCAPE_LEFT = 3
+// Orientation.LANDSCAPE_RIGHT = 4
+
+var currentOrientation = window.screen.orientation.type;
+window.addEventListener('orientationchange', function() {
+	currentOrientation = window.screen.orientation.type;
+});
 
 const App = (config) => {
 
-	var getOrientation = () => {
-		const { width, height } = Dimensions.get('window');
-		return width > height ? 'landscape' : 'portrait';
-	}
-	const [orientation, setOrientation] = useState(getOrientation());
+	const [orientation, setOrientation] = useState(null);
 
 	useEffect(() => {
-		const handleOrientationChange = () => {
-			const newOrientation = getOrientation();
-			setOrientation(newOrientation);
-		};
-		Dimensions.addEventListener('change', handleOrientationChange);
+		// checkOrientation();
+		// const subscription = ScreenOrientation.addOrientationChangeListener(
+		// 	handleOrientationChange
+		// );
+		// return () => {
+		//   	ScreenOrientation.removeOrientationChangeListeners(subscription);
+		// };
 	}, []);
+
+	// const checkOrientation = async () => {
+	// 	const orientation = await ScreenOrientation.getOrientationAsync();
+	// 	console.log(orientation);
+	// 	setOrientation(orientation);
+	// };
+
+	// const handleOrientationChange = (o) => {
+	// 	setOrientation(o.orientationInfo.orientation);
+	// };
 
 	var preferences = {
 		'current_user' : {
@@ -26,7 +46,7 @@ const App = (config) => {
 			'last':'Piccardo',
 			'user':'esteban',
 			'pass':'12345',
-			'type':'customer',
+			'type':'company',
 			'mail':'esteban@gmail.com',
 			'data': {
 				'company' : {
@@ -48,7 +68,7 @@ const App = (config) => {
 					'logo': 'uri/: ...',
 				},
 				'customer' : {
-					'document': '47326453',
+					'document': '',
 					'picture': 'uri/: ...'
 				},
 			}
@@ -71,18 +91,15 @@ const App = (config) => {
 
 	return (
 		<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-            <Main 
-				style={styles.background} 
-				orientation={orientation}
-				/>
+            <Main style={styles.background} />
         </UserContext.Provider>
 	);
 };
 
 export default App;
 
-var windowWidth = Dimensions.get('window').width;
-var windowHeight = Dimensions.get('window').height;
+// var windowWidth = Dimensions.get('window').width;
+// var windowHeight = Dimensions.get('window').height;
 
 // puedo agregar un estilo aca y usarlo en toda la aplicacion
 const styles = StyleSheet.create({

@@ -22,6 +22,7 @@ import React, {
 
 import { 
 	StyleSheet,
+	Dimensions,
 	View, 
 	Text, 
 	Image,
@@ -67,7 +68,7 @@ const Main = ( params ) => {
 				<drawerAside.Screen 
 					name="Inicio" 
 					component={HomeView} 
-					initialParams={{ userLogin: '' }}
+					initialParams={{ orientation: params.orientation }} 
 					/>
 				<drawerAside.Screen name="Agenda" component={DiaryView} />
 				<drawerAside.Screen name="Reservas" component={BookingsView} />
@@ -117,14 +118,11 @@ const MenuItems = ( { navigation } ) => {
 	};
 
 	return (
-		<DrawerContentScrollView
-			style={styles.asideMenu}
-		>
+		<DrawerContentScrollView style={styles.asideMenu} >
 			{/* Header */}
 			<View style={styles.header}>
 				<Text style={styles.title}>Menú</Text>
 			</View>
-
 			{/* Body */}
 			<View style={styles.body}>
 				<MenuButtonItem 
@@ -165,7 +163,6 @@ const MenuItems = ( { navigation } ) => {
 					</View>
 				) : null }
 			</View>
-
 			{/* Footer */}
 			<View style={styles.footer}>
 
