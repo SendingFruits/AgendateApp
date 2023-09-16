@@ -60,49 +60,28 @@ class MapController {
         // hacer una logica que me permita buscar en mi database.json todas las Companies 
     };
 
-    companyLocations = async () => {
+    companyLocations = async (loc,cte) => {
 
-        const usersList = databaseData.Users;
-        const companiesList = databaseData.Companies;
-        const organizedCompanies = companiesList.map(company => {
-            const user = usersList.find(user => user.Id === company.UserId);
+        var list = await MapServices.getCompanies(loc.latitude,loc.longitude,cte);
+        // console.log('list: ',list);
+        const organizedCompanies = list.map(company => {
             return {
-                id: company.UserId,
-                title: company.socialReason,
-                location: company.location,
-                description: company.description,
-            };
+                id: company.id,
+                title: company.razonSocial,
+                location: {
+                    "latitude":company.latitude,
+                    "longitude":company.longitude,
+                    "latitudeDelta": 0.00699,
+                    "longitudeDelta":0.00499,
+                },
+                address: company.direccion,
+                description: company.descripcion,
+                itemCompany: company.company, 
+            }
         });
-    
-        // var list = await MapServices.getCompanies();
-        // // console.log('list: ',list);
-        // const organizedCompanies = list.map(company => {
-        //     return {
-        //         id: company.id,
-        //         title: company.razonSocial,
-        //         location: {
-        //             "latitude":company.latitude,
-        //             "longitude":company.longitude,
-        //             "latitudeDelta": 0.0222,
-        //             "longitudeDelta":0.0222,
-        //         },
-        //         address: company.direccion,
-        //         description: company.descripcion,
-        //         itemCompany: company.company, 
-        //     }
-        // });
-    
-        
+
         // console.log('organizedCompanies: ',organizedCompanies);
         return organizedCompanies;
-    
-        // MapServices.getCompanies()
-        // .then((companies) => {
-        //     return  list;
-        // })
-        // .catch((error) => {
-        //     console.log('ERROR!');
-        // });
     };
 
     getServicesForCompany = async (idCompany) =>  {

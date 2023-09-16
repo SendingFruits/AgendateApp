@@ -65,7 +65,7 @@ const HomeView = ( params ) => {
 				if (await MapController.requestLocationPermission() === 'granted') {
 					const region = await MapController.getLocation();
 					setLocation(region);
-					const organizedCompanies = await MapController.companyLocations();
+					const organizedCompanies = await MapController.companyLocations(region,20);
 					setCompanies(organizedCompanies);
 				} else {
 					alert('No tiene permisos para obtener la ubicación.');
@@ -91,6 +91,7 @@ const HomeView = ( params ) => {
 	};
 	
 	const showCompanyLocations = () => {
+
 		return companies.map((item, index) => {
 			return (
 				<Marker
@@ -104,7 +105,7 @@ const HomeView = ( params ) => {
 						<Text style={styles.title}>{item.title}</Text>
 						<Text style={styles.description}>{item.description}</Text>
 					</Callout> */}
-
+					
 					{userLogin.type === 'customer' ? (
 						<Callout 
 							style={styles.callout}
@@ -165,6 +166,7 @@ const HomeView = ( params ) => {
 
 						<MapView
 							ref={mapRef}
+							// style={styles.map}
 							style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
 							onRegionChange={onRegionChange}
 							initialRegion={location}
@@ -172,6 +174,9 @@ const HomeView = ( params ) => {
 							zoomControlEnabled={true}
 							showsUserLocation={true}
 						>
+
+							{showCompanyLocations()}
+
 						</MapView>
 					</View>
 				)

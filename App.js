@@ -21,13 +21,13 @@ const App = (config) => {
 
 	var preferences = {
 		'current_user' : {
-			'guid':'2',
-			'name':'Esteban',
-			'last':'Piccardo',
-			'user':'esteban',
-			'pass':'12345',
-			'type':'customer',
-			'mail':'esteban@gmail.com',
+			'guid':'none',
+			'name':'none',
+			'last':'none',
+			'user':'none',
+			'pass':'none',
+			'type':'none',
+			'mail':'none',
 			'data': {
 				'company' : {
 					'rut': '10000500123456789',

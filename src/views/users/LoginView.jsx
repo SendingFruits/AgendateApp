@@ -53,36 +53,36 @@ const LoginView = () => {
 				console.log('userReturn: ', userReturn);
 
 				// api
-				// var user = JSON.parse(userReturn);
-				// console.log('user: ', user);
+				var user = JSON.parse(userReturn);
+				console.log('user: ', user);
 				
 				// if (user.tipoUsuario == 'Empresa') user.tipoUsuario = 'company';
 				// if (user.tipoUsuario == 'Cliente') user.tipoUsuario = 'customer';
 
-				// setUserPreferences({
-				// 	current_user: {
-				// 		guid: user.id,
-				// 		name: user.nombre,
-				// 		user: user.nombreUsuario,
-				// 		pass: user.contrasenia,
-				// 		mail: user.correo,
-				// 		type: user.tipoUsuario,
-				// 		// data: userReturn.data,
-				// 	},   
-				// });
-
-				// json
 				setUserPreferences({
 					current_user: {
-						guid: userReturn.Id,
-						name: userReturn.firstname,
-						user: userReturn.Username,
-						pass: userReturn.Password,
-						mail: userReturn.Email,
-						type: userReturn.type,
-						data: userReturn.data,
+						guid: user.id,
+						name: user.nombre,
+						user: user.nombreUsuario,
+						pass: user.contrasenia,
+						mail: user.correo,
+						type: user.tipoUsuario,
+						// data: userReturn.data,
 					},   
 				});
+
+				// json
+				// setUserPreferences({
+				// 	current_user: {
+				// 		guid: userReturn.Id,
+				// 		name: userReturn.firstname,
+				// 		user: userReturn.Username,
+				// 		pass: userReturn.Password,
+				// 		mail: userReturn.Email,
+				// 		type: userReturn.type,
+				// 		data: userReturn.data,
+				// 	},   
+				// });
 
 				navigation.navigate('Inicio');
 				alert('Bienvenido '+ 
@@ -91,7 +91,7 @@ const LoginView = () => {
 			}
 		})
 		.catch(error => {
-			alert(error);
+			alert('CATCH ERROR: '+error);
 		});
 
 	};

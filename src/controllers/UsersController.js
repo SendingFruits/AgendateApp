@@ -10,9 +10,11 @@ class UsersController {
 	handleLogin(username, password) {
 		return new Promise((resolve, reject) => {
 			// api
+			console.log('API');
 			UserServices.doLogin(username, password)
 			.then(userReturn => {
 				userReturn.api = true;
+				console.log(userReturn);
 				resolve(userReturn);
 			})
 			.catch(error => {
@@ -20,40 +22,40 @@ class UsersController {
 			});
 
 			// json
-			var userReturn = null;
-			const usersList = databaseData.Users;
-			const customersList = databaseData.Customers;
-			const companiesList = databaseData.Companies;
+			// var userReturn = null;
+			// const usersList = databaseData.Users;
+			// const customersList = databaseData.Customers;
+			// const companiesList = databaseData.Companies;
 	
-			if (username == '') {
-				reject('Por favor ingrese el Usuario.');
-				return;
-			}
-			if (password == '') {
-				reject('Por favor ingrese la Contraseña.');
-				return;
-			}
-			userReturn = usersList.find(user => user.Username === username);
-			if (userReturn && userReturn.Password === password) {
-				var data = {};
-				if (userReturn.type === 'customer') {
-					const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
-					data = {
-						'customer': customerData,
-					};
-				}
-				if (userReturn.type === 'company') {
-					const companyData = companiesList.find(company => company.UserId === userReturn.Id);
-					data = {
-						'company': companyData,
-					};
-				}
-				userReturn.data = data;
-				userReturn.api = false;
-				resolve(userReturn);
-			} else {
-				reject('Credenciales Incorrectas');
-			}
+			// if (username == '') {
+			// 	reject('Por favor ingrese el Usuario.');
+			// 	return;
+			// }
+			// if (password == '') {
+			// 	reject('Por favor ingrese la Contraseña.');
+			// 	return;
+			// }
+			// userReturn = usersList.find(user => user.Username === username);
+			// if (userReturn && userReturn.Password === password) {
+			// 	var data = {};
+			// 	if (userReturn.type === 'customer') {
+			// 		const customerData = customersList.find(customer => customer.UserId === userReturn.Id);
+			// 		data = {
+			// 			'customer': customerData,
+			// 		};
+			// 	}
+			// 	if (userReturn.type === 'company') {
+			// 		const companyData = companiesList.find(company => company.UserId === userReturn.Id);
+			// 		data = {
+			// 			'company': companyData,
+			// 		};
+			// 	}
+			// 	userReturn.data = data;
+			// 	userReturn.api = false;
+			// 	resolve(userReturn);
+			// } else {
+			// 	reject('Credenciales Incorrectas');
+			// }
 		});
 	}
 
