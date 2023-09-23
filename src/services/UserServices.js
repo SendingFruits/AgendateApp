@@ -4,47 +4,8 @@ import axios from 'axios';
 class UserServices {
 
     doLogin = async (username, password) => {
-
-        // try {
-        //     const usuarioCodificado = encodeURIComponent(username);
-        //     const contraseniaCodificada = encodeURIComponent(password);
-
-        //     const urlCompleta = `${API_BASE_URL}/Usuarios/Login`;
-        //     console.log(urlCompleta);
-            
-        //     const dataJson = {
-        //         pUsuario: usuarioCodificado,
-        //         pContrasenia: contraseniaCodificada,
-        //     };
-
-        //     const options = {
-        //         method: 'POST',
-        //         headers: {
-        //             'accept':' */*',
-        //         },
-        //         body: JSON.stringify(dataJson)
-        //     };
-    
-        //     console.log(options);
-
-        //     const response = axios(urlCompleta, options);
-        //     console.log(response);
-
-
-        //     // if (!response.data) {
-        //     //     throw new Error('Error al obtener Usuario');
-        //     // }
-        //     // const data = response.data;
-        //     // console.log(data);
-        //     // return data;
-        // } catch (error) {
-        //     console.error('Error doLogin:', error);
-        //     throw error;
-        // }
-
         return new Promise((resolve, reject) => {
         
-            // Codifica los valores de los parámetros para evitar problemas con caracteres especiales
             const usuarioCodificado = encodeURIComponent(username);
             const contraseniaCodificada = encodeURIComponent(password);
             
@@ -60,7 +21,7 @@ class UserServices {
             
             axios.post(urlCompleta, {}, { headers })
             .then(function (response) {
-                console.log('JSON: ',JSON.stringify(response.data));
+                // console.log('JSON: ',JSON.stringify(response.data));
                 resolve(JSON.stringify(response.data))
             })
             .catch(function (error) {
@@ -72,25 +33,45 @@ class UserServices {
     };
 
     postUserRegister = async (json) => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/users`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        return new Promise((resolve, reject) => {
+            console.log('json: ', json);
+
+            var type = '';
+            var method = '';
+            var dataBody = JSON.stringify(json);
+
+            if (json.tipoUsuario == 'customer') {
+                method = '​/Clientes​/RegistrarCliente';
+                type = 'customer';
+            } 
+
+            if (json.tipoUsuario == 'company') {
+                method = '​/Empresas​/RegistraseEmpresa';
+                type = 'company';
+            } 
+
+            var config = {
+                method: 'post',
+                url: `${API_BASE_URL}${method}`,
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify(json),
+                data : dataBody
+            };
+
+            console.log('config: ', config);
+
+            axios(config)
+            .then(function (response) {
+                console.log('response: ',JSON.stringify(response.data));
+                // resolve(JSON.stringify(response.data))
+            })
+            .catch(function (error) {
+                console.log(error);
+                // reject(error);
             });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error postUserRegister:', error);
-            throw error;
-        }
+        });
     };
     
     putUserData = async () => {

@@ -85,8 +85,7 @@ class MapController {
     };
 
     getServicesForCompany = async (idCompany) =>  {
-
-    }
+    };
 }
 
 export default new MapController();

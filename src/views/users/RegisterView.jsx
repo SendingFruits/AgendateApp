@@ -23,77 +23,95 @@ const RegisterView = () => {
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [nombre, setNombre] = useState('');
-	const [apellido, setApellido] = useState('');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 
+	const [movil, setMovil] = useState('');
 	const [email, setEmail] = useState('');
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		// alert('El correo es incorrecto!');
 		return emailRegex.test(email);
 	};
 
-	const handleEmailChange = (text) => {
-		setEmail(text);
-		setIsValidEmail(validateEmail(text));
+	const handleTextInputChange = (text) => {
+		// Validar según el tipo de teclado (keyboardType)
+		if (/^[a-zA-Z]*$/.test(text)) {
+		  // Solo letras
+		  setInputValue(text);
+		} else if (/^[0-9]*$/.test(text)) {
+		  // Solo números
+		  setInputValue(text);
+		} else {
+		  // Otros caracteres (no se permite)
+		  alert('Solo se permiten letras o números.');
+		}
 	};
 
-	const [userType, setUserType] = useState('Cliente');
-	// customer
-	const [documento, setDocumento] = useState('');
-	// company
-	const [rut, setRut] = useState('');
-	// images
-	const [selectedPicture, setSelectedPicture] = useState(null);
-	const [selectedLogo, setSelectedLogo] = useState(null);
+	const [userType, setUserType] = useState('customer');
+	const [document, setDocument] = useState('');
 
+	const handleFieldChange = (text,field) => {
 
-	let openImagePickerAsync = async (buttonIndex) => {
+		// console.log('text: ', text);
+		// console.log('field: ', field);
 
-		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-		// console.log(permissionResult.granted);
-		if (permissionResult.granted === false) {
-			alert('Se requiere permisos de acceso a la camara.');
-			return;
+		switch (field) {
+			case 'username':
+				setUsername(text);
+				break;
+			case 'password':
+				setPassword(text);
+				break;
+			case 'firstName':
+				setFirstName(text);
+				break;
+			case 'lastName':
+				setLastName(text);
+				break;
+			case 'movil':
+				setMovil(text);
+				break;
+			case 'email':
+				setEmail(text);
+				setIsValidEmail(validateEmail(text));	
+				break;
+			case 'userType':
+				setUserType(text);
+				break;
+			case 'document':
+				setDocument(text);
+				break;
+
+			default:
+				break;
 		}
-
-		const pickerResult = await ImagePicker.launchImageLibraryAsync()
+	};
 	
-		// eslint-disable-next-line
-		if (!pickerResult.canceled) {
-	
-			const newSelectedImage = pickerResult.assets[0].uri;
-			console.log(newSelectedImage);
-
-			if (buttonIndex === 0) {
-				setSelectedPicture(newSelectedImage);
-			} 
-			if (buttonIndex === 1) {
-				setSelectedLogo(newSelectedImage);
-			}
-		}
-	}
-
-
 	useEffect(() => {
-		setSelectedPicture(null);
-		setSelectedLogo(null);
-	}, [userType]);
-
-	const handleImagePicker = (buttonIndex) => {
-		openImagePickerAsync(buttonIndex);
-	};
+        // Comentar para test
+        // setUsername('');
+        // setPassword('');
+		// setFirstName('');
+		// setLastName('');
+		// setMovil('');
+		// setEmail('');
+		// setDocument('');
+		setIsValidEmail(true);
+		setUserType('customer');
+    }, []);
 
 	const sendData = () => {
 		const formData = {
 			username,
 			password,
-			nombre,
-			apellido,
+			firstName,
+			lastName,
+			movil,
 			email,
 			userType,
-			documento,
-			rut,
+			document,
 		};
 
 		try {
@@ -110,20 +128,24 @@ const RegisterView = () => {
 
 				<View style={styles.inputContainer}>
 					<TextInput
+						keyboardType="text"
 						style={styles.input}
 						placeholder="Username"
 						value={username}
-						onChangeText={setUsername}
+						// onChangeText={setUsername}
+						onChangeText={(text) => handleFieldChange(text, 'username')}
 					/>
 				</View>
 
 				<View style={styles.inputContainer}>
 					<TextInput
+					keyboardType="text"
 						style={styles.input}
 						placeholder="Password"
 						secureTextEntry
 						value={password}
-						onChangeText={setPassword}
+						// onChangeText={setPassword}
+						onChangeText={(text) => handleFieldChange(text, 'password')}
 					/>
 				</View>
 			</View>
@@ -134,8 +156,9 @@ const RegisterView = () => {
 					<TextInput
 						style={styles.input}
 						placeholder="Nombre"
-						value={nombre}
-						onChangeText={setNombre}
+						value={firstName}
+						// onChangeText={setFirstName}
+						onChangeText={(text) => handleFieldChange(text, 'firstName')}
 					/>
 				</View>
 
@@ -143,8 +166,20 @@ const RegisterView = () => {
 					<TextInput
 						style={styles.input}
 						placeholder="Apellido"
-						value={apellido}
-						onChangeText={setApellido}
+						value={lastName}
+						// onChangeText={setLastName}
+						onChangeText={(text) => handleFieldChange(text, 'lastName')}
+					/>
+				</View>
+
+				<View style={styles.inputContainer}>
+					<TextInput
+						keyboardType="numeric"
+						style={styles.input}
+						placeholder="Telefono"
+						value={movil}
+						// onChangeText={setMovil}
+						onChangeText={(text) => handleFieldChange(text, 'movil')}
 					/>
 				</View>
 
@@ -156,7 +191,8 @@ const RegisterView = () => {
 						style={styles.input}
 						placeholder="Correo"
 						value={email}
-						onChangeText={setEmail}
+						// onChangeText={setEmail}
+						onChangeText={(text) => handleFieldChange(text, 'email')}
 						autoCapitalize="none"
 					/>
 					{
@@ -173,111 +209,45 @@ const RegisterView = () => {
 						style={styles.picker}
 						placeholder="Tipo"
 						selectedValue={userType}
-						onValueChange={(itemValue) => setUserType(itemValue)}
+						// onValueChange={(itemValue) => setUserType(itemValue)}
+						onValueChange={(itemValue) => handleFieldChange(itemValue, 'userType')}
 					>
-						<Picker.Item label="Cliente" value="Cliente" />
-						<Picker.Item label="Empresa" value="Empresa" />
+						<Picker.Item label="Cliente" value="customer" />
+						<Picker.Item label="Empresa" value="company" />
 					</Picker>
 
 				</View>
 
 				{/* Campos según el tipo seleccionado */}
-				{userType === 'Cliente' ? (
+				{userType === 'customer' ? (
 					<View>
-						{/* <View style={styles.imageContainer}>	
-							<TouchableOpacity
-								onPress={ () => handleImagePicker(0) }
-								> 	
-								<Image 
-									style={styles.image} 
-									source={{ uri: selectedPicture }} 
-									/>
-							</TouchableOpacity>
-						</View> */}
 						<View style={styles.inputContainer}>
 							<TextInput
 								keyboardType="numeric"
+								maxLength={8}
 								style={styles.input}
 								placeholder="Documento"
-								value={documento}
-								onChangeText={setDocumento}
+								value={document}
+								// onChangeText={setDocument}
+								onChangeText={(text) => handleFieldChange(text, 'document')}
 							/>
 						</View>
 					</View>
 				) : (
 					<View>
 						<View>
-							{/* <View style={styles.docpickerContainer}>
-								<Picker
-									style={styles.pickerType}
-									placeholder="TipoDoc"
-									selectedValue={phType}
-									onValueChange={(itemValue) => setPhType(itemValue)}
-								>
-									<Picker.Item label="RUT" value="RUT" />
-									<Picker.Item label="CI" value="CI" />
-								</Picker>
-							</View> */}
 							<View style={styles.inputContainer}>
 								<TextInput
 									keyboardType="numeric"
+									maxLength={12}
 									style={styles.input}
-									placeholder={phType}
-									value={rut}
-									onChangeText={setRut}
+									placeholder={"RUT"}
+									value={document}
+									// onChangeText={setDocument}
+									onChangeText={(text) => handleFieldChange(text, 'document')}
 								/>
 							</View>
 						</View>
-
-						{/* <View style={styles.inputContainer}>
-							<TextInput
-								style={styles.input}
-								placeholder="Razon Social"
-								value={documento}
-								onChangeText={setRazon}
-							/>
-						</View>
-
-						<View style={styles.inputContainer}>
-							<TextInput
-								style={styles.input}
-								placeholder="Rubro"
-								value={documento}
-								onChangeText={setRubro}
-							/>
-						</View>
-
-						<View style={styles.inputContainer}>
-							<TextInput
-								style={styles.input}
-								placeholder="Dirección"
-								value={address}
-								onChangeText={setAddress}
-							/>
-						</View> */}
-
-						{/* <View>
-							<View style={styles.logoContainer}>
-								<TouchableOpacity
-									onPress={ () => handleImagePicker(1) }
-									> 
-									<Image 
-										style={styles.image} 
-										source={{ uri: selectedLogo }} 
-										/>
-								</TouchableOpacity>
-							</View>
-							<View style={styles.inputDescContainer}>
-								<TextInput
-									style={styles.inputDescription}
-									placeholder="Descripción..."
-									value={description}
-									onChangeText={setDescription}
-									multiline
-									numberOfLines={4}
-								/>
-							</View>
-						</View> */}
 					</View>
 				)}
 				{/* */}

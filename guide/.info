@@ -24,11 +24,22 @@
     - npm start -- --reset-cache (cuando necesitamos resetear el cache)
 
 4. Utilizar Ngrok
-
+    Buscar el ngrok.exe en agendate-app/ y ejecutarlo
+     - Si ejecutamos la url absoluta con ngrok.exe
+    ejemplo -> C:\...\agendate-app\ngrok.exe, sirve para ver las opciones de ngrok
+    entonces hacer lo siguiente nos sirve para ejecutarlo desde la termianl de vscode
+        C:\...\agendate-app\ngrok.exe http 7170 o C:\...\agendate-app\ngrok.exe http https://localhost:7170/
+     - y copiamos el ID de la ruta https parecida a esta
+    https://7c7d-2800-a4-125f-c300-a936-d659-17d7-a69f.ngrok-free.app
+    para guardar en la variable URL_TOKEN en el archivo src\services\ApiConfig.js
 
 
 5. GIT
     - git push --force agendate-app factory:esteban
+    
+    - para ustedes es 'origin'
+    - git push --force origin factory:nombre_rama_propia
+    
     subir los cambios de una rama local llamada "factory" a la rama remoto llamada "esteban"
     en el repositorio agendate-app (este pertenece a la organizacion sending fruit)
     el repo origin pertenece a otra organizacion

@@ -10,11 +10,10 @@ class UsersController {
 	handleLogin(username, password) {
 		return new Promise((resolve, reject) => {
 			// api
-			console.log('API');
 			UserServices.doLogin(username, password)
 			.then(userReturn => {
 				userReturn.api = true;
-				console.log(userReturn);
+				// console.log(userReturn);
 				resolve(userReturn);
 			})
 			.catch(error => {
@@ -62,6 +61,7 @@ class UsersController {
 	handleRegister(data) {
 	
 		const user = databaseData.Users;
+		// console.log(data);
 
 		if (data.username == '') {
 			throw new Error('Por favor ingrese el username.');
@@ -80,29 +80,26 @@ class UsersController {
 		}
 
 		if (data.userType === 'Cliente' && data.documento == '') {
-			throw new Error('Por favor ingrese el número de documento.');
-		} else {
-		  	if (data.rut == '') {
-				throw new Error('Por favor ingrese el RUT.');
-		  	}
-		  	if (data.razon == '') {
-				throw new Error('Por favor ingrese la Razón Social.');
-		  	}
-		  	if (data.rubro == '') {
-				throw new Error('Por favor ingrese el rubro.');
-		  	}
-		  	if (data.address == '') {
-				throw new Error('Por favor ingrese la dirección.');
-		  	}
-		  	if (data.selectedLogo == '') {
-				throw new Error('Por favor seleccione el logo.');
-		  	}
-		  	if (data.description == '') {
-				throw new Error('Por favor ingrese la descripción.');
-		  	}
-		}
+			throw new Error('Por favor ingrese su documento de identidad.');
+		} 
+		
+		if (data.userType === 'Empresa' && data.documento == '') {
+			throw new Error('Por favor ingrese el RUT de su Empresa.');
+		} 
 	
-		UserServices.postUserRegister(data);
+		const dataConvert = {
+			id: 0,
+			nombreUsuario: data.username,
+			nombre: data.firstName,
+			apellido: data.lastName,
+			contrasenia: data.password,
+			celular: data.movil,
+			correo: data.email,
+			tipoUsuario: data.userType,
+			documento: data.document,
+		}
+
+		UserServices.postUserRegister(dataConvert);
 	}
 
 	handleUpdate(data) {

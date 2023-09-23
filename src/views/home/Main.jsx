@@ -99,7 +99,6 @@ const MenuItems = ( { navigation } ) => {
 	const [viewProfileVisible, setViewProfileVisible] = useState(false);
 	
 	const logout = () => {
-
 		if (userLogin != null) {
 			setUserPreferences({
                 current_user: {
@@ -111,7 +110,7 @@ const MenuItems = ( { navigation } ) => {
 					data: null,
                 },
             });
-			
+			setViewProfileVisible(false);
 			alert('Ha dejado la sesión');
             navigation.navigate('Inicio');
         }

@@ -4,10 +4,7 @@ import { Calendar } from 'react-native-calendars';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import {
-	typesService, 
-	availableTimes
-} from '../../controllers/BookingController';
+import SchedulesController from '../../controllers/SchedulesController';
 
 import AlertModal from '../utils/AlertModal';
 import ScheduleList from './ScheduleList';
@@ -21,7 +18,7 @@ const CalendarPicker = () => {
     const markedDates = {};
     const disabledDates = {};
 
-    availableTimes.forEach(horario => {
+    BookingController.availableTimes.forEach(horario => {
         // console.log(horario);
         const { date, available } = horario;
         markedDates[date] = { 

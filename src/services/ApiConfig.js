@@ -1,5 +1,6 @@
-let URL_TOKEN = '7f7f-2800-a4-15b0-7400-2ca1-50a8-4f5-274';
+let URL_TOKEN = 'b282-2800-a4-130d-a700-f01c-c51e-ad6f-5e02';
 let NGROK_URL = 'https://'+URL_TOKEN+'.ngrok-free.app/api';
-let LOCALHOST = 'https://localhost:7170/api';
-// export const API_BASE_URL = NGROK_URL;
-export const API_BASE_URL = LOCALHOST;
+let LOCALHOST = 'localhost:7071/api';
+
+export const API_BASE_URL = NGROK_URL;
+// export const API_BASE_URL = LOCALHOST;

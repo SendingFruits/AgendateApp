@@ -1,9 +1,13 @@
 import { UserContext } from './src/services/context/context'; 
 import { StyleSheet, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import ApiError from './src/views/utils/ApiError'
 import Main from './src/views/home/Main';
 
+// init App
 const App = (config) => {
+
+	const [isConnected, setIsConnected] = useState(true)
 
 	var getOrientation = () => {
 		const { width, height } = Dimensions.get('window');
@@ -12,6 +16,14 @@ const App = (config) => {
 	const [orientation, setOrientation] = useState(getOrientation());
 
 	useEffect(() => {
+		const checkConnection = () => {
+			// Implementa tu lógica para verificar la conexión aquí
+			// Puedes usar librerías como NetInfo o Navigator para esto
+			// Actualiza isConnected en consecuencia
+			// setIsConnected();
+		};
+		checkConnection();
+
 		const handleOrientationChange = () => {
 			const newOrientation = getOrientation();
 			setOrientation(newOrientation);
@@ -69,14 +81,20 @@ const App = (config) => {
 	}
 	const [userPreferences, setUserPreferences] = useState(preferences);
 
-	return (
-		<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-            <Main 
-				style={styles.background} 
-				orientation={orientation}
-				/>
-        </UserContext.Provider>
-	);
+	if (isConnected) {
+		return (
+			<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
+				<Main 
+					style={styles.background} 
+					orientation={orientation}
+					/>
+			</UserContext.Provider>
+		);
+	} else {
+		return (
+			<ApiError />
+		);
+	}
 };
 
 export default App;

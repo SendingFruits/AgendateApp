@@ -1,27 +1,8 @@
 // import ServiceModel from '../models/ServiceModel';
 // import UsersController from '../../controllers/UsersController';
 
-class BookingController {
+class SchedulesController {
 
-    getBookingsCustomer = async (customer) => {
-        const bookingsList = databaseData.Bookings;
-        const bookingsForCustomer = bookingsList.filter(booking => {
-            return booking.Customer.UserId === customer.UserId;
-        });
-        console.log('bookingsForCustomer:');
-        console.log(bookingsForCustomer);
-        return bookingsForCustomer
-        // var list = BookingsServices.getBookings();
-        // console.log(list);
-        // return  list;
-    };
-    
-    typesService = [
-        { title: 'Servicio 1', description: 'Descripción del servicio 1' },
-        { title: 'Servicio 2', description: 'Descripción del servicio 2' },
-        { title: 'Servicio 3', description: 'Descripción del servicio 3' },
-    ];
-    
     availableTimes = [
     
         { serviceId: 1, date: '2023-08-07', hour: '10:00', available: true },
@@ -41,4 +22,4 @@ class BookingController {
     ];
 }
 
-export default new BookingController();
+export default new SchedulesController();
