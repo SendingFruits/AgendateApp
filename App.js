@@ -92,7 +92,7 @@ const App = (config) => {
 		);
 	} else {
 		return (
-			<ApiError />
+			<InternetError />
 		);
 	}
 };

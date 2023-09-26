@@ -1,6 +1,7 @@
 import { UserContext } from '../../services/context/context'; 
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../../views/utils/Functions'; 
+import ApiError from '../../../src/views/utils/ApiError';
 
 import MapController from '../../controllers/MapController';
 
@@ -57,33 +58,33 @@ const HomeView = ( params ) => {
 	};
 
 	const [orientation, setOrientation] = useState(getOrientation());
+	const [isConnected, setIsConnected] = useState(true)
 
+	const fetchData = async () => {
+		try {
+			if (await MapController.requestLocationPermission() === 'granted') {
+				const region = await MapController.getLocation();
+				setLocation(region);
+				const organizedCompanies = await MapController.companyLocations(region,20);
+				setCompanies(organizedCompanies);
+				setIsConnected(true);
+			} else {
+				alert('No tiene permisos para obtener la ubicación.');
+			}
+		} catch (error) {
+			console.log('ERROR fetchData: '+error);
+		}
+	};
+
+	const handleOrientationChange = () => {
+		const newOrientation = getOrientation();
+		setOrientation(newOrientation);
+	};
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				if (await MapController.requestLocationPermission() === 'granted') {
-					const region = await MapController.getLocation();
-					setLocation(region);
-					const organizedCompanies = await MapController.companyLocations(region,20);
-					setCompanies(organizedCompanies);
-				} else {
-					alert('No tiene permisos para obtener la ubicación.');
-				}
-			} catch (error) {
-				console.log('ERROR fetchData: '+error);
-			}
-		};
 		fetchData();
-
-		const handleOrientationChange = () => {
-			const newOrientation = getOrientation();
-			setOrientation(newOrientation);
-		};
 		Dimensions.addEventListener('change', handleOrientationChange);
-
 	}, []);
-
 
 	const onRegionChange = (region, gesture) => {
 		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
@@ -91,7 +92,6 @@ const HomeView = ( params ) => {
 	};
 	
 	const showCompanyLocations = () => {
-
 		return companies.map((item, index) => {
 			return (
 				<Marker
@@ -143,50 +143,57 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	return (
-		<View style={styles.container}>
-			{Platform.OS === 'android' ? (
-				userLogin.type === 'company' ? (
-					<View style={styles.conrolPanel}>
-						<CompanyPanel 
-							idCompany={userLogin.guid} 
-							dataCompany={userLogin.data.company}
-							// windowWidth={windowWidth} 
-							// windowHeight={windowHeight}
-							/>
-					</View>
+	if (!isConnected) {
+		return (
+			<ApiError />
+		)
+	} else {
+		return (
+			<View style={styles.container}>
+				{Platform.OS === 'android' ? (
+					userLogin.type === 'company' ? (
+						<View style={styles.conrolPanel}>
+							<CompanyPanel 
+								idCompany={userLogin.guid} 
+								dataCompany={userLogin.data.company}
+								// windowWidth={windowWidth} 
+								// windowHeight={windowHeight}
+								/>
+						</View>
+					) : (
+						<View style={styles.viewMap}>
+							
+							{orientation === 'portrait' ? (				
+								<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
+							) : (
+								<></>
+							)}
+	
+							<MapView
+								ref={mapRef}
+								// style={styles.map}
+								style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
+								onRegionChange={onRegionChange}
+								initialRegion={location}
+								zoomEnabled={true}
+								zoomControlEnabled={true}
+								showsUserLocation={true}
+							>
+	
+								{showCompanyLocations()}
+	
+							</MapView>
+						</View>
+					)
 				) : (
-					<View style={styles.viewMap}>
-						
-						{orientation === 'portrait' ? (				
-							<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
-						) : (
-							<></>
-						)}
-
-						<MapView
-							ref={mapRef}
-							// style={styles.map}
-							style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
-							onRegionChange={onRegionChange}
-							initialRegion={location}
-							zoomEnabled={true}
-							zoomControlEnabled={true}
-							showsUserLocation={true}
-						>
-
-							{showCompanyLocations()}
-
-						</MapView>
+					<View>
+						<Text>Mapa web</Text>
 					</View>
-				)
-			) : (
-				<View>
-					<Text>Mapa web</Text>
-				</View>
-			)}
-		</View>
-	);
+				)}
+			</View>
+		);
+	}
+
 };
 
 var windowWidth = Dimensions.get('window').width;

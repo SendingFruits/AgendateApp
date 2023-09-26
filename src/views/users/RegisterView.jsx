@@ -114,11 +114,16 @@ const RegisterView = () => {
 			document,
 		};
 
-		try {
-			UsersController.handleRegister(formData);
-		} catch (error) {
-			alert(error.message);
-		}
+		UsersController.handleRegister(formData)
+		.then(userReturn => {
+			console.log(userReturn);
+			if (userReturn) {
+				alert('Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
+			}
+		})
+		.catch(error => {
+			alert(error);
+		});
 	};
 
 	return (
@@ -128,7 +133,7 @@ const RegisterView = () => {
 
 				<View style={styles.inputContainer}>
 					<TextInput
-						keyboardType="text"
+						// keyboardType="text"
 						style={styles.input}
 						placeholder="Username"
 						value={username}
