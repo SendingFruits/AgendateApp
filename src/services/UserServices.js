@@ -13,7 +13,7 @@ class UserServices {
                 +`pUsuario=${usuarioCodificado}&`
                 +`pContrasenia=${contraseniaCodificada}`;
 
-            console.log(urlCompleta);
+            // console.log(urlCompleta);
 
             const headers = {
                 // Agrega aquí las cabeceras requeridas por la API
@@ -21,10 +21,15 @@ class UserServices {
             
             axios.post(urlCompleta, {}, { headers })
             .then(function (response) {
-                resolve(JSON.stringify(response.data))
+                // console.log(response.status);
+                if (response.status == 200) {
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response);
+                }
             })
             .catch(function (error) {
-                reject(error);
+                reject(error.response.data);
             });
             
         });
@@ -67,27 +72,62 @@ class UserServices {
         });
     };
     
-    putUserData = async () => {
-        try {
-            const response = await fetch(`${ApiConfig.API_BASE_URL}/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedUserData),
+    putUserData = async (json) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = '/Clientes/ActualizarCliente';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+            axios.put(urlCompleta, json, { headers })
+            .then(function (response) {
+                console.log(response.status);
+                if (response.status == 200) {
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response);
+                }
+            })
+            .catch(function (error) {
+                reject(error.response.data);
             });
-    
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-    
-            const data = await response.json();
-            return data; // Esto sería el objeto de usuario actualizado
-        } catch (error) {
-            console.error('Error putUserData:', error);
-            throw error;
-        }
+        });
     };
+
+    putPassword = async () => {
+        return new Promise((resolve, reject) => {
+  
+            var method = '';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            // console.log('json: ', json);
+            // console.log('urlCompleta: ', urlCompleta);
+            axios.put(urlCompleta, json, { headers })
+            .then(function (response) {
+                // console.log('status: ',JSON.stringify(response.status));
+                console.log('response: ',JSON.stringify(response.data));
+                if (response.status == 200) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            })
+            .catch(function (error) {
+                reject(error.response.data);
+            });
+        });
+    }
 }
 
 export default new UserServices();

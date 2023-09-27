@@ -4,9 +4,7 @@ import axios from 'axios';
 class MapServices {
 
     getCompanies = async (lat, lng, cte) => {
-
-        console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
-
+        // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
         try {
             const urlCompleta = `${ApiConfig.API_BASE_URL}/Empresas/ObtenerEmpresasMapa?`
             // const urlCompleta = `https://localhost:7170/api/Empresas/ObtenerEmpresasMapa?`
@@ -21,13 +19,13 @@ class MapServices {
                     // 'verify': false
                 },
             };
-            console.log('urlCompleta: ',urlCompleta); 
+            // console.log('urlCompleta: ',urlCompleta); 
             const response = await axios.get(urlCompleta, options);
             if (!response.data) {
                 throw new Error('Error al obtener Empresas');
             }
             const data = response.data;
-            console.log('data: ', data); 
+            // console.log('data: ', data); 
             return data;
         } catch (error) {
             console.error('Error getCompanies:', error);

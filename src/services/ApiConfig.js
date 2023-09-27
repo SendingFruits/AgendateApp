@@ -1,4 +1,4 @@
-var URL_TOKEN = 'cebc-2800-a4-12fb-b100-e0fe-d975-cb4b-e587';
+var URL_TOKEN = 'c042-2800-a4-122b-5900-783b-82f4-23a9-29b9';
 var NGROK_URL = 'https://'+URL_TOKEN+'.ngrok-free.app/api';
 var LOCALHOST = 'https://localhost:7071/api';
 

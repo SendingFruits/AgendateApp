@@ -41,28 +41,24 @@ const LoginView = () => {
 	const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        // Comentar para test
-        // setUsername('');
-        // setPassword('');
+        // Comentar para test, aca se le da el valor inicial al estado o cualquier variable
+        setUsername('');
+        setPassword('');
     }, []);
 
 	const login = () => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
-				console.log('userReturn: ', userReturn);
-
-				// api
+				// console.log('userReturn: ', userReturn);
 				var user = JSON.parse(userReturn);
-				console.log('user: ', user);
+				// console.log('user: ', user);
 				
-				// if (user.tipoUsuario == 'Empresa') user.tipoUsuario = 'company';
-				// if (user.tipoUsuario == 'Cliente') user.tipoUsuario = 'customer';
-
 				setUserPreferences({
 					current_user: {
 						guid: user.id,
 						name: user.nombre,
+						last: user.apellido,
 						user: user.nombreUsuario,
 						pass: user.contrasenia,
 						mail: user.correo,
@@ -71,19 +67,6 @@ const LoginView = () => {
 					},   
 				});
 
-				// json
-				// setUserPreferences({
-				// 	current_user: {
-				// 		guid: userReturn.Id,
-				// 		name: userReturn.firstname,
-				// 		user: userReturn.Username,
-				// 		pass: userReturn.Password,
-				// 		mail: userReturn.Email,
-				// 		type: userReturn.type,
-				// 		data: userReturn.data,
-				// 	},   
-				// });
-
 				navigation.navigate('Inicio');
 				alert('Bienvenido '+ 
 					(userReturn.firstname !== undefined ? 
@@ -91,7 +74,7 @@ const LoginView = () => {
 			}
 		})
 		.catch(error => {
-			alert('CATCH ERROR: '+error);
+			alert(error);
 		});
 
 	};

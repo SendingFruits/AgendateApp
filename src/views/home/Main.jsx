@@ -17,6 +17,7 @@ import ProfileView from '../users/ProfileView';
 
 import React, { 
 	useContext, 
+	useEffect,
 	useState 
 } from 'react';
 
@@ -98,6 +99,10 @@ const MenuItems = ( { navigation } ) => {
 	var userLogin = userPreferences.current_user;
 	const [viewProfileVisible, setViewProfileVisible] = useState(false);
 	
+	useEffect(() => {
+		setViewProfileVisible(false);
+	}, []);
+
 	const logout = () => {
 		if (userLogin != null) {
 			setUserPreferences({
@@ -167,45 +172,51 @@ const MenuItems = ( { navigation } ) => {
 
 				{userLogin.user === 'none' ? (
 					<View>
-						<TouchableOpacity 
-							style={styles.btnLogin}
-							onPress = { () => navigation.navigate('Login')}
-							>
-							{/* <Image 
-								source = {{uri:'../resources/images/user_login_2.png'}}
-								style = {styles.image}
-							/> */}
-							<FontAwesomeIcon icon={faUser} />
-							<Text style={styles.textLogin}>Iniciar Sesión</Text>
-						</TouchableOpacity>
+						<View>
+							<TouchableOpacity 
+								style={styles.btnLogin}
+								onPress = { () => navigation.navigate('Login')}
+								>
+								{/* <Image 
+									source = {{uri:'../resources/images/user_login_2.png'}}
+									style = {styles.image}
+								/> */}
+								<FontAwesomeIcon icon={faUser} />
+								<Text style={styles.textLogin}>Iniciar Sesión</Text>
+							</TouchableOpacity>
+						</View>
 
-						<TouchableOpacity 
-							style={styles.btnLogin}
-							onPress = { () => navigation.navigate('Registro de Usuario')}
-							>
-							{/* <Image 
-								source = {{uri:'../resources/images/user_login_2.png'}}
-								style = {styles.image}
-							/> */}
-							<FontAwesomeIcon icon={faRegistered} />
-							<Text style={styles.textLogin}>Registrarse</Text>
-						</TouchableOpacity>
+						<View>
+							<TouchableOpacity 
+								style={styles.btnLogin}
+								onPress = { () => navigation.navigate('Registro de Usuario')}
+								>
+								{/* <Image 
+									source = {{uri:'../resources/images/user_login_2.png'}}
+									style = {styles.image}
+								/> */}
+								<FontAwesomeIcon icon={faRegistered} />
+								<Text style={styles.textLogin}>Registrarse</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				) : (
 					<View>
-						<TouchableOpacity 
-							style={styles.btnLogin}
-							onPress={() => setViewProfileVisible(!viewProfileVisible)}
-							>
-							{/* <Image 
-								source = {{uri:'../resources/images/user_login_2.png'}}
-								style = {styles.image}
-							/> */}
-							<FontAwesomeIcon icon={faUser} />
-							<Text style={styles.textLogin}>
-								{userLogin.name}
-							</Text>
-						</TouchableOpacity>
+						<View>
+							<TouchableOpacity 
+								style={styles.btnLogin}
+								onPress={() => setViewProfileVisible(!viewProfileVisible)}
+								>
+								{/* <Image 
+									source = {{uri:'../resources/images/user_login_2.png'}}
+									style = {styles.image}
+								/> */}
+								<FontAwesomeIcon icon={faUser} />
+								<Text style={styles.textLogin}>
+									{userLogin.name}
+								</Text>
+							</TouchableOpacity>
+						</View>
 
 						<View>
 							<TouchableOpacity 

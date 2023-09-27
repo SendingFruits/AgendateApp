@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -20,6 +21,8 @@ import {
 
 
 const RegisterView = () => {
+
+	const navigation = useNavigation();
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -91,13 +94,13 @@ const RegisterView = () => {
 	
 	useEffect(() => {
         // Comentar para test
-        // setUsername('');
-        // setPassword('');
-		// setFirstName('');
-		// setLastName('');
-		// setMovil('');
-		// setEmail('');
-		// setDocument('');
+        setUsername('');
+        setPassword('');
+		setFirstName('');
+		setLastName('');
+		setMovil('');
+		setEmail('');
+		setDocument('');
 		setIsValidEmail(true);
 		setUserType('customer');
     }, []);
@@ -119,6 +122,17 @@ const RegisterView = () => {
 			console.log(userReturn);
 			if (userReturn) {
 				alert('Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
+				navigation.navigate('Login');
+
+				setUsername('');
+				setPassword('');
+				setFirstName('');
+				setLastName('');
+				setMovil('');
+				setEmail('');
+				setDocument('');
+				setIsValidEmail(true);
+				setUserType('customer');
 			}
 		})
 		.catch(error => {
@@ -144,7 +158,7 @@ const RegisterView = () => {
 
 				<View style={styles.inputContainer}>
 					<TextInput
-					keyboardType="text"
+						// keyboardType="text"
 						style={styles.input}
 						placeholder="Password"
 						secureTextEntry

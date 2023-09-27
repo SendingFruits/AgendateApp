@@ -1,0 +1,6 @@
+En realidad la representación de modelos, como lo hemos visto en modelos de arquitectura de capas,
+no sirven en este esquema y tipo de aplicaciones en react native
+Podriamos definir el modelo en este contexto, como un componente más en representación del concepto,
+ejemplo: BookingModel, un componente que represente todos los datos de la reserva
+
+De todas formas esto es innecesario en terminos de nuestros objetivos a cumplir.
