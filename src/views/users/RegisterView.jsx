@@ -106,6 +106,8 @@ const RegisterView = () => {
     }, []);
 
 	const sendData = () => {
+		console.log('sendData');
+
 		const formData = {
 			username,
 			password,
@@ -119,7 +121,7 @@ const RegisterView = () => {
 
 		UsersController.handleRegister(formData)
 		.then(userReturn => {
-			console.log(userReturn);
+			console.log('userReturn: ', userReturn);
 			if (userReturn) {
 				alert('Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
 				navigation.navigate('Login');

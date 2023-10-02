@@ -61,27 +61,29 @@ class MapController {
     };
 
     companyLocations = async (loc,cte) => {
-
         var list = await MapServices.getCompanies(loc.latitude,loc.longitude,cte);
         // console.log('list: ',list);
-        const organizedCompanies = list.map(company => {
-            return {
-                id: company.id,
-                title: company.razonSocial,
-                location: {
-                    "latitude":company.latitude,
-                    "longitude":company.longitude,
-                    "latitudeDelta": 0.00699,
-                    "longitudeDelta":0.00499,
-                },
-                address: company.direccion,
-                description: company.descripcion,
-                itemCompany: company.company, 
-            }
-        });
-
-        // console.log('organizedCompanies: ',organizedCompanies);
-        return organizedCompanies;
+        // console.log(list.includes('Tunnel'));
+        if (!list.includes('Tunnel')) {
+            const organizedCompanies = list.map(company => {
+                return {
+                    id: company.id,
+                    title: company.razonSocial,
+                    location: {
+                        "latitude":company.latitude,
+                        "longitude":company.longitude,
+                        "latitudeDelta": 0.00699,
+                        "longitudeDelta":0.00499,
+                    },
+                    address: company.direccion,
+                    description: company.descripcion,
+                    itemCompany: company.company, 
+                }
+            });
+            return organizedCompanies;
+        } else {
+            return null;
+        }
     };
 
     getServicesForCompany = async (idCompany) =>  {

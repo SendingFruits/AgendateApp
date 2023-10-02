@@ -107,7 +107,7 @@ const ProfileView = (userLogin) => {
 	useEffect(() => {
         setIconEye1(false);
         setIconEye2(false);
-		setModalPass(false);
+		setModalPass(true);
         setOldPass('');
         setNewPass('');
 	}, []);
@@ -127,10 +127,7 @@ const ProfileView = (userLogin) => {
                     current_user: {
                         name: userReturn.firstname,
                         last: userReturn.lastname,
-                        user: userReturn.Username,
-                        pass: userReturn.Password,
                         mail: userReturn.Email,
-                        type: userReturn.type,
                         // data: userReturn.data,
                     },   
                 });
@@ -140,26 +137,16 @@ const ProfileView = (userLogin) => {
 		.catch(error => {
 			alert('error: '+error);
 		});
-
-		// if (userReturn != null) {
-		// 	// console.log('userReturn', userReturn);
-		// 	setUserPreferences({
-        //         current_user: {
-        //             name: userReturn.firstname,
-		// 			user: userReturn.Username,
-        //             pass: userReturn.Password,
-		// 			mail: userReturn.Email,
-        //             type: userReturn.type,
-		// 			data: userReturn.data,
-        //         },   
-        //     });
-		// 	// console.log(setUserPreferences);
-        //     navigation.navigate('Inicio');
-        // }
 	};
 
     const updatePass = () => {
         setModalPass(true);
+	};
+
+    const changePassword = () => {
+        console.log('changePassword');
+
+        
 	};
 
     return (
@@ -263,7 +250,6 @@ const ProfileView = (userLogin) => {
                         <Text>X</Text>
                     </TouchableOpacity>
 
-                            
                     <View style={styles.dataModal}>
                         <Text style={styles.txtUpdate}>Antigua Contraseña: </Text>
                         <View style={styles.inputContainer}>
@@ -311,8 +297,16 @@ const ProfileView = (userLogin) => {
                                 }
                             </TouchableOpacity>
                         </View>
-                    </View>
 
+                        <View>
+                            <TouchableOpacity 
+                                style={styles.btnChangePassword}
+                                onPress={changePassword}>
+                                <Text>Cambiar</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
 
                 </View>
             </Modal>
@@ -408,7 +402,7 @@ const styles = StyleSheet.create({
         flex: 1, 
         marginHorizontal: 40,
         marginVertical: 120,
-        marginBottom: 220,
+        marginBottom: 300,
         padding: 20,
         alignItems: 'flex-end',
         backgroundColor: '#2ECC71',
@@ -421,6 +415,18 @@ const styles = StyleSheet.create({
         height: '100%',
 		width: '100%', 
         marginTop: 20,
+    },
+    btnChangePassword: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 50,
+        backgroundColor: '#69ACDD',
+        width:'50%',
+        // height:'40%',
+        borderRadius:15,
+        borderWidth: 1,
+        borderColor: '#a8ffe5',
+        padding: 10,
     }
 })
 

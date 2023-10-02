@@ -58,16 +58,21 @@ const HomeView = ( params ) => {
 	};
 
 	const [orientation, setOrientation] = useState(getOrientation());
-	const [isConnected, setIsConnected] = useState(true)
+	const [isConnected, setIsConnected] = useState(false)
 
 	const fetchData = async () => {
 		try {
 			if (await MapController.requestLocationPermission() === 'granted') {
 				const region = await MapController.getLocation();
 				setLocation(region);
-				const organizedCompanies = await MapController.companyLocations(region,20);
+				const organizedCompanies = await MapController.companyLocations(region,1);
+				// console.log('organizedCompanies: ',organizedCompanies);
+				// console.log('organizedCompanies.lenght: ',organizedCompanies.lenght);
+				if (organizedCompanies.length > 0) {
+					setIsConnected(true);
+				}
 				setCompanies(organizedCompanies);
-				setIsConnected(true);
+
 			} else {
 				alert('No tiene permisos para obtener la ubicación.');
 			}
@@ -82,6 +87,7 @@ const HomeView = ( params ) => {
 	};
 
 	useEffect(() => {
+		setIsConnected(false);
 		fetchData();
 		Dimensions.addEventListener('change', handleOrientationChange);
 	}, []);

@@ -29,7 +29,16 @@ class UserServices {
                 }
             })
             .catch(function (error) {
-                reject(error.response.data);
+                console.log('error: ',error);
+                if (error.message == 'Network Error') {
+                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
+                } else {
+                    if (error.response.status == 404) {
+                        reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
+                    } else {
+                        reject(error.response.data);
+                    }
+                }
             });
             
         });
@@ -54,11 +63,11 @@ class UserServices {
                 'Accept': 'application/json'
             };
 
-            // console.log('json: ', json);
-            // console.log('urlCompleta: ', urlCompleta);
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
-                // console.log('status: ',JSON.stringify(response.status));
+                console.log('status: ',JSON.stringify(response.status));
                 console.log('response: ',JSON.stringify(response.data));
                 if (response.status == 200) {
                     resolve(true);
