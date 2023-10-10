@@ -46,25 +46,12 @@ class MapController {
             console.log('Error al obtener la Empresa:', error);
             throw error;
         }
-    
-        // necesito, en la siguiente funcion
-        // export const searchCompany = async (company) => {
-        //     try {
-                
-        //     } catch (error) {
-        //         console.log('Error al obtener la Empresa:', error);
-        //         throw error;
-        //     }
-        // };
-    
-        // hacer una logica que me permita buscar en mi database.json todas las Companies 
     };
 
     companyLocations = async (loc,cte) => {
         var list = await MapServices.getCompanies(loc.latitude,loc.longitude,cte);
-        // console.log('list: ',list);
-        // console.log(list.includes('Tunnel'));
-        if (!list.includes('Tunnel')) {
+        console.log('list: ',list);
+        if (list !== undefined) {
             const organizedCompanies = list.map(company => {
                 return {
                     id: company.id,

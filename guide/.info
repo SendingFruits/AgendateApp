@@ -26,10 +26,10 @@
 4. Utilizar Ngrok
     Buscar el ngrok.exe en agendate-app/ y ejecutarlo
      - Si ejecutamos la url absoluta con ngrok.exe
-    ejemplo -> C:\...\agendate-app\ngrok.exe, sirve para ver las opciones de ngrok
-    entonces hacer lo siguiente nos sirve para ejecutarlo desde la termianl de vscode
-        C:\...\agendate-app\ngrok.exe http 7170 o C:\...\agendate-app\ngrok.exe http https://localhost:7170/
-     - y copiamos el ID de la ruta https parecida a esta
+    Podemos tambien abrir una terminal en vscode y ejecutar 
+     - primero, cmd para pasar de powershell a simbolo del sistema
+     - despues, ejecutar ngrok 'http https://localhost:7170/' (sin las comillas porsupuesto)
+     - copiamos el ID de la ruta https parecida a esta
     https://7c7d-2800-a4-125f-c300-a936-d659-17d7-a69f.ngrok-free.app
     para guardar en la variable URL_TOKEN en el archivo src\services\ApiConfig.js
 
@@ -43,3 +43,11 @@
     subir los cambios de una rama local llamada "factory" a la rama remoto llamada "esteban"
     en el repositorio agendate-app (este pertenece a la organizacion sending fruit)
     el repo origin pertenece a otra organizacion
+
+
+6. Configurar Expo Go (Es necesario para iPhone)
+    - Para que la app funcione en Android y tambien en iPhone hay que 
+        a- hacerse una cuenta en Expo Go
+        b- descargar la app en el dispositivo 
+        c- debe estar configurado el cliente, que ya esta instalado para nuestra app (npm install -g eas-cli)
+        d- comando 'eas login' para iniciar sesion con el cliente... seguir documentacion https://docs.expo.dev/build/setup/

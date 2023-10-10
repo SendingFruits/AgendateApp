@@ -1,12 +1,12 @@
-var URL_TOKEN = '2b2e-2800-a4-137f-2a00-31d2-35e6-2e49-c806';
+var URL_TOKEN = '8b51-2800-a4-136c-2900-a9f3-c1b4-620a-bd55';
 var NGROK_URL = 'https://'+URL_TOKEN+'.ngrok-free.app/api';
-var LOCALHOST = 'https://localhost:7071/api';
+var LOCALHOST = 'https://10.0.2.2/api';
 
 class ApiConfig {
  
     constructor() {
-        // this.API_BASE_URL = LOCALHOST;
-        this.API_BASE_URL = NGROK_URL;
+        this.API_BASE_URL = LOCALHOST;
+        //this.API_BASE_URL = NGROK_URL;
     }
 
     getURL = async () => {

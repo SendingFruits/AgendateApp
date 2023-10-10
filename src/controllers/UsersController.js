@@ -70,10 +70,10 @@ class UsersController {
 	handleUpdate(data) {
 		return new Promise((resolve, reject) => {
 
-			if (data.username == '') {
+			if (data.user == '') {
 				throw new Error('Falta el usuario.');
 			}
-			if (data.password == '') {
+			if (data.pass == '') {
 				throw new Error('Falta la contraseña.');
 			}
 			if (data.name == '') {
@@ -86,25 +86,17 @@ class UsersController {
 				throw new Error('Falta el correo electrónico.');
 			}
 
-			// {
-			// 	"id": 0,
-			// 	"nombreUsuario": "string",
-			// 	"nombre": "string",
-			// 	"apellido": "string",
-			// 	"contrasenia": "string",
-			// 	"celular": "string",
-			// 	"correo": "string",
-			// 	"tipoUsuario": "string",
-			// 	"documento": "string"
-			//   }
-
 			console.log('data: ', data);
 
 			const dataConvert = {
-				nombre: data.name,
+				nombreUsuario: data.user,
+				nombre: data.password,
 				apellido: data.last,
+				contrasenia: data.pass,
+				celular: data.movil,
 				correo: data.mail,
-				// tipoUsuario: data.type,
+				tipoUsuario: data.type,
+				documento: data.docu
 			}
 
 			UserServices.putUserData(dataConvert)

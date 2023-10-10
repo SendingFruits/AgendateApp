@@ -5,6 +5,7 @@ import { Calendar } from 'react-native-calendars';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import SchedulesController from '../../controllers/SchedulesController';
+import BookingController from '../../controllers/BookingController';
 
 import AlertModal from '../utils/AlertModal';
 import ScheduleList from './ScheduleList';
@@ -18,20 +19,20 @@ const CalendarPicker = () => {
     const markedDates = {};
     const disabledDates = {};
 
-    BookingController.availableTimes.forEach(horario => {
-        // console.log(horario);
-        const { date, available } = horario;
-        markedDates[date] = { 
-            selected: true, 
-            marked: true, 
-            dotColor: available ? 'green' : 'red',
-            selectedColor : available ? 'green' : 'red',
-        };
+    // BookingController.availableTimes.forEach(horario => {
+    //     // console.log(horario);
+    //     const { date, available } = horario;
+    //     markedDates[date] = { 
+    //         selected: true, 
+    //         marked: true, 
+    //         dotColor: available ? 'green' : 'red',
+    //         selectedColor : available ? 'green' : 'red',
+    //     };
 
-        if (!available) {
-            disabledDates[date] = { disabled: true };
-        }
-    });
+    //     if (!available) {
+    //         disabledDates[date] = { disabled: true };
+    //     }
+    // });
 
     const handleDateSelect = (day) => {
         

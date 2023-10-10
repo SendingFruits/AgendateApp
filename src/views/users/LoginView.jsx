@@ -63,6 +63,7 @@ const LoginView = () => {
 						pass: user.contrasenia,
 						mail: user.correo,
 						type: user.tipoUsuario,
+						docu: user.documento,
 						// data: userReturn.data,
 					},   
 				});

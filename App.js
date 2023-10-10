@@ -40,6 +40,7 @@ const App = (config) => {
 			'pass':'none',
 			'type':'none',
 			'mail':'none',
+			'docu':'none',
 			'data': {
 				'company' : {
 					'rut': '10000500123456789',

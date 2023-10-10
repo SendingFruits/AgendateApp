@@ -17,17 +17,18 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": 
-          "Necesita usar la ubiación del dispositivo.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": 
-          "Necesita usar la ubiación del dispositivo."
+        "NSLocationWhenInUseUsageDescription": "Necesita usar la ubiación del dispositivo.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Necesita usar la ubiación del dispositivo."
       }
     },
     "android": {
       "permissions": [
         "ACCESS_BACKGROUND_LOCATION",
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -42,10 +43,14 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": 
-            "Permite a $(PRODUCT_NAME) utilizar tu ubicación."
+          "locationAlwaysAndWhenInUsePermission": "Permite a $(PRODUCT_NAME) utilizar tu ubicación."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a44a7704-4472-41f9-ac23-83f6f82d9de0"
+      }
+    }
   }
 }

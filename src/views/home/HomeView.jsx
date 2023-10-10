@@ -66,9 +66,8 @@ const HomeView = ( params ) => {
 				const region = await MapController.getLocation();
 				setLocation(region);
 				const organizedCompanies = await MapController.companyLocations(region,1);
-				// console.log('organizedCompanies: ',organizedCompanies);
-				// console.log('organizedCompanies.lenght: ',organizedCompanies.lenght);
-				if (organizedCompanies.length > 0) {
+				console.log('organizedCompanies: ',organizedCompanies);
+				if (organizedCompanies !== null && organizedCompanies.length > 0) {
 					setIsConnected(true);
 				}
 				setCompanies(organizedCompanies);
@@ -98,37 +97,40 @@ const HomeView = ( params ) => {
 	};
 	
 	const showCompanyLocations = () => {
-		return companies.map((item, index) => {
-			return (
-				<Marker
-					key={index}
-					pinColor='#00ffff'
-					coordinate={item.location}
-					>
-					{/* <Callout 
-						style={styles.callout}
-						onPress={() => navigation.navigate('Realizar Reserva', { item })} >
-						<Text style={styles.title}>{item.title}</Text>
-						<Text style={styles.description}>{item.description}</Text>
-					</Callout> */}
-					
-					{userLogin.type === 'customer' ? (
-						<Callout 
+		if (companies) {
+			return companies.map((item, index) => {
+				return (
+					<Marker
+						key={index}
+						pinColor='#00ffff'
+						coordinate={item.location}
+						>
+						{/* <Callout 
 							style={styles.callout}
 							onPress={() => navigation.navigate('Realizar Reserva', { item })} >
 							<Text style={styles.title}>{item.title}</Text>
 							<Text style={styles.description}>{item.description}</Text>
-						</Callout>
-					) : (
-						<Callout 
-							style={styles.callout}>
-							<Text style={styles.title}>{item.title}</Text>
-							<Text style={styles.description}>{item.description}</Text>
-						</Callout>
-					)}
-				</Marker>
-			)
-		});
+						</Callout> */}
+						
+						{userLogin.type === 'customer' ? (
+							<Callout 
+								style={styles.callout}
+								onPress={() => navigation.navigate('Realizar Reserva', { item })} >
+								<Text style={styles.title}>{item.title}</Text>
+								<Text style={styles.description}>{item.description}</Text>
+							</Callout>
+						) : (
+							<Callout 
+								style={styles.callout}>
+								<Text style={styles.title}>{item.title}</Text>
+								<Text style={styles.description}>{item.description}</Text>
+							</Callout>
+						)}
+					</Marker>
+				)
+			});
+		}
+		
 	};
 
 	const handleSearch = (query) => {
@@ -149,11 +151,11 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	if (!isConnected) {
-		return (
-			<ApiError />
-		)
-	} else {
+	// if (!isConnected) {
+	// 	return (
+	// 		<ApiError />
+	// 	)
+	// } else {
 		return (
 			<View style={styles.container}>
 				{Platform.OS === 'android' ? (
@@ -198,7 +200,7 @@ const HomeView = ( params ) => {
 				)}
 			</View>
 		);
-	}
+	// }
 
 };
 
