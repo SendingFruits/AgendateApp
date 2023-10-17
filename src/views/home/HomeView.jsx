@@ -66,7 +66,7 @@ const HomeView = ( params ) => {
 				const region = await MapController.getLocation();
 				setLocation(region);
 				const organizedCompanies = await MapController.companyLocations(region,1);
-				console.log('organizedCompanies: ',organizedCompanies);
+				// console.log('organizedCompanies: ',organizedCompanies);
 				if (organizedCompanies !== null && organizedCompanies.length > 0) {
 					setIsConnected(true);
 				}
@@ -158,8 +158,8 @@ const HomeView = ( params ) => {
 	// } else {
 		return (
 			<View style={styles.container}>
-				{Platform.OS === 'android' ? (
-					userLogin.type === 'company' ? (
+				{/* {Platform.OS === 'android' ? ( */}
+					{userLogin.type === 'company' ? (
 						<View style={styles.conrolPanel}>
 							<CompanyPanel 
 								idCompany={userLogin.guid} 
@@ -192,12 +192,12 @@ const HomeView = ( params ) => {
 	
 							</MapView>
 						</View>
-					)
-				) : (
+					)}
+				{/* // ) : (
 					<View>
 						<Text>Mapa web</Text>
 					</View>
-				)}
+				)} */}
 			</View>
 		);
 	// }

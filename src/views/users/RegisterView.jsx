@@ -56,10 +56,6 @@ const RegisterView = () => {
 	const [document, setDocument] = useState('');
 
 	const handleFieldChange = (text,field) => {
-
-		// console.log('text: ', text);
-		// console.log('field: ', field);
-
 		switch (field) {
 			case 'username':
 				setUsername(text);

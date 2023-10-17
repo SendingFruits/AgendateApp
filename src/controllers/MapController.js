@@ -50,7 +50,7 @@ class MapController {
 
     companyLocations = async (loc,cte) => {
         var list = await MapServices.getCompanies(loc.latitude,loc.longitude,cte);
-        console.log('list: ',list);
+        // console.log('list: ',list);
         if (list !== undefined) {
             const organizedCompanies = list.map(company => {
                 return {

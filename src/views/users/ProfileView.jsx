@@ -104,13 +104,15 @@ const ProfileView = (userLogin) => {
     const [oldPass, setOldPass] = useState('');
     const [newPass, setNewPass] = useState('');
 
+
 	useEffect(() => {
         setIconEye1(false);
         setIconEye2(false);
-		setModalPass(true);
+		setModalPass(false);
         setOldPass('');
         setNewPass('');
 	}, []);
+
 
     const toggleModal = () => {
         setModalPass(!modalPass);
@@ -140,13 +142,56 @@ const ProfileView = (userLogin) => {
 	};
 
     const updatePass = () => {
-        setModalPass(true);
+        // setModalPass(true);
+        // navigation.navigate('Registro de Usuario');
 	};
 
-    const changePassword = () => {
-        console.log('changePassword');
+    const changePassword = (user) => {
+
+        // var valuesChange = {
+        //     'idu': user.guid,
+        //     'old': user.pass,
+        //     'new': user.guid,
+        // }
+
+        // console.log(valuesChange);
+        // console.log('changePassword');
 
         
+	};
+
+    const handleFieldChange = (text,field) => {
+		switch (field) {
+			case 'username':
+				setUsername(text);
+				break;
+			case 'password':
+				setPassword(text);
+				break;
+            case 'firstName':
+                setFirstName(text);
+                break;
+            case 'lastName':
+                setLastName(text);
+                break;
+            case 'movil':
+                setMovil(text);
+                break;
+            case 'email':
+                setEmail(text);
+                setIsValidEmail(validateEmail(text));	
+                break;
+
+            case 'newPassword':
+                setNewPass(text);
+                break;
+            case 'oldPassword':
+                setOldPass(text);
+                break;   
+
+			default:
+				break;
+		}
 	};
 
     return (
@@ -156,19 +201,23 @@ const ProfileView = (userLogin) => {
                     <TextInput
                         style={styles.input}
                         value={username}
-                        onChangeText={setUsername}
                         editable={false}
+                        // onChangeText={setUsername}
+                        onChangeText={(text) => handleFieldChange(text, 'username')}
                     />
                 </View>
             </View>
 
-            <ScrollView style={styles.body}>
+            <ScrollView 
+                style={styles.body}
+                >
 
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         value={firsname}
-                        onChangeText={setFirstname}
+                        // onChangeText={setFirstname}
+                        onChangeText={(text) => handleFieldChange(text, 'firstname')}
                     />
                 </View>
 
@@ -176,7 +225,8 @@ const ProfileView = (userLogin) => {
                     <TextInput
                         style={styles.input}
                         value={lastname}
-                        onChangeText={setLastname}
+                        // onChangeText={setLastname}
+                        onChangeText={(text) => handleFieldChange(text, 'lastname')}
                     />
                 </View>
 
@@ -187,8 +237,9 @@ const ProfileView = (userLogin) => {
                         keyboardType="email-address"
                         style={styles.input}
                         value={email}
-                        onChangeText={setEmail}
                         autoCapitalize="none"
+                        // onChangeText={setEmail}
+                        onChangeText={(text) => handleFieldChange(text, 'email')}
                     />
                     {
                         !isValidEmail &&
@@ -238,7 +289,7 @@ const ProfileView = (userLogin) => {
 				</View>    
             </View>
 
-            <Modal 
+            {/* <Modal 
                 visible={modalPass}
                 animationType="slide" // Esto define la animación para mostrar el modal
                 transparent={true} 
@@ -251,6 +302,7 @@ const ProfileView = (userLogin) => {
                     </TouchableOpacity>
 
                     <View style={styles.dataModal}>
+                        
                         <Text style={styles.txtUpdate}>Antigua Contraseña: </Text>
                         <View style={styles.inputContainer}>
                             <TextInput
@@ -258,6 +310,7 @@ const ProfileView = (userLogin) => {
                                 // secureTextEntry={secureTextEntryValue}
                                 // value={password}
                                 // onChangeText={setPassword}
+                                onChangeText={(text) => handleFieldChange(text, 'newPassword')}
                             />
                             <TouchableOpacity 
                                 style={styles.iconEye}
@@ -274,6 +327,7 @@ const ProfileView = (userLogin) => {
                                 }
                             </TouchableOpacity>
                         </View>
+
                         <Text style={styles.txtUpdate}>Nueva Contraseña: </Text>
                         <View style={styles.inputContainer}>
                             <TextInput
@@ -281,6 +335,7 @@ const ProfileView = (userLogin) => {
                                 // secureTextEntry={secureTextEntryValue}
                                 // value={password}
                                 // onChangeText={setPassword}
+                                onChangeText={(text) => handleFieldChange(text, 'oldPassword')}
                             />
                             <TouchableOpacity 
                                 style={styles.iconEye}
@@ -301,7 +356,7 @@ const ProfileView = (userLogin) => {
                         <View>
                             <TouchableOpacity 
                                 style={styles.btnChangePassword}
-                                onPress={changePassword}>
+                                onPress={changePassword(userLogin)}>
                                 <Text>Cambiar</Text>
                             </TouchableOpacity>
                         </View>
@@ -309,14 +364,14 @@ const ProfileView = (userLogin) => {
                     </View>
 
                 </View>
-            </Modal>
+            </Modal> */}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'center',
     },
     header: {
@@ -395,8 +450,8 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     modalPass: {
-        alignSelf:'center',
-        alignItems: 'center',
+        // alignSelf:'center',
+        // alignItems: 'center',
     },
     modalContent: {
         flex: 1, 
@@ -404,16 +459,16 @@ const styles = StyleSheet.create({
         marginVertical: 120,
         marginBottom: 300,
         padding: 20,
-        alignItems: 'flex-end',
+        // alignItems: 'flex-end',
         backgroundColor: '#2ECC71',
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#a8ffe5',
     },
     dataModal: {
-        flex: 1,
-        height: '100%',
-		width: '100%', 
+        // flex: 1,
+        // height: '100%',
+		// width: '100%', 
         marginTop: 20,
     },
     btnChangePassword: {
@@ -421,7 +476,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 50,
         backgroundColor: '#69ACDD',
-        width:'50%',
+        // width:'50%',
         // height:'40%',
         borderRadius:15,
         borderWidth: 1,

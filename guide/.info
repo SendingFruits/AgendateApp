@@ -28,7 +28,7 @@
      - Si ejecutamos la url absoluta con ngrok.exe
     Podemos tambien abrir una terminal en vscode y ejecutar 
      - primero, cmd para pasar de powershell a simbolo del sistema
-     - despues, ejecutar ngrok 'http https://localhost:7170/' (sin las comillas porsupuesto)
+     - despues, ejecutar 'ngrok http https://localhost:7170/' (sin las comillas porsupuesto)
      - copiamos el ID de la ruta https parecida a esta
     https://7c7d-2800-a4-125f-c300-a936-d659-17d7-a69f.ngrok-free.app
     para guardar en la variable URL_TOKEN en el archivo src\services\ApiConfig.js

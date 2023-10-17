@@ -29,27 +29,73 @@ const PassChanger = () => {
 	// };
 
     return (
-        <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                // secureTextEntry={secureTextEntryValue}
-                // value={password}
-                // onChangeText={setPassword}
-            />
-            <TouchableOpacity 
-                style={styles.iconEye}
-                // onPress={handleToggleIcon}
-                > 	
-                { (iconEye) ? (
-                    <View>
-                        <FontAwesomeIcon icon={faEye} />
-                    </View>
-                ) : 
-                    <View>
-                        <FontAwesomeIcon icon={faEyeSlash} />
-                    </View>
-                }
+        <View style={styles.modalContent}>
+            <TouchableOpacity onPress={toggleModal}>
+                <Text>X</Text>
             </TouchableOpacity>
+
+            <View style={styles.dataModal}>
+                
+                <Text style={styles.txtUpdate}>Antigua Contraseña: </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        // secureTextEntry={secureTextEntryValue}
+                        // value={password}
+                        // onChangeText={setPassword}
+                        onChangeText={(text) => handleFieldChange(text, 'newPassword')}
+                    />
+                    <TouchableOpacity 
+                        style={styles.iconEye}
+                        // onPress={handleToggleIcon(1)}
+                        > 	
+                        { (iconEye1) ? (
+                            <View>
+                                <FontAwesomeIcon icon={faEye} />
+                            </View>
+                        ) : 
+                            <View>
+                                <FontAwesomeIcon icon={faEyeSlash} />
+                            </View>
+                        }
+                    </TouchableOpacity>
+                </View>
+
+                <Text style={styles.txtUpdate}>Nueva Contraseña: </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        // secureTextEntry={secureTextEntryValue}
+                        // value={password}
+                        // onChangeText={setPassword}
+                        onChangeText={(text) => handleFieldChange(text, 'oldPassword')}
+                    />
+                    <TouchableOpacity 
+                        style={styles.iconEye}
+                        // onPress={handleToggleIcon(2)}
+                        > 	
+                        { (iconEye2) ? (
+                            <View>
+                                <FontAwesomeIcon icon={faEye} />
+                            </View>
+                        ) : 
+                            <View>
+                                <FontAwesomeIcon icon={faEyeSlash} />
+                            </View>
+                        }
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+                    <TouchableOpacity 
+                        style={styles.btnChangePassword}
+                        onPress={changePassword(userLogin)}>
+                        <Text>Cambiar</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+
         </View>
     );
 }

@@ -22,16 +22,16 @@ class MapServices {
             };
             console.log('urlCompleta: ',urlCompleta); 
             const response = await axios.get(urlCompleta, options);
-            console.log('response.status: ', response.status.toString());
+            // console.log('response.status: ', response.status.toString());
             if (response.status) {
-                console.log('response.data: ', response.data);
+                // console.log('response.data: ', response.data);
                 return response.data;
             } else {
                 return -1;
             }
 
         } catch (error) {
-            console.error('Error getCompanies:', error);
+            // console.error('Error getCompanies:', error);
             if (error.message == 'Network Error') {
                 reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
             } else {
