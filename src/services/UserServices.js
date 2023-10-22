@@ -9,7 +9,7 @@ class UserServices {
             const usuarioCodificado = encodeURIComponent(username);
             const contraseniaCodificada = encodeURIComponent(password);
             
-            var method = '/Usuarios/Login';
+            var method = 'Usuarios/Login';
             const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
                 +`pUsuario=${usuarioCodificado}&`
                 +`pContrasenia=${contraseniaCodificada}`;
@@ -22,11 +22,11 @@ class UserServices {
             
             axios.post(urlCompleta, {}, { headers })
             .then(function (response) {
-                // console.log(response.status);
+                console.log(response.data);
                 if (response.status == 200) {
                     resolve(JSON.stringify(response.data));
                 } else {
-                    resolve(response);
+                    resolve(response.data);
                 }
             })
             .catch(function (error) {
@@ -74,11 +74,12 @@ class UserServices {
                 if (response.status == 200) {
                     resolve(true);
                 } else {
-                    resolve(false);
+                    resolve('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');
                 }
             })
             .catch(function (error) {
-                reject(error.response.data);
+                // reject(error.response.data);
+                reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');
             });
         });
     };

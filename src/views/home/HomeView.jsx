@@ -152,12 +152,12 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	console.log(isConnected);
-	if (!isConnected) {
-		return (
-			<ApiError />
-		)
-	} else {
+	// console.log(isConnected);
+	// if (!isConnected) {
+	// 	return (
+	// 		<ApiError />
+	// 	)
+	// } else {
 		return (
 			<View style={styles.container}>
 				{/* {Platform.OS === 'android' ? ( */}
@@ -202,7 +202,7 @@ const HomeView = ( params ) => {
 				)} */}
 			</View>
 		);
-	}
+	// }
 
 };
 

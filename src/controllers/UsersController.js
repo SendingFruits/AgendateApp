@@ -70,9 +70,6 @@ class UsersController {
 	handleUpdate(data) {
 		return new Promise((resolve, reject) => {
 
-			if (data.user == '') {
-				throw new Error('Falta el usuario.');
-			}
 			if (data.pass == '') {
 				throw new Error('Falta la contraseña.');
 			}
@@ -89,14 +86,9 @@ class UsersController {
 			console.log('data: ', data);
 
 			const dataConvert = {
-				nombreUsuario: data.user,
-				nombre: data.password,
+				nombre: data.name,
 				apellido: data.last,
-				contrasenia: data.pass,
-				celular: data.movil,
 				correo: data.mail,
-				tipoUsuario: data.type,
-				documento: data.docu
 			}
 
 			UserServices.putUserData(dataConvert)

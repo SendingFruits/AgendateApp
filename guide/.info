@@ -3,11 +3,9 @@
     - node -v en cmd para ver version
     - tener npm en variables de entorno configurada
 
-
 1. Actualizar Dependencias
     - ir al directorio de la app agendate-app/
     - ejecutar npm install
-
 
 2. Iniciar Emulador
     - hay que configurar las variables de entorno para que funcione
@@ -31,17 +29,15 @@
     https://7c7d-2800-a4-125f-c300-a936-d659-17d7-a69f.ngrok-free.app
     para guardar en la variable URL_TOKEN en el archivo src\services\ApiConfig.js
 
-
 5. GIT
     - git push --force agendate-app factory:esteban
     
-    - para ustedes es 'origin'
-    - git push --force origin factory:nombre_rama_propia
+    - para ustedes es 'agendate-app'
+    - git push --force agendate-app factory:nombre_rama_propia
     
     subir los cambios de una rama local llamada "factory" a la rama remoto llamada "esteban"
     en el repositorio agendate-app (este pertenece a la organizacion sending fruit)
     el repo origin pertenece a otra organizacion
-
 
 6. Configurar Expo Go (Es necesario para iPhone)
     - Para que la app funcione en Android y tambien en iPhone hay que 
@@ -49,3 +45,10 @@
         b- descargar la app en el dispositivo 
         c- debe estar configurado el cliente, que ya esta instalado para nuestra app (npm install -g eas-cli)
         d- comando 'eas login' para iniciar sesion con el cliente... seguir documentacion https://docs.expo.dev/build/setup/
+        e- poner el token del proyecto creado en la pagina de https://expo.dev/, ejemplo
+            "extra": {
+                "eas": {
+                    "projectId": "a44a7704-4472-41f9-ac23-83f6f82d9de0"
+                }
+            }
+        
