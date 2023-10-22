@@ -9,7 +9,8 @@ class UserServices {
             const usuarioCodificado = encodeURIComponent(username);
             const contraseniaCodificada = encodeURIComponent(password);
             
-            const urlCompleta = `${ApiConfig.API_BASE_URL}/Usuarios/Login?`
+            var method = '/Usuarios/Login';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
                 +`pUsuario=${usuarioCodificado}&`
                 +`pContrasenia=${contraseniaCodificada}`;
 
@@ -33,11 +34,12 @@ class UserServices {
                 if (error.message == 'Network Error') {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else {
-                    if (error.response.status == 404) {
-                        reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
-                    } else {
-                        reject(error.response.data);
-                    }
+                    // if (error.response.status == 404) {
+                    //     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
+                    // } else {
+                    //     reject(error.response.data);
+                    // }
+                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
                 }
             });
             
@@ -50,10 +52,10 @@ class UserServices {
             var method = '';
 
             if (json.TipoUsuario == 'customer') {
-                method = '/Clientes/RegistrarCliente';
+                method = 'Clientes/RegistrarCliente';
             } 
             if (json.TipoUsuario == 'company') {
-                method = '/Clientes/RegistrarEmpresa';
+                method = 'Clientes/RegistrarEmpresa';
             } 
 
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
@@ -109,12 +111,12 @@ class UserServices {
         });
     };
 
-    putPassword = async () => {
+    putPassword = async (json) => {
         return new Promise((resolve, reject) => {
   
-            var method = '';
-            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
-
+            var method = 'Usuarios/ActualizarContraseniaBody';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+            
             const headers = {
                 'Content-Type': 'application/json', 
                 'Accept': 'application/json'
@@ -122,17 +124,17 @@ class UserServices {
 
             // console.log('json: ', json);
             // console.log('urlCompleta: ', urlCompleta);
-            axios.put(urlCompleta, json, { headers })
-            .then(function (response) {
-                // console.log('status: ',JSON.stringify(response.status));
-                console.log('response: ',JSON.stringify(response.data));
+
+            axios.put(urlCompleta, json)
+            .then(response => {
+                // console.log('response: ', response);
                 if (response.status == 200) {
-                    resolve(true);
+                    resolve(response.data);
                 } else {
                     resolve(false);
                 }
             })
-            .catch(function (error) {
+            .catch(error => {
                 reject(error.response.data);
             });
         });

@@ -1,0 +1,79 @@
+{
+    "default": "closed",
+    "history": [
+        {
+            "key": "Inicio-FVfpZxQxi3HfGCCKTztHb",
+            "type": "route"
+        },
+        {
+            "status": "open",
+            "type": "drawer"
+        }
+    ],
+    "index": 0,
+    "key": "drawer-KQ95qLp92cHsRFbfW6xd0",
+    "routeNames": [
+        "Inicio",
+        "Agenda",
+        "Reservas",
+        "Servicios",
+        "Promociones",
+        "Realizar Reserva",
+        "Login",
+        "Registro de Usuario",
+        "Password"
+    ],
+    "routes": [
+        {
+            "key": "Inicio-FVfpZxQxi3HfGCCKTztHb",
+            "name": "Inicio",
+            "params": [Object
+            ]
+        },
+        {
+            "key": "Agenda-an497AzIASqQ2gpUTa1C9",
+            "name": "Agenda",
+            "params": undefined
+        },
+        {
+            "key": "Reservas-F4am6dH76CJgRmEPTEqB4",
+            "name": "Reservas",
+            "params": undefined
+        },
+        {
+            "key": "Servicios-rY-6qV6ypGzLWJ4JRZulo",
+            "name": "Servicios",
+            "params": [Object
+            ]
+        },
+        {
+            "key": "Promociones-ws0Sq6ELJ7R06y02eYO5i",
+            "name": "Promociones",
+            "params": [Object
+            ]
+        },
+        {
+            "key": "Realizar Reserva-A1gLKwz7Lv71LQnfDHjaD",
+            "name": "Realizar Reserva",
+            "params": undefined
+        },
+        {
+            "key": "Login-g6Chl0L75G9OVNA9jy0Ny",
+            "name": "Login",
+            "params": undefined
+        },
+        {
+            "key": "Registro de Usuario-BELHLFWP01SK8o-w63QjA",
+            "name": "Registro de Usuario",
+            "params": undefined
+        },
+        {
+            "key": "Password-sgla5CKktloYaZ96buVCK",
+            "name": "Password",
+            "params": [Object
+            ]
+        }
+    ],
+    "stale": false,
+    "type": "drawer"
+}

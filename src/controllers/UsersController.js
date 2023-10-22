@@ -111,13 +111,32 @@ class UsersController {
 
 	handleUpdatePass(data) {
 		return new Promise((resolve, reject) => {
-			const user = databaseData.Users;
 
-			if (data.password == '') {
-				throw new Error('Por favor ingrese la contraseña.');
+			if (data.old === '') {
+				throw new Error('Debe ingresar la Contraseña Actual.');
+			}
+			if (data.new === '') {
+				throw new Error('Debe ingresar la Contraseña Nueva.');
 			}
 
-			UserServices.putUserData(data);
+			var json = {
+                'Id':data.idu,
+                'passVieja':data.old,
+                'passNueva':data.new,
+            }
+
+			if (data.new !== data.old) {
+				UserServices.putPassword(json)
+				.then(msgReturn => {
+					resolve(msgReturn);
+				})
+				.catch(error => {
+					reject(error);
+				});
+			} else {
+				throw new Error('La contraseña sigue siendo igual, debe ser diferente');
+			}
+
 		});
 	}
 }

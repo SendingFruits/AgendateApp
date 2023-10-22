@@ -12,7 +12,6 @@ import {
     StyleSheet, 
     View,
     ScrollView,
-    Modal,
     TextInput,
     TouchableOpacity,
     Image 
@@ -42,22 +41,7 @@ const ProfileView = (userLogin) => {
     const [firsname, setFirstname] = useState(user.name);
     const [lastname, setLastname] = useState(user.last);
 
-    const [email,    setEmail]    = useState(user.mail);
-
-    const [iconEye1, setIconEye1] = useState(false);
-    const [iconEye2, setIconEye2] = useState(false);
-    const [secureTextEntryValue1, setSecureTextEntryValue1] = useState(true);
-    const [secureTextEntryValue2, setSecureTextEntryValue2] = useState(true);
-    
-    const handleToggleIcon = (param) => {
-        if (param == 1) {
-            setIconEye1(!iconEye1);
-            setSecureTextEntryValue1(!iconEye1);
-        } else {
-            setIconEye2(!iconEye2);
-            setSecureTextEntryValue2(!iconEye2);
-        }
-    };
+    const [email, setEmail] = useState(user.mail);
 
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const validateEmail = (email) => {
@@ -95,32 +79,20 @@ const ProfileView = (userLogin) => {
 		openImagePickerAsync();
 	};
 
-
-    const openModalPass = (user) => {
-        setModalPass(true);
-    }
-
-    const [modalPass, setModalPass] = useState(false);
-    const [oldPass, setOldPass] = useState('');
-    const [newPass, setNewPass] = useState('');
-
-
 	useEffect(() => {
-        setIconEye1(false);
-        setIconEye2(false);
-		setModalPass(false);
-        setOldPass('');
-        setNewPass('');
+        // inicializar variables
 	}, []);
 
-
-    const toggleModal = () => {
-        setModalPass(!modalPass);
-    };
-
     const updateData = () => {
-        // console.log('user: ', user);
-        UsersController.handleUpdate(user)
+        
+        const formData = {
+			username,
+			firstName,
+			lastName,
+			email,
+		};
+
+        UsersController.handleUpdate(formData)
         .then(userReturn => {
 			console.log('userReturn: ', userReturn);
 			if (userReturn) {
@@ -133,6 +105,9 @@ const ProfileView = (userLogin) => {
                         // data: userReturn.data,
                     },   
                 });
+                setFirstname(userReturn.firstname);
+                setLastname(userReturn.lastname);
+                setEmail(userReturn.Email);
                 navigation.navigate('Inicio');
 			}
 		})
@@ -143,21 +118,7 @@ const ProfileView = (userLogin) => {
 
     const updatePass = () => {
         // setModalPass(true);
-        // navigation.navigate('Registro de Usuario');
-	};
-
-    const changePassword = (user) => {
-
-        // var valuesChange = {
-        //     'idu': user.guid,
-        //     'old': user.pass,
-        //     'new': user.guid,
-        // }
-
-        // console.log(valuesChange);
-        // console.log('changePassword');
-
-        
+        navigation.navigate('Password');
 	};
 
     const handleFieldChange = (text,field) => {
@@ -180,14 +141,7 @@ const ProfileView = (userLogin) => {
             case 'email':
                 setEmail(text);
                 setIsValidEmail(validateEmail(text));	
-                break;
-
-            case 'newPassword':
-                setNewPass(text);
-                break;
-            case 'oldPassword':
-                setOldPass(text);
-                break;   
+                break; 
 
 			default:
 				break;
@@ -208,9 +162,7 @@ const ProfileView = (userLogin) => {
                 </View>
             </View>
 
-            <ScrollView 
-                style={styles.body}
-                >
+            <ScrollView style={styles.body} >
 
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -275,7 +227,7 @@ const ProfileView = (userLogin) => {
 				<View style={styles.nextContainer}>
 					<TouchableOpacity 
                         style={styles.btnUpdate}
-                        onPress={updatePass} >
+                        onPress={() => updatePass(user)} >
                         <Text style={styles.txtUpdate}>Cambiar Contraseña</Text>
                     </TouchableOpacity>
 				</View>  
@@ -288,83 +240,6 @@ const ProfileView = (userLogin) => {
                     </TouchableOpacity>
 				</View>    
             </View>
-
-            {/* <Modal 
-                visible={modalPass}
-                animationType="slide" // Esto define la animación para mostrar el modal
-                transparent={true} 
-                onBackdropPress={toggleModal} 
-                style={styles.modalPass}
-                >
-                <View style={styles.modalContent}>
-                    <TouchableOpacity onPress={toggleModal}>
-                        <Text>X</Text>
-                    </TouchableOpacity>
-
-                    <View style={styles.dataModal}>
-                        
-                        <Text style={styles.txtUpdate}>Antigua Contraseña: </Text>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                // secureTextEntry={secureTextEntryValue}
-                                // value={password}
-                                // onChangeText={setPassword}
-                                onChangeText={(text) => handleFieldChange(text, 'newPassword')}
-                            />
-                            <TouchableOpacity 
-                                style={styles.iconEye}
-                                // onPress={handleToggleIcon(1)}
-                                > 	
-                                { (iconEye1) ? (
-                                    <View>
-                                        <FontAwesomeIcon icon={faEye} />
-                                    </View>
-                                ) : 
-                                    <View>
-                                        <FontAwesomeIcon icon={faEyeSlash} />
-                                    </View>
-                                }
-                            </TouchableOpacity>
-                        </View>
-
-                        <Text style={styles.txtUpdate}>Nueva Contraseña: </Text>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                // secureTextEntry={secureTextEntryValue}
-                                // value={password}
-                                // onChangeText={setPassword}
-                                onChangeText={(text) => handleFieldChange(text, 'oldPassword')}
-                            />
-                            <TouchableOpacity 
-                                style={styles.iconEye}
-                                // onPress={handleToggleIcon(2)}
-                                > 	
-                                { (iconEye2) ? (
-                                    <View>
-                                        <FontAwesomeIcon icon={faEye} />
-                                    </View>
-                                ) : 
-                                    <View>
-                                        <FontAwesomeIcon icon={faEyeSlash} />
-                                    </View>
-                                }
-                            </TouchableOpacity>
-                        </View>
-
-                        <View>
-                            <TouchableOpacity 
-                                style={styles.btnChangePassword}
-                                onPress={changePassword(userLogin)}>
-                                <Text>Cambiar</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
-
-                </View>
-            </Modal> */}
         </View>
     );
 }
@@ -438,51 +313,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    
-    iconEye: {
-        flex: 1,
-        position:'absolute',
-        bottom:5,
-        left:65,
-        alignSelf:'flex-end',
-        marginLeft: 140,
-        backgroundColor:'#fff',
-        padding: 5,
-    },
-    modalPass: {
-        // alignSelf:'center',
-        // alignItems: 'center',
-    },
-    modalContent: {
-        flex: 1, 
-        marginHorizontal: 40,
-        marginVertical: 120,
-        marginBottom: 300,
-        padding: 20,
-        // alignItems: 'flex-end',
-        backgroundColor: '#2ECC71',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#a8ffe5',
-    },
-    dataModal: {
-        // flex: 1,
-        // height: '100%',
-		// width: '100%', 
-        marginTop: 20,
-    },
-    btnChangePassword: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        marginTop: 50,
-        backgroundColor: '#69ACDD',
-        // width:'50%',
-        // height:'40%',
-        borderRadius:15,
-        borderWidth: 1,
-        borderColor: '#a8ffe5',
-        padding: 10,
-    }
 })
 
 export default ProfileView;

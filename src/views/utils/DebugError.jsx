@@ -2,13 +2,13 @@ import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const InternetError = () => {
+const DebugError = (error) => {
 
     const navigation = useNavigation();
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.message} >Error de Conexión a Internet</Text>
+            <Text style={styles.message} >{error}</Text>
             <Button 
                 title="Reintentar" 
                 onPress={() => navigation.navigate('Inicio')}
@@ -17,7 +17,7 @@ const InternetError = () => {
     );
 }
 
-export default InternetError;
+export default DebugError;
 
 const styles = StyleSheet.create({
 	message: {

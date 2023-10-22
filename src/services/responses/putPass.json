@@ -1,0 +1,103 @@
+{
+    "config": {
+        "adapter": [
+            "xhr",
+            "http"
+        ],
+        "data": "{\"Id\":1,\"passVieja\":\"123456\",\"passNueva\":\"321654\"}",
+        "env": {
+            "Blob": [Function Blob
+            ],
+            "FormData": [Function FormData
+            ]
+        },
+        "headers": [Object
+        ],
+        "maxBodyLength": -1,
+        "maxContentLength": -1,
+        "method": "put",
+        "timeout": 0,
+        "transformRequest": [
+            [Function transformRequest
+            ]
+        ],
+        "transformResponse": [
+            [Function transformResponse
+            ]
+        ],
+        "transitional": {
+            "clarifyTimeoutError": false,
+            "forcedJSONParsing": true,
+            "silentJSONParsing": true
+        },
+        "url": "https://2183-2800-a4-1255-ba00-b8f6-45ac-f645-a7ac.ngrok-free.app/api/Usuarios/ActualizarContraseniaBody",
+        "validateStatus": [Function validateStatus
+        ],
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN"
+    },
+    "data": "La contraseña fue cambiada exitosamente.",
+    "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "date": "Sun, 22 Oct 2023 19:09:20 GMT",
+        "ngrok-trace-id": "441ac220f6ebb4d55618543bfc3dc5e9",
+        "server": "Kestrel"
+    },
+    "request": {
+        "DONE": 4,
+        "HEADERS_RECEIVED": 2,
+        "LOADING": 3,
+        "OPENED": 1,
+        "UNSENT": 0,
+        "_aborted": false,
+        "_cachedResponse": undefined,
+        "_hasError": false,
+        "_headers": {
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json"
+        },
+        "_incrementalEvents": false,
+        "_lowerCaseResponseHeaders": {
+            "content-type": "text/plain; charset=utf-8",
+            "date": "Sun, 22 Oct 2023 19:09:20 GMT",
+            "ngrok-trace-id": "441ac220f6ebb4d55618543bfc3dc5e9",
+            "server": "Kestrel"
+        },
+        "_method": "PUT",
+        "_perfKey": "network_XMLHttpRequest_https://2183-2800-a4-1255-ba00-b8f6-45ac-f645-a7ac.ngrok-free.app/api/Usuarios/ActualizarContraseniaBody",
+        "_performanceLogger": {
+            "_closed": false,
+            "_extras": [Object
+            ],
+            "_isLoggingForWebPerformance": false,
+            "_pointExtras": [Object
+            ],
+            "_points": [Object
+            ],
+            "_timespans": [Object
+            ]
+        },
+        "_requestId": null,
+        "_response": "La contraseña fue cambiada exitosamente.",
+        "_responseType": "",
+        "_sent": true,
+        "_subscriptions": [],
+        "_timedOut": false,
+        "_trackingName": "unknown",
+        "_url": "https://2183-2800-a4-1255-ba00-b8f6-45ac-f645-a7ac.ngrok-free.app/api/Usuarios/ActualizarContraseniaBody",
+        "readyState": 4,
+        "responseHeaders": {
+            "content-type": "text/plain; charset=utf-8",
+            "date": "Sun, 22 Oct 2023 19:09:20 GMT",
+            "ngrok-trace-id": "441ac220f6ebb4d55618543bfc3dc5e9",
+            "server": "Kestrel"
+        },
+        "responseURL": "https://2183-2800-a4-1255-ba00-b8f6-45ac-f645-a7ac.ngrok-free.app/api/Usuarios/ActualizarContraseniaBody",
+        "status": 200,
+        "timeout": 0,
+        "upload": {},
+        "withCredentials": true
+    },
+    "status": 200,
+    "statusText": undefined
+}

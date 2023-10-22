@@ -59,7 +59,7 @@ const HomeView = ( params ) => {
 
 	const [orientation, setOrientation] = useState(getOrientation());
 	const [isConnected, setIsConnected] = useState(false)
-
+ 
 	const fetchData = async () => {
 		try {
 			if (await MapController.requestLocationPermission() === 'granted') {
@@ -77,6 +77,7 @@ const HomeView = ( params ) => {
 			}
 		} catch (error) {
 			console.log('ERROR fetchData: '+error);
+			setIsConnected(false);
 		}
 	};
 
@@ -151,11 +152,12 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	// if (!isConnected) {
-	// 	return (
-	// 		<ApiError />
-	// 	)
-	// } else {
+	console.log(isConnected);
+	if (!isConnected) {
+		return (
+			<ApiError />
+		)
+	} else {
 		return (
 			<View style={styles.container}>
 				{/* {Platform.OS === 'android' ? ( */}
@@ -200,7 +202,7 @@ const HomeView = ( params ) => {
 				)} */}
 			</View>
 		);
-	// }
+	}
 
 };
 

@@ -14,6 +14,7 @@ import PromosView from '../promotions/PromosView';
 import LoginView from '../users/LoginView';
 import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
+import PassChanger from '../users/PassChanger';
 
 import React, { 
 	useContext, 
@@ -28,6 +29,8 @@ import {
 	Text, 
 	Image,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
+	Keyboard,
 } from 'react-native';
 import { 
 	NavigationContainer 
@@ -60,34 +63,70 @@ const Main = ( params ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	// console.log('userLogin in Main: ', userLogin);
+
 	return (
-		<NavigationContainer style={styles.barMenu}>
-			<drawerAside.Navigator 
-				initialRouteName="Home"
-				drawerContent = { (props) => <MenuItems { ...props} params={''} /> }
-				>
+		<NavigationContainer 
+			style={styles.barMenu}
+			onStateChange={(state) => {
+				// console.log('state: ', state);
+				if ((state.history.length > 1)) {
+					// console.log('status: ', state.history[1].status);
+					for (const key in state.history) {
+						if (state.history[key].type == 'drawer') {
+							Keyboard.dismiss();
+							
+						}
+					}
+				}
+
+			}} >
+			<drawerAside.Navigator
+				options={{ title: null, headerShown: false, }}
+				initialRouteName="Inicio"
+				drawerContent = { 
+					(props) => <MenuItems { ...props} params={''} /> 
+				} >
+
 				<drawerAside.Screen 
+					options={{ title: null, }}
 					name="Inicio" 
 					component={HomeView} 
-					initialParams={{ orientation: params.orientation }} 
-					/>
-				<drawerAside.Screen name="Agenda" component={DiaryView} />
-				<drawerAside.Screen name="Reservas" component={BookingsView} />
+					initialParams={{ orientation: params.orientation }} />
 				<drawerAside.Screen 
+					name="Agenda" 
+					component={DiaryView} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
+					name="Reservas" 
+					component={BookingsView} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
 					name="Servicios" 
 					component={ServicesView} 
-					initialParams={{ userLogin: userLogin }} 
-					/>
+					initialParams={{ userLogin: userLogin }} />
 				<drawerAside.Screen 
+					options={{ title: null, }}
 					name="Promociones" 
 					component={PromosView} 
-					initialParams={{ userLogin: userLogin }} 
-					/>
-				<drawerAside.Screen name="Realizar Reserva" component={MakeReservation} />
-				{/* <drawerAside.Screen name="Acerca de..." component={AboutView} /> */}
-				
-				<drawerAside.Screen name="Login" component={LoginView} />
-				<drawerAside.Screen name="Registro de Usuario" component={RegisterView} />
+					initialParams={{ userLogin: userLogin }} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
+					name="Realizar Reserva" 
+					component={MakeReservation} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
+					name="Login" 
+					component={LoginView} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
+					name="Registro de Usuario" 
+					component={RegisterView} />
+				<drawerAside.Screen 
+					options={{ title: null, }}
+					name="Password" 
+					component={PassChanger} 
+					initialParams={{ userLogin: userLogin }} />
+					
 			</drawerAside.Navigator>
 		</NavigationContainer>
 	);
@@ -97,10 +136,12 @@ const MenuItems = ( { navigation } ) => {
 
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
-	const [viewProfileVisible, setViewProfileVisible] = useState(false);
-	
+	const [profileVisible, setProfileVisible] = useState(false);
+	const [menuVisible, setMenuVisible] = useState(false);
+
 	useEffect(() => {
-		setViewProfileVisible(false);
+		setMenuVisible(false)
+		setProfileVisible(false);
 	}, []);
 
 	const logout = () => {
@@ -115,7 +156,7 @@ const MenuItems = ( { navigation } ) => {
 					data: null,
                 },
             });
-			setViewProfileVisible(false);
+			setProfileVisible(false);
 			alert('Ha dejado la sesión');
             navigation.navigate('Inicio');
         }
@@ -205,7 +246,7 @@ const MenuItems = ( { navigation } ) => {
 						<View>
 							<TouchableOpacity 
 								style={styles.btnLogin}
-								onPress={() => setViewProfileVisible(!viewProfileVisible)}
+								onPress={() => setProfileVisible(!profileVisible)}
 								>
 								{/* <Image 
 									source = {{uri:'../resources/images/user_login_2.png'}}
@@ -229,7 +270,7 @@ const MenuItems = ( { navigation } ) => {
 					</View>
 				)}
 					
-				{ (viewProfileVisible && userLogin.user !== 'none') ? (
+				{ (profileVisible && userLogin.user !== 'none') ? (
 					<View>
 						{ (userLogin.type == 'customer') ? (
 							<View style={styles.profile}>
@@ -250,6 +291,12 @@ const MenuItems = ( { navigation } ) => {
 }
 
 const styles = StyleSheet.create({
+	main: {
+		flex: 1,
+	},
+	touchMenu: {
+		flex: 1,
+	},
 	barMenu: {
 		backgroundColor: '#2ECC71'
 	},

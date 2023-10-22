@@ -24,8 +24,6 @@
     - npm start -- --reset-cache (cuando necesitamos resetear el cache)
 
 4. Utilizar Ngrok
-    Buscar el ngrok.exe en agendate-app/ y ejecutarlo
-     - Si ejecutamos la url absoluta con ngrok.exe
     Podemos tambien abrir una terminal en vscode y ejecutar 
      - primero, cmd para pasar de powershell a simbolo del sistema
      - despues, ejecutar 'ngrok http https://localhost:7170/' (sin las comillas porsupuesto)

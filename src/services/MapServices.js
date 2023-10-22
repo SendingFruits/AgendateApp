@@ -7,7 +7,8 @@ class MapServices {
         // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
         const data = '';
         try {
-            const urlCompleta = `${ApiConfig.API_BASE_URL}/Empresas/ObtenerEmpresasMapa?`
+            var method = 'Empresas/ObtenerEmpresasMapa';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
             //const urlCompleta = `http://192.168.1.7:9080/api/Empresas/ObtenerEmpresasMapa?`
                 + `radioCircunferencia=${cte}&`
                 + `latitudeCliente=${lat}&`
@@ -20,7 +21,7 @@ class MapServices {
                     // 'verify': false
                 },
             };
-            console.log('urlCompleta: ',urlCompleta); 
+            // console.log('urlCompleta: ',urlCompleta); 
             const response = await axios.get(urlCompleta, options);
             // console.log('response.status: ', response.status.toString());
             if (response.status) {
@@ -45,6 +46,8 @@ class MapServices {
         }
     };
 
+
+    // prueba
     getCompaniesThen = async (lat, lng, cte) => {
         // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
       
@@ -98,6 +101,7 @@ class MapServices {
         });
     };
 
+    // prueba
     getCompaniesFetch = (lat, lng, cte) => {
 
         fetch('https://10.0.2.2:9083/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=1&latitudeCliente=-34.8785883&longitudeCliente=-56.18071')
