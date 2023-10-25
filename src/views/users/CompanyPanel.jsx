@@ -31,10 +31,10 @@ var windowHeight = Dimensions.get('window').height;
 const CompanyPanel = (params) => {
 
     var data = params.dataCompany;
-    // console.log(data);
+    console.log(data);
     const navigation = useNavigation();
 
-    const [rut, setRUT] = useState(data.rut);
+    const [docu, setDocu] = useState(data.docu);
     const [reason, setReason] = useState(data.socialReason);
     const [itemCompany, setItemCompany] = useState(data.itemCompany);
     const [address, setAddress] = useState(data.address);
@@ -133,8 +133,8 @@ const CompanyPanel = (params) => {
                             <TextInput 
                                 keyboardType="numeric"
                                 style={styles.dataEdit} 
-                                value={rut}
-                                onChangeText={setRUT}
+                                value={docu}
+                                onChangeText={setDocu}
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 

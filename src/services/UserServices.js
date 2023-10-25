@@ -30,16 +30,16 @@ class UserServices {
                 }
             })
             .catch(function (error) {
-                console.log('error: ',error);
                 if (error.message == 'Network Error') {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else {
-                    // if (error.response.status == 404) {
-                    //     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
-                    // } else {
-                    //     reject(error.response.data);
-                    // }
-                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');    
+                    if (error.response.status >= 500) {
+                        reject('Error de Servidor. Verifique su conexión a Internet o consulte el proveedor.');                
+                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
+                        reject(error.response.data); 
+                    } else {
+                        reject('Error Desconocido.');    
+                    }
                 }
             });
             

@@ -69,9 +69,7 @@ const LoginView = () => {
 				});
 
 				navigation.navigate('Inicio');
-				alert('Bienvenido '+ 
-					(userReturn.firstname !== undefined ? 
-						userReturn.firstname : user.nombre ));
+				alert('Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre ));
 			}
 		})
 		.catch(error => {

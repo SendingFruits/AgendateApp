@@ -9,6 +9,14 @@ class UsersController {
 
 	handleLogin(username, password) {
 		return new Promise((resolve, reject) => {
+
+			if (username == '') {
+				throw new Error('Por favor ingrese el username.');
+			}
+			if (password == '') {
+				throw new Error('Por favor ingrese la contraseña.');
+			}
+
 			UserServices.doLogin(username, password)
 			.then(userReturn => {
 				resolve(userReturn);

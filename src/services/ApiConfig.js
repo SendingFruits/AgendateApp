@@ -1,4 +1,4 @@
-var URL_TOKEN = '2183-2800-a4-1255-ba00-b8f6-45ac-f645-a7ac';
+var URL_TOKEN = '3f71-2800-a4-1239-6f00-ed6a-9acd-2d07-57d4';
 var NGROK_URL = 'https://'+URL_TOKEN+'.ngrok-free.app/api/';
 var LOCALHOST = 'https://192.168.1.7:9083/api';
 
@@ -25,18 +25,17 @@ class ApiConfig {
         }
     };
 
-    getMessage = async (code) => {
-        switch (code) {
-            case 200:
-                return true;
-                break;
-            case 404:
-                return 'Error de conexión.';
-                break;
-        
-            default:
-                return 'Error de conexión.'
-                break;
+    codeMessage = async (code) => {
+        if (code >= 200 && code < 300) {
+            return true;
+        } else if (code >= 300 && code < 400) {
+            return false;
+        } else if (code >= 400 && code < 500) {
+            return '';
+        } else if (code >= 500) {
+            return 'Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.';
+        } else {
+            reject('Error Desconocido.');    
         }
     };
 }

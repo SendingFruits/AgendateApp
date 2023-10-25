@@ -63,6 +63,7 @@ const Main = ( params ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	// console.log('userLogin in Main: ', userLogin);
+	const [menuVisible, setMenuVisible] = useState(false);
 
 	return (
 		<NavigationContainer 
@@ -74,9 +75,11 @@ const Main = ( params ) => {
 					for (const key in state.history) {
 						if (state.history[key].type == 'drawer') {
 							Keyboard.dismiss();
-							
-						}
+							setMenuVisible(true);
+						} 
 					}
+				} else {
+					setMenuVisible(false);
 				}
 
 			}} >
@@ -84,7 +87,7 @@ const Main = ( params ) => {
 				options={{ title: null, headerShown: false, }}
 				initialRouteName="Inicio"
 				drawerContent = { 
-					(props) => <MenuItems { ...props} params={''} /> 
+					(props) => <MenuItems { ...props} menuVisible={false} /> 
 				} >
 
 				<drawerAside.Screen 
@@ -132,17 +135,20 @@ const Main = ( params ) => {
 	);
 };
 
-const MenuItems = ( { navigation } ) => {
+const MenuItems = ( { menuVisible, navigation } ) => {
 
+	// console.log('menuVisible: ', menuVisible);
+	// console.log('navigation: ', navigation.getState());
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	const [profileVisible, setProfileVisible] = useState(false);
-	const [menuVisible, setMenuVisible] = useState(false);
 
-	useEffect(() => {
-		setMenuVisible(false)
-		setProfileVisible(false);
-	}, []);
+	// var stateMenu = navigation.getState();
+	// console.log('stateMenu: ', stateMenu.history[1]);
+	// if (stateMenu.history[1] === 'undefined') {
+	// 	console.log('false');
+	// 	setProfileVisible(false);
+	// }
 
 	const logout = () => {
 		if (userLogin != null) {
@@ -269,18 +275,12 @@ const MenuItems = ( { navigation } ) => {
 						</View>
 					</View>
 				)}
-					
-				{ (profileVisible && userLogin.user !== 'none') ? (
+				
+				{ (profileVisible) ? (
 					<View>
-						{ (userLogin.type == 'customer') ? (
+						{ (userLogin.user !== 'none') ? (
 							<View style={styles.profile}>
 								<ProfileView param={userLogin} />
-							</View>
-						) : null }
-
-						{ (userLogin.type == 'company') ? (
-							<View style={styles.profile}>
-								<ProfileView param={userLogin}/>
 							</View>
 						) : null }
 					</View>

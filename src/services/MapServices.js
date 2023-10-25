@@ -3,7 +3,7 @@ import axios from 'axios';
 
 class MapServices {
 
-    getCompanies = async (lat, lng, cte) => {
+    getCompaniesOld = async (lat, lng, cte) => {
         // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
         const data = '';
         try {
@@ -46,70 +46,51 @@ class MapServices {
         }
     };
 
-
-    // prueba
-    getCompaniesThen = async (lat, lng, cte) => {
-        // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
-      
-
-
-        // const urlCompleta = `${ApiConfig.API_BASE_URL}/Empresas/ObtenerEmpresasMapa?`
-        // //const urlCompleta = `http://192.168.1.7:9080/api/Empresas/ObtenerEmpresasMapa?`
-        //     + `radioCircunferencia=${cte}&`
-        //     + `latitudeCliente=${lat}&`
-        //     + `longitudeCliente=${lng}`;
-
-        // const params = {
-        //     radioCircunferencia: cte,
-        //     latitudeCliente: lat,
-        //     longitudeCliente: lng,
-        //   };
-
-
-
-
-
-        // const url = 'https://192.168.224.1:9083/api/Empresas/ObtenerEmpresasMapa?' 
-        // + Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&');
-
-        // console.log(url);
-
-        // axios.get(url)
-        // .then(response => {
-        //     // Manejar la respuesta exitosa aquí
-        //     console.log('response.data: ', response.data);
-        // })
-        // .catch(error => {
-        //     // Manejar errores aquí
-        //     console.error('error: ', error);
-        // });
-
-
-        fetch('https://192.168.224.1:9083/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=1&latitudeCliente=-34.8785883&longitudeCliente=-56.18071', {
-            method: "GET",
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json",
-            },
-        })
-        .then((response) => response.json())
-        .then((responseData) => {
-            console.log(JSON.stringify(responseData));
-        })
-        .catch((error) => {
-            console.error("Error:", error);
+    getCompanies = async (lat, lng, cte) => {
+        return new Promise((resolve, reject) => {
+        
+            var method = 'Empresas/ObtenerEmpresasMapa';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
+            //const urlCompleta = `http://192.168.1.7:9080/api/Empresas/ObtenerEmpresasMapa?`
+                + `radioCircunferencia=${cte}&`
+                + `latitudeCliente=${lat}&`
+                + `longitudeCliente=${lng}`;
+    
+            const options = {
+                method: 'GET',
+                headers: {
+                    'accept': 'text/json',
+                    // 'verify': false
+                },
+            };
+            
+            axios.get(urlCompleta, options)
+            .then(function (response) {
+                console.log(response.data);
+                if (response.status == 200) {
+                    resolve(response.data);
+                } else {
+                    resolve(-1);
+                }
+            })
+            .catch(function (error) {
+                if (error.message == 'Network Error') {
+                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
+                } else {
+                    if (error.response.status >= 500) {
+                        reject(-1);                
+                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
+                        reject(error.response.data); 
+                    } else {
+                        reject('Error Desconocido.');    
+                    }
+                }
+            });
+            
         });
     };
 
-    // prueba
-    getCompaniesFetch = (lat, lng, cte) => {
 
-        fetch('https://10.0.2.2:9083/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=1&latitudeCliente=-34.8785883&longitudeCliente=-56.18071')
-        .then((response) => response.json())
-        .then((response) => {
-            console.log(JSON.stringify(response));
-        });
-    };
 }
 
 export default new MapServices();

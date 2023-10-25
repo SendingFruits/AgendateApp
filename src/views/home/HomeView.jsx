@@ -58,26 +58,32 @@ const HomeView = ( params ) => {
 	};
 
 	const [orientation, setOrientation] = useState(getOrientation());
-	const [isConnected, setIsConnected] = useState(false)
+	const [isConnected, setIsConnected] = useState(true)
  
 	const fetchData = async () => {
 		try {
 			if (await MapController.requestLocationPermission() === 'granted') {
 				const region = await MapController.getLocation();
 				setLocation(region);
-				const organizedCompanies = await MapController.companyLocations(region,1);
-				// console.log('organizedCompanies: ',organizedCompanies);
-				if (organizedCompanies !== null && organizedCompanies.length > 0) {
+				// const organizedCompanies = await MapController.companyLocations(region,1);
+				MapController.companyLocations(region, 10)
+				.then(companiesReturn => {
+					setCompanies(companiesReturn);
 					setIsConnected(true);
-				}
-				setCompanies(organizedCompanies);
+				})
+				.catch(error => {
+					alert(error); 
+					setIsConnected(false);
+				});
 
 			} else {
 				alert('No tiene permisos para obtener la ubicación.');
 			}
 		} catch (error) {
 			console.log('ERROR fetchData: '+error);
-			setIsConnected(false);
+			if (error == -1) {
+				setIsConnected(false);
+			}
 		}
 	};
 
@@ -152,20 +158,20 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	// console.log(isConnected);
-	// if (!isConnected) {
-	// 	return (
-	// 		<ApiError />
-	// 	)
-	// } else {
+	console.log(isConnected);
+	if (!isConnected) {
+		return (
+			<ApiError />
+		)
+	} else {
 		return (
 			<View style={styles.container}>
 				{/* {Platform.OS === 'android' ? ( */}
 					{userLogin.type === 'company' ? (
 						<View style={styles.conrolPanel}>
 							<CompanyPanel 
-								idCompany={userLogin.guid} 
-								dataCompany={userLogin.data.company}
+								dataCompany={userLogin} 
+								// dataCompany={userLogin.data.company}
 								// windowWidth={windowWidth} 
 								// windowHeight={windowHeight}
 								/>
@@ -189,7 +195,6 @@ const HomeView = ( params ) => {
 								zoomControlEnabled={true}
 								showsUserLocation={true}
 							>
-	
 								{showCompanyLocations()}
 	
 							</MapView>
@@ -202,7 +207,7 @@ const HomeView = ( params ) => {
 				)} */}
 			</View>
 		);
-	// }
+	}
 
 };
 
