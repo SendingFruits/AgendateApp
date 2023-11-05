@@ -79,7 +79,7 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 					</TouchableOpacity> 
 					<View>
 						<Text style={styles.textConfirm}>
-							Anotarse para el dia {"\n"} {formatDate(selectedDate)} a las {selectedHour}
+							Agendate para el dia {"\n"} {formatDate(selectedDate)} a las {selectedHour}
 						</Text>
 						<Button 
 							title="Confirmar" 

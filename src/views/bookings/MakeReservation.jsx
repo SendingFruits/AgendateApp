@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
-import { View, Button, StyleSheet, Text, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Button, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
+import ServicesController from '../../controllers/ServicesController';
+import ServiceItem from '../services/ServiceItem';
 import CalendarPicker from './CalendarPicker';
 
 const MakeReservation = ({ route, navigation }) => {
 
 	var item = route.params.item;
+	console.log('item: ', item);
+
+	const [service, setService] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		ServicesController.getServicesForCompany(item.id)
+		.then(serviceReturn => {
+			console.log('serviceReturn: ', serviceReturn);
+			serviceReturn.calendar = true;
+			setService(serviceReturn);
+			setIsLoading(false);
+		})
+		.catch(error => {
+			setIsLoading(false);
+			alert(error); 
+		});	
+	}, []);
 
 	return ( 
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			
 			<View style={styles.header}>
 				<Text style={styles.title}>{item.title}</Text>
@@ -19,9 +39,18 @@ const MakeReservation = ({ route, navigation }) => {
 			</View>
 
 			<View style={styles.body}>
-				<CalendarPicker/>
+
+				{isLoading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+					<View>
+						<ServiceItem service={service} from={"calendar"} />
+						<CalendarPicker idService={service.idService}/>
+					</View>
+                )}
+
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -42,7 +71,7 @@ const styles = StyleSheet.create({
 		fontWeight:'bold',
 	},
 	description: {
-		alignSelf:'flex-start',
+		alignSelf:'center',
 		marginLeft: 3,
 		marginRight: 3,
 		paddingBottom: 1,
@@ -50,7 +79,8 @@ const styles = StyleSheet.create({
 	},
 	body: {
 		margin: 1,
-		backgroundColor: '#ffffff',
+		// backgroundColor: '#ffffff',
+		backgroundColor:'#e3e0ef',
 	},
 });
 

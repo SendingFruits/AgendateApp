@@ -84,7 +84,7 @@ const CompanyPanel = (params) => {
 	};
 
 	useEffect(() => {
-		// estdos iniciales...
+		setDocu(data.docu);
 	}, []);
 
     return (
@@ -186,7 +186,25 @@ const CompanyPanel = (params) => {
                             </View>
                         </View>
                         <View style={styles.column}>
-                            <Text>Elija el logo de su Empresa</Text>
+                            <Text>Elija el logo de su Empresa </Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text>... </Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text>... </Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text>... </Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text>... </Text>
                         </View>
                     </View>
 

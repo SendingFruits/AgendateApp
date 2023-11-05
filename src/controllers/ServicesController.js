@@ -9,7 +9,7 @@ class ServicesController {
 			var serviceReturn = null;
 			const servicesList = databaseData.Services;
 			serviceReturn = servicesList.filter(serv => serv.idCompany === parseInt(idCompany));
-			resolve(serviceReturn);
+			resolve(serviceReturn[0]); // porque es uno solo
 		});
 	}
 }

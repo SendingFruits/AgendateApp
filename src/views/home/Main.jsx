@@ -82,7 +82,7 @@ const Main = ( params ) => {
 					setMenuVisible(false);
 				}
 
-			}} >
+			}} > 
 			<drawerAside.Navigator
 				options={{ title: null, headerShown: false, }}
 				initialRouteName="Inicio"
@@ -113,7 +113,7 @@ const Main = ( params ) => {
 					component={PromosView} 
 					initialParams={{ userLogin: userLogin }} />
 				<drawerAside.Screen 
-					options={{ title: null, }}
+					// options={{ title: null, }}
 					name="Realizar Reserva" 
 					component={MakeReservation} />
 				<drawerAside.Screen 
@@ -134,7 +134,7 @@ const Main = ( params ) => {
 		</NavigationContainer>
 	);
 };
-
+ 
 const MenuItems = ( { menuVisible, navigation } ) => {
 
 	// console.log('menuVisible: ', menuVisible);

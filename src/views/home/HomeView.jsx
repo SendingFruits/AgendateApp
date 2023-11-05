@@ -34,7 +34,7 @@ from 'react-native-maps';
 import { 
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
-
+ 
 
 const HomeView = ( params ) => {
 	
@@ -48,7 +48,7 @@ const HomeView = ( params ) => {
 	const [companies, setCompanies] = useState([]);
 	const [calloutVisible, setCalloutVisible] = useState(false);
 
-	// console.log(companies);
+	// console.log(companies); 
 	const navigation = useNavigation();
 	var otherLocation = {
 		latitude: -34.90477156839922,
@@ -68,6 +68,7 @@ const HomeView = ( params ) => {
 				// const organizedCompanies = await MapController.companyLocations(region,1);
 				MapController.companyLocations(region, 10)
 				.then(companiesReturn => {
+					console.log(companiesReturn);
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 				})

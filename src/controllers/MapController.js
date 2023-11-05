@@ -1,6 +1,6 @@
-import * as Location from 'expo-location';
 import databaseData from '../services/database/database.json';
 import MapServices from '../services/MapServices';
+import * as Location from 'expo-location';
 
 class MapController {
 
