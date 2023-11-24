@@ -73,7 +73,8 @@ const HomeView = ( params ) => {
 					setIsConnected(true);
 				})
 				.catch(error => {
-					alert(error); 
+					// error = -1
+					alert('Problemas de Conexión...'); 
 					setIsConnected(false);
 				});
 
@@ -92,9 +93,8 @@ const HomeView = ( params ) => {
 		const newOrientation = getOrientation();
 		setOrientation(newOrientation);
 	};
-
+ 
 	useEffect(() => {
-		setIsConnected(false);
 		fetchData();
 		Dimensions.addEventListener('change', handleOrientationChange);
 	}, []);
@@ -159,7 +159,7 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	console.log(isConnected);
+	// console.log(isConnected);
 	if (!isConnected) {
 		return (
 			<ApiError />

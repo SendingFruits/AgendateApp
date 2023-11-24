@@ -3,6 +3,7 @@ import { UserContext } from '../../services/context/context';
 import HomeView from './HomeView';
 import MenuButtonItem from './MenuButtonItem';
 import AboutView from './AboutView';
+import ApiError from '../utils/ApiError';
 
 import DiaryView from '../diary/DiaryView';
 import BookingsView from '../bookings/BookingsView';
@@ -89,6 +90,10 @@ const Main = ( params ) => {
 				drawerContent = { 
 					(props) => <MenuItems { ...props} menuVisible={false} /> 
 				} >
+				<drawerAside.Screen 
+					options={{ title: null, headerShown: false, }}
+					name="ApiError" 
+					component={ApiError} />
 
 				<drawerAside.Screen 
 					options={{ title: null, }}

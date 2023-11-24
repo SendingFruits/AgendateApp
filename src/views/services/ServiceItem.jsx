@@ -80,7 +80,7 @@ const ServiceItem = (params) => {
                 <View>
                     {/* <ScrollView style={styles.body}> */}
                     <ScrollView style={{ ...styles.body, height: bodyHeight }} {...panResponder.panHandlers}>
-                        {!service.calendar ? (
+                        {/* {!service.calendar ? (
                             <View>
                                 <TextInput
                                     // keyboardType="email-address"
@@ -90,7 +90,7 @@ const ServiceItem = (params) => {
                                     // autoCapitalize="none"
                                 />
                             </View>
-                        ) : (
+                        ) : ( */}
                             <View>
                                 <View style={styles.row}>
                                     <Text style={styles.label}>Tipo:</Text>
@@ -109,7 +109,7 @@ const ServiceItem = (params) => {
                                     <Text style={styles.value}>{formatDate(service.dateEnd)}</Text>
                                 </View>
                             </View>
-                        )}
+                        {/* )} */}
                     </ScrollView>
                     <View style={styles.footer}>
                         {/* {console.log('calendar: ', service.calendar)} */}

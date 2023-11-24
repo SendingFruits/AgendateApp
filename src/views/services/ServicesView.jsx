@@ -20,35 +20,25 @@ import {
 const ServicesView = ( {route} ) => {
 
     const navigation = useNavigation();
-    const [listServices, setListServices] = useState([]);
+    const [listServices, setListServices] = useState(null);
 
     const { userLogin } = route.params;
     var idCompany = userLogin.guid;
-
+    console.log(idCompany);
     useEffect(() => {
-        const fetchData = async () => {
-			try {
-                const serviceReturn = await ServicesController.getServicesForCompany(idCompany);
-				console.log(serviceReturn);
-                setListServices(serviceReturn);
-                // traer servicios
-                // ServicesController.getServicesForCompany(idCompany)
-                // .then(serviceReturn => {
-                //     // var services = JSON.parse(serviceReturn);
-                //     console.log('services: ', serviceReturn);
-                //     // setListServices(serviceReturn);
-                // })
-                // .catch(error => {
-                //     alert('ERROR al intentar cargar los Servicios');
-                // });
-			} catch (error) {
-				console.log('ERROR fetchData: '+error);
-			}
-		};
-        fetchData();
+        ServicesController.getServicesForCompany(idCompany)
+        .then(serviceReturn => {
+            // var services = JSON.parse(serviceReturn);
+            // console.log('services: ', serviceReturn);
+            setListServices(serviceReturn);
+        })
+        .catch(error => {
+            alert('ERROR al intentar cargar los Servicios');
+        });
 
     }, []);
 
+    console.log('listServices: ', listServices);
     
     const handleEditService = (service) => {
         // Navegar a la vista de edición con los datos del servicio
@@ -58,7 +48,7 @@ const ServicesView = ( {route} ) => {
     return (
         <View style={styles.container}>
 
-            { (listServices.length > 0) ? (
+            { (listServices) ? (
                 <ScrollView style={styles.scrollContainer}>
                     {listServices.map((service, index) => (
                         <ServiceItem 
@@ -115,6 +105,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         width:'95%',
+        textAlignVertical:'bottom',
         alignItems:'center',
         borderTopColor:'#011',
         borderTopWidth:0.6,

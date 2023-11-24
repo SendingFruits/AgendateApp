@@ -77,26 +77,29 @@ class UsersController {
 
 	handleUpdate(data) {
 		return new Promise((resolve, reject) => {
-
+		
 			if (data.pass == '') {
 				throw new Error('Falta la contraseña.');
 			}
-			if (data.name == '') {
+			if (data.firstName == '') {
 				throw new Error('Falta el nombre.');
 			}
-			if (data.last == '') {
+			if (data.lastName == '') {
 				throw new Error('Falta el apellido.');
 			}
 			if (data.email == '') {
 				throw new Error('Falta el correo electrónico.');
 			}
-
-			console.log('data: ', data);
+			if (data.movil == '') {
+				throw new Error('Falta el celular.');
+			}
 
 			const dataConvert = {
-				nombre: data.name,
-				apellido: data.last,
-				correo: data.mail,
+				id: data.guid,
+				nombre: data.firstname,
+				apellido: data.lastname,
+				celular: data.movil,
+				correo: data.email,
 			}
 
 			UserServices.putUserData(dataConvert)

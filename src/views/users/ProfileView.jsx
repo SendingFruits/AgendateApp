@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { UserContext } from '../../services/context/context'; 
 import { formatDate } from '../utils/Functions'
 import { useNavigation } from '@react-navigation/native';
+
+import React, { 
+    useState, 
+    useEffect, 
+    useContext 
+} from 'react';
+
+// import DeviceInfo from 'react-native-device-info-2';
 
 import * as ImagePicker from "expo-image-picker";
 import UsersController from '../../controllers/UsersController';
@@ -32,15 +40,19 @@ import {
 const ProfileView = (userLogin) => {
 
     const navigation = useNavigation();
-    
+    const { setUserPreferences } = useContext(UserContext);
+
     const [user, setUser] = useState(userLogin.param);
+    const [guid, setGuid] = useState(user.guid);
 
     const [username, setUsername] = useState(user.user);
     const [password, setPassword] = useState(user.pass);
 
-    const [firsname, setFirstname] = useState(user.name);
+    const [firstname, setFirstname] = useState(user.name);
     const [lastname, setLastname] = useState(user.last);
 
+    // const phoneNumber = DeviceInfo.getPhoneNumber();
+    const [movil, setMovil] = useState(user.celu);
     const [email, setEmail] = useState(user.mail);
 
 	const [isValidEmail, setIsValidEmail] = useState(true);
@@ -81,17 +93,28 @@ const ProfileView = (userLogin) => {
 
 	useEffect(() => {
         // inicializar variables
+
+        // console.log(DeviceInfo); // no funciona ningun metodo...
+        // try {
+        //     const phoneNumber = DeviceInfo; 
+        //     console.log('Número de teléfono:', phoneNumber);
+        // } catch (error) {
+        //     console.error('Error al obtener el número de teléfono:', error);
+        // }
 	}, []);
 
     const updateData = () => {
         
         const formData = {
+            guid,
 			username,
-			firstName,
-			lastName,
-			email,
+			firstname,
+			lastname,
+			movil,
+            email,
 		};
 
+        console.log('formData: ', formData);
         UsersController.handleUpdate(formData)
         .then(userReturn => {
 			console.log('userReturn: ', userReturn);
@@ -99,20 +122,23 @@ const ProfileView = (userLogin) => {
 				alert('Los datos del usuario se han actualizado.');
                 setUserPreferences({
                     current_user: {
-                        name: userReturn.firstname,
-                        last: userReturn.lastname,
-                        mail: userReturn.Email,
+                        name: userReturn.nombre,
+                        last: userReturn.apellido,
+                        celu: userReturn.celular,
+                        mail: userReturn.correo,
                         // data: userReturn.data,
                     },   
                 });
-                setFirstname(userReturn.firstname);
-                setLastname(userReturn.lastname);
-                setEmail(userReturn.Email);
+                setFirstname(userReturn.nombre);
+                setLastname(userReturn.apellido);
+                setMovil(userReturn.celular);
+                setEmail(userReturn.correo);
+
                 navigation.navigate('Inicio');
 			}
 		})
 		.catch(error => {
-			alert('error: '+error);
+			alert(error);
 		});
 	};
 
@@ -167,7 +193,7 @@ const ProfileView = (userLogin) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        value={firsname}
+                        value={firstname}
                         // onChangeText={setFirstname}
                         onChangeText={(text) => handleFieldChange(text, 'firstname')}
                     />
@@ -179,6 +205,14 @@ const ProfileView = (userLogin) => {
                         value={lastname}
                         // onChangeText={setLastname}
                         onChangeText={(text) => handleFieldChange(text, 'lastname')}
+                    />
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        value={movil}
+                        onChangeText={(text) => handleFieldChange(text, 'movil')}
                     />
                 </View>
 
@@ -235,7 +269,7 @@ const ProfileView = (userLogin) => {
 				<View style={styles.nextContainer}>
 					<TouchableOpacity 
                         style={styles.btnUpdate}
-                        onPress={updateData} >
+                        onPress={() => updateData()} >
                         <Text style={styles.txtUpdate}>Actualizar Datos</Text>
                     </TouchableOpacity>
 				</View>    

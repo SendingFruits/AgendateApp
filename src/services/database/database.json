@@ -215,7 +215,17 @@
       "dateEnd": "2023-11-30",
       "cost": 100.00,
       "frequency": 7,
-      "quota": 20
+      "quotas": 20,
+      "duration": 1,
+      "days": [
+        {"Domingo": 0},
+        {"Lunes": 0},
+        {"Martes": 0},
+        {"Miercoles": 1},
+        {"Jueves": 1},
+        {"Viernes": 1},
+        {"Sabado": 1}
+      ]
     },
     {
       "idService":2,
@@ -227,7 +237,17 @@
       "dateEnd": "2023-11-30",
       "cost": 2000.00,
       "frequency": 7,
-      "quota": 20
+      "quotas": 20,
+      "duration": 0.5,
+      "days": [
+        {"Domingo": 1},
+        {"Lunes": 0},
+        {"Martes": 0},
+        {"Miercoles": 0},
+        {"Jueves": 0},
+        {"Viernes": 0},
+        {"Sabado": 1}
+      ]
     },
     {
       "idService":3,
@@ -238,8 +258,17 @@
       "dateInit": "2023-11-01",
       "dateEnd": "2023-11-30",
       "cost": 2000.00,
-      "frequency": 7,
-      "quota": 20
+      "quotas": 20,
+      "duration": 0.5,
+      "days": [
+        {"Domingo": 0},
+        {"Lunes": 1},
+        {"Martes": 1},
+        {"Miercoles": 1},
+        {"Jueves": 1},
+        {"Viernes": 1},
+        {"Sabado": 1}
+      ]
     }
   ],
   "Schedules": [

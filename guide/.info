@@ -51,4 +51,5 @@
                     "projectId": "a44a7704-4472-41f9-ac23-83f6f82d9de0"
                 }
             }
-        
+    - eas whoami, sirve para saber si estas logueado al EAS, y aparece tu nombre de usuario
+    - eas build -p android --profile preview, este comando es para generar el APK (se le dice la aplication standar alone)

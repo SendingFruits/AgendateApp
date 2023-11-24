@@ -87,7 +87,7 @@ class UserServices {
     putUserData = async (json) => {
         return new Promise((resolve, reject) => {
   
-            var method = '/Clientes/ActualizarCliente';
+            var method = 'Usuarios/ActualizarDatosBasicosUsuarios';
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
             const headers = {
@@ -103,10 +103,11 @@ class UserServices {
                 if (response.status == 200) {
                     resolve(JSON.stringify(response.data));
                 } else {
-                    resolve(response);
+                    resolve(response.errors);
                 }
             })
             .catch(function (error) {
+                console.log('error.response.data: ', error.response.data);
                 reject(error.response.data);
             });
         });

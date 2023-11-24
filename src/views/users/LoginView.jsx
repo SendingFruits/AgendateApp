@@ -61,6 +61,7 @@ const LoginView = () => {
 						last: user.apellido,
 						user: user.nombreUsuario,
 						pass: user.contrasenia,
+						celu: user.celular,
 						mail: user.correo,
 						type: user.tipoUsuario,
 						docu: user.documento,

@@ -6,12 +6,17 @@ const ApiError = () => {
 
     const navigation = useNavigation();
 
+    const actionButton = () => {
+		console.log('Volviendo al inicio...');
+		navigation.navigate('Inicio');
+	};
+
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.message} >Error de Conexión con la API</Text>
             <Button 
                 title="Reintentar" 
-                onPress={() => navigation.navigate('Inicio')}
+                onPress={() => actionButton()}
                 />
         </View>
     );
