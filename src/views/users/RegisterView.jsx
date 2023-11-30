@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 
-import * as ImagePicker from "expo-image-picker";
-
 import UsersController from '../../controllers/UsersController';
 
 import {
@@ -11,12 +9,9 @@ import {
 	StyleSheet,
 	View,
 	ScrollView,
+	RefreshControl,
 	TextInput,
-	Image,
 	Button,
-	TouchableOpacity,
-	Platform,
-	Alert
 } from 'react-native';
 
 
@@ -32,6 +27,13 @@ const RegisterView = () => {
 	const [movil, setMovil] = useState('');
 	const [email, setEmail] = useState('');
 	const [isValidEmail, setIsValidEmail] = useState(true);
+
+	const [userType, setUserType] = useState('customer');
+	const [document, setDocument] = useState('');
+
+	const [refreshing, setRefreshing] = useState(false);
+
+
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		// alert('El correo es incorrecto!');
@@ -51,9 +53,6 @@ const RegisterView = () => {
 		  alert('Solo se permiten letras o números.');
 		}
 	};
-
-	const [userType, setUserType] = useState('customer');
-	const [document, setDocument] = useState('');
 
 	const handleFieldChange = (text,field) => {
 		switch (field) {
@@ -88,19 +87,6 @@ const RegisterView = () => {
 		}
 	};
 	
-	useEffect(() => {
-        // Comentar para test
-        setUsername('');
-        setPassword('');
-		setFirstName('');
-		setLastName('');
-		setMovil('');
-		setEmail('');
-		setDocument('');
-		setIsValidEmail(true);
-		setUserType('customer');
-    }, []);
-
 	const sendData = () => {
 		console.log('sendData');
 
@@ -138,8 +124,33 @@ const RegisterView = () => {
 		});
 	};
 
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		setTimeout(() => {
+			setRefreshing(false);
+			// fetchData();
+		}, 2000);
+	}, []);
+
+	useEffect(() => {
+        // Comentar para test
+        setUsername('');
+        setPassword('');
+		setFirstName('');
+		setLastName('');
+		setMovil('');
+		setEmail('');
+		setDocument('');
+		setIsValidEmail(true);
+		setUserType('customer');
+    }, []);
+
 	return (
-		<View style={styles.container}>
+		<ScrollView 
+			style={styles.container}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			} >
 
 			<View style={styles.header}>
 
@@ -167,7 +178,7 @@ const RegisterView = () => {
 				</View>
 			</View>
 
-			<ScrollView style={styles.body}>
+			<View style={styles.body}>
 
 				<View style={styles.inputContainer}>
 					<TextInput
@@ -268,7 +279,8 @@ const RegisterView = () => {
 					</View>
 				)}
 				{/* */}
-			</ScrollView>
+				
+			</View>
 
 			<View style={styles.footer}>
 				{/* Button */}
@@ -281,7 +293,7 @@ const RegisterView = () => {
 				</View>
 			</View>
 
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -289,7 +301,6 @@ const styles = StyleSheet.create({
 
 	container: {
 		flex: 1,
-		backgroundColor: 'transparent',
 		marginTop: 20,
 	},
 
@@ -312,7 +323,6 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		backgroundColor: 'transparent',
 		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
@@ -371,32 +381,6 @@ const styles = StyleSheet.create({
 		marginTop: 1,
 	},
 
-	imageContainer: {
-		height: 75,
-		width: 90,
-		borderColor: '#2ECC71',
-		margin: 25,
-		alignSelf: 'center',
-		borderRadius: 20,
-		backgroundColor: '#2ECC71',
-		alignItems: 'center', // Centrar horizontalmente
-		justifyContent: 'center', // Centrar verticalmente
-	},
-	image: {
-		flex: 1,
-		height: 75,
-		width: 90,
-		borderRadius: 20,
-	},
-	imgButton: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	imgText: {
-		color: 'white',
-	},
-
-
 	doctypeContainer: {
 		flexDirection: 'row',
 		alignItems: 'flex-start',
@@ -424,7 +408,6 @@ const styles = StyleSheet.create({
 		width: 100,
 	},
 	inputRUTContainer: {
-		backgroundColor: 'transparent',
 		borderColor: '#2ECC71',
 		borderWidth: 1,
 		borderRadius: 30,
@@ -439,37 +422,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'flex-start',
 		justifyContent: 'space-between',
-	},
-	logoContainer: {
-		height: 75,
-		width: 90,
-		borderColor: '#2ECC71',
-		marginStart: 25,
-		borderRadius: 20,
-		backgroundColor: '#2ECC71',
-		alignContent: 'center',
-	},
-	inputDescContainer: {
-		backgroundColor: 'transparent',
-		borderColor: '#2ECC71',
-		borderWidth: 1,
-		borderRadius: 30,
-		marginRight: 25,
-		marginLeft: 8,
-		marginBottom: 20,
-		paddingHorizontal: 12,
-		paddingVertical: 3,
-	},
-	inputDescription: {
-		color: 'black',
-		fontWeight: 'bold',
-		width: 165,
-	},
-	logo: {
-		flex: 1,
-		height: 75,
-		width: 90,
-		borderRadius: 20,
 	},
 
 	button: {

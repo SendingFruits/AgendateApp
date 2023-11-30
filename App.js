@@ -1,10 +1,9 @@
 import { UserContext } from './src/services/context/context'; 
 import { StyleSheet, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import ApiError from './src/views/utils/ApiError'
-import DebugError from './src/views/utils/DebugError'
-import InternetError from './src/views/utils/InternetError'
+import BaseError from './src/views/utils/BaseError'
 import Main from './src/views/home/Main';
+import 'react-native-gesture-handler';
 
 // init App
 const App = (config) => {
@@ -87,20 +86,17 @@ const App = (config) => {
 		if (isConnected) {
 			return (
 				<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-					<Main 
-						style={styles.background} 
-						orientation={orientation}
-						/>
+					<Main style={styles.background} orientation={orientation} />
 				</UserContext.Provider>
 			);
 		} else {
 			return (
-				<InternetError />
+				<BaseError errorType={'debug'} />
 			);
 		}
 	} catch (error) {
 		return (
-			<DebugError initialParams={{ error: error }} />
+			<BaseError  errorType={'internet'} />
 		);
 	}
 };

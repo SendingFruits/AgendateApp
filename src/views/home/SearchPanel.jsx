@@ -3,12 +3,13 @@ import {
 } from 'react';
 
 import { 
-    Text, 
     TextInput, 
     StyleSheet, 
     View,
     Button
 } from 'react-native';
+
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SearchPanel = ({ onSearch, mapRef }) => {
 
@@ -19,15 +20,19 @@ const SearchPanel = ({ onSearch, mapRef }) => {
     };
   
     return (
-        <View style={styles.searchPanel}>
-            <TextInput
-                style={styles.input}
-                placeholder="Buscar Empresa"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                />
-            <Button title="Buscar" color="#69ACDD" onPress={handleSearch} />
-        </View>
+        <LinearGradient
+            colors={['#135000', '#238162', '#2ECC71']}
+            >
+            <View style={styles.searchPanel}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Buscar Empresa"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                    />
+                <Button title="Buscar" color="#69ACDD" onPress={handleSearch} />
+            </View>
+        </LinearGradient>
     );
 }
 
@@ -37,12 +42,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 9,
-        backgroundColor: '#2ECC71',
+        
         borderColor: '#355B54',
         borderWidth: 1,
     },
     input: {
-        flex: 1,
+        width:'77%',
         marginRight: 10,
         padding: 5,
         borderWidth: 1,

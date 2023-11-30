@@ -95,12 +95,13 @@ class UserServices {
                 'Accept': 'application/json'
             };
 
-            console.log('json: ', json);
-            console.log('urlCompleta: ', urlCompleta);
+            // console.log('json: ', json);
+            // console.log('urlCompleta: ', urlCompleta);
             axios.put(urlCompleta, json, { headers })
             .then(function (response) {
-                console.log(response.status);
+                // console.log(response.status);
                 if (response.status == 200) {
+                    // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
                     resolve(JSON.stringify(response.data));
                 } else {
                     resolve(response.errors);

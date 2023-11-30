@@ -20,6 +20,7 @@ import {
     StyleSheet, 
     View,
     ScrollView,
+    RefreshControl,
     TextInput,
     TouchableOpacity,
     Image 
@@ -40,22 +41,23 @@ import {
 const ProfileView = (userLogin) => {
 
     const navigation = useNavigation();
+
     const { setUserPreferences } = useContext(UserContext);
 
     const [user, setUser] = useState(userLogin.param);
     const [guid, setGuid] = useState(user.guid);
 
     const [username, setUsername] = useState(user.user);
-    const [password, setPassword] = useState(user.pass);
-
     const [firstname, setFirstname] = useState(user.name);
     const [lastname, setLastname] = useState(user.last);
-
-    // const phoneNumber = DeviceInfo.getPhoneNumber();
     const [movil, setMovil] = useState(user.celu);
     const [email, setEmail] = useState(user.mail);
 
 	const [isValidEmail, setIsValidEmail] = useState(true);
+    const [selectedPicture, setSelectedPicture] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
+
+
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return emailRegex.test(email);
@@ -66,9 +68,6 @@ const ProfileView = (userLogin) => {
 		setIsValidEmail(validateEmail(text));
 	};
 
-
-	const [selectedPicture, setSelectedPicture] = useState(null);
-    // convertImageToBase64(url)
     let openImagePickerAsync = async () => {
 
 		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -91,23 +90,22 @@ const ProfileView = (userLogin) => {
 		openImagePickerAsync();
 	};
 
-	useEffect(() => {
-        // inicializar variables
-
-        // console.log(DeviceInfo); // no funciona ningun metodo...
-        // try {
-        //     const phoneNumber = DeviceInfo; 
-        //     console.log('Número de teléfono:', phoneNumber);
-        // } catch (error) {
-        //     console.error('Error al obtener el número de teléfono:', error);
-        // }
+    const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		setTimeout(() => {
+			setRefreshing(false);
+            // setFirstname(user.name);
+            // setLastname(user.last);
+            // setMovil(user.celu);
+            // setEmail(user.mail);
+            // setSelectedPicture(null);
+		}, 2000);
 	}, []);
 
     const updateData = () => {
         
         const formData = {
             guid,
-			username,
 			firstname,
 			lastname,
 			movil,
@@ -117,24 +115,24 @@ const ProfileView = (userLogin) => {
         console.log('formData: ', formData);
         UsersController.handleUpdate(formData)
         .then(userReturn => {
-			console.log('userReturn: ', userReturn);
+			// console.log('userReturn: ', userReturn);
 			if (userReturn) {
 				alert('Los datos del usuario se han actualizado.');
                 setUserPreferences({
                     current_user: {
-                        name: userReturn.nombre,
-                        last: userReturn.apellido,
-                        celu: userReturn.celular,
-                        mail: userReturn.correo,
-                        // data: userReturn.data,
+                        name: formData.firstname,
+                        last: formData.lastname,
+                        celu: formData.movil,
+                        mail: formData.email,
                     },   
                 });
-                setFirstname(userReturn.nombre);
-                setLastname(userReturn.apellido);
-                setMovil(userReturn.celular);
-                setEmail(userReturn.correo);
+                // setFirstname(formData.nombre);
+                // setLastname(formData.apellido);
+                // setMovil(formData.celular);
+                // setEmail(formData.correo);
 
-                navigation.navigate('Inicio');
+                // setUser(userReturn);
+                onRefresh();
 			}
 		})
 		.catch(error => {
@@ -151,9 +149,6 @@ const ProfileView = (userLogin) => {
 		switch (field) {
 			case 'username':
 				setUsername(text);
-				break;
-			case 'password':
-				setPassword(text);
 				break;
             case 'firstName':
                 setFirstName(text);
@@ -174,28 +169,46 @@ const ProfileView = (userLogin) => {
 		}
 	};
 
+
+	useEffect(() => {
+        // inicializar variables
+
+        // console.log(DeviceInfo); // no funciona ningun metodo...
+        // try {
+        //     const phoneNumber = DeviceInfo; 
+        //     console.log('Número de teléfono:', phoneNumber);
+        // } catch (error) {
+        //     console.error('Error al obtener el número de teléfono:', error);
+        // }
+	}, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+            </View>
+
+            <ScrollView 
+                style={styles.body} 
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                } >
+
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         value={username}
                         editable={false}
                         // onChangeText={setUsername}
-                        onChangeText={(text) => handleFieldChange(text, 'username')}
+                        // onChangeText={(text) => handleFieldChange(text, 'username')}
                     />
                 </View>
-            </View>
-
-            <ScrollView style={styles.body} >
-
+ 
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         value={firstname}
-                        // onChangeText={setFirstname}
-                        onChangeText={(text) => handleFieldChange(text, 'firstname')}
+                        onChangeText={setFirstname}
+                        // onChangeText={(text) => handleFieldChange(text, 'firstname')}
                     />
                 </View>
 
@@ -203,8 +216,8 @@ const ProfileView = (userLogin) => {
                     <TextInput
                         style={styles.input}
                         value={lastname}
-                        // onChangeText={setLastname}
-                        onChangeText={(text) => handleFieldChange(text, 'lastname')}
+                        onChangeText={setLastname}
+                        // onChangeText={(text) => handleFieldChange(text, 'lastname')}
                     />
                 </View>
 
@@ -212,7 +225,8 @@ const ProfileView = (userLogin) => {
                     <TextInput
                         style={styles.input}
                         value={movil}
-                        onChangeText={(text) => handleFieldChange(text, 'movil')}
+                        onChangeText={setMovil}
+                        // onChangeText={(text) => handleFieldChange(text, 'movil')}
                     />
                 </View>
 
@@ -224,8 +238,8 @@ const ProfileView = (userLogin) => {
                         style={styles.input}
                         value={email}
                         autoCapitalize="none"
-                        // onChangeText={setEmail}
-                        onChangeText={(text) => handleFieldChange(text, 'email')}
+                        onChangeText={setEmail}
+                        // onChangeText={(text) => handleFieldChange(text, 'email')}
                     />
                     {
                         !isValidEmail &&
