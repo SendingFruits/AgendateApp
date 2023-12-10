@@ -286,7 +286,10 @@ class SQLiteHandler {
     selectReservasCliente = (cliente) => {
 		return new Promise((resolve, reject) => {
 			const db = SQLite.openDatabase('agendate.db');
-			const query = `SELECT * FROM Reservas WHERE Cliente = '${cliente}' `;
+			const query = `SELECT * FROM Reservas R, Servicios S  
+                WHERE R.Cliente = '${cliente}'
+                AND R.Servicio = S.ID
+            `;
 			console.log(query);
 			db.transaction(tx => {
 				tx.executeSql(query, [], (txObj, resultSet) => {
