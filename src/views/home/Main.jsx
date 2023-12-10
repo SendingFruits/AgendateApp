@@ -160,7 +160,14 @@ const Main = ( params ) => {
 					component={RegisterView} />
 
 				<Drawer.Screen 
-					options={{ title: null, }}
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name="Password" 
 					component={PassChanger} 
 					initialParams={{ userLogin: userLogin }} />
@@ -176,7 +183,7 @@ const Main = ( params ) => {
 };
  
 const MenuItems = ( { navigation, profile } ) => {
-	console.log('profile: ', profile);
+	// console.log('profile: ', profile);
 	// console.log('navigation: ', navigation.getState());
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
@@ -267,52 +274,37 @@ const MenuItems = ( { navigation, profile } ) => {
 					{userLogin.user === 'none' ? (
 						<View>
 							<View>
-								<TouchableOpacity 
-									style={styles.btnLogin}
+								<MenuButtonItem 
+									icon = {faUser}
+									text = {'Iniciar Sesión'}
 									onPress = { () => navigation.navigate('Login')}
-									>
-									{/* <Image 
-										source = {{uri:'../resources/images/user_login_2.png'}}
-										style = {styles.image}
-									/> */}
-									<FontAwesomeIcon icon={faUser} />
-									<Text style={styles.textLogin}>Iniciar Sesión</Text>
-								</TouchableOpacity>
+								/>
 							</View>
 
 							<View>
-								<TouchableOpacity 
-									style={styles.btnLogin}
+								<MenuButtonItem 
+									icon = {faRegistered}
+									text = {'Registrarse'}
 									onPress = { () => navigation.navigate('Registro de Usuario')}
-									>
-									{/* <Image 
-										source = {{uri:'../resources/images/user_login_2.png'}}
-										style = {styles.image}
-									/> */}
-									<FontAwesomeIcon icon={faRegistered} />
-									<Text style={styles.textLogin}>Registrarse</Text>
-								</TouchableOpacity>
+								/>
 							</View>
 						</View>
 					) : (
 						<View>
 							<View>
-								<TouchableOpacity 
-									style={styles.btnLogin}
+								<MenuButtonItem 
+									icon = {faUser}
+									text = {userLogin.name}
 									onPress={() => setProfileVisible(!profileVisible)}
-									>
-									{/* <Image 
-										source = {{uri:'../resources/images/user_login_2.png'}}
-										style = {styles.image}
-									/> */}
-									<FontAwesomeIcon icon={faUser} />
-									<Text style={styles.textLogin}>
-										{userLogin.name}
-									</Text>
-								</TouchableOpacity>
+								/>
 							</View>
 
 							<View>
+								{/* <MenuButtonItem 
+									icon = {faRightFromBracket}
+									text = {''}
+									onPress={() => logout()}
+								/> */}
 								<TouchableOpacity 
 									style={styles.btnLogout} 
 									onPress={() => logout()}
@@ -325,11 +317,15 @@ const MenuItems = ( { navigation, profile } ) => {
 					
 					{ (profileVisible) ? (
 						<View>
-							{ (userLogin.user !== 'none') ? (
-								<View style={styles.profile}>
-									<ProfileView param={userLogin} />
-								</View>
-							) : null }
+							<LinearGradient 
+								colors={['#135054', '#238162', '#a8ffe5']} 
+							 	style={styles.profile}>
+								{ (userLogin.user !== 'none') ? (
+									<View>
+										<ProfileView param={userLogin} />
+									</View>
+								) : null }
+							</LinearGradient>
 						</View>
 					) : null }
 				</View>
@@ -345,12 +341,8 @@ const styles = StyleSheet.create({
 	touchMenu: {
 		flex: 1,
 	},
-	barMenu: {
-		backgroundColor: '#2ECC71'
-	},
 	asideMenu: {
 		padding: 15,
-		backgroundColor: '#2ECC71'
 	},
 	header: {
 		height: 30,
@@ -397,7 +389,7 @@ const styles = StyleSheet.create({
 	profile: {
 		bottom: 5,
 		paddingVertical: 15,
-		backgroundColor:'#a8ffe5',
+		// backgroundColor:'#a8ffe5',
 		borderRadius: 15,
 	}
 });

@@ -1,43 +1,48 @@
 import React from 'react';
 
 import { 
-	View, 
-	Text, 
-	Image,
 	StyleSheet,
-	TouchableOpacity 
+	Text, 
+	TouchableOpacity,
+	View,
 } from 'react-native';
 
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const MenuButtonItem = ({ icon, text, onPress }) => {
 	return (	
-		<TouchableOpacity 
+		<LinearGradient
+			colors={['#135054', '#a8ffff', '#fff']}
+			start={{ x: 0.5, y: 0 }}
+      		end={{ x: 0.5, y: 1.5 }}
 			style={styles.btnAside}
-			onPress={onPress}
 			>
-			{/* <Image 
-				source = {{uri:'../resources/images/user_login_2.png'}}
-				style = {styles.image}
-			/> */}
-			<FontAwesomeIcon icon={icon} style={styles.icon} />
-			<Text style = {styles.text}>{text}</Text>
-		</TouchableOpacity>
+			<TouchableOpacity onPress={onPress} >
+				<View style={styles.container}>
+					{icon && <FontAwesomeIcon icon={icon} style={styles.icon} />}
+					{/* <FontAwesomeIcon icon={icon} style={styles.icon} /> */}
+					<Text style = {styles.text}>{text}</Text>
+				</View>
+			</TouchableOpacity>
+		</LinearGradient>
 	);
 };
 
 const styles = StyleSheet.create({
 	btnAside: {
-		padding: 10,
-		marginTop: 3,
+		paddingVertical: 10,
+		paddingHorizontal: 6,
 		marginBottom: 15,
-		backgroundColor: '#a8ffe5',
 		borderRadius: 10,
-		alignItems: 'center',
-		flexDirection: 'row'
+	},
+	container: {
+		flexDirection: 'row', // Alinea los elementos en una fila
+		alignItems: 'center', // Alinea los elementos verticalmente al centro
 	},
 	image: {
 		height: 35,
@@ -45,8 +50,8 @@ const styles = StyleSheet.create({
 		borderRadius: 23,
 	},
 	text: {
-		marginStart: 7,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		marginLeft: 5,
 	},
 	icon: {
 		color: 'black',

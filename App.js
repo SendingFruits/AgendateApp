@@ -1,37 +1,25 @@
 import { UserContext } from './src/services/context/context'; 
-import { StyleSheet, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { 
+	StyleSheet, 
+	Dimensions,
+	Text,
+	View
+} from 'react-native';
+
+import React, { 
+	useState, useEffect 
+} from 'react';
+
+import SQLiteHandler from './src/services/database/SQLiteHandler';
 import BaseError from './src/views/utils/BaseError'
 import Main from './src/views/home/Main';
+
 import 'react-native-gesture-handler';
+
 
 // init App
 const App = (config) => {
 	try {
-		const [isConnected, setIsConnected] = useState(true)
-
-		var getOrientation = () => {
-			const { width, height } = Dimensions.get('window');
-			return width > height ? 'landscape' : 'portrait';
-		}
-		const [orientation, setOrientation] = useState(getOrientation());
-	
-		useEffect(() => {
-			const checkConnection = () => {
-				// Implementa tu lógica para verificar la conexión aquí
-				// Puedes usar librerías como NetInfo o Navigator para esto
-				// Actualiza isConnected en consecuencia
-				// setIsConnected();
-			};
-			checkConnection();
-	
-			const handleOrientationChange = () => {
-				const newOrientation = getOrientation();
-				setOrientation(newOrientation);
-			};
-			Dimensions.addEventListener('change', handleOrientationChange);
-		}, []); 
-	
 		var preferences = {
 			'current_user' : {
 				'guid':'none', // 1
@@ -81,8 +69,63 @@ const App = (config) => {
 				// 'windowHeight':windowHeight,
 			}
 		}
+
 		const [userPreferences, setUserPreferences] = useState(preferences);
+
+		var getOrientation = () => {
+			const { width, height } = Dimensions.get('window');
+			return width > height ? 'landscape' : 'portrait';
+		}
+
+		const [dbLoad, setDbLoad] = useState(true);
+		const [isConnected, setIsConnected] = useState(true)
+		const [orientation, setOrientation] = useState(getOrientation());
+
+		useEffect(() => {
+			SQLiteHandler.createDb('agendate')
+			.then(result => {
+				setDbLoad(true);
+				console.log('DB Create... ', result);
+
+				// SQLiteHandler.generateTestData()
+				// .then(() => {
+				// 	console.log('Generate data ok... ');
+				// })
+				// .catch(error => {
+				// 	console.log('Generate data Error... ', error);
+				// });
+
+				// SQLiteHandler.updateDatos('Servicios', 4, {
+				// 	'DiasDefinidosSemana':'Lunes;Martes;Miercoles;Jueves;Viernes;'
+				// })
+				// .then(() => {
+				// 	console.log('Update data ok... ');
+				// })
+				// .catch(error => {
+				// 	console.log('Update data Error... ', error);
+				// });
+			})
+			.catch(error => {
+				setDbLoad(false);
+				console.log('DB Error... ', error);
+			});
+
+			const checkConnection = () => {
+				// Implementa tu lógica para verificar la conexión aquí
+				// Puedes usar librerías como NetInfo o Navigator para esto
+				// Actualiza isConnected en consecuencia
+				// setIsConnected();
+			};
+			checkConnection();
 	
+			const handleOrientationChange = () => {
+				const newOrientation = getOrientation();
+				setOrientation(newOrientation);
+			};
+			Dimensions.addEventListener('change', handleOrientationChange);
+		}, []); 
+	
+
 		if (isConnected) {
 			return (
 				<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
@@ -95,8 +138,12 @@ const App = (config) => {
 			);
 		}
 	} catch (error) {
+		console.log(error);
 		return (
-			<BaseError  errorType={'internet'} />
+			// <UserContext.Provider value={{ userPreferences, setUserPreferences }}>
+			// 	<Main style={styles.background} orientation={orientation} />
+			// </UserContext.Provider>
+			<BaseError errorType={error} />
 		);
 	}
 };

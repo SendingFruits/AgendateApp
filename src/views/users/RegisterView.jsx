@@ -288,7 +288,7 @@ const RegisterView = () => {
 					<Button
 						title="Enviar"
 						onPress={sendData}
-						color="#2ECC71"
+						color="#135944"
 					/>
 				</View>
 			</View>

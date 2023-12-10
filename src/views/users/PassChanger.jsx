@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import MenuButtonItem from '../home/MenuButtonItem';
 import UsersController from '../../controllers/UsersController';
 
 import { 
@@ -18,6 +19,9 @@ import {
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
+
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const PassChanger = (params) => {
 
@@ -97,59 +101,72 @@ const PassChanger = (params) => {
 	};
 
     return (
-        <View style={styles.container}>
 
-            <Text style={styles.txtUpdate}>Contraseña Actual: </Text>
-            <View style={styles.inputContainer}>
-                <TextInput style={styles.input}
-                    secureTextEntry={secureTextEntryValue1}
-                    onChangeText={(text) => handleFieldChange(text, 'oldpass')}
-                />
-                <TouchableOpacity style={styles.iconEye}
-                    onPress={() => handleToggleIconOldPass()}
-                    > 	
-                    { (iconEye1) ? (
-                        <View>
-                            <FontAwesomeIcon icon={faEye} />
-                        </View>
-                    ) : 
-                        <View>
-                            <FontAwesomeIcon icon={faEyeSlash} />
-                        </View>
-                    }
-                </TouchableOpacity>
-            </View>
-
-            <Text style={styles.txtUpdate}>Contraseña Nueva: </Text>
-            <View style={styles.inputContainer}>
-                <TextInput style={styles.input} 
-                    secureTextEntry={secureTextEntryValue2}
-                    onChangeText={(text) => handleFieldChange(text, 'newpass')}
-                />
-                <TouchableOpacity style={styles.iconEye}
-                    onPress={() => handleToggleIconNewPass()}
-                    > 	
-                    { (iconEye2) ? (
-                        <View>
-                            <FontAwesomeIcon icon={faEye} />
-                        </View>
-                    ) : 
-                        <View>
-                            <FontAwesomeIcon icon={faEyeSlash} />
-                        </View>
-                    }
-                </TouchableOpacity>
-            </View>
-
+        <LinearGradient 
+            colors={['#135000', '#238162', '#2ECC71']}
+            start={{ x: 0.0, y: 0.95510 }}
+            end={{ x: 0.0, y: 0.00010 }}
+            style={styles.container}
+            >
             <View>
-                <TouchableOpacity 
-                    style={styles.btnChangePassword}
-                    onPress={() => changePassword(user)} >
-                    <Text>Cambiar</Text>
-                </TouchableOpacity>
-            </View>
+                <Text style={styles.txtUpdate}>Contraseña Actual: </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.input}
+                        secureTextEntry={secureTextEntryValue1}
+                        onChangeText={(text) => handleFieldChange(text, 'oldpass')}
+                    />
+                    <TouchableOpacity style={styles.iconEye}
+                        onPress={() => handleToggleIconOldPass()}
+                        > 	
+                        { (iconEye1) ? (
+                            <View>
+                                <FontAwesomeIcon icon={faEye} />
+                            </View>
+                        ) : 
+                            <View>
+                                <FontAwesomeIcon icon={faEyeSlash} />
+                            </View>
+                        }
+                    </TouchableOpacity>
+                </View>
 
-        </View>
+                <Text style={styles.txtUpdate}>Contraseña Nueva: </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.input} 
+                        secureTextEntry={secureTextEntryValue2}
+                        onChangeText={(text) => handleFieldChange(text, 'newpass')}
+                    />
+                    <TouchableOpacity style={styles.iconEye}
+                        onPress={() => handleToggleIconNewPass()}
+                        > 	
+                        { (iconEye2) ? (
+                            <View>
+                                <FontAwesomeIcon icon={faEye} />
+                            </View>
+                        ) : 
+                            <View>
+                                <FontAwesomeIcon icon={faEyeSlash} />
+                            </View>
+                        }
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.btnChangePassword}>
+                    {/* <TouchableOpacity 
+                        style={styles.btnChangePassword}
+                        onPress={() => changePassword(user)} >
+                        <Text>Cambiar</Text>
+                    </TouchableOpacity> */}
+
+                    <MenuButtonItem 
+						icon = {null}
+						text = "Cambiar"
+						onPress = { () => navigation.navigate('Inicio')}
+					/>
+                </View>
+
+            </View>
+        </LinearGradient>
 
     );
 }
@@ -157,10 +174,9 @@ const PassChanger = (params) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1, 
-        padding: 20,
-        backgroundColor: '#a8ffe5',
+        padding: 21,
         borderWidth: 1,
-        borderColor: '#a8ffe5',
+        borderColor: '#2EAe71',
     },
     inputContainer: {
 		flexDirection: 'row',
@@ -185,26 +201,10 @@ const styles = StyleSheet.create({
         alignContent: 'flex-end',
         backgroundColor:'#fff',
     },
-    modalPass: {
-        // alignSelf:'center',
-        // alignItems: 'center',
-    },
-    dataModal: {
-        // flex: 1,
-        // height: '100%',
-		// width: '100%', 
-        marginTop: 20,
-    },
     btnChangePassword: {
         alignItems: 'center',
         alignSelf: 'center',
-        marginTop: 50,
-        backgroundColor: '#69ACDD',
-        // width:'50%',
-        // height:'40%',
-        borderRadius:15,
-        borderWidth: 1,
-        borderColor: '#a8ffe5',
+        marginTop: 35,
         padding: 10,
     }
 })

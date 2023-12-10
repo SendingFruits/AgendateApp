@@ -38,6 +38,9 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
+
 const ProfileView = (userLogin) => {
 
     const navigation = useNavigation();
@@ -184,11 +187,8 @@ const ProfileView = (userLogin) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-            </View>
 
             <ScrollView 
-                style={styles.body} 
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } >
@@ -297,17 +297,11 @@ const styles = StyleSheet.create({
         // flex: 1,
         justifyContent: 'center',
     },
-    header: {
-        backgroundColor: '#a8ffe5',
-    },
-    body: {
-        backgroundColor: '#a8ffe5',
-    },
+   
     inputContainer: {
 		flexDirection: 'row',
 		backgroundColor: '#fff',
         width:'90%',
-		// borderColor: 'lightgreen',
 		borderWidth: 1,
 		borderRadius: 5,
 		marginHorizontal:15,
@@ -324,7 +318,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
 		backgroundColor: '#69ACDD',
         width:'90%',
-        // height:'40%',
         borderRadius:15,
         marginHorizontal:15,
         marginTop:15,

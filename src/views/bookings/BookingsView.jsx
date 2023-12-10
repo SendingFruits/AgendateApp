@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 
-import ServiceItem from './BookingDetail';
-import ServicesController from '../../controllers/BookingController';
+import BookingItem from './BookingItem';
+import BookingController from '../../controllers/BookingController';
 
 import React, { 
     useState,
@@ -17,16 +17,16 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+import SQLiteHandler from '../../services/database/SQLiteHandler';
+
 
 const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
-    const [list, setList] = useState(null);
 
-    console.log(params.route.params);
-    // const { userLogin } = route.params;
-    // var guid = userLogin.guid;
- 
+    var guid = params.route.params.guid;
+
+    const [list, setList] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
     const handleEditService = (service) => {
@@ -38,7 +38,7 @@ const BookingsView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-			navigation.navigate('Inicio');
+			navigation.navigate('Reservas');
 		}, 2000);
 	}, []);
 
@@ -52,33 +52,39 @@ const BookingsView = ( params ) => {
         // .catch(error => {
         //     alert('ERROR al intentar cargar los Servicios');
         // });
+
+        SQLiteHandler.selectReservasCliente(guid)
+        .then(bookings => {
+            setList(bookings);
+        })
+        .catch(error => {
+            alert('ERROR al intentar cargar las Reservas');
+        });
     }, []);
 
     console.log('list: ', list);
 
     return (
         <View style={styles.container}>
-
-            { (list) ? (
+            {list ? (
                 <ScrollView 
                     style={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    } >
-
-                    {/* {list.map((service, index) => (
-                        // <ServiceItem 
-                        //     key={index}
-                        //     service={service} 
-                        //     onPress={handleEditService} 
-                        //     />
-                    )} */}
+                    }>
+                    {list.map((item, index) => (
+                        <BookingItem 
+                            key={index}
+                            item={item} 
+                            onPress={() => handleEditService(item)} 
+                        />
+                    ))}
                 </ScrollView>
-            ) :
+            ) : (
                 <View>
                     <Text>No tiene ninguna Reserva Realizada</Text>
                 </View>
-            }
+            )}
         </View>
     );
 };

@@ -25,6 +25,7 @@ import {
 	Alert, 
 	Button,
 	TouchableOpacity,
+	Keyboard,
 } from 'react-native';
 import 
 	MapView, { 
@@ -42,7 +43,8 @@ const HomeView = ( params ) => {
 	const mapRef = useRef(null);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
-	// console.log('userLogin', userLogin);
+	
+	// console.log('params', params);
 
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
@@ -69,6 +71,7 @@ const HomeView = ( params ) => {
 		setTimeout(() => {
 			setRefreshing(false);
 			fetchData();
+			// navigation.navigate('Login');
 		}, 2000);
 	}, []);
 
@@ -80,7 +83,7 @@ const HomeView = ( params ) => {
 				// const organizedCompanies = await MapController.companyLocations(region,1);
 				MapController.companyLocations(region, 10)
 				.then(companiesReturn => {
-					console.log(companiesReturn);
+					// console.log(companiesReturn);
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 				})
@@ -163,6 +166,7 @@ const HomeView = ( params ) => {
 			};
 			// Centra el mapa en la ubicación de la empresa encontrada
 			mapRef.current.animateToRegion(newRegion); 
+			Keyboard.dismiss();
 		}
 	};
 

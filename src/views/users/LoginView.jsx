@@ -118,7 +118,7 @@ const LoginView = () => {
 				<Button 
 					title="Iniciar Sesión" 
 					onPress={login}
-					color='#69ACDD' 
+					color='#135944' 
 					/>
 
 				<View style={styles.registerContainer}>
@@ -126,7 +126,7 @@ const LoginView = () => {
 					<Button 
 						title="Registrate" 
 						onPress = { () => navigation.navigate('Registro de Usuario')} 
-						color="#2ECC71"
+						color="#135944"
 						/>
 				</View>
 			</View>
