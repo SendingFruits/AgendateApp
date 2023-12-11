@@ -117,13 +117,14 @@ const Main = ( params ) => {
 					component={HomeView} 
 					initialParams={{ orientation: params.orientation }} />
 
-				<Drawer.Screen 
+				{/* <Drawer.Screen 
 					name="Agenda" 
-					component={DiaryView} />
+					component={DiaryView} /> */}
 
 				<Drawer.Screen 
 					options={{ title: null, }}
-					name="Reservas" 
+					name={userLogin.type === 'company' ? 'Agenda' : 'Reservas'}
+					// name="Reservas" 
 					component={BookingsView} 
 					initialParams={ userLogin } />
 					
@@ -131,13 +132,13 @@ const Main = ( params ) => {
 					options={{ title: null, }}
 					name="Servicios" 
 					component={ServicesView} 
-					initialParams={{ userLogin: userLogin }} />
+					initialParams={ userLogin } />
 
 				<Drawer.Screen 
 					options={{ title: null, }}
 					name="Promociones" 
 					component={PromosView} 
-					initialParams={{ userLogin: userLogin }} />
+					initialParams={ userLogin } />
 
 				<Drawer.Screen 
 					// options={{ title: null, }}

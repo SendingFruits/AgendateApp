@@ -31,7 +31,7 @@ var windowHeight = Dimensions.get('window').height;
 const CompanyPanel = (params) => {
 
     var data = params.dataCompany;
-    console.log(data);
+    console.log('data: ', data);
     const navigation = useNavigation();
 
     const [docu, setDocu] = useState(data.docu);

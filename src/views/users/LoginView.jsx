@@ -50,7 +50,7 @@ const LoginView = () => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
-				// console.log('userReturn: ', userReturn);
+				console.log('userReturn: ', userReturn);
 				var user = JSON.parse(userReturn);
 				// console.log('user: ', user);
 				
@@ -64,7 +64,8 @@ const LoginView = () => {
 						celu: user.celular,
 						mail: user.correo,
 						type: user.tipoUsuario,
-						docu: user.documento,
+						// docu: user.documento,
+						docu: (user.tipoUsuario === 'company' ? user.rutDocumento : user.documento)
 						// data: userReturn.data,
 					},   
 				});

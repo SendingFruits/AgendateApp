@@ -1,60 +1,37 @@
 import { formatDate } from '../../views/utils/Functions'; 
 
-import { 
-    useState, useEffect 
-} from 'react';
-
 import UsersController from '../../controllers/UsersController';
-import MenuButtonItem from '../home/MenuButtonItem';
+
+import { useState, useEffect } from 'react';
 
 import { 
     Dimensions,
     StyleSheet, 
     Text,
+    TextInput,
     View,
     ScrollView,
+    Button,
     TouchableOpacity,
+    PanResponder
 } from 'react-native';
-
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const BookingItem = (params) => {
+const ServiceItem = (params) => {
     
-    var item = params.item;
-    // console.log('item: ',item);
-
-    // var dateString = item.FechaHoraReserva.split(' ');
-    // var fecha = formatDate(dateString[0]);
-    // var hora = dateString[1].slice(0, -3);
+    var service = params.service;
+    // console.log('service: ',service);
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [bodyHeight, setBodyHeight] = useState(200);
-
-    const set__Color = (estado) => {
-        switch (estado) {
-            case 'Realizada':
-                return 'green'; // Color para estado "Realizada"
-            case 'Pendiente':
-                return 'orange'; // Color para estado "Pendiente"
-            case 'Cancelada':
-                return 'red'; // Color para estado "Cancelada"
-            default:
-                return 'black'; // Color por defecto
-        }
-    };
 
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
   
-    const editItem = () => {
-        console.log('editItem');
-    };
-
     const editName = () => {
         console.log('editName');
     };
@@ -62,69 +39,54 @@ const BookingItem = (params) => {
     const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
     const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
 
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderMove: (event, gestureState) => {
+            console.log(event);
+            console.log(gestureState);
+            if (gestureState.dy > 0) {
+                // Ajusta la altura según el desplazamiento hacia abajo
+                setBodyHeight(100 + gestureState.dy); 
+            }
+        },
+        onPanResponderRelease: () => {
+            // Realiza alguna acción al soltar el dedo
+            console.log('accion');
+        }
+    });
 
 	useEffect(() => {
 		
 	}, []);
     
-    // {
-    //     "cost": 2000,
-    //     "dateEnd": "2023-11-30",
-    //     "dateInit": "2023-11-01",
-    //     "days": [],
-    //     "description": "",
-    //     "duration": 0.5,
-    //     "frequency": 7,
-    //     "idCompany": 2,
-    //     "idService": 2,
-    //     "name": "Pedidos a Retirar",
-    //     "quotas": 20,
-    //     "type": "Comida"
-    // }
 
     return (
         <View style={styles.container}>
             <View>
-                <LinearGradient
-                    style={styles.header}
-                    colors={['#135054', '#e9e9f8', '#efffff']} 
-                    start={{ x: 0.2, y: 1.2 }}
-                    end={{ x: 1.5, y: 0.5 }} 
-                    >    
-                    <TouchableOpacity 
-                        onPress={toggleCollapse} 
-                        onLongPress={() => editName()}
-                        >
-                        <View style={styles.textHeader}>
-                            {/* <Text>Reserva</Text> */}
-                            {/* <Text> {item.Estado}</Text> */}
-                            <Text> {item.name} </Text>
-                            {/* <Text style={{ marginLeft:60 }}> {fecha}</Text>
-                            <Text style={{ marginLeft:5 }}> {hora}</Text> */}
-                        </View>
-                    </TouchableOpacity>
-
-					{/* <MenuButtonItem 
-                        style={styles.btnEditCollapse}
-						icon = {null}
-						text = "Editar"
-						onPress = { () => editItem()}
-					/> */}
-
-                </LinearGradient>
+                <TouchableOpacity 
+                    onPress={toggleCollapse} 
+                    onLongPress={editName}
+                    >
+                    <View style={styles.header}>
+                        <Text style={styles.textHeader}>{service.name}</Text>
+                    </View>
+                </TouchableOpacity>
+                {/* <TouchableOpacity style={styles.btnEditCollapse}>
+                    <Text style={styles.txtbtnEdit}>Editar</Text>
+                </TouchableOpacity> */}
             </View>
 
             {!isCollapsed ? (
                 <View>
                     {/* <ScrollView style={styles.body}> */}
-                    <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                        {/* {!booking.calendar ? (
+                    <ScrollView style={{ ...styles.body, height: bodyHeight }} {...panResponder.panHandlers}>
+                        {/* {!service.calendar ? (
                             <View>
                                 <TextInput
                                     // keyboardType="email-address"
                                     // style={styles.input}
                                     // value={email}
-                                    // onChangeText={booking.}
+                                    // onChangeText={service.}
                                     // autoCapitalize="none"
                                 />
                             </View>
@@ -132,33 +94,32 @@ const BookingItem = (params) => {
                             <View>
                                 <View style={styles.row}>
                                     <Text style={styles.label}>Tipo:</Text>
-                                    {/* <Text style={styles.value}>asd</Text> */}
+                                    <Text style={styles.value}>{service.type}</Text>
                                 </View>
                                 <View style={styles.row}>
                                     <Text style={styles.label}>Costo:</Text>
-                                    {/* <Text style={styles.value}>$ sad</Text> */}
+                                    <Text style={styles.value}>$ {service.cost}</Text>
                                 </View>
                                 <View style={styles.row}>
                                     <Text style={styles.label}>Comienza:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                    <Text style={styles.value}>{formatDate(service.dateInit)}</Text>
                                 </View>
                                 <View style={styles.row}>
                                     <Text style={styles.label}>Termina:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                    <Text style={styles.value}>{formatDate(service.dateEnd)}</Text>
                                 </View>
                             </View>
                         {/* )} */}
                     </ScrollView>
-
                     <View style={styles.footer}>
-                        {/* {console.log('calendar: ', booking.calendar)} */}
-                        {/* {!booking.calendar ? (
+                        {/* {console.log('calendar: ', service.calendar)} */}
+                        {!service.calendar ? (
                             <TouchableOpacity style={styles.btnEdit}>
                                 <Text style={styles.txtbtnEdit}>Editar</Text>
                             </TouchableOpacity>
                         ) : (
                             null
-                        )} */}
+                        )}
                     </View>
                 </View>
             ) : (
@@ -172,24 +133,21 @@ const BookingItem = (params) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth - 40,
-        marginHorizontal: 20,
-        marginVertical: 10,
+        width: windowWidth - 50,
+        marginHorizontal: 25,
+        marginVertical: 15,
         justifyContent: 'center',
         borderRadius: 12,
-        borderWidth: 1,
+        borderWidth: 0.8,
         padding:1.5,
     },
     header: {
-        flexDirection: 'row',
-        alignItems:'baseline',
+        backgroundColor:'#9a9',
         paddingHorizontal: 10,
         borderTopLeftRadius:12,
         borderTopRightRadius:12,
     },
     textHeader: {
-        flexDirection: 'row',
-        alignItems:'baseline',
         fontWeight:'bold',
         paddingVertical:10,
     },
@@ -253,4 +211,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default BookingItem;
+export default ServiceItem;

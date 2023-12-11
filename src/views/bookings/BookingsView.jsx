@@ -29,7 +29,7 @@ const BookingsView = ( params ) => {
     const [list, setList] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    const handleEditService = (service) => {
+    const handleEditItem = (service) => {
         // Navegar a la vista de edición con los datos del servicio
         // navigation.navigate('ServiceEdit', { service });
     };
@@ -76,7 +76,7 @@ const BookingsView = ( params ) => {
                         <BookingItem 
                             key={index}
                             item={item} 
-                            onPress={() => handleEditService(item)} 
+                            onPress={() => handleEditItem(item)} 
                         />
                     ))}
                 </ScrollView>
