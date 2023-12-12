@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-
+ 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import ServicesController from '../../controllers/ServicesController';
@@ -11,7 +11,7 @@ import CalendarPicker from './CalendarPicker';
 const MakeReservation = ({ route, navigation }) => {
 
 	var item = route.params.item;
-	console.log('item: ', item);
+	console.log('item param: ', item);
 
 	const [service, setService] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
