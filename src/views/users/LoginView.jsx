@@ -50,9 +50,8 @@ const LoginView = () => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
-				console.log('userReturn: ', userReturn);
 				var user = JSON.parse(userReturn);
-				// console.log('user: ', user);
+				console.log('user: ', user);
 				
 				setUserPreferences({
 					current_user: {
@@ -64,10 +63,19 @@ const LoginView = () => {
 						celu: user.celular,
 						mail: user.correo,
 						type: user.tipoUsuario,
-						// docu: user.documento,
-						docu: (user.tipoUsuario === 'company' ? user.rutDocumento : user.documento)
-						// data: userReturn.data,
-					},   
+						docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
+						...(user.tipoUsuario === 'company' && {
+							rut: user.rutDocumento,
+							businessName: user.razonSocial,
+							owner: user.nombrePropietario,
+							category: user.rubro,
+							address: user.direccion,
+							city: user.ciudad,
+							description: user.descripcion,
+							latitude: user.latitude,
+							longitude: user.longitude,
+						}),
+					},
 				});
 
 				navigation.navigate('Inicio');

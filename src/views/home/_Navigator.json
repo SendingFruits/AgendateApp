@@ -77,3 +77,59 @@
     "stale": false,
     "type": "drawer"
 }
+
+{
+    "nombreUsuario": "emp1",
+    "celular": "98217398123",
+    "ciudad": "",
+    "contrasenia": "123456",
+    "correo": "estebanpiccardo1989@gmail.com",
+    "descripcion": "",
+    "direccion": "",
+    "nombrePropietario": "empresario cagador",
+    "razonSocial": "",
+    "rubro": "",
+    "rutDocumento": "",
+    "tipoUsuario": "company",
+    "latitude": 0,
+    "longitude": 0
+}
+
+
+{
+    "message": "Request failed with status code 400",
+    "name": "AxiosError",
+    "stack": "AxiosError: Request failed with status code 400\n    at settle (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:144036:37)\n    at onloadend (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:143864:29)\n    at call (native)\n    at dispatchEvent (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:42672:31)\n    at setReadyState (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:40504:29)\n    at __didCompleteResponse (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:40281:29)\n    at apply (native)\n    at anonymous (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:40423:52)\n    at apply (native)\n    at emit (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:3067:40)\n    at apply (native)\n    at __callFunction (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:3737:36)\n    at anonymous (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:3457:31)\n    at __guard (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:3674:15)\n    at callFunctionReturnFlushedQueue (http://192.168.1.5:8081/node_modules%5Cexpo%5CAppEntry.bundle//&platform=android&dev=true&hot=false&lazy=true:3456:21)",
+    "config": {
+        "transitional": {
+            "silentJSONParsing": true,
+            "forcedJSONParsing": true,
+            "clarifyTimeoutError": false
+        },
+        "adapter": [
+            "xhr",
+            "http"
+        ],
+        "transformRequest": [
+            null
+        ],
+        "transformResponse": [
+            null
+        ],
+        "timeout": 0,
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+        "maxContentLength": -1,
+        "maxBodyLength": -1,
+        "env": {},
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        "method": "post",
+        "url": "https://1c28-2800-a4-136b-bd00-a406-a204-1b37-a878.ngrok-free.app/api/Empresas/RegistrarEmpresa",
+        "data": "{\"rutDocumento\":\"200000655465\",\"razonSocial\":\"\",\"nombrePropietario\":\"empresario cagador\",\"rubro\":\"\",\"direccion\":\"\",\"ciudad\":\"\",\"descripcion\":\"\",\"latitude\":0,\"longitude\":0,\"nombreUsuario\":\"emp1\",\"contrasenia\":\"123456\",\"celular\":\"98217398123\",\"correo\":\"estebanpiccardo1989@gmail.com\",\"tipoUsuario\":\"company\"}"
+    },
+    "code": "ERR_BAD_REQUEST",
+    "status": 400
+}

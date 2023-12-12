@@ -200,7 +200,7 @@ class SQLiteHandler {
     };
 
 
-    insertUsuarios = async (db, id, username, name, lastName, password, document, email, userType) => {
+    insertUsuario = async (db, id, username, name, lastName, password, document, email, userType) => {
         return new Promise((resolve, reject) => {
             const query = `
                 INSERT INTO Usuarios (ID, NombreUsuario, Nombre, Apellido, Contraseña, Documento, Correo, TipoUsuario, Deleted)
@@ -218,7 +218,7 @@ class SQLiteHandler {
         });
     };
 
-    insertServicios = async (db, empresaId, nombre, hIni, hFin, dias, turno, tipo, costo, descr, ultimaFecha) => {
+    insertServicio = async (db, empresaId, nombre, hIni, hFin, dias, turno, tipo, costo, descr, ultimaFecha) => {
         return new Promise((resolve, reject) => {
             const query = `
                 INSERT INTO Servicios (Empresa, Nombre, HoraInicio, HoraFin, DiasDefinidosSemana, 
@@ -237,7 +237,7 @@ class SQLiteHandler {
         });
     };
 
-    insertReservas = async (db, clienteId, servicioId, estado, fechaRealizada, fechaHoraReserva) => {
+    insertReserva = async (db, clienteId, servicioId, estado, fechaRealizada, fechaHoraReserva) => {
         return new Promise((resolve, reject) => {
             const query = `
                 INSERT INTO Reservas (Cliente, Servicio, Estado, FechaRealizada, FechaHoraReserva, Deleted)

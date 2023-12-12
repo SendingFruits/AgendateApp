@@ -78,6 +78,10 @@ class CompanyServices {
             
         });
     };
+
+    putCompanyData = async (data) => {
+        
+    }
 }
 
 export default new CompanyServices();

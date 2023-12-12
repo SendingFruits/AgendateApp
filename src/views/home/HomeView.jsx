@@ -71,7 +71,7 @@ const HomeView = ( params ) => {
 		setTimeout(() => {
 			setRefreshing(false);
 			fetchData();
-			// navigation.navigate('Login');
+			navigation.navigate('Inicio');
 		}, 2000);
 	}, []);
 
@@ -157,6 +157,8 @@ const HomeView = ( params ) => {
 		const foundCompany = companies.find(company => regex.test(company.title.toLowerCase()));
 		// const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
 	
+		
+
 		if (foundCompany) {
 			const newRegion = {
 				latitude: foundCompany.location.latitude,

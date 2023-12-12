@@ -70,7 +70,8 @@ class MapServices {
                 if (response.status == 200) {
                     resolve(response.data);
                 } else {
-                    resolve(-1);
+                    if (response.status === 204) resolve([]);
+                    else resolve(-1);
                 }
             })
             .catch(function (error) {

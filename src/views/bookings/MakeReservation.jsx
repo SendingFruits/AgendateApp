@@ -44,8 +44,8 @@ const MakeReservation = ({ route, navigation }) => {
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
 					<View>
-						<ServiceItem service={service} from={"calendar"} />
-						<CalendarPicker idService={service.idService}/>
+						{/* <ServiceItem service={service} from={"calendar"} /> */}
+						{/* <CalendarPicker idService={service.id}/> */}
 					</View>
                 )}
 

@@ -1,0 +1,102 @@
+{
+    "config": {
+      "adapter": [
+        "xhr",
+        "http"
+      ],
+      "data": undefined,
+      "env": {
+        "Blob": [Function Blob
+        ],
+        "FormData": [Function FormData
+        ]
+      },
+      "headers": [Object
+      ],
+      "maxBodyLength": -1,
+      "maxContentLength": -1,
+      "method": "get",
+      "timeout": 0,
+      "transformRequest": [
+        [Function transformRequest
+        ]
+      ],
+      "transformResponse": [
+        [Function transformResponse
+        ]
+      ],
+      "transitional": {
+        "clarifyTimeoutError": false,
+        "forcedJSONParsing": true,
+        "silentJSONParsing": true
+      },
+      "url": "https://5276-167-61-202-201.ngrok-free.app/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=10&latitudeCliente=-34.9091&longitudeCliente=-56.1367667",
+      "validateStatus": [Function validateStatus
+      ],
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN"
+    },
+    "data": "",
+    "headers": {
+      "content-length": "0",
+      "date": "Mon, 11 Dec 2023 17:20:33 GMT",
+      "ngrok-trace-id": "7aa8d5cf38615c005c173220eddc96c8",
+      "server": "Kestrel"
+    },
+    "request": {
+      "DONE": 4,
+      "HEADERS_RECEIVED": 2,
+      "LOADING": 3,
+      "OPENED": 1,
+      "UNSENT": 0,
+      "_aborted": false,
+      "_cachedResponse": undefined,
+      "_hasError": false,
+      "_headers": {
+        "accept": "text/json"
+      },
+      "_incrementalEvents": false,
+      "_lowerCaseResponseHeaders": {
+        "content-length": "0",
+        "date": "Mon, 11 Dec 2023 17:20:33 GMT",
+        "ngrok-trace-id": "7aa8d5cf38615c005c173220eddc96c8",
+        "server": "Kestrel"
+      },
+      "_method": "GET",
+      "_perfKey": "network_XMLHttpRequest_https://5276-167-61-202-201.ngrok-free.app/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=10&latitudeCliente=-34.9091&longitudeCliente=-56.1367667",
+      "_performanceLogger": {
+        "_closed": false,
+        "_extras": [Object
+        ],
+        "_isLoggingForWebPerformance": false,
+        "_pointExtras": [Object
+        ],
+        "_points": [Object
+        ],
+        "_timespans": [Object
+        ]
+      },
+      "_requestId": null,
+      "_response": "",
+      "_responseType": "",
+      "_sent": true,
+      "_subscriptions": [],
+      "_timedOut": false,
+      "_trackingName": "unknown",
+      "_url": "https://5276-167-61-202-201.ngrok-free.app/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=10&latitudeCliente=-34.9091&longitudeCliente=-56.1367667",
+      "readyState": 4,
+      "responseHeaders": {
+        "content-length": "0",
+        "date": "Mon, 11 Dec 2023 17:20:33 GMT",
+        "ngrok-trace-id": "7aa8d5cf38615c005c173220eddc96c8",
+        "server": "Kestrel"
+      },
+      "responseURL": "https://5276-167-61-202-201.ngrok-free.app/api/Empresas/ObtenerEmpresasMapa?radioCircunferencia=10&latitudeCliente=-34.9091&longitudeCliente=-56.1367667",
+      "status": 204,
+      "timeout": 0,
+      "upload": {},
+      "withCredentials": true
+    },
+    "status": 204,
+    "statusText": undefined
+  }

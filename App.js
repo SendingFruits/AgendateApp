@@ -30,30 +30,6 @@ const App = (config) => {
 				'type':'none', // customer
 				'mail':'none', // john@example.com
 				'docu':'none', // 47659893
-				'data': {
-					'company' : {
-						'rut': '10000500123456789',
-						'socialReason': 'Panaderia y Rotiseria',
-						'address': 'Vilardebo 4565',
-						'itemCompany': 'Gastronomia',
-						'description': 'Panaderia y Rotiseria donde podes realizar tu reserva de pedido y venir a retirar...',
-						'location': {
-							'lng':-34.87843487086523,
-							'lat':-56.17987247183919
-						},
-						'service': {
-							'nombre':'none',
-							'starts':'--/--/-- 00:00:00',
-							'ends':'--/--/-- 00:00:00',
-							'frecuency': 1,
-						},
-						'logo': 'uri/: ...',
-					},
-					'customer' : {
-						'document': '47326453',
-						'picture': 'uri/: ...'
-					},
-				}
 			},
 			'connection' : {
 				'string':'none',

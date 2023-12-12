@@ -31,16 +31,29 @@ var windowHeight = Dimensions.get('window').height;
 const CompanyPanel = (params) => {
 
     var data = params.dataCompany;
-    console.log('data: ', data);
+    // console.log('data: ', data);
     const navigation = useNavigation();
 
-    const [docu, setDocu] = useState(data.docu);
-    const [reason, setReason] = useState(data.socialReason);
-    const [itemCompany, setItemCompany] = useState(data.itemCompany);
+    // {
+    //     "address": "Vilardebo 4565",
+    //     "businessName": "Panaderia y Rotiseria.",
+    //     "category": "Gastronomia",
+    //     "city": "Montevideo",
+    //     "description": "Panaderia y Rotiseria donde podes realizar tu reserva de pedido y venir a retirar...",
+    //     "docu": "10000500123456789",
+    //     "owner": "Jose",
+    //     "rut": "10000500123456789",
+    // }
+
+    const [rut, setRut] = useState(data.rut);
+    const [owner, setOwner] = useState(data.owner);
+    const [businessName, setBusinessName] = useState(data.businessName);
+    const [category, setCategory] = useState(data.category);
     const [address, setAddress] = useState(data.address);
+    const [city, setCity] = useState(data.city);
     const [description, setDescription] = useState(data.description);
 
-    const [location, setLocation] = useState(null);
+    const [location, setLocation] = useState({latitude:data.latitude, longitude:data.longitude});
 
     const captureLocation = async () => {
         try {
@@ -57,6 +70,8 @@ const CompanyPanel = (params) => {
 
     const saveDataCompany = async () => {
         console.log('saveDataCompany');
+
+        
     };
 
     const [selectedPicture, setSelectedPicture] = useState(null);
@@ -84,7 +99,7 @@ const CompanyPanel = (params) => {
 	};
 
 	useEffect(() => {
-		setDocu(data.docu);
+		// setRut(data.docu);
 	}, []);
 
     return (
@@ -133,18 +148,18 @@ const CompanyPanel = (params) => {
                             <TextInput 
                                 keyboardType="numeric"
                                 style={styles.dataEdit} 
-                                value={docu}
-                                onChangeText={setDocu}
+                                value={rut}
+                                onChangeText={setRut}
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 
-                                value={reason}
-                                onChangeText={setReason}
+                                value={businessName}
+                                onChangeText={setBusinessName}
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 
-                                value={itemCompany}
-                                onChangeText={setItemCompany}
+                                value={category}
+                                onChangeText={setCategory}
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 
