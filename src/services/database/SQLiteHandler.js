@@ -283,6 +283,7 @@ class SQLiteHandler {
     }
 
 
+    // reservas
     selectReservasCliente = (cliente) => {
 		return new Promise((resolve, reject) => {
 			const db = SQLite.openDatabase('agendate.db');
@@ -290,6 +291,51 @@ class SQLiteHandler {
                 WHERE R.Cliente = '${cliente}'
                 AND R.Servicio = S.ID
             `;
+			console.log(query);
+			db.transaction(tx => {
+				tx.executeSql(query, [], (txObj, resultSet) => {
+					console.log('resultSet: ', JSON.stringify(resultSet));
+					if (resultSet.rows.length > 0) {						
+						resolve(resultSet.rows._array);
+					} else {
+						resolve(null);
+					}
+				}, (txObj, error) => {
+					reject('Error Select User - ', error);
+				});
+			});
+		});
+	};
+
+    // agenda
+    selectReservasEmpresa = (empresa) => {
+		return new Promise((resolve, reject) => {
+			const db = SQLite.openDatabase('agendate.db');
+			const query = `SELECT * FROM Reservas R, Servicios S  
+                WHERE S.Empresa = '${empresa}'
+                AND R.Servicio = S.ID
+            `;
+			console.log(query);
+			db.transaction(tx => {
+				tx.executeSql(query, [], (txObj, resultSet) => {
+					console.log('resultSet: ', JSON.stringify(resultSet));
+					if (resultSet.rows.length > 0) {						
+						resolve(resultSet.rows._array);
+					} else {
+						resolve(null);
+					}
+				}, (txObj, error) => {
+					reject('Error Select User - ', error);
+				});
+			});
+		});
+	};
+
+
+    selectServiciosEmpresa = (empresa) => {
+		return new Promise((resolve, reject) => {
+			const db = SQLite.openDatabase('agendate.db');
+			const query = `SELECT * FROM Servicios WHERE Empresa = '${empresa}' `;
 			console.log(query);
 			db.transaction(tx => {
 				tx.executeSql(query, [], (txObj, resultSet) => {

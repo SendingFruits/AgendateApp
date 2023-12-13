@@ -1,24 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
+import { getOrientation } from '../utils/Functions'; 
 
 import ServiceItem from './ServiceItem';
 import ServicesController from '../../controllers/ServicesController';
 
 import React, { 
-    useState,
-    useEffect
+    useState, useEffect
 } from 'react';
 
 import { 
-    Text, 
+    Dimensions,
     StyleSheet, 
+    Text, 
     View, 
     ScrollView,
     RefreshControl,
     TouchableOpacity
 } from 'react-native';
 
-import SQLiteHandler from '../../services/database/SQLiteHandler';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 const ServicesView = ( params ) => {
 
@@ -28,6 +28,7 @@ const ServicesView = ( params ) => {
 
     const [list, setList] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [orientation, setOrientation] = useState(getOrientation());
 
     const handleEditItem = (service) => {
         // Navegar a la vista de edición con los datos del servicio
@@ -46,17 +47,22 @@ const ServicesView = ( params ) => {
 		}, 2000);
 	}, []);
 
+    const handleOrientationChange = () => {
+		const newOrientation = getOrientation();
+		setOrientation(newOrientation);
+	};
+
     useEffect(() => {
         ServicesController.getServicesForCompany(guid)
         .then(serviceReturn => {
             // var services = JSON.parse(serviceReturn);
             console.log('services: ', serviceReturn);
-            setListServices(serviceReturn);
+            setList(serviceReturn);
         })
         .catch(error => {
-            alert('ERROR al intentar cargar los Servicios');
+            alert('ERROR al intentar cargar los Servicios, ' + error);
         });
-
+        Dimensions.addEventListener('change', handleOrientationChange);
     }, []);
 
     console.log('list: ', list);
@@ -66,7 +72,7 @@ const ServicesView = ( params ) => {
 
             {list ? (
                 <ScrollView 
-                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
@@ -82,21 +88,29 @@ const ServicesView = ( params ) => {
                 <View style={styles.scrollContainer}>
                     <Text>No tiene ningún Servicio Creado</Text>
 
-                    <TouchableOpacity 
+                    <LinearGradient
+                        colors={['#135054', '#a8ffff', '#fff']}
+                        start={{ x: 0.5, y: 0 }}
+                        end={{ x: 0.5, y: 1.5 }}
                         style={styles.btnCreate}
-                        onLongPress={() => createItem(guid)} 
                         >
-                        <Text> Crear Servicio </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onLongPress={() => createItem(guid)} >
+                            <Text> Crear Servicio </Text>
+                        </TouchableOpacity>
+                    </LinearGradient>
                 </View>
             )}
 
-            <View style={styles.footer}>
-                <Text style={styles.textVersion1}>En esta versión solo puede tener un servicio</Text>
-                <Text style={styles.textVersion2}>Necesita actualizar a la versión Premium</Text>
-                <View>        
+            {orientation === 'portrait' ? (				
+                <View style={styles.footer}>
+                    <Text style={styles.textVersion1}>En esta versión solo puede tener un servicio</Text>
+                    <Text style={styles.textVersion2}>Necesita actualizar a la versión Premium</Text>
+                    <View>        
+                    </View>
                 </View>
-            </View>
+            ) : (
+                <></>
+            )}
         </View>
     );
 };
@@ -114,11 +128,11 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     btnCreate: {
-        padding:10,
-        marginHorizontal:20,
-        marginVertical:30,
-        backgroundColor: '#135944', // Color de fondo del botón
-        borderRadius: 10,
+		paddingVertical: 10,
+		paddingHorizontal: 6,
+        marginTop: 15,
+		marginBottom: 15,
+		borderRadius: 10,
     },
     textCreate: {
         color:'#ffffff'

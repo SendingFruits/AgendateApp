@@ -9,10 +9,7 @@ import CompanyPanel from '../users/CompanyPanel';
 import MapController from '../../controllers/MapController';
 
 import React, { 
-	useRef,
-	useState, 
-	useEffect,
-	useContext
+	useRef, useState, useEffect, useContext
 } from 'react';
 
 import { 

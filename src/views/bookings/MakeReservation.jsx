@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Button, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
+import React, { 
+	useState, useEffect 
+} from 'react';
+
 import { Calendar } from 'react-native-calendars';
+
+import { 
+	View, 
+	StyleSheet, 
+	Text, 
+	ScrollView, 
+	ActivityIndicator 
+} from 'react-native';
  
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 

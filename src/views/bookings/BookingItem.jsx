@@ -86,7 +86,7 @@ const BookingItem = (params) => {
                     end={{ x: 1.5, y: 0.5 }} 
                     >    
                     <TouchableOpacity 
-                        onPress={toggleCollapse} 
+                        onPress={() => toggleCollapse()} 
                         onLongPress={() => editName()}
                         >
                         <View style={styles.textHeader}>
@@ -112,49 +112,63 @@ const BookingItem = (params) => {
 
             {!isCollapsed ? (
                 <View>
-                    {/* <ScrollView style={styles.body}> */}
-                    <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                        {/* {!booking.calendar ? (
-                            <View>
-                                <TextInput
-                                    // keyboardType="email-address"
-                                    // style={styles.input}
-                                    // value={email}
-                                    // onChangeText={booking.}
-                                    // autoCapitalize="none"
-                                />
-                            </View>
-                        ) : ( */}
-                            <View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Tipo:</Text>
-                                    {/* <Text style={styles.value}>asd</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Costo:</Text>
-                                    {/* <Text style={styles.value}>$ sad</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Comienza:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Termina:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                </View>
-                            </View>
-                        {/* )} */}
-                    </ScrollView>
+                    <LinearGradient
+                        colors={['#135054', '#e9e9f8', '#efffff']} 
+                        start={{ x: 0.2, y: 1.2 }}
+                        end={{ x: 1.5, y: 0.5 }} 
+                        >
+                        <View>
+                            <ScrollView style={{ ...styles.body, height: bodyHeight }} >
+                                {/* {!booking.calendar ? (
+                                    <View>
+                                        <TextInput
+                                            // keyboardType="email-address"
+                                            // style={styles.input}
+                                            // value={email}
+                                            // onChangeText={booking.}
+                                            // autoCapitalize="none"
+                                        />
+                                    </View>
+                                ) : ( */}
+                                    <View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Tipo:</Text>
+                                            {/* <Text style={styles.value}>asd</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Costo:</Text>
+                                            {/* <Text style={styles.value}>$ sad</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Comienza:</Text>
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Termina:</Text>
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                        </View>
+                                    </View>
+                                {/* )} */}
+                            </ScrollView>
+                        </View>        
+                    </LinearGradient>  
 
-                    <View style={styles.footer}>
-                        {/* {console.log('calendar: ', booking.calendar)} */}
-                        {/* {!booking.calendar ? (
-                            <TouchableOpacity style={styles.btnEdit}>
-                                <Text style={styles.txtbtnEdit}>Editar</Text>
-                            </TouchableOpacity>
-                        ) : (
-                            null
-                        )} */}
+                    <View>
+                        <LinearGradient
+                            style={styles.footer}
+                            colors={['#135054', '#e9e9f8', '#efffff']} 
+                            start={{ x: 0.2, y: 1.2 }}
+                            end={{ x: 1.5, y: 0.5 }} 
+                            >
+                            {/* {console.log('calendar: ', booking.calendar)} */}
+                            {/* {!booking.calendar ? (
+                                <TouchableOpacity style={styles.btnEdit}>
+                                    <Text style={styles.txtbtnEdit}>Editar</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                null
+                            )} */}
+                        </LinearGradient> 
                     </View>
                 </View>
             ) : (

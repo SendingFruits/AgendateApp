@@ -14,7 +14,6 @@ import {
     View, 
     ScrollView,
     RefreshControl,
-    TouchableOpacity
 } from 'react-native';
 
 import SQLiteHandler from '../../services/database/SQLiteHandler';

@@ -2,10 +2,8 @@ import { UserContext } from '../../services/context/context';
 
 import HomeView from './HomeView';
 import MenuButtonItem from './MenuButtonItem';
-import AboutView from './AboutView';
 import BaseError from '../utils/BaseError';
 
-import DiaryView from '../diary/DiaryView';
 import BookingsView from '../bookings/BookingsView';
 import MakeReservation from '../bookings/MakeReservation';
 
@@ -18,9 +16,7 @@ import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
 
 import React, { 
-	useContext, 
-	useEffect,
-	useState 
+	useContext, useEffect, useState 
 } from 'react';
 
 import { 
@@ -29,7 +25,6 @@ import {
 	Text, 
 	TouchableOpacity,
 	Keyboard,
-	HeaderBarItem,
 } from 'react-native';
 
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -114,34 +109,61 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Inicio" 
-					component={HomeView} 
-					initialParams={{ orientation: params.orientation }} />
+					component={HomeView}  />
 
 				{/* <Drawer.Screen 
 					name="Agenda" 
 					component={DiaryView} /> */}
 
 				<Drawer.Screen 
-					options={{ title: null, }}
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name={userLogin.type === 'company' ? 'Agenda' : 'Reservas'}
 					// name="Reservas" 
 					component={BookingsView} 
 					initialParams={ userLogin } />
 					
 				<Drawer.Screen 
-					options={{ title: null, }}
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name="Servicios" 
 					component={ServicesView} 
 					initialParams={ userLogin } />
 
 				<Drawer.Screen 
-					options={{ title: null, }}
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name="Promociones" 
 					component={PromosView} 
 					initialParams={ userLogin } />
 
 				<Drawer.Screen 
-					// options={{ title: null, }}
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name="Realizar Reserva" 
 					component={MakeReservation} />
 

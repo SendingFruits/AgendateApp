@@ -1,5 +1,6 @@
 import databaseData from '../services/database/database.json';
 import CompanyServices from '../services/CompanyServices';
+import SQLiteHandler from '../services/database/SQLiteHandler';
 
 class ServicesController {
 
@@ -14,17 +15,25 @@ class ServicesController {
 
 	getServicesForCompany(guid) {
 		return new Promise((resolve, reject) => {
-			console.log('getServicesForCompany', guid);
+			// console.log('getServicesForCompany', guid);
 			if (guid == '') {
 				throw new Error('Debe pertenecer a una empresa.');
 			}
 
-			CompanyServices.getServicesForCompany(guid)
+			// CompanyServices.getServicesForCompany(guid)
+			// .then(serviceReturn => {
+			// 	resolve(serviceReturn);
+			// })
+			// .catch(error => {
+			// 	reject('Error Controller getServicesForCompany', error);
+			// });
+
+			SQLiteHandler.selectServiciosEmpresa(guid)
 			.then(serviceReturn => {
 				resolve(serviceReturn);
 			})
 			.catch(error => {
-				reject('Error Controller getServicesForCompany', error);
+				reject('Error Controller selectServiciosEmpresa', error);
 			});
 		});
 	}

@@ -16,6 +16,14 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
+import { 
+	faTrash
+} from '@fortawesome/free-solid-svg-icons';
+
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -59,12 +67,16 @@ const BookingItem = (params) => {
         console.log('editName');
     };
 
+    const deleteItem = () => {
+        console.log('deleteItem');
+    };
+
     const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
     const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
 
 
 	useEffect(() => {
-		
+		setIsCollapsed(false);
 	}, []);
     
     // {
@@ -92,73 +104,90 @@ const BookingItem = (params) => {
                     end={{ x: 1.5, y: 0.5 }} 
                     >    
                     <TouchableOpacity 
-                        onPress={toggleCollapse} 
+                        onPress={() => toggleCollapse()} 
                         onLongPress={() => editName()}
                         >
                         <View style={styles.textHeader}>
                             {/* <Text>Reserva</Text> */}
-                            {/* <Text> {item.Estado}</Text> */}
-                            <Text> {item.name} </Text>
+                            <Text> {item.Nombre}</Text>
+                            {/* <Text> {item.name} </Text> */}
                             {/* <Text style={{ marginLeft:60 }}> {fecha}</Text>
                             <Text style={{ marginLeft:5 }}> {hora}</Text> */}
                         </View>
                     </TouchableOpacity>
 
-					{/* <MenuButtonItem 
-                        style={styles.btnEditCollapse}
-						icon = {null}
-						text = "Editar"
-						onPress = { () => editItem()}
-					/> */}
+                    <TouchableOpacity 
+                        style={styles.deleteButton}
+                        onPress={() => deleteItem()} >
+                        <FontAwesomeIcon icon={faTrash} />
+                    </TouchableOpacity>
 
                 </LinearGradient>
             </View>
 
             {!isCollapsed ? (
                 <View>
-                    {/* <ScrollView style={styles.body}> */}
-                    <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                        {/* {!booking.calendar ? (
-                            <View>
-                                <TextInput
-                                    // keyboardType="email-address"
-                                    // style={styles.input}
-                                    // value={email}
-                                    // onChangeText={booking.}
-                                    // autoCapitalize="none"
-                                />
-                            </View>
-                        ) : ( */}
-                            <View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Tipo:</Text>
-                                    {/* <Text style={styles.value}>asd</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Costo:</Text>
-                                    {/* <Text style={styles.value}>$ sad</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Comienza:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Termina:</Text>
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                </View>
-                            </View>
-                        {/* )} */}
-                    </ScrollView>
+                    <LinearGradient
+                        colors={['#fff', '#fff', '#032']} 
+                        start={{ x: 0.2, y: 1.2 }}
+                        end={{ x: 1.5, y: 0.5 }} 
+                        >
+                        <View>
+                            <ScrollView style={{ ...styles.body, height: bodyHeight }} >
+                                {/* {!booking.calendar ? (
+                                    <View>
+                                        <TextInput
+                                            // keyboardType="email-address"
+                                            // style={styles.input}
+                                            // value={email}
+                                            // onChangeText={booking.}
+                                            // autoCapitalize="none"
+                                        />
+                                    </View>
+                                ) : ( */}
+                                    <View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Tipo:</Text>
+                                            {/* <Text style={styles.value}>asd</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Costo:</Text>
+                                            {/* <Text style={styles.value}>$ sad</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Comienza:</Text>
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Termina:</Text>
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Descripción:</Text>
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                        </View>
+                                    </View>
+                                {/* )} */}
+                            </ScrollView>
+                        </View>
+                    </LinearGradient>
 
-                    <View style={styles.footer}>
-                        {/* {console.log('calendar: ', booking.calendar)} */}
-                        {/* {!booking.calendar ? (
-                            <TouchableOpacity style={styles.btnEdit}>
-                                <Text style={styles.txtbtnEdit}>Editar</Text>
-                            </TouchableOpacity>
-                        ) : (
-                            null
-                        )} */}
+                    <View>
+                        <LinearGradient
+                            style={styles.footer}
+                            colors={['#135054', '#e9e9f8', '#efffff']} 
+                            start={{ x: 0.2, y: 1.2 }}
+                            end={{ x: 1.5, y: 0.5 }} 
+                            >
+                            {/* {console.log('calendar: ', booking.calendar)} */}
+                            {/* {!booking.calendar ? (
+                                <TouchableOpacity style={styles.btnEdit}>
+                                    <Text style={styles.txtbtnEdit}>Editar</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                null
+                            )} */}
+                        </LinearGradient>
                     </View>
                 </View>
             ) : (
@@ -182,6 +211,7 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems:'baseline',
         paddingHorizontal: 10,
         borderTopLeftRadius:12,
@@ -193,15 +223,15 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         paddingVertical:10,
     },
-    
+    deleteButton: {
+       position:'relative',
+       top:-10,
+    },
     body: {
-        width: windowWidth - 55,
-        // height: 100,
-        borderTopWidth: 1,
-        borderTopColor: '#555',
+        paddingTop: 15,
+        borderTopWidth: 0.5,
+        borderTopColor: '#000',
         borderBottomWidth: 1,
-        borderBottomColor: '#556',
-        backgroundColor:'#a0d0e0',
         paddingHorizontal:10,
     },
     row: {
