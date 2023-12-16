@@ -1,9 +1,31 @@
 import { Dimensions } from 'react-native';
 
+
 export const getOrientation = () => {
     const { width, height } = Dimensions.get('window');
     return width > height ? 'landscape' : 'portrait';
 };
+
+export const showConfirmationAlert = () => {
+    return new Promise((resolve) => {
+        Alert.alert(
+            'Confirmación',
+            '¿Estás seguro de continuar?', [
+                {
+                    text: 'Cancelar',
+                    onPress: () => resolve(false),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Aceptar',
+                    onPress: () => resolve(true),
+                },
+            ], { cancelable: false }
+        );
+    });
+};
+
+
 
 export function formatDate(date) {
     const parts = date.split('-');
@@ -86,6 +108,8 @@ export function validarCedula(ci) {
 export function convertImageToBase64(url) {
     return resizeImage(url, 125, 125);
 }
+
+
 
 function resizeImage(url, width, height) {
     return new Promise((resolve) => {

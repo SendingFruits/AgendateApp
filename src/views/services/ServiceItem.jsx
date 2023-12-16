@@ -1,11 +1,9 @@
 import { formatDate } from '../../views/utils/Functions'; 
+import EditField from '../../views/utils/EditField'; 
 
 import { 
     useState, useEffect 
 } from 'react';
-
-import UsersController from '../../controllers/UsersController';
-import MenuButtonItem from '../home/MenuButtonItem';
 
 import { 
     Dimensions,
@@ -14,10 +12,12 @@ import {
     View,
     ScrollView,
     TouchableOpacity,
+    Alert
 } from 'react-native';
 
 import { 
-	faTrash
+	faTrash,
+    faPen
 } from '@fortawesome/free-solid-svg-icons';
 
 import { 
@@ -40,21 +40,10 @@ const BookingItem = (params) => {
     // var hora = dateString[1].slice(0, -3);
 
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [bodyHeight, setBodyHeight] = useState(200);
+    const [bodyHeight, setBodyHeight] = useState(360);
+    const [editMode, setEditMode] = useState(true);
 
-    const set__Color = (estado) => {
-        switch (estado) {
-            case 'Realizada':
-                return 'green'; // Color para estado "Realizada"
-            case 'Pendiente':
-                return 'orange'; // Color para estado "Pendiente"
-            case 'Cancelada':
-                return 'red'; // Color para estado "Cancelada"
-            default:
-                return 'black'; // Color por defecto
-        }
-    };
-
+   
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
@@ -63,12 +52,16 @@ const BookingItem = (params) => {
         console.log('editItem');
     };
 
-    const editName = () => {
-        console.log('editName');
+    const editField = (field) => {
+        console.log('editField ', field);
+
+
     };
 
     const deleteItem = () => {
         console.log('deleteItem');
+        var text = '¿Seguro desea eliminar este Servicio?';
+
     };
 
     const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
@@ -79,21 +72,6 @@ const BookingItem = (params) => {
 		setIsCollapsed(false);
 	}, []);
     
-    // {
-    //     "cost": 2000,
-    //     "dateEnd": "2023-11-30",
-    //     "dateInit": "2023-11-01",
-    //     "days": [],
-    //     "description": "",
-    //     "duration": 0.5,
-    //     "frequency": 7,
-    //     "idCompany": 2,
-    //     "idService": 2,
-    //     "name": "Pedidos a Retirar",
-    //     "quotas": 20,
-    //     "type": "Comida"
-    // }
-
     return (
         <View style={styles.container}>
             <View>
@@ -105,22 +83,32 @@ const BookingItem = (params) => {
                     >    
                     <TouchableOpacity 
                         onPress={() => toggleCollapse()} 
-                        onLongPress={() => editName()}
                         >
                         <View style={styles.textHeader}>
-                            {/* <Text>Reserva</Text> */}
-                            <Text> {item.Nombre}</Text>
-                            {/* <Text> {item.name} </Text> */}
-                            {/* <Text style={{ marginLeft:60 }}> {fecha}</Text>
-                            <Text style={{ marginLeft:5 }}> {hora}</Text> */}
+                            
+                            <EditField 
+                                icon={null} 
+                                text={item.Nombre}
+                                type={null}
+                                onPress={() => editField(item.Nombre)}
+                                />
+                            
+                            {/* <Text> {item.Nombre}</Text> */}
+                         
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
-                        style={styles.deleteButton}
-                        onPress={() => deleteItem()} >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </TouchableOpacity>
+                    <View style={styles.buttonsRow}>
+                        {/* <TouchableOpacity 
+                            style={{ marginEnd:8, }}
+                            onPress={() => editItem()} >
+                            <FontAwesomeIcon icon={faPen} />
+                        </TouchableOpacity> */}
+
+                        <TouchableOpacity onPress={() => deleteItem()} >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </TouchableOpacity>
+                    </View>
 
                 </LinearGradient>
             </View>
@@ -134,40 +122,65 @@ const BookingItem = (params) => {
                         >
                         <View>
                             <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                                {/* {!booking.calendar ? (
-                                    <View>
-                                        <TextInput
-                                            // keyboardType="email-address"
-                                            // style={styles.input}
-                                            // value={email}
-                                            // onChangeText={booking.}
-                                            // autoCapitalize="none"
-                                        />
+                                <View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Tipo:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.TipoServicio}
+                                            type={null}
+                                            onPress={() => editField(item.TipoServicio)}
+                                            />
+                                        {/* <Text style={styles.value}>{item.TipoServicio}</Text> */}
                                     </View>
-                                ) : ( */}
-                                    <View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Tipo:</Text>
-                                            {/* <Text style={styles.value}>asd</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Costo:</Text>
-                                            {/* <Text style={styles.value}>$ sad</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Comienza:</Text>
-                                            {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Termina:</Text>
-                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Descripción:</Text>
-                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                        </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Costo:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.TipoServicio}
+                                            type={null}
+                                            onPress={() => editField(item.TipoServicio)}
+                                            />
                                     </View>
-                                {/* )} */}
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Comienza:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.HoraInicio}
+                                            type={'hour'}
+                                            onPress={() => editField(item.HoraInicio)}
+                                            />
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Termina:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.HoraFin}
+                                            type={'hour'}
+                                            onPress={() => editField(item.HoraFin)}
+                                            />
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Descripción:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.Descripcion}
+                                            type={null}
+                                            onPress={() => editField(item.Descripcion)}
+                                            />
+                                        {/* <Text style={styles.value}>{item.Descripcion}</Text> */}
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Dias:</Text>
+                                        <EditField 
+                                            icon={null} 
+                                            text={item.DiasDefinidosSemana}
+                                            type={'list'}
+                                            onPress={() => editField(item.DiasDefinidosSemana)}
+                                            />
+                                        {/* <Text style={styles.value}>{item.DiasDefinidosSemana}</Text> */}
+                                    </View>
+                                </View>
                             </ScrollView>
                         </View>
                     </LinearGradient>
@@ -223,9 +236,11 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         paddingVertical:10,
     },
-    deleteButton: {
-       position:'relative',
-       top:-10,
+    buttonsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position:'relative',
+        top:-10,
     },
     body: {
         paddingTop: 15,
@@ -245,10 +260,6 @@ const styles = StyleSheet.create({
     label: {
         width: '45%',
         fontWeight:'bold',
-    },
-    value: {
-        width: '45%',
-        textAlign: 'right',
     },
 
     footer: {

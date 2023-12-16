@@ -15,7 +15,8 @@ import {
     View, 
     ScrollView,
     RefreshControl,
-    TouchableOpacity
+    TouchableOpacity,
+    Keyboard
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -24,19 +25,23 @@ const ServicesView = ( params ) => {
 
     const navigation = useNavigation();
 
-    var guid = params.route.params.guid;
+    var guid = params.route.params.guid; 
 
     const [list, setList] = useState(null);
+    const [editing, setEditing] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
 
-    const handleEditItem = (service) => {
-        // Navegar a la vista de edición con los datos del servicio
-        // navigation.navigate('ServiceEdit', { service });
+    const handleEditItem = (item) => {
+        console.log('handleEditItem', item);
     };
-
+ 
     const createItem = (guid) => {
         console.log('create', guid);
+    };
+
+    const premiumUpdate = () => {
+        console.log('premiumUpdate');
     };
 
     const onRefresh = React.useCallback(() => {
@@ -63,6 +68,21 @@ const ServicesView = ( params ) => {
             alert('ERROR al intentar cargar los Servicios, ' + error);
         });
         Dimensions.addEventListener('change', handleOrientationChange);
+
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', () => {
+                console.log('Teclado abierto');
+                setEditing(true);
+            }
+        );
+      
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                console.log('Teclado cerrado');
+                setEditing(false);
+            }
+        );
     }, []);
 
     console.log('list: ', list);
@@ -94,23 +114,36 @@ const ServicesView = ( params ) => {
                         end={{ x: 0.5, y: 1.5 }}
                         style={styles.btnCreate}
                         >
-                        <TouchableOpacity onLongPress={() => createItem(guid)} >
+                        <TouchableOpacity onPress={() => createItem(guid)} >
                             <Text> Crear Servicio </Text>
                         </TouchableOpacity>
                     </LinearGradient>
                 </View>
             )}
 
-            {orientation === 'portrait' ? (				
-                <View style={styles.footer}>
-                    <Text style={styles.textVersion1}>En esta versión solo puede tener un servicio</Text>
-                    <Text style={styles.textVersion2}>Necesita actualizar a la versión Premium</Text>
-                    <View>        
-                    </View>
-                </View>
+            {!editing ? (
+                <>
+                    {orientation === 'portrait' ? (				
+                        <View style={styles.footer}>
+                            <Text style={styles.textVersion1}>
+                                En esta versión solo puede tener un servicio</Text>
+                            <TouchableOpacity 
+                                onPress={() => premiumUpdate()} 
+                                style={{ alignItems:'center' }}>
+                                <Text>Necesita actualizar a la versión Premium</Text>
+                                <Text>si quiere manejar multiples servicios</Text>
+                            </TouchableOpacity>
+                            <View>        
+                            </View>
+                        </View>
+                    ) : (
+                        <></>
+                    )}
+                </>
             ) : (
                 <></>
             )}
+
         </View>
     );
 };
@@ -144,6 +177,7 @@ const styles = StyleSheet.create({
         right: 0,     
         textAlignVertical:'bottom',
         alignItems:'center',
+        textAlign:'center',
         borderTopColor:'#011',
         borderTopWidth:0.6,
     },

@@ -117,6 +117,36 @@ class CompanyServices {
             }
         });
     }
+
+    putServiceData = async (json) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Servicios';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+            axios.put(urlCompleta, json, { headers })
+            .then(function (response) {
+                // console.log(response.status);
+                if (response.status == 200) {
+                    // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
+                console.log('error.response.data: ', error.response.data);
+                reject(error.response.data);
+            });
+        });
+    }
 }
 
 export default new CompanyServices();
