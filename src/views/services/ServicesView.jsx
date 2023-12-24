@@ -26,9 +26,11 @@ const ServicesView = ( params ) => {
     const navigation = useNavigation();
 
     var guid = params.route.params.guid; 
+    // console.log('guid: ', guid);
 
     const [list, setList] = useState(null);
     const [editing, setEditing] = useState(false);
+    const [isCreate, setIsCreate] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
 
@@ -37,7 +39,8 @@ const ServicesView = ( params ) => {
     };
  
     const createItem = (guid) => {
-        console.log('create', guid);
+        // console.log('create', guid);
+        navigation.navigate('Crear Servicio');
     };
 
     const premiumUpdate = () => {
@@ -48,7 +51,8 @@ const ServicesView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-			navigation.navigate('Servicios');
+            getServices();
+			// navigation.navigate('Servicios');
 		}, 2000);
 	}, []);
 
@@ -57,52 +61,77 @@ const ServicesView = ( params ) => {
 		setOrientation(newOrientation);
 	};
 
-    useEffect(() => {
+    const getServices = async () => {
         ServicesController.getServicesForCompany(guid)
         .then(serviceReturn => {
-            // var services = JSON.parse(serviceReturn);
-            console.log('services: ', serviceReturn);
-            setList(serviceReturn);
+            if (serviceReturn !== null) {
+                setList([serviceReturn]);
+            } else {
+                setList([]);
+            }
         })
         .catch(error => {
             alert('ERROR al intentar cargar los Servicios, ' + error);
         });
+    }
+
+    const listServices = () => {
+        // console.log('list: ', list); 
+		if (list) {
+			return list.map((item, index) => {
+				return item && (
+					<ServiceItem 
+                        guid={guid}
+                        key={index}
+                        item={item} 
+                        edit={false}
+                        onPress={() => handleEditItem(item)} 
+                    />
+				)
+			});
+		}
+		
+	};
+    
+
+    useEffect(() => {
+        setTimeout(() => {            
+            getServices();
+        }, 1000);
+
         Dimensions.addEventListener('change', handleOrientationChange);
 
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow', () => {
-                console.log('Teclado abierto');
+                // console.log('Teclado abierto');
                 setEditing(true);
             }
-        );
-      
+        );     
         const keyboardDidHideListener = Keyboard.addListener(
             'keyboardDidHide',
             () => {
-                console.log('Teclado cerrado');
+                // console.log('Teclado cerrado');
                 setEditing(false);
             }
         );
-    }, []);
+    }, [guid]);
 
-    console.log('list: ', list);
 
     return (
         <View style={styles.container}>
 
-            {list ? (
+            {/* {console.log(list)}
+            {console.log(Array.isArray(list))} */}
+            
+            {(list !== null && Array.isArray(list) && list.length > 0) ? (
                 <ScrollView 
                     contentContainerStyle={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
-                    {list.map((item, index) => (
-                        <ServiceItem 
-                            key={index}
-                            item={item} 
-                            onPress={() => handleEditItem(item)} 
-                        />
-                    ))}
+
+                    {listServices()}
+
                 </ScrollView>
             ) : (
                 <View style={styles.scrollContainer}>

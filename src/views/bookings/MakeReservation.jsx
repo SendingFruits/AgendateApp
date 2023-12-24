@@ -23,21 +23,39 @@ const MakeReservation = ({ route, navigation }) => {
 	var item = route.params.item;
 	console.log('item param: ', item);
 
+	// var guid = params.route.params.guid; 
+
 	const [service, setService] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [list, setList] = useState(null);
+
+	const getService = async () => {
+        ServicesController.getServicesForCompany(guid)
+        .then(serviceReturn => {
+            
+            if (serviceReturn.value !== null) {
+                setList([serviceReturn.value]);
+            } else {
+                setList([]);
+            }
+        })
+        .catch(error => {
+            alert('ERROR al intentar cargar los Servicios, ' + error);
+        });
+    }
 
 	useEffect(() => {
-		ServicesController.getServicesForCompany(item.id)
-		.then(serviceReturn => {
-			console.log('serviceReturn: ', serviceReturn);
-			serviceReturn.calendar = true;
-			setService(serviceReturn);
-			setIsLoading(false);
-		})
-		.catch(error => {
-			setIsLoading(false);
-			alert(error); 
-		});	
+		// ServicesController.getServicesForCompany(item.id)
+		// .then(serviceReturn => {
+		// 	console.log('serviceReturn: ', serviceReturn);
+		// 	serviceReturn.calendar = true;
+		// 	setService(serviceReturn);
+		// 	setIsLoading(false);
+		// })
+		// .catch(error => {
+		// 	setIsLoading(false);
+		// 	alert(error); 
+		// });	
 	}, []);
 
 	return ( 
@@ -54,8 +72,8 @@ const MakeReservation = ({ route, navigation }) => {
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
 					<View>
-						{/* <ServiceItem service={service} from={"calendar"} /> */}
-						{/* <CalendarPicker idService={service.id}/> */}
+						{/* <ServiceItem service={service} from={"calendar"} item={null}/> */}
+						<CalendarPicker idService={null}/>
 					</View>
                 )}
 

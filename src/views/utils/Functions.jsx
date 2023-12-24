@@ -28,13 +28,69 @@ export const showConfirmationAlert = () => {
 
 
 export function formatDate(date) {
-    const parts = date.split('-');
-    if (parts.length !== 3) {
-        throw new Error('Formato de fecha no válido');
+    if (date !== undefined) {
+        const parts = date.split('-');
+        if (parts.length !== 3) {
+            throw new Error('Formato de fecha no válido');
+        }
+        const [year, month, day] = parts;
+        return `${day}/${month}/${year}`;
+    } else {
+        return '';
     }
-    const [year, month, day] = parts;
-    return `${day}/${month}/${year}`;
 }
+
+export function convertHour(valor, opcion) {
+    if (opcion === "toHours") {
+        // Conversión de decimal a horas
+        if (valor < 0 || valor >= 24) {
+            return "Número fuera de rango";
+        }
+
+        var horas = Math.floor(valor);
+        var minutos = Math.round((valor - horas) * 60);
+
+        var horasFormateadas = (horas < 10 ? "0" : "") + horas;
+        var minutosFormateados = (minutos < 10 ? "0" : "") + minutos;
+
+        return horasFormateadas + ":" + minutosFormateados;
+    } else if (opcion === "toDecimal") {
+        // Conversión de horas a decimal
+        var partes = valor.split(":");
+        if (partes.length !== 2 || isNaN(partes[0]) || isNaN(partes[1])) {
+            return "Formato de hora no válido";
+        }
+
+        var horas = parseInt(partes[0], 10);
+        var minutos = parseInt(partes[1], 10);
+
+        if (horas < 0 || horas >= 24 || minutos < 0 || minutos >= 60) {
+            return "Número fuera de rango";
+        }
+
+        return horas + minutos / 60;
+    } else {
+        return "Opción no válida";
+    }
+}
+
+export function createDateTimeFromDecimalHour(decimalHour) {
+    // Extraer las horas y los minutos del decimal
+    const hours = Math.floor(decimalHour);
+    const minutes = Math.round((decimalHour - hours) * 60);
+    // Obtener la fecha actual
+    const currentDate = new Date();
+    // Configurar la hora y los minutos en la fecha actual
+    currentDate.setHours(hours-24);
+    currentDate.setMinutes(minutes);
+    currentDate.setSeconds(0);
+    currentDate.setMilliseconds(0);
+    // Formatear la fecha como una cadena ISO
+    const formattedDate = currentDate.toISOString();
+    // console.log('formattedDate: ', formattedDate);
+    return currentDate;
+}
+
 
 export function validarRUT(rut) {
     // Verificar que el RUT tenga un formato válido

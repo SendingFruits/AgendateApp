@@ -16,84 +16,104 @@ class ServicesController {
 	getServicesForCompany(guid) {
 		return new Promise((resolve, reject) => {
 			// console.log('getServicesForCompany', guid);
-			if (guid == '') {
+			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe pertenecer a una empresa.');
 			}
 
-			// CompanyServices.getServicesForCompany(guid)
+			CompanyServices.getServicesForCompany(guid)
+			.then(serviceReturn => {
+				// console.log('serviceReturn', serviceReturn);
+				if (serviceReturn !== null) {
+					resolve(serviceReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getServicesForCompany', error);
+			});
+
+			// SQLiteHandler.selectServiciosEmpresa(guid)
 			// .then(serviceReturn => {
 			// 	resolve(serviceReturn);
 			// })
 			// .catch(error => {
-			// 	reject('Error Controller getServicesForCompany', error);
+			// 	reject('Error Controller selectServiciosEmpresa', error);
 			// });
-
-			SQLiteHandler.selectServiciosEmpresa(guid)
-			.then(serviceReturn => {
-				resolve(serviceReturn);
-			})
-			.catch(error => {
-				reject('Error Controller selectServiciosEmpresa', error);
-			});
 		});
 	}
 
 	handleServiceUpdate(data) {
 		return new Promise((resolve, reject) => {
 		
-			// if (data.rut == '') {
-			// 	throw new Error('Falta el RUT.');
-			// }
-			// if (data.businessName == '') {
-			// 	throw new Error('Falta el Razon Social.');
-			// }
-			// if (data.lastName == '') {
-			// 	throw new Error('Falta el apellido.');
-			// }
+			if (data.nombre == '') {
+				throw new Error('Falta el Nombre.');
+			}
+			if (data.tipo == '') {
+				throw new Error('Falta el Tipo.');
+			}
+			if (data.comienzo == '') {
+				throw new Error('Falta la hora de Comienzo.');
+			}
+			if (data.termino == '') {
+				throw new Error('Falta la hora de Termino.');
+			}
+			if (data.dias == '') {
+				throw new Error('Falta seleccionar los dias.');
+			}
 
 			console.log(data);
 
-			var dataConvert = {
-				rutDocumento: data.rut,
-				razonSocial: data.businessName,
-				// nombrePropietario: data.firstName + ' ' + data.lastName,
-				rubro: data.category,
-				direccion: data.address,
-				ciudad: data.city,
-				descripcion: data.description,
-				latitude: data.latitude,
-				longitude: data.longitude,
-
-				// nombre: data.firstName,
-				// apellido: data.lastName,
-				// nombreUsuario: data.username,
-				// contrasenia: data.password,
-				// celular: data.movil,
-				// correo: data.email,
-				// tipoUsuario: data.userType
+			var dataConvert = {	
+				nombre: data.nombre,
+				tipoServicio: data.tipo,
+				costo: data.costo,
+				horaInicio: data.comienzo,
+				horaFin: data.termino,
+				duracionTurno: data.turno,
+				descripcion: data.descripcion,
+				diasDefinidosSemana: data.dias,
+				idEmpresa: data.guid
 			}
 
 			// {
-			// 	"id": 0,
-			// 	"nombreUsuario": "string",
 			// 	"nombre": "string",
-			// 	"apellido": "string",
-			// 	"contrasenia": "string",
-			// 	"celular": "string",
-			// 	"correo": "string",
-			// 	"tipoUsuario": "string",
-			// 	"rutDocumento": "string",
-			// 	"razonSocial": "string",
-			// 	"nombrePropietario": "string",
-			// 	"rubro": "string",
-			// 	"direccion": "string",
-			// 	"ciudad": "string",
+			// 	"horaInicio": 0,
+			// 	"horaFin": 0,
+			// 	"diasDefinidosSemana": "string",
+			// 	"duracionTurno": 0,
+			// 	"tipoServicio": "string",
+			// 	"costo": 0,
 			// 	"descripcion": "string",
-			// 	"latitude": 0,
-			// 	"longitude": 0
+			// 	"idEmpresa": 0
 			//   }
 
+			// {
+			// 	"costo": "1300",
+			// 	"descripcion": "Descripcion del Servicio de prueba...",
+			// 	"diasDefinidosSemana": "Lunes;Martes;Miercoles;Jueves;",
+			// 	"duracionTurno": 60,
+			// 	"horaFin": 17.5,
+			// 	"horaInicio": 8.5,
+			// 	"idEmpresa": 2,
+			// 	"nombre": "Prueba de Servicio asd asasd",
+			// 	"tipoServicio": "Prueba 2"
+			// }
+
 			CompanyServices.putServiceData(dataConvert)
+			.then(servReturn => {
+				resolve(servReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
+
+	handleServiceDelete(guid) {
+		return new Promise((resolve, reject) => {
+		
+			CompanyServices.deleteService(guid)
 			.then(servReturn => {
 				resolve(servReturn);
 			})

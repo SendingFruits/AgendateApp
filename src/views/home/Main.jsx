@@ -14,6 +14,7 @@ import LoginView from '../users/LoginView';
 import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
+import ServiceCreate from '../services/ServiceCreate';
 
 import React, { 
 	useContext, useEffect, useState 
@@ -151,6 +152,19 @@ const Main = ( params ) => {
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
+					name="Crear Servicio" 
+					component={ServiceCreate} 
+					initialParams={ userLogin } />
+
+				<Drawer.Screen 
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
 					name="Promociones" 
 					component={PromosView} 
 					initialParams={ userLogin } />
@@ -211,6 +225,7 @@ const MenuItems = ( { navigation, profile } ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	const [profileVisible, setProfileVisible] = useState(profile);
+	const [islogin, setIsLogin] = useState(false);
 
 	// var stateMenu = navigation.getState();
 	// console.log('stateMenu: ', stateMenu.history[1]);
@@ -221,25 +236,33 @@ const MenuItems = ( { navigation, profile } ) => {
 
 	const logout = () => {
 		if (userLogin != null) {
+			setIsLogin(false);
+			setProfileVisible(false);
+
 			setUserPreferences({
                 current_user: {
-                    name: 'none',
-					user: 'none',
-                    pass: 'none',
-                    type: 'none',
-					pick: '',
-					data: null,
+					'guid':'none',
+					'name':'none',
+					'last':'none',
+					'user':'none',
+					'pass':'none',
+					'type':'none',
+					'mail':'none',
+					'docu':'none',
                 },
             });
-			setProfileVisible(false);
-			alert('Ha dejado la sesión');
-            navigation.navigate('Inicio');
         }
 	};
 
 	useEffect(() => {
 		setProfileVisible(profile);
-	}, []);
+
+		if (!islogin) {
+			navigation.navigate('Inicio');
+			console.log(userPreferences);
+		}
+	
+	}, [userPreferences]);
 
 	return (
 		<LinearGradient

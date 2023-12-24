@@ -172,7 +172,7 @@ const HomeView = ( params ) => {
 	useEffect(() => {
 		fetchData();
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, []);
+	}, []); // location - pasarle location para actualizar siempre que se geolocalice
 
 	// console.log(isConnected);
 	if (!isConnected) {

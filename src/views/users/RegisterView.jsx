@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+
+import React, { 
+	useState, useEffect 
+} from 'react';
 
 import UsersController from '../../controllers/UsersController';
 

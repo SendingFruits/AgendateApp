@@ -1,4 +1,3 @@
-import databaseData from '../services/database/database.json';
 import UserServices from '../services/UserServices';
 import CompanyServices from '../services/CompanyServices';
 
@@ -176,25 +175,38 @@ class UsersController {
 			if (data.rut == '') {
 				throw new Error('Falta el RUT.');
 			}
-			if (data.businessName == '') {
-				throw new Error('Falta el Razon Social.');
-			}
-			if (data.lastName == '') {
-				throw new Error('Falta el apellido.');
-			}
+			// if (data.owner == '') {
+			// 	throw new Error('Falta el Nombre del Propietario.');
+			// }
+			// if (data.businessName == '') {
+			// 	throw new Error('Falta el Razon Social.');
+			// }
+			// if (data.category == '') {
+			// 	throw new Error('Falta el Rubro.');
+			// }
+			// if (data.address == '') {
+			// 	throw new Error('Falta la Dirección.');
+			// }
+			// if (data.description == '') {
+			// 	throw new Error('Falta la Ddescripción.');
+			// }
+
+			if (data.location.latitude === undefined) data.location.latitude = 0.0;
+			if (data.location.longitude === undefined) data.location.longitude = 0.0; 
 
 			console.log(data);
 
 			var dataConvert = {
+				id: data.guid,
 				rutDocumento: data.rut,
 				razonSocial: data.businessName,
-				// nombrePropietario: data.firstName + ' ' + data.lastName,
+				nombrePropietario: data.owner,
 				rubro: data.category,
 				direccion: data.address,
 				ciudad: data.city,
 				descripcion: data.description,
-				latitude: data.latitude,
-				longitude: data.longitude,
+				latitude: data.location.latitude,
+				longitude: data.location.longitude,
 
 				// nombre: data.firstName,
 				// apellido: data.lastName,
@@ -207,13 +219,6 @@ class UsersController {
 
 			// {
 			// 	"id": 0,
-			// 	"nombreUsuario": "string",
-			// 	"nombre": "string",
-			// 	"apellido": "string",
-			// 	"contrasenia": "string",
-			// 	"celular": "string",
-			// 	"correo": "string",
-			// 	"tipoUsuario": "string",
 			// 	"rutDocumento": "string",
 			// 	"razonSocial": "string",
 			// 	"nombrePropietario": "string",
@@ -225,7 +230,7 @@ class UsersController {
 			// 	"longitude": 0
 			//   }
 
-			UserServices.putCompanyData(dataConvert)
+			CompanyServices.putCompanyData(dataConvert)
 			.then(userReturn => {
 				resolve(userReturn);
 			})

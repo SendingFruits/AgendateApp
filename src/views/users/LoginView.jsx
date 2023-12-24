@@ -51,7 +51,7 @@ const LoginView = () => {
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
-				console.log('user: ', user);
+				console.log('user.id: ', user.id);
 				
 				setUserPreferences({
 					current_user: {

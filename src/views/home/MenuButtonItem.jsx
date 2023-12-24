@@ -25,8 +25,9 @@ const MenuButtonItem = ({ icon, text, onPress }) => {
 			<TouchableOpacity onPress={onPress} >
 				<View style={styles.container}>
 					{icon && <FontAwesomeIcon icon={icon} style={styles.icon} />}
-					{/* <FontAwesomeIcon icon={icon} style={styles.icon} /> */}
-					<Text style = {styles.text}>{text}</Text>
+					
+					{/* <Text style = {styles.text}>{text}</Text> */}
+					<Text style={[styles.text, icon ? null : { textAlign: 'center' }]}>{text}</Text>
 				</View>
 			</TouchableOpacity>
 		</LinearGradient>

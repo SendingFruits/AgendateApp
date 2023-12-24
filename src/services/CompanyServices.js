@@ -42,7 +42,7 @@ class CompanyServices {
     getServicesForCompany = async (guid) => {
         return new Promise((resolve, reject) => {
         
-            var method = 'Servicios/BuscarServicioPorEmpresa';
+            var method = 'Servicios/BuscarServicioPorIdEmpresa';
             const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
     
             const options = {
@@ -52,14 +52,16 @@ class CompanyServices {
                     // 'verify': false
                 },
             };
-            
+             
+            // console.log(urlCompleta);
+
             axios.get(urlCompleta, options)
             .then(function (response) {
-                // console.log(response.data);
+                // console.log('response.data: ', response.data);
                 if (response.status == 200) {
                     resolve(response.data);
                 } else {
-                    resolve(-1);
+                    resolve(null);
                 }
             })
             .catch(function (error) {
@@ -80,7 +82,32 @@ class CompanyServices {
     };
 
     putCompanyData = async (json) => {
-        
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Empresas/ActualizarEmpresa';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+            axios.put(urlCompleta, json, { headers })
+            .then(function (response) {
+                console.log('response: ', response);
+                if (response.status == 200) {
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
+                console.log('error.response.data: ', error.response.data);
+                reject(error.response.data);
+            });
+        });   
     }
 
     postServiceData = async (json) => {
@@ -121,7 +148,7 @@ class CompanyServices {
     putServiceData = async (json) => {
         return new Promise((resolve, reject) => {
   
-            var method = 'Servicios';
+            var method = 'ActualizarServicio';
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
             const headers = {
@@ -133,7 +160,7 @@ class CompanyServices {
             console.log('urlCompleta: ', urlCompleta);
             axios.put(urlCompleta, json, { headers })
             .then(function (response) {
-                // console.log(response.status);
+                console.log(response);
                 if (response.status == 200) {
                     // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
                     resolve(JSON.stringify(response.data));
@@ -142,7 +169,46 @@ class CompanyServices {
                 }
             })
             .catch(function (error) {
-                console.log('error.response.data: ', error.response.data);
+                console.log('error: ', error);
+                // reject(error.response.data);
+
+                if (error.message == 'Network Error') {
+                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
+                } else {
+                    if (error.response.status >= 500) {
+                        reject(-1);                
+                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
+                        reject(error.response.data); 
+                    } else {
+                        reject('Error Desconocido.');    
+                    }
+                }
+            });
+        });
+    }
+
+    deleteService = async (json) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'EliminarServicio';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+            axios.delete(urlCompleta, { headers })
+            .then(function (response) {
+                if (response.status == 200) {
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
                 reject(error.response.data);
             });
         });

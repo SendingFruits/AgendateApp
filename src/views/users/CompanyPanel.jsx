@@ -3,12 +3,11 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker";
 import UsersController from '../../controllers/UsersController';
 
-import ServiceItem from '../services/ServiceItem';
+import MenuButtonItem from '../home/MenuButtonItem';
 import MapController from '../../controllers/MapController';
 
 import { 
-    useState,
-	useEffect
+    useState, useEffect
 } from 'react';
 
 import { 
@@ -18,12 +17,11 @@ import {
     ScrollView,
     Text, 
     TextInput,
-    Button,
     TouchableOpacity,
-    Alert,
     SafeAreaView,
 } from 'react-native';
 
+import { LinearGradient } from 'expo-linear-gradient';
 
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
@@ -34,16 +32,18 @@ const CompanyPanel = (params) => {
     // console.log('data: ', data);
     const navigation = useNavigation();
 
-    // {
-    //     "address": "Vilardebo 4565",
-    //     "businessName": "Panaderia y Rotiseria.",
-    //     "category": "Gastronomia",
-    //     "city": "Montevideo",
-    //     "description": "Panaderia y Rotiseria donde podes realizar tu reserva de pedido y venir a retirar...",
-    //     "docu": "10000500123456789",
-    //     "owner": "Jose",
-    //     "rut": "10000500123456789",
+    // data = {
+    //     id: "2",    
+    //     address: "Vilardebo 4565",
+    //     businessName: "Panaderia y Rotiseria.",
+    //     category: "Gastronomia",
+    //     city: "Montevideo",
+    //     description: "Panaderia y Rotiseria donde podes realizar tu reserva de pedido y venir a retirar...",
+    //     owner: "Jose",
+    //     rut: "10000500123456789",
     // }
+
+    var guid = data.guid;
 
     const [rut, setRut] = useState(data.rut);
     const [owner, setOwner] = useState(data.owner);
@@ -59,6 +59,7 @@ const CompanyPanel = (params) => {
         try {
             if (await MapController.requestLocationPermission() === 'granted') {
                 const region = await MapController.getLocation();
+                console.log(region);
                 setLocation(region);
             } else {
                 alert('No tiene permisos para obtener la ubicación.');
@@ -71,7 +72,36 @@ const CompanyPanel = (params) => {
     const saveDataCompany = async () => {
         console.log('saveDataCompany');
 
-        
+        const formData = {
+            guid,
+			rut,
+			owner,
+			businessName,
+			category,
+			address,
+			city,
+			description,
+            location
+		};
+
+		UsersController.handleCompanyUpdate(formData)
+		.then(dataReturn => {
+			console.log('dataReturn: ', dataReturn);
+			if (dataReturn) {
+				alert('Datos de la empresa Actualizados.');
+
+                // setRut('');
+                // setOwner('');
+                // setBusinessName('');
+                // setCategory('');
+                // setAddress('');
+                // setCity('');
+                // setDescription('');
+			}
+		})
+		.catch(error => {
+			alert(error);
+		});
     };
 
     const [selectedPicture, setSelectedPicture] = useState(null);
@@ -100,6 +130,15 @@ const CompanyPanel = (params) => {
 
 	useEffect(() => {
 		// setRut(data.docu);
+        console.log(location);
+
+        setTimeout(() => {
+            if ((location.latitude === '' || location.latitude === 0)
+             && (location.longitude === '' || location.longitude === 0)
+            ) {
+                alert('Tu empresa no se verá en el mapa hasta que captures tu ubicación y la guardes.');
+            }
+        }, 3000);
 	}, []);
 
     return (
@@ -110,14 +149,29 @@ const CompanyPanel = (params) => {
             <View style={styles.body}>    
                 <ScrollView>
                     <View style={styles.row}>
+                        
+                        <View style={styles.space}>
+                        </View> 
+
                         <View style={styles.column}>
-                            <TouchableOpacity 
+
+                            <View style={styles.btnCaptureLocation}>
+                                <MenuButtonItem 
+                                    icon = {null}
+                                    text = {'Captar Ubicación'}
+                                    onPress={() => captureLocation()}
+                                />
+                            </View>
+                            
+                            {/* <TouchableOpacity 
                                 style={styles.btnCaptureLocation}
                                 onPress={() => captureLocation()}
                                 >
                                 <Text style={styles.txtbtnCapture}>Captar Ubicación</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
+                            
                         </View> 
+
                         <View style={styles.column}>
                             <Text style={styles.txtCoord}>Coordenadas:</Text>
 
@@ -137,11 +191,14 @@ const CompanyPanel = (params) => {
                             }
                         </View>
                     </View> 
+
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <Text style={styles.dataLabel}>RUT:</Text>
+                            <Text style={styles.dataLabel}>Propietario:</Text>
                             <Text style={styles.dataLabel}>Razón Social:</Text>
                             <Text style={styles.dataLabel}>Rubro:</Text>
+                            <Text style={styles.dataLabel}>Ciudad:</Text>
                             <Text style={styles.dataLabel}>Dirección:</Text>
                         </View> 
                         <View style={styles.column}>
@@ -153,6 +210,11 @@ const CompanyPanel = (params) => {
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 
+                                value={owner}
+                                onChangeText={setOwner}
+                                />
+                            <TextInput 
+                                style={styles.dataEdit} 
                                 value={businessName}
                                 onChangeText={setBusinessName}
                                 />
@@ -160,6 +222,11 @@ const CompanyPanel = (params) => {
                                 style={styles.dataEdit} 
                                 value={category}
                                 onChangeText={setCategory}
+                                />
+                            <TextInput 
+                                style={styles.dataEdit} 
+                                value={city}
+                                onChangeText={setCity}
                                 />
                             <TextInput 
                                 style={styles.dataEdit} 
@@ -180,6 +247,16 @@ const CompanyPanel = (params) => {
                                 />
                         </SafeAreaView>
                     </View> 
+
+                    <View style={styles.row}>
+                        <View style={styles.column}>
+                            <Text>  </Text>
+                        </View>
+                        <View style={styles.column}>
+                            <Text>  </Text>
+                        </View>
+                    </View>
+
                     <View style={styles.row}>
                         <View style={styles.column}>
                             <View style={styles.imageContainer}>
@@ -207,19 +284,19 @@ const CompanyPanel = (params) => {
 
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text>... </Text>
+                            <Text>  </Text>
                         </View>
                         <View style={styles.column}>
-                            <Text>... </Text>
+                            <Text>  </Text>
                         </View>
                     </View>
 
                     <View style={styles.row}>
                         <View style={styles.column}>
-                            <Text>... </Text>
+                            <Text>  </Text>
                         </View>
                         <View style={styles.column}>
-                            <Text>... </Text>
+                            <Text>  </Text>
                         </View>
                     </View>
 
@@ -227,9 +304,14 @@ const CompanyPanel = (params) => {
             </View>
             <View style={styles.footer}>
                 <Text style={styles.textFooter} ></Text>
-                <Button 
+                {/* <Button 
                     title='Guardar'
                     color='#2ECC71'
+                    onPress={() => saveDataCompany()}
+                /> */}
+                <MenuButtonItem 
+                    icon = {null}
+                    text = {'Guardar'}
                     onPress={() => saveDataCompany()}
                 />
             </View>
@@ -250,8 +332,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
         marginHorizontal: 20,
-        borderRadius: 20,
-        borderRadius: 12,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
         borderWidth: 2,
         borderColor: '#fff',
         backgroundColor:'#9a9'
@@ -284,16 +366,12 @@ const styles = StyleSheet.create({
         flex: 1, // Ocupar espacio igual en ambas columnas
         paddingHorizontal: 5, // Espacio horizontal entre columnas
     },
+    space: {
+        width: 20
+    },
     btnCaptureLocation: {
-        width:130,
-        backgroundColor: '#2ECC71',
-        padding: 10,
         marginVertical: 15,
-        marginHorizontal: 15,
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#2d9',
-        alignItems:'center',
+        marginHorizontal: 10,
     },
     txtbtnCapture: {
         color: '#fff',
@@ -359,12 +437,12 @@ const styles = StyleSheet.create({
 
     footer: {
         width: windowWidth - 50,
-        height: windowHeight - 730,
+        height: windowHeight - 720,
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 10,
         marginHorizontal: 20,
-        borderRadius: 20,
-        borderRadius: 12,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
         borderWidth: 2,
         borderColor: '#fff',
         backgroundColor:'#9a9'

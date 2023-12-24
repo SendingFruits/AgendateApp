@@ -13,6 +13,7 @@ import React, {
 import * as ImagePicker from "expo-image-picker";
 import UsersController from '../../controllers/UsersController';
 
+import MenuButtonItem from '../home/MenuButtonItem';
 import PassChanger from './PassChanger';
 
 import { 
@@ -271,22 +272,38 @@ const ProfileView = (userLogin) => {
             </ScrollView>
 
             <View style={styles.footer}>
-                {/* Button */}
-				<View style={styles.nextContainer}>
+
+                <View style={{ marginHorizontal:25, marginTop:15, textAlign:'center' }}>
+                    <MenuButtonItem 
+                        icon = {null}
+                        text = {'Cambiar Contraseña'}
+                        onPress={() => updatePass(user)}
+                    /> 
+
+                    <MenuButtonItem
+                        style={{marginHorizontal:20}}
+                        icon = {null}
+                        text = {'Actualizar Datos'}
+                        onPress={() => updateData()}
+                    />
+                </View>
+                
+
+				{/*<View style={styles.nextContainer}>
 					<TouchableOpacity 
                         style={styles.btnUpdate}
                         onPress={() => updatePass(user)} >
                         <Text style={styles.txtUpdate}>Cambiar Contraseña</Text>
                     </TouchableOpacity>
 				</View>  
-                {/* Button */}
+             
 				<View style={styles.nextContainer}>
 					<TouchableOpacity 
                         style={styles.btnUpdate}
                         onPress={() => updateData()} >
                         <Text style={styles.txtUpdate}>Actualizar Datos</Text>
                     </TouchableOpacity>
-				</View>    
+				</View>*/}
             </View>
         </View>
     );

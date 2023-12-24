@@ -25,7 +25,7 @@ const BaseError = ( param, debug=null ) => {
 	}, []);
 
     const errorView = (type) => {
-        console.log(type);
+        // console.log(type);
         switch (type) {
             case 'api':
                 return (<Text style={styles.message} >Error de Conexión con la API</Text>);
