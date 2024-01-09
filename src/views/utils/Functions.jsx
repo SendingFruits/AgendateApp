@@ -1,9 +1,13 @@
 import { Dimensions } from 'react-native';
+import * as FileSystem from "expo-file-system";
+
 
 
 export const getOrientation = () => {
     const { width, height } = Dimensions.get('window');
-    return width > height ? 'landscape' : 'portrait';
+    var ori =  width > height ? 'landscape' : 'portrait';
+    // console.log('ori: ', ori);
+    return ori;
 };
 
 export const showConfirmationAlert = () => {
@@ -25,10 +29,22 @@ export const showConfirmationAlert = () => {
     });
 };
 
+export const getBase64FromUri = async (uri) => {
+    const fileContent = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+    return fileContent;
+}
+
+export const loadImageFromBase64 = (base64) => {
+    if (base64 !== '') {
+        return `data:image/png;base64,${base64}`;
+    } else {
+        return '';
+    }
+};
 
 
 export function formatDate(date) {
-    if (date !== undefined) {
+    if (date !== undefined && date !== '') {
         const parts = date.split('-');
         if (parts.length !== 3) {
             throw new Error('Formato de fecha no válido');
@@ -161,23 +177,3 @@ export function validarCedula(ci) {
     return digitoVerificador === parseInt(ci[ci.length - 1]);
 }
 
-export function convertImageToBase64(url) {
-    return resizeImage(url, 125, 125);
-}
-
-
-
-function resizeImage(url, width, height) {
-    return new Promise((resolve) => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        img.onload = function() {
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL());
-        };
-        img.src = url;
-    });
-}

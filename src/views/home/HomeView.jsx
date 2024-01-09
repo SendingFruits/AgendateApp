@@ -4,6 +4,7 @@ import { getOrientation } from '../../views/utils/Functions';
 
 import BaseError from '../../../src/views/utils/BaseError';
 import SearchPanel from './SearchPanel';
+import RatioPanel from './RatioPanel';
 import CompanyPanel from '../users/CompanyPanel';
 
 import MapController from '../../controllers/MapController';
@@ -23,6 +24,7 @@ import {
 	Button,
 	TouchableOpacity,
 	Keyboard,
+	Image
 } from 'react-native';
 import 
 	MapView, { 
@@ -41,8 +43,8 @@ const HomeView = ( params ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	
-	// console.log('params', params);
-
+	console.log('params', params);
+	
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
@@ -61,7 +63,7 @@ const HomeView = ( params ) => {
 	const [orientation, setOrientation] = useState(getOrientation());
 	const [isConnected, setIsConnected] = useState(true)
 	const [refreshing, setRefreshing] = useState(false);
- 
+	const [ratio, setRatio] = useState(1);
 	
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -78,15 +80,16 @@ const HomeView = ( params ) => {
 				const region = await MapController.getLocation();
 				setLocation(region);
 				// const organizedCompanies = await MapController.companyLocations(region,1);
-				MapController.companyLocations(region, 10)
+				MapController.companyLocations(region, ratio)
 				.then(companiesReturn => {
-					// console.log(companiesReturn);
+					console.log('hay datos ');
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 				})
 				.catch(error => {
-					// error = -1
+					console.log('no hay datos ');
 					alert('Problemas de Conexión...'); 
+					setCompanies([]);
 					setIsConnected(false);
 				});
 
@@ -106,6 +109,12 @@ const HomeView = ( params ) => {
 		setOrientation(newOrientation);
 	};
  
+	const handleRatioChange = (value) => {
+		// console.log(value);
+        setRatio(value);
+		fetchData();
+    };
+
 	const onRegionChange = (region, gesture) => {
 		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
 		// console.log(region, gesture);
@@ -114,29 +123,38 @@ const HomeView = ( params ) => {
 	const showCompanyLocations = () => {
 		if (companies) {
 			return companies.map((item, index) => {
+				var imgLogo = (item.logo !== '') ? 'data:image/png;base64, '+item.logo : null;
+				// console.log(Marker);
 				return (
+					// <CustomMarker
+					// 	index={index}
+					// 	typeUser={userLogin.type}
+					// 	item={item}
+					// 	imgLogo={imgLogo}
+					// 	imgSize={1}
+					// 	/>
+					
 					<Marker
 						key={index}
 						pinColor='#00ffff'
 						coordinate={item.location}
+						// icon={{uri:imgLogo}}
 						>
-						{/* <Callout 
-							style={styles.callout}
-							onPress={() => navigation.navigate('Realizar Reserva', { item })} >
-							<Text style={styles.title}>{item.title}</Text>
-							<Text style={styles.description}>{item.description}</Text>
-						</Callout> */}
-						
+
+						{/* <Image uri={imgLogo} style={{height: 35, width:35 }} /> */}
+
 						{userLogin.type === 'customer' ? (
 							<Callout 
 								style={styles.callout}
-								onPress={() => navigation.navigate('Realizar Reserva', { item })} >
+								onPress={() => navigation.navigate('Realizar Reserva', { userLogin, item })} 
+								>
 								<Text style={styles.title}>{item.title}</Text>
 								<Text style={styles.description}>{item.description}</Text>
 							</Callout>
 						) : (
 							<Callout 
-								style={styles.callout}>
+								style={styles.callout}
+								>
 								<Text style={styles.title}>{item.title}</Text>
 								<Text style={styles.description}>{item.description}</Text>
 							</Callout>
@@ -144,8 +162,7 @@ const HomeView = ( params ) => {
 					</Marker>
 				)
 			});
-		}
-		
+		}	
 	};
 
 	const handleSearch = (query) => {
@@ -171,17 +188,21 @@ const HomeView = ( params ) => {
 
 	useEffect(() => {
 		fetchData();
+		console.log('useEffect');
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, []); // location - pasarle location para actualizar siempre que se geolocalice
+	}, [isConnected]); // location - pasarle location para actualizar siempre que se geolocalice
 
 	// console.log(isConnected);
 	if (!isConnected) {
 		return (
-			<BaseError errorType={'api'} />
+			<BaseError data={companies} nav={navigation} errorType={'api'} />
 		)
 	} else {
 		return (
-			<View style={styles.container} >
+			<ScrollView contentContainerStyle={styles.container} 
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}>
 				{userLogin.type === 'company' ? (
 					<View style={styles.conrolPanel}>
 						<CompanyPanel 
@@ -213,11 +234,50 @@ const HomeView = ( params ) => {
 							{showCompanyLocations()}
 
 						</MapView>
+	
+						<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
+							<RatioPanel 
+								onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
+								mapRef={mapRef}
+								/>
+						</View>			
+					
 					</View>
 				)}
-			</View>
+			</ScrollView>
 		);
 	}
+};
+
+const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
+	return (
+		<Marker
+			key={index}
+			pinColor='#00ffff'
+			coordinate={item.location}
+			image={{
+				uri: imgLogo,
+				scale: 0.01
+			}} 
+			>
+			{typeUser === 'customer' ? (
+				<Callout 
+					style={styles.callout}
+					onPress={() => navigation.navigate('Realizar Reserva', { item })} 
+					>
+					<Text style={styles.title}>{item.title}</Text>
+					<Text style={styles.description}>{item.description}</Text>
+				</Callout>
+			) : (
+				<Callout 
+					style={styles.callout}
+					>
+					<Text style={styles.title}>{item.title}</Text>
+					<Text style={styles.description}>{item.description}</Text>
+				</Callout>
+			)}
+		</Marker>
+	);
 };
 
 var windowWidth = Dimensions.get('window').width;
@@ -286,8 +346,32 @@ const styles = StyleSheet.create({
 		paddingBottom: 1,
 		color: '#61A2DC'
 	},
+
 	conrolPanel: {
 		flex: 1,
+	},
+	ratioPanel: {
+		position:'absolute',
+		top: '90%',
+    	left: '24%',
+		zIndex: 2
+	},
+	ratioPanelPortrait: {
+		position: 'absolute',
+		top: '88%',
+		left: '24%',
+		zIndex: 2,
+	},	
+	ratioPanelLandscape: {
+		position: 'absolute',
+		top: '78%',
+		left: '1%',
+		zIndex: 2,
+	},
+
+	marker: {
+		width: 1,
+		height: 1,
 	}
 })
 

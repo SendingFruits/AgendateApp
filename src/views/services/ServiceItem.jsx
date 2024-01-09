@@ -46,8 +46,8 @@ const ServiceItem = (params) => {
     var guid = params.guid;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [bodyHeight, setBodyHeight] = useState(280);
-    const [editMode, setEditMode] = useState(false);
+    const [bodyHeight, setBodyHeight] = useState(280); 
+    const [editMode, setEditMode] = useState(edit);
 
     const [nombre, setNombre] = useState(item.nombre);
     const [tipo, setTipo] = useState(item.tipoServicio);
@@ -60,15 +60,26 @@ const ServiceItem = (params) => {
     const [terminoHora, setTerminoHora] = useState(convertHour(item.horaFin, 'toHours'));
 
     const [descripcion, setDescription] = useState(item.descripcion);
-    const [dias, setDias] = useState(item.diasDefinidosSemana);
 
-    const diasList = item.diasDefinidosSemana.split(';').filter(Boolean);
+
+    var [selectedDias, setSelectedDias] = useState(item.diasDefinidosSemana);
+    var [diasListArray, setDiasListArray] = useState([]);
+    
 
     const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
     const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
 
     const [selectedDatePicker1, setSelectedDatePicker1] = useState(new Date());
     const [selectedDatePicker2, setSelectedDatePicker2] = useState(new Date());
+
+
+    const handleDiasSelectionChange = (selectedItems) => {
+        console.log(selectedItems);
+        var joinerArrayInString = selectedItems.join(';');
+        setSelectedDias(joinerArrayInString);
+        var listAux = joinerArrayInString.split(';');
+        setDiasListArray(listAux);
+    };
 
 
     const showDatePicker= (field) => {
@@ -111,18 +122,29 @@ const ServiceItem = (params) => {
         setIsCollapsed(!isCollapsed);
     };
   
-    const editItem = () => {
+    const editItem = (p=true) => {
         // console.log('editItem');
-        setEditMode(true);
-        setBodyHeight(480);
+        if (p == false) {
+            setEditMode(false);
+            setBodyHeight(280);
+        } else {
+            setEditMode(true);
+            setBodyHeight(480);
+        }
     };
 
     const saveItem = () => {
-        console.log('saveItem');
+
         setEditMode(false);
         setBodyHeight(280);
 
+        var id = params.item.id;
+
+        console.log('selectedDias: ',selectedDias);
+        setSelectedDias(selectedDias);
+
         const formData = {
+            id,
 			nombre,
 			tipo,
 			costo,
@@ -130,7 +152,7 @@ const ServiceItem = (params) => {
 			termino,
 			turno,
 			descripcion,
-			dias,
+			selectedDias,
             guid,
 		};
 
@@ -138,7 +160,7 @@ const ServiceItem = (params) => {
 		.then(servReturn => {
 			console.log('servReturn: ', servReturn);
 			if (servReturn) {
-			
+                alert('Se actualizaron los datos del Servicio');
 			}
 		})
 		.catch(error => {
@@ -148,13 +170,15 @@ const ServiceItem = (params) => {
 
     const deleteItem = () => {
         console.log('deleteItem');
+
+        var id = params.item.id;
         var text = '¿Seguro desea eliminar este Servicio?';
 
         AlertModal.showConfirmationAlert(text)
 		.then(alertRes => {
 			console.log('alertRes: ', alertRes);
 			if (alertRes) {
-                ServicesController.handleServiceDelete(formData)
+                ServicesController.handleServiceDelete(id)
                 .then(deleted => {
                 	console.log('deleted: ', deleted); 
                 })
@@ -175,11 +199,18 @@ const ServiceItem = (params) => {
 
 
 	useEffect(() => {
-        setEditMode(false);
+        setBodyHeight(280);
+        setEditMode(edit);
 		setIsCollapsed(false);
         setDatePickerVisibility1(false);
         setDatePickerVisibility2(false);
-	}, []);
+
+        // console.log('selectedDias: ',selectedDias);
+        if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
+            var listAux = selectedDias.split(';');
+            setDiasListArray(listAux);
+        }
+	}, [edit]);
     
     return (
         <View style={styles.container}>
@@ -238,7 +269,7 @@ const ServiceItem = (params) => {
                                                 <Text style={styles.label}>Comienza:</Text>
                                             </View>
                                             <View style={styles.columnV}>
-                                                <Text> {item.horaInicio}</Text>
+                                                <Text> {comienzoHora}</Text>
                                             </View>
                                         </View>
                                         <View style={styles.row}>
@@ -246,7 +277,7 @@ const ServiceItem = (params) => {
                                                 <Text style={styles.label}>Termina:</Text>
                                             </View>
                                             <View style={styles.columnV}>
-                                                <Text> {item.horaFin}</Text>
+                                                <Text> {terminoHora}</Text>
                                             </View>
                                         </View>
                                         <View style={styles.row}>
@@ -272,14 +303,21 @@ const ServiceItem = (params) => {
                                                 <Text style={styles.label}>Dias:</Text>
                                             </View>
                                             <View style={styles.columnV}>
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    flexWrap: 'wrap',
-                                                }}>
-                                                    {diasList.map((dia, index) => (
-                                                        <Text key={index}>{dia},</Text>
-                                                    ))}
-                                                </View>
+
+                                                {/* {console.log(diasListArray)} */}
+
+                                                {diasListArray && diasListArray !== undefined ? (
+                                                    <View style={{
+                                                        flexDirection: 'row',
+                                                        flexWrap: 'wrap',
+                                                    }}>
+                                                        {diasListArray.map((dia, index) => (
+                                                            <Text key={index}>{dia},</Text>
+                                                        ))}
+                                                    </View>
+                                                ) : (
+                                                    <Text>No hay días seleccionados</Text>
+                                                )}
                                             </View>
                                         </View>
         
@@ -442,42 +480,21 @@ const ServiceItem = (params) => {
                                                     <Picker.Item label="1 hora" value={60} />
                                                 </Picker>
                                             </View>
-                                        </View>
+                                    </View>
                                     <View style={styles.row}>
                                         <View style={styles.columnT}>
                                             <Text style={styles.label}>Dias:</Text>
                                         </View>
                                         <View style={styles.columnV}>
-                                            {/* <TouchableOpacity>
-                                                <TextInput 
-                                                    editable={false}
-                                                    style={styles.dataEdit} 
-                                                    value={terminoHora.toString()}
-                                                    />
-                                            </TouchableOpacity> */}
-
-                                            <MultiPicker list={diasList} />
+                                           
+                                            <MultiPicker 
+                                                list={diasListArray} 
+                                                onSelectionChange={(selectedItems) => handleDiasSelectionChange(selectedItems)}
+                                                />
                                            
                                         </View>
                                     </View>
     
-                                    {/* <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Ultima Fecha:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <Text>{formatDate(item.UltimaFecha)}</Text>
-                                        
-                                        </View>
-                                    </View> */}
-    
-                                    {/* <EditField 
-                                        icon={null} 
-                                        text={formatDate(item.UltimaFecha)}
-                                        type={'date'}
-                                        attr={'ultima'}
-                                        onPress={() => editField(item.UltimaFecha)}
-                                    /> */}
                                 </ScrollView>
                             </View>
                         </LinearGradient>
@@ -489,13 +506,22 @@ const ServiceItem = (params) => {
                                 start={{ x: 0.2, y: 1.2 }}
                                 end={{ x: 1.5, y: 0.5 }} 
                                 >
-    
-                                <View style={styles.btnEdit}>    
-                                    <MenuButtonItem 
-                                        icon = {null}
-                                        text = {'Guardar'}
-                                        onPress={() => saveItem()}
-                                    />
+
+                                <View style={styles.btns}>
+                                    <View style={styles.btnEdit}>    
+                                        <MenuButtonItem 
+                                            icon = {null}
+                                            text = {'Cancelar'}
+                                            onPress={() => editItem(false)}
+                                        />
+                                    </View>
+                                    <View style={styles.btnEdit}>    
+                                        <MenuButtonItem 
+                                            icon = {null}
+                                            text = {'Guardar'}
+                                            onPress={() => saveItem()}
+                                        />
+                                    </View>
                                 </View>
     
                                
@@ -504,7 +530,6 @@ const ServiceItem = (params) => {
                     </View> 
                 </>
             )}
-
         </View>
     );
 };
@@ -577,6 +602,11 @@ const styles = StyleSheet.create({
         backgroundColor:'#9a9',
         borderBottomLeftRadius:12,
         borderBottomRightRadius:12,
+    },
+
+    btns: {
+        flexDirection:'row',
+
     },
     btnEdit: {
         marginEnd: 6,

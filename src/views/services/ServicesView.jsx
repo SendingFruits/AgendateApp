@@ -51,6 +51,7 @@ const ServicesView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
+            setEditing(false);
             getServices();
 			// navigation.navigate('Servicios');
 		}, 2000);
@@ -64,6 +65,7 @@ const ServicesView = ( params ) => {
     const getServices = async () => {
         ServicesController.getServicesForCompany(guid)
         .then(serviceReturn => {
+            // console.log('serviceReturn: ', serviceReturn);
             if (serviceReturn !== null) {
                 setList([serviceReturn]);
             } else {
@@ -95,9 +97,8 @@ const ServicesView = ( params ) => {
     
 
     useEffect(() => {
-        setTimeout(() => {            
-            getServices();
-        }, 1000);
+        setEditing(false);
+        getServices();
 
         Dimensions.addEventListener('change', handleOrientationChange);
 

@@ -42,23 +42,23 @@ const BookingsView = ( params ) => {
 	}, []);
 
     useEffect(() => {
-        // ServicesController.getServicesForCompany(idCompany)
-        // .then(serviceReturn => {
-        //     // var services = JSON.parse(serviceReturn);
-        //     // console.log('services: ', serviceReturn);
-        //     setListServices(serviceReturn);
-        // })
-        // .catch(error => {
-        //     alert('ERROR al intentar cargar los Servicios');
-        // });
-
-        SQLiteHandler.selectReservasCliente(guid)
-        .then(bookings => {
-            setList(bookings);
+        BookingController.getBookingsForCustomer(guid)
+        .then(serviceReturn => {
+            // var services = JSON.parse(serviceReturn);
+            // console.log('services: ', serviceReturn);
+            setListServices(serviceReturn);
         })
         .catch(error => {
-            alert('ERROR al intentar cargar las Reservas');
+            alert('ERROR al intentar cargar los Servicios');
         });
+ 
+        // SQLiteHandler.selectReservasCliente(guid)
+        // .then(bookings => {
+        //     setList(bookings);
+        // })
+        // .catch(error => {
+        //     alert('ERROR al intentar cargar las Reservas');
+        // });
     }, []);
 
     console.log('list: ', list);
@@ -81,7 +81,7 @@ const BookingsView = ( params ) => {
                 </ScrollView>
             ) : (
                 <View>
-                    <Text>No tiene ninguna Reserva Realizada</Text>
+                    <Text>No hay Reservas</Text>
                 </View>
             )}
         </View>

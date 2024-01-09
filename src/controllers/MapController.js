@@ -64,7 +64,8 @@ class MapController {
                     },
                     address: company.direccion,
                     description: company.descripcion,
-                    itemCompany: company.company, 
+                    itemCompany: company.rubro,
+                    logo: company.logo, 
                 }
             });
             return organizedCompanies;

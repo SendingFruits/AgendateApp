@@ -15,7 +15,7 @@ class ServicesController {
 
 	getServicesForCompany(guid) {
 		return new Promise((resolve, reject) => {
-			// console.log('getServicesForCompany', guid);
+			console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe pertenecer a una empresa.');
 			}
@@ -43,6 +43,7 @@ class ServicesController {
 		});
 	}
 
+
 	handleServiceUpdate(data) {
 		return new Promise((resolve, reject) => {
 		
@@ -62,9 +63,11 @@ class ServicesController {
 				throw new Error('Falta seleccionar los dias.');
 			}
 
-			console.log(data);
+			console.log('data: ', data);
+			// var dias = data.diasList.filter(Boolean).join(';');
 
 			var dataConvert = {	
+				id: data.id,
 				nombre: data.nombre,
 				tipoServicio: data.tipo,
 				costo: data.costo,
@@ -72,21 +75,11 @@ class ServicesController {
 				horaFin: data.termino,
 				duracionTurno: data.turno,
 				descripcion: data.descripcion,
-				diasDefinidosSemana: data.dias,
+				diasDefinidosSemana: data.selectedDias,
 				idEmpresa: data.guid
 			}
 
-			// {
-			// 	"nombre": "string",
-			// 	"horaInicio": 0,
-			// 	"horaFin": 0,
-			// 	"diasDefinidosSemana": "string",
-			// 	"duracionTurno": 0,
-			// 	"tipoServicio": "string",
-			// 	"costo": 0,
-			// 	"descripcion": "string",
-			// 	"idEmpresa": 0
-			//   }
+			// console.log('dataConvert: ', dataConvert);
 
 			// {
 			// 	"costo": "1300",
@@ -116,6 +109,54 @@ class ServicesController {
 			CompanyServices.deleteService(guid)
 			.then(servReturn => {
 				resolve(servReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
+
+	handleServiceCreate(data) {
+		return new Promise((resolve, reject) => {
+			
+			if (data.nombre == '') {
+				throw new Error('Falta el Nombre.');
+			}
+			if (data.tipo == '') {
+				throw new Error('Falta el Tipo.');
+			}
+			if (data.comienzo == '') {
+				throw new Error('Falta la hora de Comienzo.');
+			}
+			if (data.termino == '') {
+				throw new Error('Falta la hora de Termino.');
+			}
+			if (data.dias == '') {
+				throw new Error('Falta seleccionar algun dia.');
+			}
+
+			// var dias = data.diasList.filter(Boolean).join(';');
+
+			descReplace = data.descripcion.replace(/\n/g, "\\n");
+
+			var dataConvert = {	
+				// id: data.id,
+				nombre: data.nombre,
+				tipoServicio: data.tipo,
+				costo: data.costo,
+				horaInicio: data.comienzo,
+				horaFin: data.termino,
+				duracionTurno: data.turno,
+				descripcion: descReplace,
+				diasDefinidosSemana: data.selectedDias,
+				idEmpresa: data.guid
+			}
+			
+			console.log('dataConvert: ', dataConvert);
+
+			CompanyServices.postServiceData(dataConvert)
+			.then(srvReturn => {
+				resolve(srvReturn);
 			})
 			.catch(error => {
 				reject(error);

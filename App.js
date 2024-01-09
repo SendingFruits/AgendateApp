@@ -2,8 +2,6 @@ import { UserContext } from './src/services/context/context';
 import { 
 	StyleSheet, 
 	Dimensions,
-	Text,
-	View
 } from 'react-native';
 
 import React, { 
@@ -15,47 +13,33 @@ import BaseError from './src/views/utils/BaseError'
 import Main from './src/views/home/Main';
 
 import 'react-native-gesture-handler';
-
-
-// init App
+ 
 const App = (config) => {
 	try {
 		var preferences = {
 			'current_user' : {
-				'guid':'none', // 1
-				'name':'none', // John
-				'last':'none', // Doe
-				'user':'none', // admin
-				'pass':'none', // 123456
-				'type':'none', // customer
-				'mail':'none', // john@example.com
-				'docu':'none', // 47659893
+				'guid':'none', // 39
+				'name':'none', // Jose
+				'last':'none', // Panadero
+				'user':'none',
+				'pass':'none',
+				'type':'none', // company
+				'mail':'none', 
+				'docu':'none',
+				'logo':'none', 
 			},
 			'connection' : {
 				'string':'none',
 			},
 			'theme' : {
-				'appColor': '#2ECC71',
-				'asideColor':'#69ACDD',
-				'backgroundColor':'#69ACDD',
-				'menuButttons': '#a8ffe5'
-			},
-			'dimensions':{
-				// 'windowWidth':windowWidth,
-				// 'windowHeight':windowHeight,
+				'dark': 0,
+				'white': 1,
 			}
 		}
 
 		const [userPreferences, setUserPreferences] = useState(preferences);
-
-		var getOrientation = () => {
-			const { width, height } = Dimensions.get('window');
-			return width > height ? 'landscape' : 'portrait';
-		}
-
 		const [dbLoad, setDbLoad] = useState(true);
 		const [isConnected, setIsConnected] = useState(true)
-		const [orientation, setOrientation] = useState(getOrientation());
 
 		useEffect(() => {
 			SQLiteHandler.createDb('agendate')
@@ -94,18 +78,12 @@ const App = (config) => {
 			};
 			checkConnection();
 	
-			const handleOrientationChange = () => {
-				const newOrientation = getOrientation();
-				setOrientation(newOrientation);
-			};
-			Dimensions.addEventListener('change', handleOrientationChange);
 		}, []); 
 	
-
 		if (isConnected) {
 			return (
 				<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-					<Main style={styles.background} orientation={orientation} />
+					<Main style={styles.background} />
 				</UserContext.Provider>
 			);
 		} else {

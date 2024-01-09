@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
+import { getBase64FromUri, loadImageFromBase64 } from '../utils/Functions'
 
 import * as ImagePicker from "expo-image-picker";
-import UsersController from '../../controllers/UsersController';
 
 import MenuButtonItem from '../home/MenuButtonItem';
 import MapController from '../../controllers/MapController';
+import UsersController from '../../controllers/UsersController';
 
 import { 
     useState, useEffect
@@ -15,10 +16,11 @@ import {
     StyleSheet,
     View,
     ScrollView,
-    Text, 
+    Text,
     TextInput,
     TouchableOpacity,
     SafeAreaView,
+    Image
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -52,6 +54,10 @@ const CompanyPanel = (params) => {
     const [address, setAddress] = useState(data.address);
     const [city, setCity] = useState(data.city);
     const [description, setDescription] = useState(data.description);
+    
+    const [logoBase, setLogoBase] = useState('');
+    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(data.logo));
+    const [selectedPicture, setSelectedPicture] = useState(null);
 
     const [location, setLocation] = useState({latitude:data.latitude, longitude:data.longitude});
 
@@ -70,7 +76,7 @@ const CompanyPanel = (params) => {
     };
 
     const saveDataCompany = async () => {
-        console.log('saveDataCompany');
+        // console.log('saveDataCompany');
 
         const formData = {
             guid,
@@ -81,12 +87,13 @@ const CompanyPanel = (params) => {
 			address,
 			city,
 			description,
-            location
+            location,
+            logoBase
 		};
 
 		UsersController.handleCompanyUpdate(formData)
 		.then(dataReturn => {
-			console.log('dataReturn: ', dataReturn);
+			// console.log('dataReturn: ', dataReturn);
 			if (dataReturn) {
 				alert('Datos de la empresa Actualizados.');
 
@@ -97,6 +104,7 @@ const CompanyPanel = (params) => {
                 // setAddress('');
                 // setCity('');
                 // setDescription('');
+                setLogoUrl(loadImageFromBase64(dataReturn.logo));
 			}
 		})
 		.catch(error => {
@@ -104,9 +112,8 @@ const CompanyPanel = (params) => {
 		});
     };
 
-    const [selectedPicture, setSelectedPicture] = useState(null);
-    // convertImageToBase64(url)
-    let openImagePickerAsync = async () => {
+    
+    let openLogoPickerAsync = async () => {
 
 		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 		// console.log(permissionResult.granted);
@@ -115,22 +122,41 @@ const CompanyPanel = (params) => {
 			return;
 		}
 
-		const pickerResult = await ImagePicker.launchImageLibraryAsync()
+		// const pickerResult = await ImagePicker.launchImageLibraryAsync()
+
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
+            quality: 0.1, // Puedes ajustar este valor según tus necesidades (0.0 - 1.0)
+        });
+
 		// eslint-disable-next-line
 		if (!pickerResult.canceled) {
-			const newSelectedImage = pickerResult.assets[0].uri;
-			console.log(newSelectedImage);
-            setSelectedPicture(newSelectedImage);
+            const uri = pickerResult.assets[0].uri;
+            const base64 = await getBase64FromUri(uri);
+            // console.log(base64);
+            setLogoBase(base64);
+            setSelectedPicture(uri);
 		}
 	}
 
+    let openImageSavedAsync = async () => {
+        const storedImageUri = await AsyncStorage.getItem(username);
+        console.log(storedImageUri);
+        if (storedImageUri) {
+            setSelectedPicture(storedImageUri);
+        }
+    }
+
+
     const handleImagePicker = () => {
-		openImagePickerAsync();
+		openLogoPickerAsync();
 	};
 
 	useEffect(() => {
 		// setRut(data.docu);
-        console.log(location);
+        // console.log(logoUrl);
+        // setLogoUrl(loadImageFromBase64());
+
+        setSelectedPicture(logoUrl);
 
         setTimeout(() => {
             if ((location.latitude === '' || location.latitude === 0)
@@ -139,14 +165,14 @@ const CompanyPanel = (params) => {
                 alert('Tu empresa no se verá en el mapa hasta que captures tu ubicación y la guardes.');
             }
         }, 3000);
-	}, []);
+	}, [data.latitude, data.longitude]);
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>                
                 <Text style={styles.textHeader} >Panel de Gestión</Text>
             </View>
-            <View style={styles.body}>    
+            <View style={styles.body}>
                 <ScrollView>
                     <View style={styles.row}>
                         
@@ -203,6 +229,7 @@ const CompanyPanel = (params) => {
                         </View> 
                         <View style={styles.column}>
                             <TextInput 
+                                editable={false}
                                 keyboardType="numeric"
                                 style={styles.dataEdit} 
                                 value={rut}

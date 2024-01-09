@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {
+    useState, useEffect
+} from 'react';
 
 import { 
     StyleSheet, 
@@ -11,18 +13,29 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 const BaseError = ( param, debug=null ) => {
+    
+    // console.log('nav: ', param.nav);
+    // console.log('err: ', param.errorType);
+    console.log('dto: ', param.data);
 
-    const navigation = useNavigation();
+    const navigation = param.nav;
+    const errorType = param.errorType;
 
+    const [data, setData] = useState(param.data);
+    const [from, setFrom] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-			navigation.navigate('Inicio');
+            if (data.length > 0) {
+                setFrom(true);
+                console.log(from);
+            }
+            navigation.navigate('Inicio', params={from});
 		}, 2000);
-	}, []);
+	}, [navigation]);
 
     const errorView = (type) => {
         // console.log(type);
@@ -41,6 +54,13 @@ const BaseError = ( param, debug=null ) => {
         }
     }
 
+    useEffect(() => {
+        setFrom(false);
+		// if (refreshing) {
+        //     navigation.navigate('Inicio');
+        // }
+	}, []); 
+
     return(
         <ScrollView
             style={{ flex: 1 }}
@@ -48,7 +68,7 @@ const BaseError = ( param, debug=null ) => {
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			} >
             <View style={{ flex: 1 }}>
-                {errorView(param.errorType)}
+                {errorView(errorType)}
             </View>    
         </ScrollView>
     );

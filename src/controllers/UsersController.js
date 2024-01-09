@@ -194,7 +194,8 @@ class UsersController {
 			if (data.location.latitude === undefined) data.location.latitude = 0.0;
 			if (data.location.longitude === undefined) data.location.longitude = 0.0; 
 
-			console.log(data);
+			console.log('data: ',data);
+			var code64 = 'data:image/png;base64, ';
 
 			var dataConvert = {
 				id: data.guid,
@@ -207,28 +208,10 @@ class UsersController {
 				descripcion: data.description,
 				latitude: data.location.latitude,
 				longitude: data.location.longitude,
-
-				// nombre: data.firstName,
-				// apellido: data.lastName,
-				// nombreUsuario: data.username,
-				// contrasenia: data.password,
-				// celular: data.movil,
-				// correo: data.email,
-				// tipoUsuario: data.userType
+				logo: data.logoBase
 			}
-
-			// {
-			// 	"id": 0,
-			// 	"rutDocumento": "string",
-			// 	"razonSocial": "string",
-			// 	"nombrePropietario": "string",
-			// 	"rubro": "string",
-			// 	"direccion": "string",
-			// 	"ciudad": "string",
-			// 	"descripcion": "string",
-			// 	"latitude": 0,
-			// 	"longitude": 0
-			//   }
+			console.log('dataConvert: ',dataConvert);
+			
 
 			CompanyServices.putCompanyData(dataConvert)
 			.then(userReturn => {

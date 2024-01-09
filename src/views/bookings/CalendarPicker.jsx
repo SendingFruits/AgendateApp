@@ -12,8 +12,8 @@ import ScheduleList from './ScheduleList';
 
 const CalendarPicker = (service) => {
 
-    var idService = service.idService;
-    // console.log('idService: ', idService);
+    var guid = service.idService;
+    // console.log('guid: ', guid);
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState(null);
@@ -27,49 +27,30 @@ const CalendarPicker = (service) => {
     const disabledDates = {};
 
     const handleDateSelect = (day) => {
-        
-        // var isBusy = false;
-        // for (var key in availableTimes) {
-        //     console.log(day.dateString);
-        //     console.log(availableTimes);
-        //     if (day.dateString == availableTimes[key].date) {
-        //         isBusy = true;
-        //         break;
-        //     }
-        // }
-       
-        // if (!isBusy) {
-            setSelectedDate(day.dateString);
-            // setAvailableTimes(day.dateString);
-
-            setTimePickerVisible(true);
-            setScheduleListVisible(true); 
-        // } else {
-        //     AlertModal.showAlert('Dia Ocupado');
-        // }
-    
-    };
-
-    useEffect(() => {
-		SchedulesController.getSchedulesForService(idService)
+        // console.log(day.dateString);
+        SchedulesController.getSchedulesForService(guid,day.dateString)
 		.then(schedulesReturn => {
 			// console.log('schedulesReturn: ', schedulesReturn);
 			 
-            schedulesReturn.forEach(horario => {
-                // console.log('horario: ', horario);
-                const { date, available } = horario;
-                // console.log(date);
-                // console.log(available);
-                markedDates[date] = { 
-                    selected: true, 
-                    marked: true, 
-                    dotColor: available ? 'green' : 'red',
-                    selectedColor : available ? 'green' : 'red',
-                };
-                if (!available) {
-                    disabledDates[date] = { disabled: true };
-                }
-            });
+            /**
+             * esto serviria si quiero mostrar la disponibilidad en todo el mes
+             */
+
+            // schedulesReturn.forEach(horario => {
+            //     // console.log('horario: ', horario);
+            //     const { date, available } = horario;
+            //     // console.log(date);
+            //     // console.log(available);
+            //     markedDates[date] = { 
+            //         selected: true, 
+            //         marked: true, 
+            //         dotColor: available ? 'green' : 'red',
+            //         selectedColor : available ? 'green' : 'red',
+            //     };
+            //     if (!available) {
+            //         disabledDates[date] = { disabled: true };
+            //     }
+            // });
 
             setAvailableTimes(schedulesReturn);
 			setIsLoading(false);
@@ -78,6 +59,18 @@ const CalendarPicker = (service) => {
 			setIsLoading(false);
 			alert(error); 
 		});
+       
+    
+        setSelectedDate(day.dateString);
+        setScheduleListVisible(true); 
+        setTimePickerVisible(true);
+    
+    };
+
+    useEffect(() => {
+		setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
 	}, []);
 
 	return ( 
@@ -95,18 +88,24 @@ const CalendarPicker = (service) => {
                 />
             )}
 
-            {isScheduleListVisible && (
+            {/* {isScheduleListVisible && (
                 <ScheduleList
                     availableTimes={availableTimes}
                     selectedDate={selectedDate}
                 />
-            )}
+            )} */}
+
+            <ScheduleList
+                    availableTimes={availableTimes}
+                    selectedDate={selectedDate}
+                />
         </View>
 	);
 };
 
 const styles = StyleSheet.create({
 	calendar: {
+        // height: '50%',
 		backgroundColor: '#e3e0ef',
 	},
 });

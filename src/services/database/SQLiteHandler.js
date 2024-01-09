@@ -188,15 +188,16 @@ class SQLiteHandler {
         // await this.insertUsuario(db, 6, 'userX', 'User', 'Equiz', '0350MwGjTiI4C8O8o61/VA==', '545654888', 'userX@example.com', 'customer');
 
         // Insertar datos de prueba para Reservas y Servicios
-        await this.insertServicio(db, 2, 'Servicio de Panadería', '08:00', '18:00', 'Lunes;Martes;Miercoles;Jueves;Viernes;', 
-            60, 'Panadería', 20.50, 'Ofrecemos una variedad de productos horneados.', '2023-01-15');
-        await this.insertServicio(db, 3, 'Corte de Cabello', '09:00', '19:00', 'Lunes;Martes;Miercoles;Jueves;Viernes;Sabado;', 
-            45, 'Peluquería', 30.00, 'Corte de cabello moderno y personalizado.', '2023-01-20');
+        // await this.insertServicio(db, 2, 'Servicio de Panadería', '08:00', '18:00', 'Lunes;Martes;Miercoles;Jueves;Viernes;', 
+        //     60, 'Panadería', 20.50, 'Ofrecemos una variedad de productos horneados.', '2023-01-15');
+        // await this.insertServicio(db, 3, 'Corte de Cabello', '09:00', '19:00', 'Lunes;Martes;Miercoles;Jueves;Viernes;Sabado;', 
+        //     45, 'Peluquería', 30.00, 'Corte de cabello moderno y personalizado.', '2023-01-20');
 
         // Simular algunas reservas
-        await this.insertReserva(db, 1, 3, 'Realizada', '2023-01-15', '2023-01-15 10:30:00');
-        await this.insertReserva(db, 1, 2, 'Pendiente', '2023-01-20', '2023-01-20 15:00:00');
-        await this.insertReserva(db, 1, 2, 'Cancelada', '2023-01-18', '2023-01-18 12:45:00');
+        await this.insertReserva(db, 1, 3, 'Realizada', '2024-01-15', '2023-01-15 10:30:00');
+        await this.insertReserva(db, 1, 2, 'Pendiente', '2024-01-20', '2023-01-20 15:00:00');
+        await this.insertReserva(db, 1, 2, 'Cancelada', '2024-01-18', '2023-01-18 12:45:00');
+        await this.insertReserva(db, 1, 2, 'Pendiente', '2024-02-01', '2023-01-18 12:45:00');
     };
 
 

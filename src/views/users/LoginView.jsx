@@ -51,7 +51,7 @@ const LoginView = () => {
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
-				console.log('user.id: ', user.id);
+				// console.log('user.id: ', user.id);
 				
 				setUserPreferences({
 					current_user: {
@@ -74,6 +74,7 @@ const LoginView = () => {
 							description: user.descripcion,
 							latitude: user.latitude,
 							longitude: user.longitude,
+							logo: user.logo,
 						}),
 					},
 				});

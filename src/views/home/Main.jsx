@@ -249,6 +249,7 @@ const MenuItems = ( { navigation, profile } ) => {
 					'type':'none',
 					'mail':'none',
 					'docu':'none',
+					// 'logo':'none',
                 },
             });
         }
@@ -259,7 +260,7 @@ const MenuItems = ( { navigation, profile } ) => {
 
 		if (!islogin) {
 			navigation.navigate('Inicio');
-			console.log(userPreferences);
+			// console.log(userPreferences);
 		}
 	
 	}, [userPreferences]);

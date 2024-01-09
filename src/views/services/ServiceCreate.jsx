@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+
 import AlertModal from '../utils/AlertModal';
 import MultiPicker from '../utils/MultiPicker';
 import MenuButtonItem from '../home/MenuButtonItem';
@@ -42,29 +44,30 @@ const windowHeight = Dimensions.get('window').height;
 
 const ServiceCreate = (params) => {
     
-    var item = params.item;
-    console.log(item);
-    var edit = params.edit;
-    var guid = 0; //''a;
+    const navigation = useNavigation();
+    
+    var edit = false; // params.edit;
+    var guid = params.route.params.guid;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [bodyHeight, setBodyHeight] = useState(280);
-    const [editMode, setEditMode] = useState(false);
+    const [bodyHeight, setBodyHeight] = useState(480); 
 
     const [nombre, setNombre] = useState('');
     const [tipo, setTipo] = useState('');
-    const [costo, setCosto] = useState('');
+    const [costo, setCosto] = useState(0);
     const [comienzo, setComienzo] = useState('');
     const [termino, setTermino] = useState('');
     const [turno, setTurno] = useState('');
 
-    const [comienzoHora,setComienzoHora]= useState('');
-    const [terminoHora, setTerminoHora] = useState('');
+    const [comienzoHora,setComienzoHora]= useState(convertHour(0.00,'toHours'));
+    const [terminoHora, setTerminoHora] = useState(convertHour(0.00, 'toHours'));
 
     const [descripcion, setDescription] = useState('');
-    const [dias, setDias] = useState('');
 
-    const diasList = ('');
+
+    var [selectedDias, setSelectedDias] = useState([]);
+    var [diasListArray, setDiasListArray] = useState([]);
+    
 
     const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
     const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
@@ -73,113 +76,108 @@ const ServiceCreate = (params) => {
     const [selectedDatePicker2, setSelectedDatePicker2] = useState(new Date());
 
 
-    // const showDatePicker= (field) => {
-    //     if (field === 'comienzo') {
-    //         setDatePickerVisibility1(true);
-    //         setSelectedDatePicker1(createDateTimeFromDecimalHour(comienzo));
-    //     }
-    //     if (field === 'termino') {
-    //         setDatePickerVisibility2(true);
-    //         setSelectedDatePicker2(createDateTimeFromDecimalHour(termino));
-    //     }
-    // }
+    const handleDiasSelectionChange = (selectedItems) => {
+        console.log(selectedItems);
+        var joinerArrayInString = selectedItems.join(';');
+        setSelectedDias(joinerArrayInString);
+        var listAux = joinerArrayInString.split(';');
+        setDiasListArray(listAux);
+    };
 
-    // const handleDateConfirm = (date,field) => {
-    //     console.log(date);
-    //     console.log(field);
 
-    //     const fecha = new Date(date);
-    //     const hora = `${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2, '0')}`;
-    //     // var decimal = convertHour(hora, 'toDecimal');
+    const showDatePicker= (field) => {
+        if (field === 'comienzo') {
+            setDatePickerVisibility1(true);
+            setSelectedDatePicker1(createDateTimeFromDecimalHour(comienzo));
+        }
+        if (field === 'termino') {
+            setDatePickerVisibility2(true);
+            setSelectedDatePicker2(createDateTimeFromDecimalHour(termino));
+        }
+    }
+
+    const handleDateConfirm = (date,field) => {
+        // console.log(date);
         
-    //     console.log(fecha);
-    //     console.log(hora);
+        const fecha = new Date(date);
+        const hora = `${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2, '0')}`;
+        var decimal = convertHour(hora, 'toDecimal');
+    
+        if (field == 'comienzo') {
+            setSelectedDatePicker1(createDateTimeFromDecimalHour(decimal));
+            setComienzo(decimal);
+            setComienzoHora(hora);
+            // console.log(decimal);
+        }
+        if (field == 'termino') {
+            setSelectedDatePicker2(createDateTimeFromDecimalHour(decimal));
+            setTermino(decimal);
+            setTerminoHora(hora);
+            // console.log(decimal);
+        }
 
-    //     if (field === 'comienzo') {
-    //         setSelectedDatePicker1(fecha);
-    //         setComienzo(decimal);
-    //         setDatePickerVisibility1(false);
-    //     }
-    //     if (field === 'termino') {
-    //         setSelectedDatePicker2(fecha);
-    //         setTermino(decimal);
-    //         setDatePickerVisibility2(false);
-    //     }
-        
-    // };
+        setDatePickerVisibility1(false);
+        setDatePickerVisibility2(false);
+ 
+    };
 
-    // const toggleCollapse = () => {
-    //     setIsCollapsed(!isCollapsed);
-    // };
+    const toggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
   
-    // const editItem = () => {
-    //     // console.log('editItem');
-    //     setEditMode(true);
-    //     setBodyHeight(420);
-    // };
+    const editItem = (p=true) => {};
 
-    // const saveItem = () => {
-    //     console.log('saveItem');
-    //     setEditMode(false);
-    //     setBodyHeight(280);
+    const saveItem = () => {
 
-    //     const formData = {
-	// 		nombre,
-	// 		tipo,
-	// 		costo,
-	// 		comienzo,
-	// 		termino,
-	// 		turno,
-	// 		descripcion,
-	// 		dias,
-    //         guid,
-	// 	};
+        // var id = params.item.id;
 
-	// 	ServicesController.handleServiceUpdate(formData)
-	// 	.then(servReturn => {
-	// 		console.log('servReturn: ', servReturn);
-	// 		if (servReturn) {
-			
-			
-	// 		}
-	// 	})
-	// 	.catch(error => {
-	// 		alert(error);
-	// 	});
-    // };
+        console.log('selectedDias: ',selectedDias);
+        setSelectedDias(selectedDias);
 
-    // const deleteItem = () => {
-    //     console.log('deleteItem');
-    //     var text = '¿Seguro desea eliminar este Servicio?';
+        const formData = {
+            // id,
+			nombre,
+			tipo,
+			costo,
+			comienzo,
+			termino,
+			turno,
+			descripcion,
+			selectedDias,
+            guid,
+		};
 
-    //     AlertModal.showConfirmationAlert(text)
-	// 	.then(alertRes => {
-	// 		console.log('alertRes: ', alertRes);
-	// 		if (alertRes) {
-    //             ServicesController.handleServiceDelete(formData)
-    //             .then(deleted => {
-    //             	console.log('deleted: ', deleted); 
-    //             })
-    //             .catch(error => {
-    //             	alert(error);
-    //             });
-    //         }
-	// 	})
-	// 	.catch(error => {
-	// 		alert(error);
-	// 	});
+		ServicesController.handleServiceCreate(formData)
+		.then(servReturn => {
+			console.log('servReturn: ', servReturn);
+			// if (servReturn) {
+            //     alert('Se creó el Servicio Exitosamente');
+			// }
+            navigation.navigate('Servicios');
+		})
+		.catch(error => {
+			alert(error);
+		});
+    };
 
-
-    // };
+    const deleteItem = () => {};
 
     const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
     const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
 
 
 	useEffect(() => {
-        setEditMode(false);
-		setIsCollapsed(false);
-	}, []);
+        setBodyHeight(480); 
+
+        setDatePickerVisibility1(false);
+        setDatePickerVisibility2(false);
+
+        // console.log('selectedDias: ',selectedDias);
+        if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
+            var listAux = selectedDias.split(';');
+            setDiasListArray(listAux);
+        }
+	}, [edit]);
     
     return (
         <View style={styles.container}>
@@ -319,7 +317,10 @@ const ServiceCreate = (params) => {
                                             />
                                     </TouchableOpacity> */}
 
-                                    <MultiPicker list={diasList} />
+                                    <MultiPicker 
+                                        list={diasListArray} 
+                                        onSelectionChange={(selectedItems) => handleDiasSelectionChange(selectedItems)}
+                                        />
                                     
                                 </View>
                             </View>
@@ -354,11 +355,22 @@ const ServiceCreate = (params) => {
                         >
 
                         <View style={styles.btnEdit}>    
-                            <MenuButtonItem 
-                                icon = {null}
-                                text = {'Guardar'}
-                                onPress={() => saveItem()}
-                            />
+
+                            <View style={{marginEnd:10, marginTop:7}}>
+                                <MenuButtonItem 
+                                    icon = {null}
+                                    text = {'Guardar'}
+                                    onPress={() => saveItem()}
+                                />
+                            </View>
+                            <View style={{marginEnd:5, marginTop:7}}>
+                                <MenuButtonItem 
+                                    icon = {null}
+                                    text = {'Cancelar'}
+                                    onPress={() => navigation.navigate('Servicios')}
+                                />
+
+                            </View>
                         </View>
 
                         
@@ -439,6 +451,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius:12,
     },
     btnEdit: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginEnd: 6,
         padding: 5,
     },

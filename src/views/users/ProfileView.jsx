@@ -24,7 +24,7 @@ import {
     RefreshControl,
     TextInput,
     TouchableOpacity,
-    Image 
+    Image
 } from 'react-native';
 
 import { 
@@ -39,6 +39,8 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -72,23 +74,39 @@ const ProfileView = (userLogin) => {
 		setIsValidEmail(validateEmail(text));
 	};
 
+
     let openImagePickerAsync = async () => {
-
-		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-		// console.log(permissionResult.granted);
-		if (permissionResult.granted === false) {
-			alert('Se requiere permisos de acceso a la camara.');
-			return;
-		}
-
-		const pickerResult = await ImagePicker.launchImageLibraryAsync()
-		// eslint-disable-next-line
-		if (!pickerResult.canceled) {
-			const newSelectedImage = pickerResult.assets[0].uri;
-			console.log(newSelectedImage);
-            setSelectedPicture(newSelectedImage);
-		}
+        try {
+            let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
+            // console.log(permissionResult.granted);
+            if (permissionResult.granted === false) {
+                alert('Se requiere permisos de acceso a la camara.');
+                return;
+            }
+    
+            const pickerResult = await ImagePicker.launchImageLibraryAsync()
+            // eslint-disable-next-line
+            if (!pickerResult.canceled) {
+                const newSelectedImage = pickerResult.assets[0].uri;
+                console.log(newSelectedImage);
+                setSelectedPicture(newSelectedImage);
+    
+                await AsyncStorage.setItem(username, newSelectedImage);
+            }
+            
+        } catch (error) {
+           alert('Error al manejar la selección de imagen. ', error);
+        }
 	}
+
+    let openImageSavedAsync = async () => {
+        const storedImageUri = await AsyncStorage.getItem(username);
+        console.log(storedImageUri);
+        if (storedImageUri) {
+            setSelectedPicture(storedImageUri);
+        }
+    }
+
 
     const handleImagePicker = () => {
 		openImagePickerAsync();
@@ -116,7 +134,7 @@ const ProfileView = (userLogin) => {
             email,
 		};
 
-        console.log('formData: ', formData);
+        // console.log('formData: ', formData);
         UsersController.handleUpdate(formData)
         .then(userReturn => {
 			// console.log('userReturn: ', userReturn);
@@ -124,16 +142,16 @@ const ProfileView = (userLogin) => {
 				alert('Los datos del usuario se han actualizado.');
                 setUserPreferences({
                     current_user: {
+                        guid: formData.guid,
                         name: formData.firstname,
                         last: formData.lastname,
+						pass: user.pass,
+						user: user.user,
                         celu: formData.movil,
-                        mail: formData.email,
+						mail: formData.email,
+						type: 'customer',
                     },   
                 });
-                // setFirstname(formData.nombre);
-                // setLastname(formData.apellido);
-                // setMovil(formData.celular);
-                // setEmail(formData.correo);
 
                 // setUser(userReturn);
                 onRefresh();
@@ -183,7 +201,9 @@ const ProfileView = (userLogin) => {
         //     console.log('Número de teléfono:', phoneNumber);
         // } catch (error) {
         //     console.error('Error al obtener el número de teléfono:', error);
-        // }
+        // } 
+
+        openImageSavedAsync();
 	}, []);
 
     return (
@@ -255,6 +275,7 @@ const ProfileView = (userLogin) => {
                         <TouchableOpacity 
                             style={styles.imageButton}
                             onPress={ () => handleImagePicker(0) } > 	
+                            {/* file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540ethelvan%252Fagendate-app/ImagePicker/a67ed7c4-a8b9-4e8f-9e89-ee6812f4a5dc.jpeg */}
                             <View style={styles.buttonContent}>
                                 { (!selectedPicture) ? (
                                     <Text style={styles.imageText}>Foto</Text>
