@@ -16,23 +16,20 @@ const BaseError = ( param, debug=null ) => {
     
     // console.log('nav: ', param.nav);
     // console.log('err: ', param.errorType);
-    console.log('dto: ', param.data);
+    // console.log('dto: ', param.data);
 
     const navigation = param.nav;
     const errorType = param.errorType;
 
-    const [data, setData] = useState(param.data);
+    // const [data, setData] = useState(param.data);
     const [from, setFrom] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
+        setFrom(true);
 		setTimeout(() => {
-			setRefreshing(false);
-            if (data.length > 0) {
-                setFrom(true);
-                console.log(from);
-            }
+			setRefreshing(false);   
             navigation.navigate('Inicio', params={from});
 		}, 2000);
 	}, [navigation]);
@@ -55,10 +52,11 @@ const BaseError = ( param, debug=null ) => {
     }
 
     useEffect(() => {
-        setFrom(false);
-		// if (refreshing) {
-        //     navigation.navigate('Inicio');
-        // }
+		if (refreshing) {
+            setFrom(true);
+        } else {
+            setFrom(false);
+        }
 	}, []); 
 
     return(

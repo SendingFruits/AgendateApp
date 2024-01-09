@@ -99,6 +99,7 @@ const HomeView = ( params ) => {
 		} catch (error) {
 			console.log('ERROR fetchData: '+error);
 			if (error == -1) {
+				setCompanies([]);
 				setIsConnected(false);
 			}
 		}
@@ -188,9 +189,11 @@ const HomeView = ( params ) => {
 
 	useEffect(() => {
 		fetchData();
-		console.log('useEffect');
+		// console.log('useEffect');
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [isConnected]); // location - pasarle location para actualizar siempre que se geolocalice
+	}, [isConnected, companies]); 
+	// location - pasarle location para actualizar siempre que se geolocalice
+	// companies - pasarle companies para actualizar siempre las empresas
 
 	// console.log(isConnected);
 	if (!isConnected) {
