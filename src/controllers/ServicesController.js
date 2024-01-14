@@ -15,7 +15,7 @@ class ServicesController {
 
 	getServicesForCompany(guid) {
 		return new Promise((resolve, reject) => {
-			console.log('getServicesForCompany', guid);
+			// console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe pertenecer a una empresa.');
 			}

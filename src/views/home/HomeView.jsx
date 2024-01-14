@@ -43,7 +43,7 @@ const HomeView = ( params ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	
-	console.log('params', params);
+	// console.log('params', params);
 	
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
@@ -82,12 +82,12 @@ const HomeView = ( params ) => {
 				// const organizedCompanies = await MapController.companyLocations(region,1);
 				MapController.companyLocations(region, ratio)
 				.then(companiesReturn => {
-					console.log('hay datos ');
+					// console.log('hay datos ');
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 				})
 				.catch(error => {
-					console.log('no hay datos ');
+					// console.log('no hay datos ');
 					alert('Problemas de Conexión...'); 
 					setCompanies([]);
 					setIsConnected(false);

@@ -13,7 +13,7 @@ import ScheduleList from './ScheduleList';
 const CalendarPicker = (service) => {
 
     var guid = service.idService;
-    // console.log('guid: ', guid);
+    console.log('guid: ', guid);
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState(null);
@@ -88,16 +88,9 @@ const CalendarPicker = (service) => {
                 />
             )}
 
-            {/* {isScheduleListVisible && (
-                <ScheduleList
-                    availableTimes={availableTimes}
-                    selectedDate={selectedDate}
-                />
-            )} */}
-
             <ScheduleList
-                    availableTimes={availableTimes}
-                    selectedDate={selectedDate}
+                availableTimes={availableTimes}
+                selectedDate={selectedDate}
                 />
         </View>
 	);

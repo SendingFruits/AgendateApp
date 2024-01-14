@@ -49,7 +49,7 @@ const BookingsView = ( params ) => {
             setListServices(serviceReturn);
         })
         .catch(error => {
-            alert('ERROR al intentar cargar los Servicios');
+            alert('ERROR al intentar cargar las Reservas');
         });
  
         // SQLiteHandler.selectReservasCliente(guid)

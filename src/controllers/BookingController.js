@@ -3,7 +3,7 @@
 
 class BookingController {
 
-    getBookingsCustomer = async (customer) => {
+    getBookingsForCustomerJSON = async (customer) => {
         const bookingsList = databaseData.Bookings;
         const bookingsForCustomer = bookingsList.filter(booking => {
             return booking.Customer.UserId === customer.UserId;
@@ -17,16 +17,25 @@ class BookingController {
     };
     
     getBookingsForCustomer = async (guid) => {
-        const bookingsList = databaseData.Bookings;
-        const bookingsForCustomer = bookingsList.filter(booking => {
-            return booking.Customer.UserId === customer.UserId;
-        });
-        console.log('bookingsForCustomer:');
-        console.log(bookingsForCustomer);
-        return bookingsForCustomer
-        // var list = BookingsServices.getBookings();
-        // console.log(list);
-        // return  list;
+		return new Promise((resolve, reject) => {
+			// console.log('getSchedulesForService', guid);
+			if ((guid == '') || (guid == undefined)) {
+				throw new Error('Debe existir un servicio.');
+			}
+
+			BookingServices.getSchedulesOfServices(guid, date)
+			.then(serviceReturn => {
+				// console.log('serviceReturn', serviceReturn);
+				if (serviceReturn !== null) {
+					resolve(serviceReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getBookingsForCustomer', error);
+			});
+		});
     };
 }
 

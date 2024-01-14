@@ -6,7 +6,7 @@ class BookingServices {
     getBookings = async (guid) => {
         return new Promise((resolve, reject) => {
         
-            var method = 'Empresas/ObtenerEmpresasMapa';
+            var method = 'Reservas/ReservasCliente';
             const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
             //const urlCompleta = `http://192.168.1.7:9080/api/Empresas/ObtenerEmpresasMapa?`
                 + `radioCircunferencia=${cte}&`
@@ -62,7 +62,7 @@ class BookingServices {
                 },
             };
              
-            console.log(urlCompleta);
+            console.log('urlCompleta: ', urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {

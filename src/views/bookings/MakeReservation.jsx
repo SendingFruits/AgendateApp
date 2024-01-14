@@ -2,42 +2,54 @@ import React, {
 	useState, useEffect 
 } from 'react';
 
-import { Calendar } from 'react-native-calendars';
-
 import { 
 	View, 
+	RefreshControl,
 	StyleSheet, 
 	Text, 
 	ScrollView, 
-	ActivityIndicator 
+	ActivityIndicator,
 } from 'react-native';
  
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
 import ServicesController from '../../controllers/ServicesController';
-import ServiceItem from '../services/ServiceItem';
 import CalendarPicker from './CalendarPicker';
 
 const MakeReservation = ({ route, navigation }) => {
 	
+	// console.log('route: ', route);
+
+	// var ruta = route;
 	var item = route.params.item;
-	console.log('item: ', item);
+	var guid = route.params.item.id; 
 
-	// var guid = params.route.params.guid; 
+	// console.log('item: ', item);
+	// console.log('guid: ', guid);
 
-	// const [company, setCompany] = useState(null);
 	const [service, setService] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const [list, setList] = useState(null);
 
+	const [companyView, setCompanyView] = useState(true);
+	const [calendarView, setCalendarView] = useState(true);
+
+	const [refreshing, setRefreshing] = useState(false);
+	
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		setTimeout(() => {
+			setRefreshing(false);
+			getService();
+			navigation.navigate('Realizar Reserva', route={route});
+		}, 2000);
+	}, []);
+	
 	const getService = async () => {
         ServicesController.getServicesForCompany(guid)
         .then(serviceReturn => {
             
-            if (serviceReturn.value !== null) {
-                setList([serviceReturn.value]);
+            if (serviceReturn !== null) {
+                setService(serviceReturn);
             } else {
-                setList([]);
+                setService(null);
             }
         })
         .catch(error => {
@@ -46,22 +58,16 @@ const MakeReservation = ({ route, navigation }) => {
     }
 
 	useEffect(() => {
-		ServicesController.getServicesForCompany(item.id)
-		.then(serviceReturn => {
-			console.log('serviceReturn: ', serviceReturn);
-			// serviceReturn.calendar = true;
-			setService(serviceReturn);
-			setIsLoading(false);
-		})
-		.catch(error => {
-			setIsLoading(false);
-			alert(error); 
-		});	
-	}, [item.id]);
+		getService();
+	}, [guid]);
 
 	return ( 
-		<ScrollView style={styles.container}>
-			
+		<ScrollView 
+			style={styles.container}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}>
+		
 			<View style={styles.header}>
 				<Text style={styles.title}>{item.title}</Text>
 

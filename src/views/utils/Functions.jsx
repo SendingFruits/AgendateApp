@@ -44,13 +44,30 @@ export const loadImageFromBase64 = (base64) => {
 
 
 export function formatDate(date) {
-    if (date !== undefined && date !== '') {
+    // console.log(date);
+    if (date !== undefined && date !== '' && date !== null) {
         const parts = date.split('-');
         if (parts.length !== 3) {
             throw new Error('Formato de fecha no válido');
         }
         const [year, month, day] = parts;
         return `${day}/${month}/${year}`;
+    } else {
+        return '';
+    }
+}
+
+export function formatDate2(date) {
+    if (date !== undefined && date !== '' && date !== null) {
+        const dateTimeParts = date.split('T');
+
+        if (dateTimeParts.length === 2) {
+            // Formato con fecha y hora
+            const timePart = dateTimeParts[1].substring(0, 5); 
+            return timePart;
+        } else {
+            throw new Error('Formato de fecha no válido');
+        }
     } else {
         return '';
     }

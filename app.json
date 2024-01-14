@@ -6,6 +6,7 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "runtimeVersion": "1.0.0",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -52,6 +53,10 @@
       "eas": {
         "projectId": "a44a7704-4472-41f9-ac23-83f6f82d9de0"
       }
+    },
+    "owner": "ethelvan",
+    "updates": {
+      "url": "https://u.expo.dev/a44a7704-4472-41f9-ac23-83f6f82d9de0"
     }
   }
 }
