@@ -42,13 +42,13 @@ const MakeReservation = ({ route }) => {
 	
 	const getUserId = async () => {
         var id = await AsyncStorage.getItem('userLoginId');
-		console.log('id: ', id);
 		setUserID(id);
     }
 
-	const saveCompanyId = async () => {
-		// console.log('company.id: ', compId);
-        // await AsyncStorage.setItem('selectedCompany_'+userID, compId.toString());
+	const saveCompany = async () => {
+		if (item !== null && item !== '') {
+			await AsyncStorage.setItem('dataCompany_'+(item.toString()), JSON.stringify(item));
+		}
     }
 
 	const saveServiceStorage = async () => {
@@ -61,7 +61,6 @@ const MakeReservation = ({ route }) => {
 	const showServiceStorage = async () => {
 		if (compId !== null && compId !== '') {
 			const selectedService = await AsyncStorage.getItem('selectedService_'+(compId.toString()));
-			console.log('selectedService_'+compId+': ', selectedService);
 		}
     }
 

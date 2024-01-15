@@ -17,6 +17,7 @@ const CalendarPicker = ( params ) => {
     var id_comp = params.companyData.id;
 
     const [serverSelectId, setServerSelectId] = useState(null);
+    const [companyData, setCompanyData] = useState(null);
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState(null);
@@ -45,8 +46,12 @@ const CalendarPicker = ( params ) => {
         diciembre: 'Diciembre',
     };
 
+    const getCompanyData = async () => {
+        var dataCompany = await AsyncStorage.getItem('dataCompany_'+(id_comp.toString()));
+        console.log('dataCompany: ', dataCompany);
+    }
+
     const getServiceId = async () => {
-        console.log('id_comp: ', id_comp);
         if (id_comp !== null && id_comp !== undefined) {
             var selectedService = await AsyncStorage.getItem('selectedService_'+(id_comp.toString()));
             console.log('selectedService: ', selectedService);
@@ -89,6 +94,7 @@ const CalendarPicker = ( params ) => {
 
     useEffect(() => {
         setTimeout(() => {
+            getCompanyData();
             setIsLoading(false);
             getServiceId();
             setIsLoadingSchedules(false);
