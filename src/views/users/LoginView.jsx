@@ -27,6 +27,8 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -46,12 +48,17 @@ const LoginView = () => {
         setPassword('');
     }, []);
 
+	const saveId = async (id) => {
+        await AsyncStorage.setItem('userLoginId', id.toString());
+    }
+
 	const login = () => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
-				// console.log('user.id: ', user.id);
+
+				saveId(user.id);
 				
 				setUserPreferences({
 					current_user: {

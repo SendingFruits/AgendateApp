@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { View, Button, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
 import SchedulesController from '../../controllers/SchedulesController';
 // import BookingController from '../../controllers/BookingController';
 
 import AlertModal from '../utils/AlertModal';
 import ScheduleList from './ScheduleList';
 
-const CalendarPicker = (service) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-    var guid = service.idService;
-    console.log('guid: ', guid);
+const CalendarPicker = ( params ) => {
+
+    console.log('params: ', params);
+
+    var id_comp = params.companyData.id;
+
+    const [serverSelectId, setServerSelectId] = useState(null);
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState(null);
@@ -22,38 +25,55 @@ const CalendarPicker = (service) => {
     const [isScheduleListVisible, setScheduleListVisible] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingSchedules, setIsLoadingSchedules] = useState(true);
 
     const markedDates = {};
     const disabledDates = {};
 
+    const spanishMonthNames = {
+        enero: 'Enero',
+        febrero: 'Febrero',
+        marzo: 'Marzo',
+        abril: 'Abril',
+        mayo: 'Mayo',
+        junio: 'Junio',
+        julio: 'Julio',
+        agosto: 'Agosto',
+        septiembre: 'Septiembre',
+        octubre: 'Octubre',
+        noviembre: 'Noviembre',
+        diciembre: 'Diciembre',
+    };
+
+    const getServiceId = async () => {
+        console.log('id_comp: ', id_comp);
+        if (id_comp !== null && id_comp !== undefined) {
+            var selectedService = await AsyncStorage.getItem('selectedService_'+(id_comp.toString()));
+            console.log('selectedService: ', selectedService);
+            if (selectedService !== null) {
+                var serviceJSON = JSON.parse(selectedService);
+                // console.log('serviceJSON: ', serviceJSON);
+                if (serviceJSON !== null) {
+                    setServerSelectId(serviceJSON.id);
+                    // console.log('serverSelectId: ', serverSelectId);
+                }
+            }
+        }
+    }
+
     const handleDateSelect = (day) => {
-        // console.log(day.dateString);
-        SchedulesController.getSchedulesForService(guid,day.dateString)
+
+        console.log(day.dateString);
+        console.log(serverSelectId);
+
+        SchedulesController.getSchedulesForService(serverSelectId,day.dateString)
 		.then(schedulesReturn => {
-			// console.log('schedulesReturn: ', schedulesReturn);
+			console.log('schedulesReturn: ', schedulesReturn);
 			 
-            /**
-             * esto serviria si quiero mostrar la disponibilidad en todo el mes
-             */
-
-            // schedulesReturn.forEach(horario => {
-            //     // console.log('horario: ', horario);
-            //     const { date, available } = horario;
-            //     // console.log(date);
-            //     // console.log(available);
-            //     markedDates[date] = { 
-            //         selected: true, 
-            //         marked: true, 
-            //         dotColor: available ? 'green' : 'red',
-            //         selectedColor : available ? 'green' : 'red',
-            //     };
-            //     if (!available) {
-            //         disabledDates[date] = { disabled: true };
-            //     }
-            // });
-
-            setAvailableTimes(schedulesReturn);
-			setIsLoading(false);
+            if (schedulesReturn !== null) {
+                setAvailableTimes(schedulesReturn);
+                setIsLoading(false);
+            }
 		})
 		.catch(error => {
 			setIsLoading(false);
@@ -68,8 +88,10 @@ const CalendarPicker = (service) => {
     };
 
     useEffect(() => {
-		setTimeout(() => {
+        setTimeout(() => {
             setIsLoading(false);
+            getServiceId();
+            setIsLoadingSchedules(false);
         }, 1000);
 	}, []);
 
@@ -85,13 +107,21 @@ const CalendarPicker = (service) => {
                     onDayPress={(day) => handleDateSelect(day)}
                     markingType="multi-dot"
                     disabledDates={disabledDates}
+                    monthNames={spanishMonthNames}
                 />
             )}
 
-            <ScheduleList
-                availableTimes={availableTimes}
-                selectedDate={selectedDate}
-                />
+            {isLoadingSchedules ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <ScheduleList
+                    // userLogin={userLogin}
+                    // item={availableTimes}
+                    availableTimes={availableTimes}
+                    selectedDate={selectedDate}
+                    />
+            )}
+           
         </View>
 	);
 };

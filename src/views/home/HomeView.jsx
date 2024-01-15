@@ -153,9 +153,7 @@ const HomeView = ( params ) => {
 								<Text style={styles.description}>{item.description}</Text>
 							</Callout>
 						) : (
-							<Callout 
-								style={styles.callout}
-								>
+							<Callout style={styles.callout} >
 								<Text style={styles.title}>{item.title}</Text>
 								<Text style={styles.description}>{item.description}</Text>
 							</Callout>
@@ -203,9 +201,10 @@ const HomeView = ( params ) => {
 	} else {
 		return (
 			<ScrollView contentContainerStyle={styles.container} 
-				refreshControl={
-					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				}>
+				// refreshControl={
+				// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				// }
+				>
 				{userLogin.type === 'company' ? (
 					<View style={styles.conrolPanel}>
 						<CompanyPanel 

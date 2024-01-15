@@ -1,7 +1,9 @@
 import { formatDate, formatDate2 } from '../utils/Functions'
 
+import BookingController from '../../controllers/BookingController';
+
 import React, { 
-	useState 
+	useState, useEffect
 } from 'react';
 
 import { 
@@ -15,30 +17,27 @@ import {
 } from 'react-native';
 
 
-const ScheduleList = ({ availableTimes, selectedDate }) => {
 
-	// console.log('availableTimes: ', availableTimes);
-	// console.log('selectedDate: ', selectedDate);
+const ScheduleList = ({ userLogin, item, availableTimes, selectedDate }) => {
 
-	var filteredTimes = [];
-	if (availableTimes !== null) {
-		// filteredTimes = availableTimes.filter(horario => horario.fechaHora === selectedDate);
-		filteredTimes = availableTimes.filter(horario => horario.fechaHora.includes(selectedDate));
-	}
-	// console.log('filteredTimes: ', selectedDate);
+	// console.log('_item: ', item);
+	// console.log('_userLogin: ', userLogin);
+	// console.log('_selectedDate: ', selectedDate);
+	// console.log('_availableTimes: ', availableTimes);
 
-	const [colorSchedule, setColorSchedule] = useState('green');
-	const [selectedItem, setSelectedItem] = useState(null);
+	const [filteredTimes, setFilteredTimes] = useState([]);
 	const [selectedHour, setSelectedHour] = useState(null);
 	const [showModal, setShowModal] = useState(false);
 
-	// var list = (availableTimes) => {
-	//     for (const key in availableTimes) {
-	// 		console.log(availableTimes[key]);
-	// 	}
-	// };
+	const filterTimes = () => {
+		if (availableTimes !== null) {
+			// filteredTimes = availableTimes.filter(horario => horario.fechaHora === selectedDate);
+			setFilteredTimes(availableTimes.filter(horario => horario.fechaHora.includes(selectedDate)));
+			console.log('filteredTimes: ', filteredTimes);
+		}
+	};
 
-	const confirmReservation = (item) => {
+	const createReservation = (item) => {
 		// console.log(item);
 		setSelectedItem(item);
 		setSelectedHour(item.fechaHora);
@@ -49,49 +48,94 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 		}, 10000);
 	};
 
-	const createReservation = (item) => {
-		// console.log(item);
+	const confirmReservation = (hour) => {
+		console.log(hour);
 
+		const formData = {
+			idCliente,
+			idServicio,
+			fechaHoraTurno,
+			estado,
+		};
+
+		BookingController.handleCreateBooking(formData)
+		.then(userReturn => {
+			// console.log('userReturn: ', userReturn);
+			if (userReturn) {
+				alert('Se realizó la Reserva con éxito');
+				navigation.navigate('Realizar Reserva', { userLogin, item });
+			}
+		})
+		.catch(error => {
+			alert(error);
+		});
+
+		// {
+		// 	"id": 0,
+		// 	"idCliente": 0,
+		// 	"idServicio": 0,
+		// 	"fechaHoraTurno": "2024-01-14T23:52:03.570Z",
+		// 	"estado": "string"
+		// }
 	};
+
+	useEffect(() => {
+        filterTimes();
+	}, [availableTimes]);
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Horarios para el dia {formatDate(selectedDate)}</Text>
-			{/* {console.log('filteredTimes: ', filteredTimes)} */}
 
-			<ScrollView>
-				{filteredTimes.map((item, index) => ( item.disponible ? 
-					<>
-						<View key={index} >
-							<TouchableOpacity onPress={(day) => confirmReservation(item)} >
-								<View style={styles.scheduleItem}>
-									<Text style={styles.hourItem}> Agendate para las {formatDate2(item.fechaHora)} </Text>
-									<Text style={[styles.statusItem, 
-										{ color: item.disponible ? 'green' : 'red' }] } >  
-										{ item.disponible ? 'Libre' : 'Ocupado' }
+			{availableTimes !== null && availableTimes.length > 0 ? (
+				<View>
+					<Text style={styles.title}>Horarios para el dia {formatDate(selectedDate)}</Text>
+					{/* {console.log('filteredTimes: ', filteredTimes)} */}
+
+					<ScrollView>
+						{filteredTimes.map((item, index) => (
+							<View key={index}>
+
+								{/* {item.disponible ? 
+								<>
+									<TouchableOpacity onPress={(day) => createReservation(item)} >
+										<View style={styles.scheduleItem}>
+											<Text style={styles.hourItem}> Agendate para las {formatDate2(item.fechaHora)} </Text>
+											<Text style={[styles.statusItem, 
+												{ color: item.disponible ? 'green' : 'red' }] } >  
+												{ item.disponible ? 'Libre' : 'Ocupado' }
+											</Text>
+										</View>
+									</TouchableOpacity> 
+								</> : <>
+									<View style={styles.scheduleItem}>
+										<Text style={styles.hourItem}> Agendate para las {formatDate2(item.fechaHora)} </Text>
+										<Text style={[styles.statusItem, 
+											{ color: item.disponible ? 'green' : 'red' }] } >  
+											{ item.disponible ? 'Libre' : 'Ocupado' }
+										</Text>
+									</View>
+								</>} */}
+
+								<TouchableOpacity onPress={() => createReservation(item)}>
+									<View style={styles.scheduleItem}>
+									<Text style={styles.hourItem}>Agendate para las {formatDate2(item.fechaHora)}</Text>
+									<Text style={[styles.statusItem, { color: item.disponible ? 'green' : 'red' }]}>
+										{item.disponible ? 'Libre' : 'Ocupado'}
 									</Text>
-								</View>
-							</TouchableOpacity> 
-						</View>
-					</> : <>
-						<View key={index} >
-							<View style={styles.scheduleItem}>
-								<Text style={styles.hourItem}> Agendate para las {formatDate2(item.fechaHora)} </Text>
-								<Text style={[styles.statusItem, 
-									{ color: item.disponible ? 'green' : 'red' }] } >  
-									{ item.disponible ? 'Libre' : 'Ocupado' }
-								</Text>
+									</View>
+								</TouchableOpacity>
+
 							</View>
-						</View> 
-					</>
-				))}
-			</ScrollView>
+						))}
+					</ScrollView>
+				</View>
+			) : null}
 
 			<Modal
 				animationType="slide"
 				visible={showModal}
 				transparent={true}
-			>
+				>
 				<View style={styles.modal}>
 					<TouchableOpacity
 						style={styles.closeModal}
@@ -106,7 +150,7 @@ const ScheduleList = ({ availableTimes, selectedDate }) => {
 						<Button
 							title="Confirmar"
 							onPress={() => {
-								createReservation(item);
+								confirmReservation(selectedHour);
 								setShowModal(false);
 							}} />
 					</View>
@@ -121,11 +165,14 @@ const styles = StyleSheet.create({
 		backgroundColor: '#e3e0ef',
 	},
 	title: {
-		alignSelf: 'center',
+		alignSelf:'center',
 		marginTop: 3,
 		padding: 2,
-		color: '#000000',
-		fontWeight: 'bold',
+		color:'#000000',
+		fontWeight:'bold',
+		backgroundColor:'#e3eeee',
+		width:'100%',
+		textAlign:'center'
 	},
 	scheduleItem: {
 		flexDirection: 'row',

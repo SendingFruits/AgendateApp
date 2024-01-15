@@ -28,15 +28,11 @@ class SchedulesController {
 
 			BookingServices.getSchedulesOfServices(guid, date)
 			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
-				} else {
-					resolve(null);
-				}
+				console.log('serviceReturn', serviceReturn);
+				resolve(serviceReturn);
 			})
 			.catch(error => {
-				reject('Error Controller getServicesForCompany', error);
+				reject(error.mensaje);
 			});
 		});
 	}

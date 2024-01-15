@@ -45,7 +45,7 @@ const App = (config) => {
 			SQLiteHandler.createDb('agendate')
 			.then(result => {
 				setDbLoad(true);
-				console.log('DB Create... ', result);
+				// console.log('DB Create... ', result);
 
 				// SQLiteHandler.generateTestData()
 				// .then(() => {
@@ -67,7 +67,7 @@ const App = (config) => {
 			})
 			.catch(error => {
 				setDbLoad(false);
-				console.log('DB Error... ', error);
+				// console.log('DB Error... ', error);
 			});
 
 			const checkConnection = () => {

@@ -1,5 +1,5 @@
 import React, { 
-	useState, useEffect 
+	useState, useEffect, useRef
 } from 'react';
 
 import { 
@@ -14,59 +14,98 @@ import {
 import ServicesController from '../../controllers/ServicesController';
 import CalendarPicker from './CalendarPicker';
 
-const MakeReservation = ({ route, navigation }) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const MakeReservation = ({ route }) => {
 	
 	// console.log('route: ', route);
 
-	// var ruta = route;
 	var item = route.params.item;
-	var guid = route.params.item.id; 
+	var user = route.params.userLogin;
+	var compId = route.params.item.id; 
 
-	// console.log('item: ', item);
-	// console.log('guid: ', guid);
+	const scrollViewRef = useRef(null);
 
 	const [service, setService] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
-
-	const [companyView, setCompanyView] = useState(true);
-	const [calendarView, setCalendarView] = useState(true);
-
 	const [refreshing, setRefreshing] = useState(false);
 	
+
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-		setTimeout(() => {
-			setRefreshing(false);
-			getService();
-			navigation.navigate('Realizar Reserva', route={route});
-		}, 2000);
+		// setTimeout(() => {
+		// 	setRefreshing(false);
+		// 	getService();
+		// 	navigation.navigate('Realizar Reserva', route={route});
+		// }, 2000);
 	}, []);
 	
-	const getService = async () => {
-        ServicesController.getServicesForCompany(guid)
-        .then(serviceReturn => {
-            
-            if (serviceReturn !== null) {
-                setService(serviceReturn);
-            } else {
-                setService(null);
-            }
-        })
-        .catch(error => {
-            alert('ERROR al intentar cargar los Servicios, ' + error);
-        });
+	const getUserId = async () => {
+        var id = await AsyncStorage.getItem('userLoginId');
+		console.log('id: ', id);
+		setUserID(id);
     }
 
+	const saveCompanyId = async () => {
+		// console.log('company.id: ', compId);
+        // await AsyncStorage.setItem('selectedCompany_'+userID, compId.toString());
+    }
+
+	const saveServiceStorage = async () => {
+		// console.log('service: ', JSON.stringify(service));
+		if (compId !== null && compId !== '') {
+			await AsyncStorage.setItem('selectedService_'+(compId.toString()), JSON.stringify(service));
+		}
+    }
+
+	const showServiceStorage = async () => {
+		if (compId !== null && compId !== '') {
+			const selectedService = await AsyncStorage.getItem('selectedService_'+(compId.toString()));
+			console.log('selectedService_'+compId+': ', selectedService);
+		}
+    }
+
+	const getService = async () => {
+		
+		ServicesController.getServicesForCompany(compId)
+		.then(serviceReturn => {
+			// console.log('serviceReturn ', serviceReturn);
+			if (serviceReturn !== null) {
+				setService(serviceReturn);
+				setIsLoading(false);
+				saveServiceStorage();
+			} else {
+				setService(null);
+				setIsLoading(true);
+			}
+		})
+		.catch(error => {
+			alert('ERROR al intentar cargar los Servicios, ' + error);
+		});
+		
+    }
+
+	const handleScrollToElement = () => {
+		const scrollToY = 200;
+		if (scrollViewRef.current) {
+		  	scrollViewRef.current.scrollTo({ y: scrollToY, animated: true });
+		}
+	};
+
 	useEffect(() => {
+		// setService(null);
 		getService();
-	}, [guid]);
+		// showServiceStorage();
+	}, [compId]);
 
 	return ( 
 		<ScrollView 
 			style={styles.container}
-			refreshControl={
-				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-			}>
+			ref={scrollViewRef}
+			// refreshControl={
+			// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			// }
+			>
 		
 			<View style={styles.header}>
 				<Text style={styles.title}>{item.title}</Text>
@@ -112,6 +151,11 @@ const MakeReservation = ({ route, navigation }) => {
 								<Text style={styles.label}>Cierra a las: </Text>
 								<Text style={styles.value}>{service.horaFin} horas</Text>
 							</View>
+
+							<View style={styles.row}>
+								<Text style={styles.label}>Dias: </Text>
+								<Text style={styles.value}>{service.diasDefinidosSemana}</Text>
+							</View>
 						</View>
 					) : <View style={styles.span}>
 							<Text style={{fontWeight:'bold'}}>Esta empresa aún no publicó un Servicio.</Text>
@@ -131,7 +175,11 @@ const MakeReservation = ({ route, navigation }) => {
 							) : (
 								<View>
 									{/* <ServiceItem service={service} from={"calendar"} item={null}/> */}
-									<CalendarPicker idService={service.id}/>
+									<CalendarPicker 
+										companyData={item} 
+										userLogin={user} 
+										handler={handleScrollToElement}
+										/>
 								</View>
 							)}
 			

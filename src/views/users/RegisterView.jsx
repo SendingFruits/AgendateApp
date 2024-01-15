@@ -91,8 +91,7 @@ const RegisterView = () => {
 	};
 	
 	const sendData = () => {
-		// console.log('sendData');
-
+		
 		const formData = {
 			username,
 			password,

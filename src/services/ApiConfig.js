@@ -1,12 +1,10 @@
-var URL_TOKEN = 'c75f-2800-a4-1219-d500-39ea-75d4-d3dc-dda9';
-var NGROK_URL = 'https://'+URL_TOKEN+'.ngrok-free.app/api/';
-var LOCALHOST = 'https://192.168.1.7:9083/api/';
 
 class ApiConfig {
 
     constructor() {
-        // this.API_BASE_URL = LOCALHOST;
-        this.API_BASE_URL = NGROK_URL;
+        this.API_URL_TOKEN = '2575-2800-a4-12ff-8000-c8b0-96c5-4f85-a327';
+        this.API_BASE_URL = 'https://'+this.API_URL_TOKEN+'.ngrok-free.app/api/';
+        this.API_LOCALHOST = 'https://192.168.1.7:9083/api/';
     }
 
     getURL = async () => {
@@ -38,6 +36,10 @@ class ApiConfig {
             reject('Error Desconocido.');    
         }
     };
+
+    setNgrokToken = async (code) => {
+        this.API_URL_TOKEN = code;
+    }
 }
 
 export default new ApiConfig();

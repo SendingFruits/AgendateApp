@@ -4,7 +4,7 @@ import axios from 'axios';
 class MapServices {
 
     getCompaniesOld = async (lat, lng, cte) => {
-        // console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
+        console.log('API_BASE_URL: ', ApiConfig.API_BASE_URL);
         const data = '';
         try {
             var method = 'Empresas/ObtenerEmpresasMapa';
