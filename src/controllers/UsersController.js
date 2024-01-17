@@ -194,7 +194,7 @@ class UsersController {
 			if (data.location.latitude === undefined) data.location.latitude = 0.0;
 			if (data.location.longitude === undefined) data.location.longitude = 0.0; 
 
-			console.log('data: ',data);
+			// console.log('data: ',data);
 			var code64 = 'data:image/png;base64, ';
 
 			var dataConvert = {

@@ -57,7 +57,7 @@ const ServiceCreate = (params) => {
     const [costo, setCosto] = useState(0);
     const [comienzo, setComienzo] = useState('');
     const [termino, setTermino] = useState('');
-    const [turno, setTurno] = useState('');
+    const [turno, setTurno] = useState(30);
 
     const [comienzoHora,setComienzoHora]= useState(convertHour(0.00,'toHours'));
     const [terminoHora, setTerminoHora] = useState(convertHour(0.00, 'toHours'));
@@ -168,6 +168,20 @@ const ServiceCreate = (params) => {
 
 	useEffect(() => {
         setBodyHeight(480); 
+
+        // setNombre('');
+        // setTipo('');
+        // setCosto(0.00);
+        // setComienzo('00:00');
+        // setTermino('00:00');
+        // setTurno(30);
+        // setDescription('');
+        
+        // setComienzoHora(0.00);
+        // setTerminoHoras(0.00);
+        
+        // setSelectedDias([]);
+        // setDiasListArray([]);
 
         setDatePickerVisibility1(false);
         setDatePickerVisibility2(false);
@@ -300,7 +314,7 @@ const ServiceCreate = (params) => {
                                             // onValueChange={(itemValue) => handleFieldChange(itemValue, 'userType')}
                                             >
                                             <Picker.Item label="30 min" value={30} />
-                                            <Picker.Item label="1 hora" value={60} />
+                                            <Picker.Item label="1 hora" value={1} />
                                         </Picker>
                                     </View>
                                 </View>

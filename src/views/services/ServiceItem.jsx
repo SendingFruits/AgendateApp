@@ -41,6 +41,8 @@ const windowHeight = Dimensions.get('window').height;
 
 const ServiceItem = (params) => {
     
+    // console.log('ServiceItem: ', params);
+
     var item = params.item;
     var edit = params.edit;
     var guid = params.guid;
@@ -158,7 +160,7 @@ const ServiceItem = (params) => {
 
 		ServicesController.handleServiceUpdate(formData)
 		.then(servReturn => {
-			console.log('servReturn: ', servReturn);
+			// console.log('servReturn: ', servReturn);
 			if (servReturn) {
                 alert('Se actualizaron los datos del Servicio');
 			}
