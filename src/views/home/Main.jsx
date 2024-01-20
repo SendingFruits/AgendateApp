@@ -6,6 +6,7 @@ import BaseError from '../utils/BaseError';
 
 import BookingsView from '../bookings/BookingsView';
 import MakeReservation from '../bookings/MakeReservation';
+import ScheduleList from '../bookings/ScheduleList';
 
 import ServicesView from '../services/ServicesView';
 import PromosView from '../promotions/PromosView';
@@ -112,10 +113,6 @@ const Main = ( params ) => {
 					name="Inicio" 
 					component={HomeView}  />
 
-				{/* <Drawer.Screen 
-					name="Agenda" 
-					component={DiaryView} /> */}
-
 				<Drawer.Screen 
 					options={{
 						title: null,
@@ -179,7 +176,21 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Realizar Reserva" 
-					component={MakeReservation} />
+					component={MakeReservation} 
+					// initialParams={{ userLogin: userLogin }} 
+					/>
+
+				<Drawer.Screen 
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#2ECC71']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
+					name="Horarios" 
+					component={ScheduleList} />
 
 				<Drawer.Screen 
 					options={{ title: null, }}

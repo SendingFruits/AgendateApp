@@ -28,7 +28,7 @@ class SchedulesController {
 
 			BookingServices.getSchedulesOfServices(guid, date)
 			.then(serviceReturn => {
-				console.log('serviceReturn', serviceReturn);
+				// console.log('serviceReturn', serviceReturn);
 				resolve(serviceReturn);
 			})
 			.catch(error => {

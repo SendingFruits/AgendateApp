@@ -62,11 +62,11 @@ class BookingServices {
                 },
             };
              
-            console.log('urlCompleta: ', urlCompleta);
+            // console.log('urlCompleta: ', urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {
-                console.log('response: ', response);
+                // console.log('response: ', response);
                 if (response.status == 200) {
                     resolve(response.data);
                 } else {

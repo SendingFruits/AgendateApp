@@ -8,6 +8,7 @@ class UsersController {
 		this.navigation = navigation;
 	}
 
+
 	handleLogin(username, password) {
 		return new Promise((resolve, reject) => {
 
@@ -169,6 +170,29 @@ class UsersController {
 		});
 	}
 
+
+	getCompanyData(guid) {
+		return new Promise((resolve, reject) => {
+			// console.log('getServicesForCompany', guid);
+			if ((guid == '') || (guid == undefined)) {
+				throw new Error('Se requiere ID de Empresa.');
+			}
+
+			CompanyServices.getDataCompany(guid)
+			.then(serviceReturn => {
+				// console.log('serviceReturn', serviceReturn);
+				if (serviceReturn !== null) {
+					resolve(serviceReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getCompanyData', error);
+			});
+		});
+	}
+
 	handleCompanyUpdate(data) {
 		return new Promise((resolve, reject) => {
 		
@@ -222,6 +246,7 @@ class UsersController {
 			});
 		});
 	}
+
 }
 
 export default new UsersController();

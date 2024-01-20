@@ -48,8 +48,14 @@ const LoginView = () => {
         setPassword('');
     }, []);
 
+
 	const saveId = async (id) => {
-        await AsyncStorage.setItem('userLoginId', id.toString());
+		try {
+			// await AsyncStorage.clear();
+			await AsyncStorage.setItem('userLoginId', id.toString());
+		} catch (error) {
+			console.error('Error al limpiar AsyncStorage:', error);
+		}
     }
 
 	const login = () => {

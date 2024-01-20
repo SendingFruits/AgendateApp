@@ -18,12 +18,7 @@ import {
 
 
 
-const ScheduleList = ({ userLogin, item, availableTimes, selectedDate }) => {
-
-	// console.log('_item: ', item);
-	// console.log('_userLogin: ', userLogin);
-	// console.log('_selectedDate: ', selectedDate);
-	// console.log('_availableTimes: ', availableTimes);
+const ScheduleList = ({ availableTimes, selectedDate }) => {
 
 	const [filteredTimes, setFilteredTimes] = useState([]);
 	const [selectedHour, setSelectedHour] = useState(null);
@@ -33,13 +28,12 @@ const ScheduleList = ({ userLogin, item, availableTimes, selectedDate }) => {
 		if (availableTimes !== null) {
 			// filteredTimes = availableTimes.filter(horario => horario.fechaHora === selectedDate);
 			setFilteredTimes(availableTimes.filter(horario => horario.fechaHora.includes(selectedDate)));
-			console.log('filteredTimes: ', filteredTimes);
 		}
 	};
 
 	const createReservation = (item) => {
 		// console.log(item);
-		setSelectedItem(item);
+		// setSelectedItem(item);
 		setSelectedHour(item.fechaHora);
 		setShowModal(true);
 
@@ -81,11 +75,11 @@ const ScheduleList = ({ userLogin, item, availableTimes, selectedDate }) => {
 
 	useEffect(() => {
         filterTimes();
-	}, [availableTimes]);
+		console.log(filteredTimes);
+	}, [availableTimes,selectedDate]);
 
 	return (
 		<View style={styles.container}>
-
 			{availableTimes !== null && availableTimes.length > 0 ? (
 				<View>
 					<Text style={styles.title}>Horarios para el dia {formatDate(selectedDate)}</Text>
@@ -129,7 +123,12 @@ const ScheduleList = ({ userLogin, item, availableTimes, selectedDate }) => {
 						))}
 					</ScrollView>
 				</View>
-			) : null}
+			) : 
+				<View>
+					{/* <Text style={styles.title}>Sin Horarios para este dia</Text> */}
+					{/* {setFilteredTimes([])} */}
+				</View>
+			}
 
 			<Modal
 				animationType="slide"

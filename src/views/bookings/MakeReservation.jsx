@@ -1,5 +1,7 @@
+import { UserContext } from '../../services/context/context'; 
+
 import React, { 
-	useState, useEffect, useRef
+	useState, useEffect, useContext, useRef 
 } from 'react';
 
 import { 
@@ -12,6 +14,8 @@ import {
 } from 'react-native';
  
 import ServicesController from '../../controllers/ServicesController';
+import UsersController from '../../controllers/UsersController';
+
 import CalendarPicker from './CalendarPicker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,13 +23,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const MakeReservation = ({ route }) => {
 	
 	// console.log('route: ', route);
-
-	var item = route.params.item;
+	// const { userPreferences, setUserPreferences } = useContext(UserContext);
+	// var userLogin = userPreferences.current_user;
+	// console.log('userLogin: ', userLogin);
+	
 	var user = route.params.userLogin;
 	var compId = route.params.item.id; 
 
 	const scrollViewRef = useRef(null);
 
+	const [company, setCompany] = useState(null);
 	const [service, setService] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
@@ -33,12 +40,9 @@ const MakeReservation = ({ route }) => {
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-		// setTimeout(() => {
-		// 	setRefreshing(false);
-		// 	getService();
-		// 	navigation.navigate('Realizar Reserva', route={route});
-		// }, 2000);
-	}, []);
+		getCompany();
+		getService();
+	}, [compId]);
 	
 	const getUserId = async () => {
         var id = await AsyncStorage.getItem('userLoginId');
@@ -46,26 +50,37 @@ const MakeReservation = ({ route }) => {
     }
 
 	const saveCompany = async () => {
-		if (item !== null && item !== '') {
-			await AsyncStorage.setItem('dataCompany_'+(item.toString()), JSON.stringify(item));
-		}
+		// if (item !== null && item !== '') {
+		// 	await AsyncStorage.setItem('dataCompany', JSON.stringify(item));
+		// }
     }
 
 	const saveServiceStorage = async () => {
-		// console.log('service: ', JSON.stringify(service));
-		if (compId !== null && compId !== '') {
-			await AsyncStorage.setItem('selectedService_'+(compId.toString()), JSON.stringify(service));
+		if (service !== null && service !== '') {
+			await AsyncStorage.setItem('selectedService', JSON.stringify(service));
 		}
     }
 
 	const showServiceStorage = async () => {
 		if (compId !== null && compId !== '') {
-			const selectedService = await AsyncStorage.getItem('selectedService_'+(compId.toString()));
+			const selectedService = await AsyncStorage.getItem('selectedService');
 		}
     }
 
-	const getService = async () => {
-		
+
+	const getCompany = async () => {
+		UsersController.getCompanyData(compId)
+		.then(companyReturn => {
+			console.log('companyReturn ', companyReturn);
+			setCompany(companyReturn);
+			console.log('company ', company)
+		})
+		.catch(error => {
+			alert('ERROR al intentar cargar la Empresa, ' + error);
+		});
+	}
+
+	const getService = async () => {	
 		ServicesController.getServicesForCompany(compId)
 		.then(serviceReturn => {
 			// console.log('serviceReturn ', serviceReturn);
@@ -81,8 +96,8 @@ const MakeReservation = ({ route }) => {
 		.catch(error => {
 			alert('ERROR al intentar cargar los Servicios, ' + error);
 		});
-		
     }
+
 
 	const handleScrollToElement = () => {
 		const scrollToY = 200;
@@ -92,35 +107,36 @@ const MakeReservation = ({ route }) => {
 	};
 
 	useEffect(() => {
-		// setService(null);
+		getCompany();
 		getService();
-		// showServiceStorage();
 	}, [compId]);
 
 	return ( 
 		<ScrollView 
 			style={styles.container}
 			ref={scrollViewRef}
-			// refreshControl={
-			// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-			// }
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
 			>
+
+			{console.log('company ', company)}
 		
 			<View style={styles.header}>
-				<Text style={styles.title}>{item.title}</Text>
+				<Text style={styles.title}>{company.razonSocial}</Text>
 
 				<View style={styles.row}>
 					{/* <Text style={styles.label}>Descripción:</Text> */}
-					<Text style={styles.value}>{item.description}</Text>
-					{/* <Text style={styles.value}>{item.description}{"\n"}{service.descripcion}</Text> */}
+					<Text style={styles.value}>{company.descripcion}</Text>
+					{/* <Text style={styles.value}>{company.descripcion}{"\n"}{service.descripcion}</Text> */}
 				</View>
 				<View style={styles.row}>
 					<Text style={styles.label}>Rubro: </Text>
-					<Text style={styles.value}>{item.itemCompany}</Text>
+					<Text style={styles.value}>{company.rubro}</Text>
 				</View>
 				<View style={styles.row}>
 					<Text style={styles.label}>Dirección: </Text>
-					<Text style={styles.value}>{item.address}</Text>
+					<Text style={styles.value}>{company.direccion}</Text>
 				</View>
 
 				<View>
@@ -175,7 +191,7 @@ const MakeReservation = ({ route }) => {
 								<View>
 									{/* <ServiceItem service={service} from={"calendar"} item={null}/> */}
 									<CalendarPicker 
-										companyData={item} 
+										companyData={company} 
 										userLogin={user} 
 										handler={handleScrollToElement}
 										/>

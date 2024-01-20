@@ -18,14 +18,15 @@ const App = (config) => {
 	try {
 		var preferences = {
 			'current_user' : {
-				'guid':'none', // 39
-				'name':'none', // Jose
-				'last':'none', // Panadero
-				'user':'none',
-				'pass':'none',
-				'type':'none', // company
-				'mail':'none', 
-				'docu':'none',
+				'guid':'1',
+				'name':'Esteban',
+				'last':'Piccardo',
+				'user':'espial',
+				'pass':'123456',
+				'type':'customer',
+				'mail':'e.p.a@gmail.com', 
+				'docu':'44564566',
+				'celu':'098790944',
 				'logo':'none', 
 			},
 			'connection' : {
