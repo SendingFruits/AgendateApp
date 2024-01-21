@@ -36,6 +36,8 @@ import {
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
  
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const HomeView = ( params ) => {
 	
@@ -147,7 +149,7 @@ const HomeView = ( params ) => {
 						{userLogin.type === 'customer' ? (
 							<Callout 
 								style={styles.callout}
-								onPress={() => navigation.navigate('Realizar Reserva', { userLogin, item })} 
+								onPress={() => handleReservation(userLogin,item)} 
 								>
 								<Text style={styles.title}>{item.title}</Text>
 								<Text style={styles.description}>{item.description}</Text>
@@ -184,6 +186,19 @@ const HomeView = ( params ) => {
 			Keyboard.dismiss();
 		}
 	};
+
+	const handleReservation = (userLogin, item) => {
+		// console.log('item: ', item);
+		saveCompanyID(item.id);
+		navigation.navigate('Realizar Reserva', { userLogin, item })
+	}; 
+
+	const saveCompanyID = async (id) => {
+		if (id !== null && id !== '') {
+			await AsyncStorage.setItem('selectedCompanyID', id.toString());
+		}
+    }
+
 
 	useEffect(() => {
 		fetchData();

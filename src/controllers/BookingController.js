@@ -1,29 +1,38 @@
 // import ServiceModel from '../models/ServiceModel';
-// import UsersController from '../../controllers/UsersController';
+import BookingServices from '../services/BookingServices';
 
 class BookingController {
 
-    getBookingsForCustomerJSON = async (customer) => {
-        const bookingsList = databaseData.Bookings;
-        const bookingsForCustomer = bookingsList.filter(booking => {
-            return booking.Customer.UserId === customer.UserId;
-        });
-        console.log('bookingsForCustomer:');
-        console.log(bookingsForCustomer);
-        return bookingsForCustomer
-        // var list = BookingsServices.getBookings();
-        // console.log(list);
-        // return  list;
-    };
-    
     getBookingsForCustomer = async (guid) => {
+		return new Promise((resolve, reject) => {
+			// console.log('guid', guid);
+			if ((guid == '') || (guid == undefined)) {
+				throw new Error('Debe existir un Cliente.');
+			}
+
+			BookingServices.getBookings(guid, null, 'Clientes')
+			.then(bookingsReturn => {
+				// console.log('bookingsReturn', bookingsReturn);
+				if (bookingsReturn !== null) {
+					resolve(bookingsReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getBookingsForCustomer '+ error);
+			});
+		});
+    };
+
+    getBookingsForCompany = async (guid, date) => {
 		return new Promise((resolve, reject) => {
 			// console.log('getSchedulesForService', guid);
 			if ((guid == '') || (guid == undefined)) {
-				throw new Error('Debe existir un servicio.');
+				throw new Error('Debe existir una Empresa.');
 			}
 
-			BookingServices.getSchedulesOfServices(guid, date)
+			BookingServices.getBookings(guid, date, 'Empresas')
 			.then(serviceReturn => {
 				// console.log('serviceReturn', serviceReturn);
 				if (serviceReturn !== null) {
@@ -33,37 +42,33 @@ class BookingController {
 				}
 			})
 			.catch(error => {
-				reject('Error Controller getBookingsForCustomer', error);
+				reject('Error Controller getBookingsForCompany', error);
 			});
 		});
     };
 
+
 	handleCreateBooking(data) {
 		return new Promise((resolve, reject) => {
 			
-			if (data.username == '') {
-				throw new Error('Por favor ingrese el username.');
-			}
-			if (data.password == '') {
-				throw new Error('Por favor ingrese la contraseña.');
-			}
+			// console.log(data);
+			// if (data.username == '') {
+			// 	throw new Error('Por favor ingrese el username.');
+			// }
 		
 			var dataConvert = {};
-			
-		
+			// var fechaHoraTurno = data.fechaHoraTurno.replace('T',' ');
+
 			dataConvert = {
-				rutDocumento: data.document,
-				razonSocial: "",
-				nombrePropietario: data.firstName + ' ' + data.lastName,
-				rubro: "",
-				direccion: "",
-				ciudad: "",
-				descripcion: "",
-				latitude: 0,
-				longitude: 0,
+				idCliente: data.idCliente,
+				idServicio: data.idServicio,
+				fechaHoraTurno: data.fechaHoraTurno+'.000Z',
+				estado: data.estado,
 			}
 
-			UserServices.postUserRegister(dataConvert)
+			// console.log('dataConvert: ', dataConvert);
+
+			BookingServices.postBooking(dataConvert)
 			.then(userReturn => {
 				resolve(userReturn);
 			})

@@ -24,14 +24,14 @@ const windowHeight = Dimensions.get('window').height;
 
 const BookingItem = (params) => {
     
+    console.log('params: ',params);
     var item = params.item;
-    // console.log('item: ',item);
 
-    var dateString = item.FechaHoraReserva.split(' ');
+    var dateString = item.fechaHoraTurno.split('T');
     var fecha = formatDate(dateString[0]);
     var hora = dateString[1].slice(0, -3);
 
-    const [isCollapsed, setIsCollapsed] = useState(true);
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const [bodyHeight, setBodyHeight] = useState(200);
 
     const setStatusColor = (estado) => {
@@ -64,18 +64,9 @@ const BookingItem = (params) => {
 
 
 	useEffect(() => {
-		
+		setIsCollapsed(false);
 	}, []);
     
-    // {
-    //     "Cliente": 1,
-    //     "Estado": "Realizada",
-    //     "FechaHoraReserva": "2023-01-15 10:30:00",
-    //     "FechaRealizada": "2023-01-15",
-    //     "ID": 1,
-    //     "Servicio": 3
-    // },
-
     return (
         <View style={styles.container}>
             <View>
@@ -91,12 +82,17 @@ const BookingItem = (params) => {
                         >
                         <View style={styles.textHeader}>
                             <Text>Reserva</Text>
-                            {/* <Text> {item.Estado}</Text> */}
-                            <Text style={{ marginLeft:20, color: setStatusColor(item.Estado) }}>
-                                {item.Estado}
-                            </Text>
+                            
                             <Text style={{ marginLeft:60 }}> {fecha}</Text>
                             <Text style={{ marginLeft:5 }}> {hora}</Text>
+                            
+                            <Text style={{ 
+                                fontWeight:'bold', marginLeft:20, 
+                                color: setStatusColor(item.estado) 
+                            }}>
+                                {item.estado}
+                            </Text>
+                            
                         </View>
                     </TouchableOpacity>
 
@@ -113,42 +109,34 @@ const BookingItem = (params) => {
             {!isCollapsed ? (
                 <View>
                     <LinearGradient
-                        colors={['#135054', '#e9e9f8', '#efffff']} 
+                        colors={['#fffefe', '#ffffee', '#135054']} 
                         start={{ x: 0.2, y: 1.2 }}
                         end={{ x: 1.5, y: 0.5 }} 
                         >
                         <View>
                             <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                                {/* {!booking.calendar ? (
-                                    <View>
-                                        <TextInput
-                                            // keyboardType="email-address"
-                                            // style={styles.input}
-                                            // value={email}
-                                            // onChangeText={booking.}
-                                            // autoCapitalize="none"
-                                        />
+                            
+                                <View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.label}>Empresa:</Text>
+                                        <Text style={styles.value}>{item.nombreEmpresa}</Text>
                                     </View>
-                                ) : ( */}
-                                    <View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Tipo:</Text>
-                                            {/* <Text style={styles.value}>asd</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Costo:</Text>
-                                            {/* <Text style={styles.value}>$ sad</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Comienza:</Text>
-                                            {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
-                                            <Text style={styles.label}>Termina:</Text>
-                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                        </View>
-                                    </View>
-                                {/* )} */}
+                                </View>
+
+
+                                <View style={styles.row}>
+                                    <Text style={styles.label}>Servicio:</Text>
+                                    {/* <Text style={styles.value}>$ sad</Text> */}
+                                </View>
+                                <View style={styles.row}>
+                                    <Text style={styles.label}>Comienza:</Text>
+                                    {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                </View>
+                                <View style={styles.row}>
+                                    <Text style={styles.label}>Termina:</Text>
+                                    {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                </View>
+                          
                             </ScrollView>
                         </View>        
                     </LinearGradient>  
@@ -211,7 +199,6 @@ const styles = StyleSheet.create({
         borderTopColor: '#555',
         borderBottomWidth: 1,
         borderBottomColor: '#556',
-        backgroundColor:'#a0d0e0',
         paddingHorizontal:10,
     },
     row: {

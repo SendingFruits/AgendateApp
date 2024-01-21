@@ -17,15 +17,17 @@ import {
 } from 'react-native';
 
 import SQLiteHandler from '../../services/database/SQLiteHandler';
-
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
 
     var guid = params.route.params.guid;
+    var type = params.route.params.type;
 
     const [list, setList] = useState(null);
+    const [date, setDate] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
     const handleEditItem = (service) => {
@@ -42,16 +44,28 @@ const BookingsView = ( params ) => {
 	}, []);
 
     useEffect(() => {
-        BookingController.getBookingsForCustomer(guid)
-        .then(serviceReturn => {
-            // var services = JSON.parse(serviceReturn);
-            // console.log('services: ', serviceReturn);
-            setListServices(serviceReturn);
-        })
-        .catch(error => {
-            alert('ERROR al intentar cargar las Reservas');
-        });
- 
+        console.log('guid: ', guid);
+        if (type === 'customer') {
+            BookingController.getBookingsForCustomer(guid)
+            .then(bookingsReturn => {
+                console.log('bookings: ', bookingsReturn);
+                setList(bookingsReturn);
+            })
+            .catch(error => {
+                alert('ERROR al intentar cargar las Reservas del Cliente '+error);
+            });
+        } else {
+            BookingController.getBookingsForCompany(guid,date)
+            .then(bookingsReturn => {
+                // console.log('bookings: ', bookingsReturn);
+                setList(bookingsReturn);
+            })
+            .catch(error => {
+                alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+            });
+        }
+
+  
         // SQLiteHandler.selectReservasCliente(guid)
         // .then(bookings => {
         //     setList(bookings);
@@ -72,11 +86,15 @@ const BookingsView = ( params ) => {
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
                     {list.map((item, index) => (
-                        <BookingItem 
-                            key={index}
-                            item={item} 
-                            onPress={() => handleEditItem(item)} 
-                        />
+                        <View>
+                            <BookingItem 
+                                key={index}
+                                item={item} 
+                                onPress={() => handleEditItem(item)} 
+                            />
+    
+                            {/* <Text key={index}>{item.costo}</Text> */}
+                        </View>
                     ))}
                 </ScrollView>
             ) : (
@@ -126,6 +144,61 @@ const styles = StyleSheet.create({
     textVersion2: {
         paddingHorizontal:3,
         paddingBottom: 5,
+    },
+});
+
+const DatePicker = ( params ) => {
+    return (
+        <View style={stylesPicker.row}>
+        <View style={stylesPicker.columnT}>
+            <Text style={stylesPicker.label}>Termina:</Text>
+        </View>
+            <View style={stylesPicker.columnV}>
+                <TouchableOpacity onPress={(param) => showDatePicker('termino')}>
+                    <TextInput 
+                        editable={false}
+                        style={stylesPicker.dataEdit} 
+                        value={terminoHora.toString()}
+                        />
+                </TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible2}
+                    mode="time"
+                    display="spinner"
+                    is24Hour={true}
+                    date = {selectedDatePicker2}
+                    minuteInterval={30}
+                    onConfirm={(date) => handleDateConfirm(date,'termino')}
+                    onCancel={() => setDatePickerVisibility2(false)}
+                    />
+            </View>
+        </View>
+    );
+}
+
+const stylesPicker = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginBottom: 10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#000',
+
+    },
+    columnT: {
+        width:'30%',
+        paddingLeft:5,
+        // backgroundColor:'red',
+    },
+    columnV: {
+        width:'70%',
+        paddingRight:1,
+        alignItems:'stretch',
+        // backgroundColor:'green',
+    },
+
+    label: {
+        fontWeight:'bold',
     },
 });
 
