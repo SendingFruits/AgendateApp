@@ -53,3 +53,9 @@
             }
     - eas whoami, sirve para saber si estas logueado al EAS, y aparece tu nombre de usuario
     - eas build -p android --profile preview, este comando es para generar el APK (se le dice la aplication standar alone)
+
+
+
+
+    vieja: AIzaSyAw3URXc5f3Ita-qPGumWSZPa6v0SbhS94
+    nueva: AIzaSyA3ae5nFUjrHPyd4y6n7OZ7dg65dUkXeR4

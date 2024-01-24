@@ -55,32 +55,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 const Drawer = createDrawerNavigator();
 
 const Main = ( params ) => {
-	// console.log(params);
+
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	
-	// const navigation = useNavigation();
 	const [menuVisible, setMenuVisible] = useState(false);
 	const [profileVisibleInit, setProfileVisibleInit] = useState(false);
 
-	// React.useLayoutEffect(() => {
-	// 	navigation.setOptions({
-	// 		title: 'Main',
-	// 		headerStyle: {
-	// 			backgroundColor: 'red',
-	// 		},
-	// 		headerLeft: () => (
-	// 			<HeaderBarItem to='Realizar Reserva' title='Realizar Reserva' />
-	// 		),
-	// 		headerRight: () => (
-	// 			<HeaderBarItem to='Realizar Reserva' title='Realizar Reserva' />
-	// 		),
-	// 	});
-	// }, [navigation]);
-
 	return (
 		<NavigationContainer 
-			style={styles.barMenu}
 			onStateChange={(state) => {
 				if ((state.history.length > 1)) {
 					for (const key in state.history) {
@@ -221,7 +204,7 @@ const Main = ( params ) => {
 					initialParams={{ userLogin: userLogin }} />
 
 				<Drawer.Screen 
-					options={{ title: null, headerShown: 'none' }}
+					options={{ title: null, headerShown: 'hide' }}
 					name="BaseError" 
 					component={BaseError} />
 
@@ -231,8 +214,7 @@ const Main = ( params ) => {
 };
  
 const MenuItems = ( { navigation, profile } ) => {
-	// console.log('profile: ', profile);
-	// console.log('navigation: ', navigation.getState());
+	
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	const [profileVisible, setProfileVisible] = useState(profile);
@@ -278,10 +260,12 @@ const MenuItems = ( { navigation, profile } ) => {
 
 	return (
 		<LinearGradient
-			colors={['#135054', '#238162', '#2ECC71']}
+			colors={['#135054', '#D0E4D0', '#dfe4ff']}
+			start={{ x: 1, y: 1 }} // Punto de inicio en la esquina superior izquierda
+			end={{ x: 0, y: 0 }} // Punto final en la esquina inferior derecha
 			style={{ flex: 1 }}
 			>
-			<DrawerContentScrollView style={styles.asideMenu} >
+			<DrawerContentScrollView>
 				{/* Header */}
 				<View style={styles.header}>
 					<Text style={styles.title}>Menú</Text>
@@ -399,22 +383,21 @@ const styles = StyleSheet.create({
 	touchMenu: {
 		flex: 1,
 	},
-	asideMenu: {
-		padding: 15,
-	},
 	header: {
 		height: 30,
 		marginBottom: 25,
+		marginHorizontal: 15,
 	},
 	body: {
 		flex: 1,
+		marginHorizontal: 15,
 	},
 	footer: {
 		marginTop: 25,
 		borderTopWidth: 1,
 		borderTopColor: 'gray',
 		paddingVertical: 10,
-		// backgroundColor:'#'
+		marginHorizontal: 15,
 	},
 	title:{
 		fontSize: 20,

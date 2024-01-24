@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		height: 220,
-		backgroundColor: '#2ECC71',
+		backgroundColor: '#135054',
 	},
 	body: {
 		flex: 1,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: 'transparent',
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 18,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 	},
 	forgotPasswordText: {
-		color: '#2ECC71',
+		color: '#135054',
 		fontWeight: 'bold',
 		marginLeft: 'auto',
 		fontSize: 12,

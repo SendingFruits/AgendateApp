@@ -23,6 +23,9 @@ const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
 
+    var bookings = [];
+    var ecualList = 0;
+
     var guid = params.route.params.guid;
     var type = params.route.params.type;
 
@@ -39,17 +42,20 @@ const BookingsView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
+            loadBookings(guid, type, date);
 			navigation.navigate('Reservas');
 		}, 2000);
 	}, []);
 
-    useEffect(() => {
-        console.log('guid: ', guid);
+    const loadBookings = (guid, type, date) => {
         if (type === 'customer') {
             BookingController.getBookingsForCustomer(guid)
             .then(bookingsReturn => {
-                console.log('bookings: ', bookingsReturn);
+                console.log('bookingsReturn: ', bookingsReturn);
                 setList(bookingsReturn);
+                // console.log('bookings: ', bookings);
+                // ecualList = (bookings === list) ? true : false;
+                // console.log('ecualList: ', ecualList);
             })
             .catch(error => {
                 alert('ERROR al intentar cargar las Reservas del Cliente '+error);
@@ -64,16 +70,12 @@ const BookingsView = ( params ) => {
                 alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
             });
         }
+    }
 
-  
-        // SQLiteHandler.selectReservasCliente(guid)
-        // .then(bookings => {
-        //     setList(bookings);
-        // })
-        // .catch(error => {
-        //     alert('ERROR al intentar cargar las Reservas');
-        // });
-    }, []);
+    useEffect(() => {
+        console.log('guid: ', guid);
+        loadBookings(guid, type, date);
+    }, [guid, type, date]);
 
     console.log('list: ', list);
 

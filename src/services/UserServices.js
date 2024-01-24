@@ -49,7 +49,7 @@ class UserServices {
     postUserRegister = async (json) => {
         return new Promise((resolve, reject) => {
   
-            var method = '';
+            var method;
 
             if (json.tipoUsuario == 'customer') {
                 method = 'Clientes/RegistrarCliente';
@@ -69,11 +69,11 @@ class UserServices {
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
                 // console.log('status: ',JSON.stringify(response.status));
-                // console.log('response: ',JSON.stringify(response.data));
+                console.log('response: ', response);
                 if (response.status == 200) {
-                    resolve(true);
+                    resolve(JSON.stringify(response.data));
                 } else {
-                    resolve('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');
+                    resolve(response.data);
                 }
             })
             .catch(function (error) {

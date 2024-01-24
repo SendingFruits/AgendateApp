@@ -24,7 +24,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CalendarPicker = ( params ) => {
 
-    // console.log('params: ', params);
     var id_comp = params.compId;
     var id_server = params.service.id;
 

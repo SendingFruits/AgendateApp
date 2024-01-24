@@ -67,8 +67,8 @@ class UsersController {
 					direccion: "",
 					ciudad: "",
 					descripcion: "",
-					latitude: 0,
-					longitude: 0,
+					latitude: 0.00,
+					longitude: 0.00,
 
 					nombre: data.firstName,
 					apellido: data.lastName,
@@ -76,7 +76,8 @@ class UsersController {
 					contrasenia: data.password,
 					celular: data.movil,
 					correo: data.email,
-					tipoUsuario: data.userType
+					tipoUsuario: data.userType,
+					logo: '',
 				}
 			} else {
 				dataConvert = {

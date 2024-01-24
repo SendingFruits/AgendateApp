@@ -41,11 +41,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeView = ( params ) => {
 	
+	var countMap = 0;
+
 	const mapRef = useRef(null);
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
-	
-	// console.log('params', params);
 	
 	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
@@ -82,17 +82,23 @@ const HomeView = ( params ) => {
 				const region = await MapController.getLocation();
 				setLocation(region);
 				// const organizedCompanies = await MapController.companyLocations(region,1);
+				
 				MapController.companyLocations(region, ratio)
 				.then(companiesReturn => {
 					// console.log('hay datos ');
 					setCompanies(companiesReturn);
 					setIsConnected(true);
+
+					countMap++;
+					console.log(countMap);
 				})
 				.catch(error => {
 					// console.log('no hay datos ');
 					alert('Problemas de Conexión...'); 
 					setCompanies([]);
 					setIsConnected(false);
+
+					countMap = 0;
 				});
 
 			} else {
@@ -204,7 +210,7 @@ const HomeView = ( params ) => {
 		fetchData();
 		// console.log('useEffect');
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [isConnected, companies]); 
+	}, [isConnected]); 
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas
 
@@ -255,7 +261,6 @@ const HomeView = ( params ) => {
 						<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
 							<RatioPanel 
 								onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
-								mapRef={mapRef}
 								/>
 						</View>			
 					

@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
 	inputContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
 	pickerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
 
 	typeContainer: {
 		alignItems: 'flex-start',
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginRight: 25,
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
 	docpickerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		marginLeft: 25,
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
 		width: 100,
 	},
 	inputRUTContainer: {
-		borderColor: '#2ECC71',
+		borderColor: '#135054',
 		borderWidth: 1,
 		borderRadius: 30,
 		height: 35,

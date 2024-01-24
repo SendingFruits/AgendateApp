@@ -24,7 +24,6 @@ const windowHeight = Dimensions.get('window').height;
 
 const BookingItem = (params) => {
     
-    console.log('params: ',params);
     var item = params.item;
 
     var dateString = item.fechaHoraTurno.split('T');
@@ -129,11 +128,11 @@ const BookingItem = (params) => {
                                     {/* <Text style={styles.value}>$ sad</Text> */}
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Comienza:</Text>
+                                    {/* <Text style={styles.label}>Comienza:</Text> */}
                                     {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Termina:</Text>
+                                    {/* <Text style={styles.label}>Termina:</Text> */}
                                     {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
                                 </View>
                           

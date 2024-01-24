@@ -31,19 +31,7 @@ var windowHeight = Dimensions.get('window').height;
 const CompanyPanel = (params) => {
 
     var data = params.dataCompany;
-    // console.log('data: ', data);
     const navigation = useNavigation();
-
-    // data = {
-    //     id: "2",    
-    //     address: "Vilardebo 4565",
-    //     businessName: "Panaderia y Rotiseria.",
-    //     category: "Gastronomia",
-    //     city: "Montevideo",
-    //     description: "Panaderia y Rotiseria donde podes realizar tu reserva de pedido y venir a retirar...",
-    //     owner: "Jose",
-    //     rut: "10000500123456789",
-    // }
 
     var guid = data.guid;
 

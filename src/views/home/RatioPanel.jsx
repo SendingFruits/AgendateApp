@@ -17,9 +17,11 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
     
 
     const handleRatioChange = (value) => {
-        setRatio(value);
-        // Llama a la función de devolución de llamada con el nuevo valor
-        onRatioChange(value);
+        if ((value === 1) || (value === 10) || (value === 15) || (value === 20) || (value === 25)) {
+            setRatio(value);
+            // Llama a la función de devolución de llamada con el nuevo valor
+            onRatioChange(value);
+        }
     };
   
     return (
@@ -30,10 +32,11 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
                 maximumValue={20}
                 // minimumTrackTintColor="#FFFFFF"
                 // maximumTrackTintColor="#000000"
-                thumbTintColor="#389338"
+                thumbTintColor="#389338" 
                 step={1}
                 value={ratio}
                 onValueChange={handleRatioChange}
+                // onSlidingComplete={handleRatioChange}
                 renderThumb={ratio}
             />
             <View style={styles.labels}>
