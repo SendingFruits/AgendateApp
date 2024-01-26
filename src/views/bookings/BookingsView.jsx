@@ -51,7 +51,7 @@ const BookingsView = ( params ) => {
         if (type === 'customer') {
             BookingController.getBookingsForCustomer(guid)
             .then(bookingsReturn => {
-                console.log('bookingsReturn: ', bookingsReturn);
+                // console.log('bookingsReturn: ', bookingsReturn);
                 setList(bookingsReturn);
                 // console.log('bookings: ', bookings);
                 // ecualList = (bookings === list) ? true : false;
@@ -73,25 +73,26 @@ const BookingsView = ( params ) => {
     }
 
     useEffect(() => {
-        console.log('guid: ', guid);
+        // console.log('guid: ', guid);
         loadBookings(guid, type, date);
     }, [guid, type, date]);
 
-    console.log('list: ', list);
+    // console.log('list: ', list);
 
     return (
         <View style={styles.container}>
-            {list ? (
+            {list !== null ? (
                 <ScrollView 
                     style={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
                     {list.map((item, index) => (
-                        <View>
+                        <View key={item.id}>
                             <BookingItem 
                                 key={index}
                                 item={item} 
+                                onRefresh={onRefresh}
                                 onPress={() => handleEditItem(item)} 
                             />
     

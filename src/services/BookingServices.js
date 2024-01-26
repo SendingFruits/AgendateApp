@@ -24,7 +24,7 @@ class BookingServices {
                 },
             };
             
-            console.log(urlCompleta);
+            // console.log(urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {
@@ -106,8 +106,8 @@ class BookingServices {
                 // Agrega aquí las cabeceras requeridas por la API
             };
             
-            console.log('json: ', json);
-            console.log('url: ', urlCompleta);
+            // console.log('json: ', json);
+            // console.log('url: ', urlCompleta);
 
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
@@ -136,7 +136,33 @@ class BookingServices {
     };
 
 
+    putBookingStatus = async (guid) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Reservas/CancelarReserva';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}?idReserva=${guid}`;
 
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            axios.put(urlCompleta, {}, { headers })
+            .then(function (response) {
+                console.log(response.status);
+                if (response.status == 200) {
+                    // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
+                console.log('error.response.data: ', error.response.data);
+                reject(error.response.data);
+            });
+        });
+    };
 }
 
 export default new BookingServices();

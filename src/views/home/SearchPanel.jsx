@@ -18,9 +18,9 @@ const SearchPanel = ({ onSearch, mapRef }) => {
     const handleSearch = () => {
         onSearch(searchQuery);
     };
-  
+    
     return (
-        <LinearGradient colors={['#135000', '#238162', '#2ECC71']} >
+        <LinearGradient colors={['#dfe4ff', '#238162', '#2ECC71']} >
             <View style={styles.searchPanel}>
                 <TextInput
                     style={styles.input}

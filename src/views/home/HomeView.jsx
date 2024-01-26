@@ -20,8 +20,6 @@ import {
 	Text, 
 	View,
 	ScrollView,
-	Alert, 
-	Button,
 	TouchableOpacity,
 	Keyboard,
 	Image
@@ -133,6 +131,7 @@ const HomeView = ( params ) => {
 		if (companies) {
 			return companies.map((item, index) => {
 				var imgLogo = (item.logo !== '') ? 'data:image/png;base64, '+item.logo : null;
+				var empresa = item;
 				// console.log(Marker);
 				return (
 					// <CustomMarker
@@ -155,7 +154,7 @@ const HomeView = ( params ) => {
 						{userLogin.type === 'customer' ? (
 							<Callout 
 								style={styles.callout}
-								onPress={() => handleReservation(userLogin,item)} 
+								onPress={() => handleReservation(userLogin,empresa)} 
 								>
 								<Text style={styles.title}>{item.title}</Text>
 								<Text style={styles.description}>{item.description}</Text>
@@ -200,11 +199,37 @@ const HomeView = ( params ) => {
 	}; 
 
 	const saveCompanyID = async (id) => {
-		if (id !== null && id !== '') {
+		try {
+			await clearAsyncStorageItem('selectedCompanyID');
 			await AsyncStorage.setItem('selectedCompanyID', id.toString());
+			var selected = await AsyncStorage.getItem('selectedCompanyID');
+			console.log('id seleccionado: ', selected);
+		} catch (error) {
+			alert('ERROR al intentar cargar la Empresa, ' + error);
 		}
     }
 
+	const clearAsyncStorageItem = async (key) => {
+		return new Promise((resolve, reject) => {
+			try {
+				AsyncStorage.removeItem(key);
+				console.log(`Elemento con clave "${key}" eliminado.`);
+				resolve(true);
+			} catch (error) {
+				console.error(`Error al eliminar el elemento con clave "${key}" `, error);
+				reject(error);
+			}
+		});
+	};
+
+	const clearAsyncStorage = async () => {
+		try {
+			await AsyncStorage.clear();
+			console.log('AsyncStorage limpiada correctamente.');
+		} catch (error) {
+		  	console.error('Error al limpiar AsyncStorage: ', error);
+		}
+	};
 
 	useEffect(() => {
 		fetchData();

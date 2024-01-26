@@ -77,6 +77,19 @@ class BookingController {
 			});
 		});
 	}
+
+	handleCancelBooking(guid) {
+		return new Promise((resolve, reject) => {
+			
+			BookingServices.putBookingStatus(guid)
+			.then(userReturn => {
+				resolve(userReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
 }
 
 export default new BookingController();

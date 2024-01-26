@@ -5,7 +5,9 @@ import {
 } from 'react';
 
 import UsersController from '../../controllers/UsersController';
+import BookingController from '../../controllers/BookingController';
 import MenuButtonItem from '../home/MenuButtonItem';
+import AlertModal from '../utils/AlertModal';
 
 import { 
     Dimensions,
@@ -16,15 +18,32 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
+import { 
+	faCircleXmark,
+    faCircleCheck
+} from '@fortawesome/free-solid-svg-icons';
+
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const BookingItem = (params) => {
-    
-    var item = params.item;
+const BookingItem = ( params ) => {
+
+    console.log(params);
+    var {
+        key,
+		item, 
+		onRefresh,
+        onPress,
+	} = params;
+
+    // var item = params.item;
 
     var dateString = item.fechaHoraTurno.split('T');
     var fecha = formatDate(dateString[0]);
@@ -36,13 +55,15 @@ const BookingItem = (params) => {
     const setStatusColor = (estado) => {
         switch (estado) {
             case 'Realizada':
-                return 'green'; // Color para estado "Realizada"
+                return 'green';
             case 'Pendiente':
-                return 'orange'; // Color para estado "Pendiente"
+                return 'orange'; 
+            case 'Solicitada':
+                return 'blue'; 
             case 'Cancelada':
-                return 'red'; // Color para estado "Cancelada"
+                return 'red'; 
             default:
-                return 'black'; // Color por defecto
+                return 'black';
         }
     };
 
@@ -56,6 +77,31 @@ const BookingItem = (params) => {
 
     const editName = () => {
         console.log('editName');
+    };
+
+    const cancellation = (id) => {
+        console.log('cancellation of: ', id);
+        var text = '¿Seguro desea cancelar la Reserva?';
+
+        AlertModal.showConfirmationAlert(text)
+		.then(alertRes => {
+			console.log('alertRes: ', alertRes);
+			if (alertRes) {
+                BookingController.handleCancelBooking(id)
+                .then(resDelete => {
+                    // console.log('userReturn: ', userReturn);
+                    if (resDelete) {
+                        onRefresh();
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                });
+            }
+		})
+		.catch(error => {
+			alert(error);
+		});
     };
 
     const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
@@ -80,27 +126,43 @@ const BookingItem = (params) => {
                         onLongPress={() => editName()}
                         >
                         <View style={styles.textHeader}>
-                            <Text>Reserva</Text>
+                            <Text>Reserva para el</Text>
                             
-                            <Text style={{ marginLeft:60 }}> {fecha}</Text>
-                            <Text style={{ marginLeft:5 }}> {hora}</Text>
+                            <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
+                            <Text style={{ fontWeight:'bold' }}> {hora}</Text>
                             
-                            <Text style={{ 
-                                fontWeight:'bold', marginLeft:20, 
-                                color: setStatusColor(item.estado) 
-                            }}>
-                                {item.estado}
-                            </Text>
+                            {console.log('item.id: ', item.id)}
+
+                            {item.estado === 'Solicitada' ? (
+                                <>
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:15,
+                                        color: setStatusColor(item.estado) 
+                                        }}> {item.estado}
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={{ position:'relative', top:-12}}
+                                        onPress={() => cancellation(item.id)} > 
+                                        <FontAwesomeIcon icon={faCircleXmark} />
+                                    </TouchableOpacity>
+                                </>
+                            ) : (
+                                <>
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:15, 
+                                        color: setStatusColor(item.estado) 
+                                        }}> {item.estado}
+                                    </Text>
+                                    <View style={{ position:'relative', top:-12}} >                                        
+                                        <FontAwesomeIcon icon={faCircleCheck} />
+                                    </View>
+                                </>
+                            ) }
                             
                         </View>
                     </TouchableOpacity>
-
-					{/* <MenuButtonItem 
-                        style={styles.btnEditCollapse}
-						icon = {null}
-						text = "Editar"
-						onPress = { () => editItem()}
-					/> */}
 
                 </LinearGradient>
             </View>
@@ -120,22 +182,51 @@ const BookingItem = (params) => {
                                         <Text style={styles.label}>Empresa:</Text>
                                         <Text style={styles.value}>{item.nombreEmpresa}</Text>
                                     </View>
+                                    <View style={styles.rowInvi}>
+                                        <Text>{item.descripcionEmpresa}</Text>
+                                    </View>
+                                    <View>
+                                        <Text>Rubro: {item.rubro}</Text>
+                                        <Text>Ciudad: {item.ciudad}</Text>
+                                    </View>
                                 </View>
 
+                                <View> 
+                                    <View style={{ ...styles.row, marginTop:10 }}>
+                                        <Text style={styles.label}>Servicio:</Text>
+                                        <Text style={styles.value}>{item.nombreServicio}</Text>
+                                    </View>
 
-                                <View style={styles.row}>
-                                    <Text style={styles.label}>Servicio:</Text>
-                                    {/* <Text style={styles.value}>$ sad</Text> */}
+                                    <View style={styles.rowInvi}>
+                                        <Text>{item.descripcion}</Text>
+                                    </View>
+
+                                    <View style={styles.row}>
+                                        {/* <Text style={styles.label}>Comienza:</Text> */}
+                                        {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                    </View>
+                                    <View style={styles.row}>
+                                        {/* <Text style={styles.label}>Termina:</Text> */}
+                                        {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                    </View>
                                 </View>
-                                <View style={styles.row}>
-                                    {/* <Text style={styles.label}>Comienza:</Text> */}
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                </View>
-                                <View style={styles.row}>
-                                    {/* <Text style={styles.label}>Termina:</Text> */}
-                                    {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                </View>
-                          
+
+                                {/* -
+                                    "costo": 300,
+                                    "diasDefinidosSemana": "Lunes;Miercoles;Viernes", 
+                                    "direccion": "Vilardebo 4565", 
+                                    "duracionTurno": 30, 
+                                    "estado": "Solicitada", 
+                                    "fechaHoraTurno": "2024-01-01T09: 30: 00", 
+                                    "horaFinServicio": 18, 
+                                    "horaInicioServicio": 9, 
+                                    "id": 2, 
+                                    "idCliente": 1, 
+                                    "idServicio": 1, 
+                                    "latitude": -34.84784, 
+                                    "longitude": -56.177822
+                                */}
+
                             </ScrollView>
                         </View>        
                     </LinearGradient>  
@@ -158,9 +249,7 @@ const BookingItem = (params) => {
                         </LinearGradient> 
                     </View>
                 </View>
-            ) : (
-                null
-            )}
+            ) : null }
 
         </View>
     );
@@ -206,6 +295,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderBottomWidth: 0.5,
         borderBottomColor: '#000',
+
+    },
+    rowInvi: {
+        flexDirection: 'row',
+        // justifyContent: 'space-between',
+        marginBottom: 10,
 
     },
     label: {

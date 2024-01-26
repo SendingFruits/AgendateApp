@@ -89,7 +89,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -101,7 +101,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -115,7 +115,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -128,7 +128,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -141,7 +141,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -154,7 +154,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -168,7 +168,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -195,7 +195,7 @@ const Main = ( params ) => {
 						title: null,
 						headerBackground: () =>
 							<LinearGradient 
-								colors={['#135000', '#238162', '#2ECC71']} 
+								colors={['#135000', '#238162', '#dfe4ff']} 
 								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
 							</LinearGradient>, 
 					}}
@@ -204,7 +204,10 @@ const Main = ( params ) => {
 					initialParams={{ userLogin: userLogin }} />
 
 				<Drawer.Screen 
-					options={{ title: null, headerShown: 'hide' }}
+					options={{ 
+						title: null, 
+						headerShown: false 
+					}}
 					name="BaseError" 
 					component={BaseError} />
 
@@ -260,7 +263,7 @@ const MenuItems = ( { navigation, profile } ) => {
 
 	return (
 		<LinearGradient
-			colors={['#135054', '#D0E4D0', '#dfe4ff']}
+			colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
 			start={{ x: 1, y: 1 }} // Punto de inicio en la esquina superior izquierda
 			end={{ x: 0, y: 0 }} // Punto final en la esquina inferior derecha
 			style={{ flex: 1 }}

@@ -64,8 +64,8 @@ class UserServices {
                 // Agrega aquí las cabeceras requeridas por la API
             };
 
-            console.log('json: ', json);
-            console.log('urlCompleta: ', urlCompleta);
+            // console.log('json: ', json);
+            // console.log('urlCompleta: ', urlCompleta);
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
                 // console.log('status: ',JSON.stringify(response.status));

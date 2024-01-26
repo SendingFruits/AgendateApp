@@ -1,20 +1,6 @@
-import databaseData from '../services/database/database.json';
 import BookingServices from '../services/BookingServices';
 
 class SchedulesController {
-
-    getSchedulesForServiceJSON(idService) {
-		// json
-		return new Promise((resolve, reject) => {
-            // console.log('idService in controller: ', idService);
-			var schedulesReturn = null;
-			const schedulesList = databaseData.Schedules;
-			// console.log(schedulesList);
-			schedulesReturn = schedulesList.filter(schedule => schedule.serviceId === idService);
-			// console.log(' - serviceReturn: ', schedulesReturn);
-			resolve(schedulesReturn);
-		});
-	}
 
 	getSchedulesForService(guid, date) {
 		return new Promise((resolve, reject) => {

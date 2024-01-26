@@ -31,6 +31,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MakeReservation = ({ route }) => {
 	
+	// console.log(route);
+
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var user = userPreferences.current_user;
 	var [compId, setCompId] = useState(null);
@@ -79,23 +81,8 @@ const MakeReservation = ({ route }) => {
 		});
     }
 
-	const saveServiceStorage = async () => {
-		if (service !== null && service !== '') {
-			await AsyncStorage.setItem('selectedService', JSON.stringify(service));
-		}
-    }
-
 
 	const getCompany = async (id) => {
-		// UsersController.getCompanyData(compId)
-		// .then(companyReturn => {
-		// 	console.log('companyReturn ', companyReturn);
-		// 	setCompany(companyReturn);
-		// })
-		// .catch(error => {
-		// 	alert('ERROR al intentar cargar la Empresa, ' + error);
-		// });
-
 		try {
 			const companyReturn = await UsersController.getCompanyData(id);
 			// console.log('companyReturn ', companyReturn);
@@ -108,22 +95,6 @@ const MakeReservation = ({ route }) => {
 	}
 
 	const getService = async (id) => {
-		// ServicesController.getServicesForCompany(compId)
-		// .then(serviceReturn => {
-		// 	// console.log('serviceReturn ', serviceReturn);
-		// 	if (serviceReturn !== null) {
-		// 		setService(serviceReturn);
-		// 		setIsLoading(false);
-		// 		saveServiceStorage();
-		// 	} else {
-		// 		setService(null);
-		// 		setIsLoading(true);
-		// 	}
-		// })
-		// .catch(error => {
-		// 	alert('ERROR al intentar cargar los Servicios, ' + error);
-		// });
-
 		try {
 			const serviceReturn = await ServicesController.getServicesForCompany(id);
 			// console.log('serviceReturn ', serviceReturn);
@@ -170,7 +141,7 @@ const MakeReservation = ({ route }) => {
         setCalendarVisible(true);
 		setSchedulesVisible(false);
 
-	}, [compId]);
+	}, [compId,route]);
 
 	return ( 
 		<ScrollView 
@@ -317,6 +288,7 @@ const stylesMake = StyleSheet.create({
 	},
 
 	row: {
+		width: '100%',
         flexDirection: 'row',
         // justifyContent: 'space-between', // Distribuir en dos columnas
         alignItems: 'center', // Alinear verticalmente al centro
@@ -350,7 +322,8 @@ const stylesMake = StyleSheet.create({
 const CalendarPicker = ( params ) => {
 
 	// console.log(LocaleConfig);
-
+	const [list, setList] = useState(null);
+	
 	const { 
 		setInforVisible, 
 		setCalendarVisible,
@@ -433,7 +406,7 @@ const CalendarPicker = ( params ) => {
 
         SchedulesController.getSchedulesForService(id_server,day.dateString)
         .then(schedulesReturn => {
-            // console.log('schedulesReturn: ', schedulesReturn);        
+            console.log('schedulesReturn: ', schedulesReturn.resultado);        
 
             if (schedulesReturn !== null) {
                 setAvailableTimes(schedulesReturn.resultado);    
@@ -572,6 +545,9 @@ const ScheduleList = ( params ) => {
 		availableTimes,
 		onRefresh
 	} = params;
+
+
+	console.log(availableTimes);
 
 	const [selectedHour, setSelectedHour] = useState(null);
 	const [showModal, setShowModal] = useState(false);
