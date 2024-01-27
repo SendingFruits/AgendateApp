@@ -526,7 +526,6 @@ const ServiceItem = (params) => {
                                     </View>
                                 </View>
     
-                               
                             </LinearGradient>
                         </View>
                     </View> 

@@ -1,5 +1,6 @@
 // import ServiceModel from '../models/ServiceModel';
 import BookingServices from '../services/BookingServices';
+import { getFormattedDate } from '../views/utils/Functions'; 
 
 class BookingController {
 
@@ -30,6 +31,9 @@ class BookingController {
 			// console.log('getSchedulesForService', guid);
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe existir una Empresa.');
+			}
+			if (date === null) {
+				date = getFormattedDate();
 			}
 
 			BookingServices.getBookings(guid, date, 'Empresas')

@@ -18,12 +18,12 @@ const App = (config) => {
 	try {
 		var preferences = {
 			'current_user' : {
-				'guid':'1',
+				'guid':'39',
 				'name':'Esteban',
 				'last':'Piccardo',
 				'user':'espial',
 				'pass':'123456',
-				'type':'customer',
+				'type':'company',
 				'mail':'e.p.a@gmail.com', 
 				'docu':'44564566',
 				'celu':'098790944',

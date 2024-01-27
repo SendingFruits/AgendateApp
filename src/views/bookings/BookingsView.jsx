@@ -1,11 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
+import { formatDate, getFormattedDate } from '../../views/utils/Functions'; 
 
 import BookingItem from './BookingItem';
+import FilterPanel from './FilterPanel';
 import BookingController from '../../controllers/BookingController';
+import ServicesController from '../../controllers/ServicesController';
 
 import React, { 
-    useState,
-    useEffect
+    useState, useEffect
 } from 'react';
 
 import { 
@@ -16,38 +18,42 @@ import {
     RefreshControl,
 } from 'react-native';
 
-import SQLiteHandler from '../../services/database/SQLiteHandler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
 
-    var bookings = [];
-    var ecualList = 0;
 
     var guid = params.route.params.guid;
     var type = params.route.params.type;
 
-    const [list, setList] = useState(null);
-    const [date, setDate] = useState(null);
+    
+    const [list, setList] = useState([]);
+    const [counter, setCounter] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
-    const handleEditItem = (service) => {
-        // Navegar a la vista de edición con los datos del servicio
-        // navigation.navigate('ServiceEdit', { service });
-    };
+    const [showModal, setShowModal] = useState(false);
+    const [dateSelected, setDateSelected] = useState(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-            loadBookings(guid, type, date);
-			navigation.navigate('Reservas');
+            loadBookings(guid, type);
+
+            if (type === 'company') {
+                navigation.navigate('Agenda');
+            } else {
+                navigation.navigate('Reservas');
+            }
 		}, 2000);
 	}, []);
 
-    const loadBookings = (guid, type, date) => {
+    const loadBookings = (guid, type) => {
         if (type === 'customer') {
             BookingController.getBookingsForCustomer(guid)
             .then(bookingsReturn => {
@@ -61,27 +67,70 @@ const BookingsView = ( params ) => {
                 alert('ERROR al intentar cargar las Reservas del Cliente '+error);
             });
         } else {
-            BookingController.getBookingsForCompany(guid,date)
-            .then(bookingsReturn => {
-                // console.log('bookings: ', bookingsReturn);
-                setList(bookingsReturn);
+
+            ServicesController.getServicesForCompany(guid)
+            .then(serviceReturn => {
+                console.log('dateSelected: ', dateSelected);
+               
+                BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                .then(bookingsReturn => {
+                    console.log('bookings: ', bookingsReturn);
+                    console.log('length: ', bookingsReturn.length);
+                    if (bookingsReturn.length > 0) {
+                        setCounter(bookingsReturn.length);
+                        setList(bookingsReturn);
+                    } else {
+                        setCounter(0);
+                        setList([]);
+                    }
+                })
+                .catch(error => {
+                    alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+                });
+                
             })
             .catch(error => {
-                alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+                alert('ERROR al intentar cargar los Servicios, ' + error);
             });
+
+
         }
     }
 
-    useEffect(() => {
-        // console.log('guid: ', guid);
-        loadBookings(guid, type, date);
-    }, [guid, type, date]);
+    const showDatePicker= () => {
+        setDatePickerVisibility(true);      
+    }
 
-    // console.log('list: ', list);
+    useEffect(() => {
+        if (dateSelected === null) 
+            setDateSelected(getFormattedDate());
+        loadBookings(guid, type);
+    }, [guid, type, dateSelected]);
+
+    console.log('list: ', list);
 
     return (
         <View style={styles.container}>
-            {list !== null ? (
+           
+            {type === 'company' ? (
+                <>
+                    <FilterPanel
+                        onRefresh={onRefresh}
+                        dateSelected={dateSelected}
+                        setDateSelected={setDateSelected}
+                        showModal={showModal}
+                        setShowModal={setShowModal}
+                        />
+                    <View 
+                        style={{ paddingVertical:25 }}
+                        />
+                </>
+            ) : (
+                <></>
+            ) }
+
+            {/* {(list !== null || (Array.isArray(list) && list.length !== 0)) ? ( */}
+            {(list.length !== 0) ? (
                 <ScrollView 
                     style={styles.scrollContainer}
                     refreshControl={
@@ -90,10 +139,9 @@ const BookingsView = ( params ) => {
                     {list.map((item, index) => (
                         <View key={item.id}>
                             <BookingItem 
-                                key={index}
+                                index={index}
                                 item={item} 
                                 onRefresh={onRefresh}
-                                onPress={() => handleEditItem(item)} 
                             />
     
                             {/* <Text key={index}>{item.costo}</Text> */}
@@ -102,9 +150,10 @@ const BookingsView = ( params ) => {
                 </ScrollView>
             ) : (
                 <View>
-                    <Text>No hay Reservas</Text>
+                    <Text>No hay Reservas para el {formatDate(dateSelected)}</Text>
                 </View>
             )}
+          
         </View>
     );
 };

@@ -35,9 +35,9 @@ const windowHeight = Dimensions.get('window').height;
 
 const BookingItem = ( params ) => {
 
-    console.log(params);
+    console.log('params: ', params);
     var {
-        key,
+        index,
 		item, 
 		onRefresh,
         onPress,
@@ -131,7 +131,7 @@ const BookingItem = ( params ) => {
                             <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
                             <Text style={{ fontWeight:'bold' }}> {hora}</Text>
                             
-                            {console.log('item.id: ', item.id)}
+                            {/* {console.log('item.id: ', item.id)} */}
 
                             {item.estado === 'Solicitada' ? (
                                 <>
@@ -161,6 +161,23 @@ const BookingItem = ( params ) => {
                                 </>
                             ) }
                             
+                            {/* 
+                                "rubro": "Gastronomia",
+                                "ciudad": "Montevideo",
+                                "costo": 300,
+                                "diasDefinidosSemana": "Lunes;Miercoles;Viernes", 
+                                "direccion": "Vilardebo 4565", 
+                                "duracionTurno": 30, 
+                                "estado": "Solicitada", 
+                                "fechaHoraTurno": "2024-01-01T09: 30: 00", 
+                                "horaFinServicio": 18, 
+                                "horaInicioServicio": 9, 
+                                "id": 2, 
+                                "idCliente": 1, 
+                                "idServicio": 1, 
+                                "latitude": -34.84784, 
+                                "longitude": -56.177822
+                            */}
                         </View>
                     </TouchableOpacity>
 
@@ -188,6 +205,7 @@ const BookingItem = ( params ) => {
                                     <View>
                                         <Text>Rubro: {item.rubro}</Text>
                                         <Text>Ciudad: {item.ciudad}</Text>
+                                        <Text>Celular:</Text>
                                     </View>
                                 </View>
 

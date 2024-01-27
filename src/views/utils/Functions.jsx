@@ -73,6 +73,25 @@ export function formatDate2(date) {
     }
 }
 
+export function getFormattedDate() {
+    const currentDate = new Date();
+
+    // Obtén los componentes de la fecha
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    const hours = '00';
+    const minutes = '00';
+    const seconds = '00';
+
+    // Formatea la fecha como 'YYYY-MM-DD HH:mm:ss'
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+}
+
+
+
 export function convertHour(valor, opcion) {
     if (opcion === "toHours") {
         // Conversión de decimal a horas

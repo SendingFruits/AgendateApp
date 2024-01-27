@@ -115,7 +115,7 @@ const ServicesView = ( params ) => {
                 setEditing(false);
             }
         );
-    }, [list,guid]);
+    }, [guid]);
 
 
     return (
