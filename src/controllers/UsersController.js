@@ -32,6 +32,8 @@ class UsersController {
 	handleRegister(data) {
 		return new Promise((resolve, reject) => {
 			
+			console.log(data);
+
 			if (data.username == '') {
 				throw new Error('Por favor ingrese el username.');
 			}
@@ -48,11 +50,11 @@ class UsersController {
 				throw new Error('Por favor ingrese el correo electrónico.');
 			}
 
-			if (data.userType === 'customer' && data.documento == '') {
+			if (data.userType === 'customer' && data.document == '') {
 				throw new Error('Por favor ingrese su documento de identidad.');
 			} 
 			
-			if (data.userType === 'company' && data.documento == '') {
+			if (data.userType === 'company' && data.document == '') {
 				throw new Error('Por favor ingrese el RUT de su Empresa.');
 			} 
 		

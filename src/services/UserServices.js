@@ -77,11 +77,11 @@ class UserServices {
                 }
             })
             .catch(function (error) {
-                console.log('error: ', error.message);
+                console.log('error: ', error.response);
                 if (error.message == 'Network Error') {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else if (error.message == 'Request failed with status code 400') {
-                    reject(error.message); 
+                    reject(error.response.data); 
                 } else {
                     if (error.response.status >= 500) {
                         reject('Error de Servidor. Verifique su conexión a Internet o consulte el proveedor.');                

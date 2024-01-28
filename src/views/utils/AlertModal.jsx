@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Button, StyleSheet, Text, Alert } from 'react-native';
+
+import { Alert } from 'react-native';
 
 class AlertModal {
     
-    showAlert = (text) => {
+    showAlert = (titile,text) => {
         Alert.alert(
-            ' ', text,
+            titile, text,
             [
                 // { text: 'Cancelar', style: 'cancel' },
                 { text: 'Aceptar' }

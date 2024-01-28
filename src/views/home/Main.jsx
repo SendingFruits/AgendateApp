@@ -63,20 +63,21 @@ const Main = ( params ) => {
 	const [profileVisibleInit, setProfileVisibleInit] = useState(false);
 
 	return (
-		<NavigationContainer 
-			onStateChange={(state) => {
-				if ((state.history.length > 1)) {
-					for (const key in state.history) {
-						if (state.history[key].type == 'drawer') {
-							Keyboard.dismiss();
-							setMenuVisible(true);
-						} 
-					}
-				} else {
-					setMenuVisible(false);
-					setProfileVisibleInit(false);
-				}
-			}} > 
+		// <NavigationContainer 
+		// 	onStateChange={(state) => {
+		// 		if ((state.history.length > 1)) {
+		// 			for (const key in state.history) {
+		// 				if (state.history[key].type == 'drawer') {
+		// 					Keyboard.dismiss();
+		// 					setMenuVisible(true);
+		// 				} 
+		// 			}
+		// 		} else {
+		// 			setMenuVisible(false);
+		// 			setProfileVisibleInit(false);
+		// 		}
+		// 	}} > 
+		<NavigationContainer> 
 			<Drawer.Navigator
 				options={{ title: null, headerShown: false, }}
 				initialRouteName="Inicio"
@@ -302,12 +303,12 @@ const MenuItems = ( { navigation, profile } ) => {
 	}, [userPreferences]);
 
 	return (
-		<LinearGradient
-			colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
-			start={{ x: 1, y: 1 }} // Punto de inicio en la esquina superior izquierda
-			end={{ x: 0, y: 0 }} // Punto final en la esquina inferior derecha
-			style={{ flex: 1 }}
-			>
+		// <LinearGradient
+		// 	colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
+		// 	start={{ x: 1, y: 1 }} // Punto de inicio en la esquina superior izquierda
+		// 	end={{ x: 0, y: 0 }} // Punto final en la esquina inferior derecha
+		// 	style={{ flex: 1 }}
+		// 	>
 			<DrawerContentScrollView>
 				{/* Header */}
 				<View style={styles.header}>
@@ -417,7 +418,7 @@ const MenuItems = ( { navigation, profile } ) => {
 					) : null } */}
 				</View>
 			</DrawerContentScrollView>
-		</LinearGradient>	
+		// </LinearGradient>	
 	)
 }
 
