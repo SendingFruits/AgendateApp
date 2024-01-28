@@ -153,6 +153,32 @@ class UserServices {
             });
         });
     }
+
+    putDelete = async (id) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Usuarios/EliminarUsuario';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${id}`;
+            
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+            
+            axios.put(urlCompleta,{},{})
+            .then(response => {
+                // console.log('response: ', response);
+                if (response.status == 200) {
+                    resolve(response.data);
+                } else {
+                    resolve(false);
+                }
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+        });
+    }
 }
 
 export default new UserServices();
