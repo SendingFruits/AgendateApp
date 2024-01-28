@@ -248,6 +248,18 @@ class UsersController {
 		});
 	}
 
+	handleDelete(id) {
+		return new Promise((resolve, reject) => {
+			UserServices.putDelete(id)
+			.then(userReturn => {
+				resolve(userReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
+
 }
 
 export default new UsersController();

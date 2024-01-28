@@ -160,11 +160,27 @@ const ProfileView = ( params ) => {
 		.then(alertRes => {
 			// console.log('alertRes: ', alertRes);
 			if (alertRes) {
-                BookingController.handleCancelBooking(id)
+                UsersController.handleDelete(user.guid)
                 .then(resDelete => {
                     // console.log('userReturn: ', userReturn);
                     if (resDelete) {
+                        setUserPreferences({
+                            current_user : {
+                                'guid':'none',
+                                'name':'none',
+                                'last':'none',
+                                'user':'none',
+                                'pass':'none',
+                                'type':'none',
+                                'mail':'none', 
+                                'docu':'none',
+                                'celu':'none',
+                                'logo':'none', 
+                            },   
+                        });
                         onRefresh();
+                        navigation.navigate('Inicio');
+                        AlertModal.showAlert('La cuenta fue eliminada');
                     }
                 })
                 .catch(error => {
