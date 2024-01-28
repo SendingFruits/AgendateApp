@@ -1,20 +1,22 @@
 import { UserContext } from '../../services/context/context'; 
+import { formatDate } from '../utils/Functions'
 import { useNavigation } from '@react-navigation/native';
-import { getOrientation } from '../utils/Functions';
 
 import React, { 
-    useState, useEffect, useContext 
+    useState, 
+    useEffect, 
+    useContext 
 } from 'react';
 
 // import DeviceInfo from 'react-native-device-info-2';
 
 import * as ImagePicker from "expo-image-picker";
 import UsersController from '../../controllers/UsersController';
-import AlertModal from '../utils/AlertModal';
-import MenuButtonItem from '../home/MenuButtonItem';
 
-import {
-    Dimensions,
+import MenuButtonItem from '../home/MenuButtonItem';
+import PassChanger from './PassChanger';
+
+import { 
     Text, 
     StyleSheet, 
     View,
@@ -25,23 +27,31 @@ import {
     Image
 } from 'react-native';
 
+import { 
+	NavigationContainer 
+} from '@react-navigation/native';
+
+import { 
+	faEye,
+    faEyeSlash
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const { width, height } = Dimensions.get('window');
 
-const ProfileView = ( params ) => {
+const MenuProfileView = (userLogin) => {
 
-    const [widthMax, setWidthMax] = useState(width);
-    const [heightMax, setHeightMax] = useState(height);
-
-    var userLogin = params.route.params;
-    const { setUserPreferences } = useContext(UserContext);
     const navigation = useNavigation();
 
-    const [user, setUser] = useState(userLogin);
-    const [guid, setGuid] = useState(userLogin.guid);
+    const { setUserPreferences } = useContext(UserContext);
+
+    const [user, setUser] = useState(userLogin.param);
+    const [guid, setGuid] = useState(user.guid);
 
     const [username, setUsername] = useState(user.user);
     const [firstname, setFirstname] = useState(user.name);
@@ -106,10 +116,13 @@ const ProfileView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-            
+            // setFirstname(user.name);
+            // setLastname(user.last);
+            // setMovil(user.celu);
+            // setEmail(user.mail);
+            // setSelectedPicture(null);
 		}, 2000);
 	}, []);
-
 
     const updateData = () => {
         
@@ -154,30 +167,6 @@ const ProfileView = ( params ) => {
         navigation.navigate('Password');
 	};
 
-    const deleteAccount = () => {
-        var text = "¿Está seguro que desea eliminar su cuenta?";
-        AlertModal.showConfirmationAlert(text)
-		.then(alertRes => {
-			// console.log('alertRes: ', alertRes);
-			if (alertRes) {
-                BookingController.handleCancelBooking(id)
-                .then(resDelete => {
-                    // console.log('userReturn: ', userReturn);
-                    if (resDelete) {
-                        onRefresh();
-                    }
-                })
-                .catch(error => {
-                    alert(error);
-                });
-            }
-		})
-		.catch(error => {
-			alert(error);
-		});
-	};
-
-
     const handleFieldChange = (text,field) => {
 		switch (field) {
 			case 'username':
@@ -202,25 +191,9 @@ const ProfileView = ( params ) => {
 		}
 	};
 
-    const handleOrientationChange = () => {
-        const { width, height } = Dimensions.get('window');
-        setWidthMax(width);
-        setHeightMax(height);
-
-        // if (getOrientation() === 'portrait') {
-        //     setContainer({
-        //         flex: 1,
-        //         width: widthMax,
-        //         height: heightMax
-        //     });
-        // } else {
-
-        // }
-    };
-    
 
 	useEffect(() => {
-        Dimensions.addEventListener('change', handleOrientationChange);
+        // inicializar variables
 
         // console.log(DeviceInfo); // no funciona ningun metodo...
         // try {
@@ -240,26 +213,6 @@ const ProfileView = ( params ) => {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } >
-
-                { (user.type === 'customer') ? (
-                    <View style={styles.imageContainer}>
-                        <TouchableOpacity 
-                            style={styles.imageButton}
-                            onPress={ () => handleImagePicker(0) } > 	
-                            {/* file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540ethelvan%252Fagendate-app/ImagePicker/a67ed7c4-a8b9-4e8f-9e89-ee6812f4a5dc.jpeg */}
-                            <View style={styles.buttonImageContent}>
-                                { (!selectedPicture) ? (
-                                    <Text style={styles.imageText}>Foto</Text>
-                                ) : 
-                                    <Image 
-                                        style={styles.image} 
-                                        source={{ uri: selectedPicture }} 
-                                        />
-                                }
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                ) : null }
 
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -317,11 +270,31 @@ const ProfileView = ( params ) => {
                     }
                 </View>
 
+                { (user.type === 'customer') ? (
+                    <View style={styles.imageContainer}>
+                        <TouchableOpacity 
+                            style={styles.imageButton}
+                            onPress={ () => handleImagePicker(0) } > 	
+                            {/* file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540ethelvan%252Fagendate-app/ImagePicker/a67ed7c4-a8b9-4e8f-9e89-ee6812f4a5dc.jpeg */}
+                            <View style={styles.buttonContent}>
+                                { (!selectedPicture) ? (
+                                    <Text style={styles.imageText}>Foto</Text>
+                                ) : 
+                                    <Image 
+                                        style={styles.image} 
+                                        source={{ uri: selectedPicture }} 
+                                        />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ) : null }
+
             </ScrollView>
 
             <View style={styles.footer}>
 
-                <View style={styles.buttons}>
+                <View style={{ marginHorizontal:25, marginTop:15, textAlign:'center' }}>
                     <MenuButtonItem 
                         icon = {null}
                         text = {'Cambiar Contraseña'}
@@ -334,14 +307,24 @@ const ProfileView = ( params ) => {
                         text = {'Actualizar Datos'}
                         onPress={() => updateData()}
                     />
-
-                    <MenuButtonItem
-                        style={{marginHorizontal:20}}
-                        icon = {null}
-                        text = {'Eliminar Cuenta'}
-                        onPress={() => deleteAccount()}
-                    />
                 </View>
+                
+
+				{/*<View style={styles.nextContainer}>
+					<TouchableOpacity 
+                        style={styles.btnUpdate}
+                        onPress={() => updatePass(user)} >
+                        <Text style={styles.txtUpdate}>Cambiar Contraseña</Text>
+                    </TouchableOpacity>
+				</View>  
+             
+				<View style={styles.nextContainer}>
+					<TouchableOpacity 
+                        style={styles.btnUpdate}
+                        onPress={() => updateData()} >
+                        <Text style={styles.txtUpdate}>Actualizar Datos</Text>
+                    </TouchableOpacity>
+				</View>*/}
             </View>
         </View>
     );
@@ -349,17 +332,17 @@ const ProfileView = ( params ) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'center',
     },
    
     inputContainer: {
-		flexDirection: 'column',
+		flexDirection: 'row',
 		backgroundColor: '#fff',
-        
+        width:'90%',
 		borderWidth: 1,
 		borderRadius: 5,
-		marginHorizontal:45,
+		marginHorizontal:15,
 		marginBottom: 5,
 		paddingHorizontal: 15,
 		paddingVertical: 3,
@@ -383,9 +366,9 @@ const styles = StyleSheet.create({
 	},
 
     imageContainer: {
-		height: 120,
-		width: 120,
-		margin: 10,
+		height: 75,
+		width: 90,
+		margin: 25,
 		alignSelf: 'center',
 		borderRadius: 20,
 		backgroundColor: '#fff',
@@ -400,20 +383,15 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		flex: 1,
-		height: 120,
-		width: 120,
+		height: 75,
+		width: 90,
 		borderRadius: 20,
         resizeMode: 'cover',
 	},
-    buttonImageContent: {
+    buttonContent: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    buttons: { 
-        marginHorizontal:45, 
-        marginBottom:15, 
-        textAlign:'center' 
-    }
 })
 
-export default ProfileView;
+export default MenuProfileView;

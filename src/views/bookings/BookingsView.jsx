@@ -140,6 +140,7 @@ const BookingsView = ( params ) => {
                         <View key={item.id}>
                             <BookingItem 
                                 index={index}
+                                type={type}
                                 item={item} 
                                 onRefresh={onRefresh}
                             />

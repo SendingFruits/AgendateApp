@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../utils/Functions'; 
 
-import ServiceItem from './ServiceItem';
+import ServiceItem from './FavoriteItem';
 import ServicesController from '../../controllers/ServicesController';
 
 import React, { 
@@ -97,33 +97,14 @@ const ServicesView = ( params ) => {
     
 
     useEffect(() => {
-        setEditing(false);
-        getServices();
-
-        Dimensions.addEventListener('change', handleOrientationChange);
-
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow', () => {
-                // console.log('Teclado abierto');
-                setEditing(true);
-            }
-        );     
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                // console.log('Teclado cerrado');
-                setEditing(false);
-            }
-        );
+        // setEditing(false);
+        
     }, [list,guid]);
 
 
     return (
         <View style={styles.container}>
 
-            {/* {console.log(list)}
-            {console.log(Array.isArray(list))} */}
-            
             {(list !== null && Array.isArray(list) && list.length > 0) ? (
                 <ScrollView 
                     contentContainerStyle={styles.scrollContainer}
@@ -134,38 +115,12 @@ const ServicesView = ( params ) => {
                     {listServices()}
 
                 </ScrollView>
-            ) : (
-                <View style={styles.scrollContainer}>
-                    <Text>No tiene ningún Servicio Creado</Text>
-
-                    <LinearGradient
-                        colors={['#135054', '#a8ffff', '#fff']}
-                        start={{ x: 0.5, y: 0 }}
-                        end={{ x: 0.5, y: 1.5 }}
-                        style={styles.btnCreate}
-                        >
-                        <TouchableOpacity onPress={() => createItem(guid)} >
-                            <Text> Crear Servicio </Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </View>
-            )}
+            ) : null }
 
             {!editing ? (
                 <>
                     {orientation === 'portrait' ? (				
-                        <View style={styles.footer}>
-                            <Text style={styles.textVersion1}>
-                                En esta versión solo puede tener un servicio</Text>
-                            <TouchableOpacity 
-                                onPress={() => premiumUpdate()} 
-                                style={{ alignItems:'center' }}>
-                                <Text>Necesita actualizar a la versión Premium</Text>
-                                <Text>si quiere manejar multiples servicios</Text>
-                            </TouchableOpacity>
-                            <View>        
-                            </View>
-                        </View>
+                        <></>
                     ) : (
                         <></>
                     )}

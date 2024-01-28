@@ -10,7 +10,7 @@ import ScheduleList from '../bookings/ScheduleList';
 
 import ServicesView from '../services/ServicesView';
 import PromosView from '../promotions/PromosView';
-
+import FavoritesView from '../favorites/FavoriteView';
 import LoginView from '../users/LoginView';
 import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
@@ -94,7 +94,8 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Inicio" 
-					component={HomeView}  />
+					component={HomeView}
+					/>
 
 				<Drawer.Screen 
 					options={{
@@ -107,8 +108,9 @@ const Main = ( params ) => {
 					}}
 					name={userLogin.type === 'company' ? 'Agenda' : 'Reservas'}
 					// name="Reservas" 
+					initialParams={ userLogin } 
 					component={BookingsView} 
-					initialParams={ userLogin } />
+					/>
 					
 				<Drawer.Screen 
 					options={{
@@ -120,8 +122,23 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Servicios" 
+					initialParams={ userLogin } 
 					component={ServicesView} 
-					initialParams={ userLogin } />
+					/>
+
+				<Drawer.Screen 
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#dfe4ff']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
+					name="Favoritos" 
+					initialParams={ userLogin } 
+					component={FavoritesView} 
+					/>
 
 				<Drawer.Screen 
 					options={{
@@ -133,8 +150,9 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Crear Servicio" 
+					initialParams={ userLogin } 
 					component={ServiceCreate} 
-					initialParams={ userLogin } />
+					/>
 
 				<Drawer.Screen 
 					options={{
@@ -146,8 +164,9 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Promociones" 
+					initialParams={ userLogin }
 					component={PromosView} 
-					initialParams={ userLogin } />
+					/>
 
 				<Drawer.Screen 
 					options={{
@@ -159,8 +178,8 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Realizar Reserva" 
-					component={MakeReservation} 
 					// initialParams={{ userLogin: userLogin }} 
+					component={MakeReservation} 
 					/>
 
 				<Drawer.Screen 
@@ -173,22 +192,27 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Horarios" 
-					component={ScheduleList} />
+					component={ScheduleList} 
+					/>
 
 				<Drawer.Screen 
-					options={{ title: null, }}
+					options={{
+						title: null, 
+					}}
 					name="Login" 
-					component={LoginView} />
+					component={LoginView} 
+					/>
 
 				<Drawer.Screen 
-					options={{ 
+					options={{
 						title: null, 
 						headerStyle: {
 							backgroundColor: '#efefef'
 						},
 					}}
 					name="Registro de Usuario" 
-					component={RegisterView} />
+					component={RegisterView} 
+					/>
 
 				<Drawer.Screen 
 					options={{
@@ -200,16 +224,32 @@ const Main = ( params ) => {
 							</LinearGradient>, 
 					}}
 					name="Password" 
+					initialParams={{ userLogin: userLogin }}
 					component={PassChanger} 
-					initialParams={{ userLogin: userLogin }} />
+					/>
 
 				<Drawer.Screen 
-					options={{ 
+					options={{
+						title: null,
+						headerBackground: () =>
+							<LinearGradient 
+								colors={['#135000', '#238162', '#dfe4ff']} 
+								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+							</LinearGradient>, 
+					}}
+					name="Perfil de Usuario" 
+					initialParams={{ userLogin: userLogin }}
+					component={ProfileView} 
+					/>
+
+				<Drawer.Screen 
+					options={{
 						title: null, 
 						headerShown: false 
 					}}
 					name="BaseError" 
-					component={BaseError} />
+					component={BaseError} 
+					/>
 
 			</Drawer.Navigator>
 		</NavigationContainer>
@@ -304,11 +344,18 @@ const MenuItems = ( { navigation, profile } ) => {
 							) : null }
 
 							{ (userLogin.type === 'customer') ? (
-								<MenuButtonItem 
-									icon = {faCalendar}
-									text = "Reservas"
-									onPress = { () => navigation.navigate('Reservas')}
-							/>
+								<>
+									<MenuButtonItem 
+										icon = {faCalendar}
+										text = "Reservas"
+										onPress = { () => navigation.navigate('Reservas')}
+										/>
+									<MenuButtonItem 
+										icon = {faStar}
+										text = "Favoritos"
+										onPress = { () => navigation.navigate('Favoritos')}
+										/>
+								</>
 							) : null }
 						</View>
 					) : null }
@@ -340,39 +387,34 @@ const MenuItems = ( { navigation, profile } ) => {
 								<MenuButtonItem 
 									icon = {faUser}
 									text = {userLogin.name}
-									onPress={() => setProfileVisible(!profileVisible)}
+									// onPress={ () => setProfileVisible(!profileVisible)}
+									onPress={ () => navigation.navigate('Perfil de Usuario', userLogin)}
 								/>
 							</View>
 
 							<View>
-								{/* <MenuButtonItem 
-									icon = {faRightFromBracket}
-									text = {''}
-									onPress={() => logout()}
-								/> */}
 								<TouchableOpacity 
 									style={styles.btnLogout} 
-									onPress={() => logout()}
-									>
+									onPress={() => logout()} >
 									<FontAwesomeIcon icon={faRightFromBracket} />
 								</TouchableOpacity>
 							</View>
 						</View>
 					)}
 					
-					{ (profileVisible) ? (
+					{/* { (profileVisible) ? (
 						<View>
 							<LinearGradient 
 								colors={['#135054', '#238162', '#a8ffe5']} 
 							 	style={styles.profile}>
 								{ (userLogin.user !== 'none') ? (
 									<View>
-										<ProfileView param={userLogin} />
+										<MenuProfileView param={userLogin} />
 									</View>
 								) : null }
 							</LinearGradient>
 						</View>
-					) : null }
+					) : null } */}
 				</View>
 			</DrawerContentScrollView>
 		</LinearGradient>	

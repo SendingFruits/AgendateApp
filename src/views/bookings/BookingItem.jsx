@@ -35,9 +35,10 @@ const windowHeight = Dimensions.get('window').height;
 
 const BookingItem = ( params ) => {
 
-    console.log('params: ', params);
+    // console.log('params: ', params);
     var {
         index,
+        type,
 		item, 
 		onRefresh,
         onPress,
@@ -116,7 +117,6 @@ const BookingItem = ( params ) => {
         <View style={styles.container}>
             <View>
                 <LinearGradient
-                    style={styles.header}
                     colors={['#135054', '#e9e9f8', '#efffff']} 
                     start={{ x: 0.2, y: 1.2 }}
                     end={{ x: 1.5, y: 0.5 }} 
@@ -125,59 +125,51 @@ const BookingItem = ( params ) => {
                         onPress={() => toggleCollapse()} 
                         onLongPress={() => editName()}
                         >
-                        <View style={styles.textHeader}>
-                            <Text>Reserva para el</Text>
-                            
-                            <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
-                            <Text style={{ fontWeight:'bold' }}> {hora}</Text>
-                            
-                            {/* {console.log('item.id: ', item.id)} */}
+                        <View style={styles.lineHeader} >
 
-                            {item.estado === 'Solicitada' ? (
-                                <>
-                                    <Text style={{ 
-                                        fontWeight:'bold', 
-                                        marginHorizontal:15,
-                                        color: setStatusColor(item.estado) 
-                                        }}> {item.estado}
-                                    </Text>
-                                    <TouchableOpacity
-                                        style={{ position:'relative', top:-12}}
-                                        onPress={() => cancellation(item.id)} > 
-                                        <FontAwesomeIcon icon={faCircleXmark} />
-                                    </TouchableOpacity>
-                                </>
-                            ) : (
-                                <>
-                                    <Text style={{ 
-                                        fontWeight:'bold', 
-                                        marginHorizontal:15, 
-                                        color: setStatusColor(item.estado) 
-                                        }}> {item.estado}
-                                    </Text>
-                                    <View style={{ position:'relative', top:-12}} >                                        
-                                        <FontAwesomeIcon icon={faCircleCheck} />
-                                    </View>
-                                </>
-                            ) }
+                            <View style={styles.leftLineHeader}>
+                                { type === 'customer' ? (
+                                    <Text>Reserva para el</Text>
+                                ) : ( 
+                                    <Text>Reserva para el</Text>
+                                )}
+                            </View>
                             
-                            {/* 
-                                "rubro": "Gastronomia",
-                                "ciudad": "Montevideo",
-                                "costo": 300,
-                                "diasDefinidosSemana": "Lunes;Miercoles;Viernes", 
-                                "direccion": "Vilardebo 4565", 
-                                "duracionTurno": 30, 
-                                "estado": "Solicitada", 
-                                "fechaHoraTurno": "2024-01-01T09: 30: 00", 
-                                "horaFinServicio": 18, 
-                                "horaInicioServicio": 9, 
-                                "id": 2, 
-                                "idCliente": 1, 
-                                "idServicio": 1, 
-                                "latitude": -34.84784, 
-                                "longitude": -56.177822
-                            */}
+                            <View style={styles.centerLineHeader}>
+                                <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
+                                <Text style={{ fontWeight:'bold' }}> {hora}</Text>
+                            </View>
+                          
+                            <View style={styles.rightLineHeader}>
+                                {item.estado === 'Solicitada' ? (
+                                    <>
+                                        <Text style={{ 
+                                            fontWeight:'bold', 
+                                            marginHorizontal:5,
+                                            color: setStatusColor(item.estado) 
+                                            }}> {item.estado}
+                                        </Text>
+                                        <TouchableOpacity
+                                            style={{ marginHorizontal:5 }}
+                                            onPress={() => cancellation(item.id)} > 
+                                            <FontAwesomeIcon icon={faCircleXmark} />
+                                        </TouchableOpacity>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Text style={{ 
+                                            fontWeight:'bold', 
+                                            marginHorizontal:5, 
+                                            color: setStatusColor(item.estado) 
+                                            }}> {item.estado}
+                                        </Text>
+                                        <View style={{ marginHorizontal:5 }}> 
+                                            <FontAwesomeIcon icon={faCircleCheck} />
+                                        </View>
+                                    </>
+                                ) }
+                            </View>
+                            
                         </View>
                     </TouchableOpacity>
 
@@ -191,81 +183,76 @@ const BookingItem = ( params ) => {
                         start={{ x: 0.2, y: 1.2 }}
                         end={{ x: 1.5, y: 0.5 }} 
                         >
-                        <View>
-                            <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                            
-                                <View>
-                                    <View style={styles.row}>
-                                        <Text style={styles.label}>Empresa:</Text>
-                                        <Text style={styles.value}>{item.nombreEmpresa}</Text>
-                                    </View>
-                                    <View style={styles.rowInvi}>
-                                        <Text>{item.descripcionEmpresa}</Text>
-                                    </View>
+                        <ScrollView style={{ ...styles.body, height: bodyHeight }} >
+                        
+                            { type === 'customer' ? (
+                                <>
                                     <View>
-                                        <Text>Rubro: {item.rubro}</Text>
-                                        <Text>Ciudad: {item.ciudad}</Text>
-                                        <Text>Celular:</Text>
-                                    </View>
-                                </View>
-
-                                <View> 
-                                    <View style={{ ...styles.row, marginTop:10 }}>
-                                        <Text style={styles.label}>Servicio:</Text>
-                                        <Text style={styles.value}>{item.nombreServicio}</Text>
-                                    </View>
-
-                                    <View style={styles.rowInvi}>
-                                        <Text>{item.descripcion}</Text>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Empresa:</Text>
+                                            <Text style={styles.value}>{item.nombreEmpresa}</Text>
+                                        </View>
+                                        <View style={styles.rowInvi}>
+                                            <Text>{item.descripcionEmpresa}</Text>
+                                        </View>
+                                        <View>
+                                            <Text>Rubro: {item.rubro}</Text>
+                                            <Text>Ciudad: {item.ciudad}</Text>
+                                            <Text>Celular:</Text>
+                                        </View>
                                     </View>
 
-                                    <View style={styles.row}>
-                                        {/* <Text style={styles.label}>Comienza:</Text> */}
-                                        {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                    </View>
-                                    <View style={styles.row}>
-                                        {/* <Text style={styles.label}>Termina:</Text> */}
-                                        {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                    </View>
-                                </View>
+                                    <View>
+                                        <View style={{ ...styles.row, marginTop:10 }}>
+                                            <Text style={styles.label}>Servicio:</Text>
+                                            <Text style={styles.value}>{item.nombreServicio}</Text>
+                                        </View>
 
-                                {/* -
-                                    "costo": 300,
-                                    "diasDefinidosSemana": "Lunes;Miercoles;Viernes", 
-                                    "direccion": "Vilardebo 4565", 
-                                    "duracionTurno": 30, 
-                                    "estado": "Solicitada", 
-                                    "fechaHoraTurno": "2024-01-01T09: 30: 00", 
-                                    "horaFinServicio": 18, 
-                                    "horaInicioServicio": 9, 
-                                    "id": 2, 
-                                    "idCliente": 1, 
-                                    "idServicio": 1, 
-                                    "latitude": -34.84784, 
-                                    "longitude": -56.177822
-                                */}
+                                        <View style={styles.rowInvi}>
+                                            <Text>{item.descripcion}</Text>
+                                        </View>
 
-                            </ScrollView>
-                        </View>        
+                                        <View style={styles.row}>
+                                            {/* <Text style={styles.label}>Comienza:</Text> */}
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
+                                        </View>
+                                        <View style={styles.row}>
+                                            {/* <Text style={styles.label}>Termina:</Text> */}
+                                            {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
+                                        </View>
+                                    </View>
+                                </>
+                            ) : (  
+                                <>
+                                    <View>
+                                        <View style={styles.row}>
+                                            <Text style={styles.label}>Cliente:</Text>
+                                            <Text style={styles.value}>{item.nombreCliente} {item.apellidoCliente}</Text>
+                                        </View>
+                                        {/* <View style={styles.rowInvi}>
+                                            <Text>{item.descripcionEmpresa}</Text>
+                                        </View> */}
+                                        <View>
+                                            <Text>Correo: {item.correoCliente}</Text>
+                                            <Text>Celular: {item.celularCliente}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View>
+                                    </View>
+                                </>
+                            )}
+                        
+                        </ScrollView>
                     </LinearGradient>  
 
-                    <View>
-                        <LinearGradient
-                            style={styles.footer}
-                            colors={['#135054', '#e9e9f8', '#efffff']} 
-                            start={{ x: 0.2, y: 1.2 }}
-                            end={{ x: 1.5, y: 0.5 }} 
-                            >
-                            {/* {console.log('calendar: ', booking.calendar)} */}
-                            {/* {!booking.calendar ? (
-                                <TouchableOpacity style={styles.btnEdit}>
-                                    <Text style={styles.txtbtnEdit}>Editar</Text>
-                                </TouchableOpacity>
-                            ) : (
-                                null
-                            )} */}
-                        </LinearGradient> 
-                    </View>
+                    <LinearGradient
+                        style={styles.footer}
+                        colors={['#135054', '#e9e9f8', '#efffff']} 
+                        start={{ x: 0.2, y: 1.2 }}
+                        end={{ x: 1.5, y: 0.5 }} 
+                        >
+                    </LinearGradient> 
                 </View>
             ) : null }
 
@@ -284,20 +271,37 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding:1.5,
     },
-    header: {
+    lineHeader: {
         flexDirection: 'row',
-        alignItems:'baseline',
-        paddingHorizontal: 10,
-        borderTopLeftRadius:12,
-        borderTopRightRadius:12,
-    },
-    textHeader: {
-        flexDirection: 'row',
-        alignItems:'baseline',
-        fontWeight:'bold',
-        paddingVertical:10,
+        alignContent:'space-between',
+        alignItems:'stretch',
+        paddingVertical:6,
+        paddingHorizontal:6,
     },
     
+    lineHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        paddingVertical: 6,
+        paddingHorizontal: 6,
+    },
+    
+    leftLineHeader: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    
+    centerLineHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    
+    rightLineHeader: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+    },
+
     body: {
         width: windowWidth - 55,
         // height: 100,
