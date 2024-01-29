@@ -36,9 +36,17 @@ import {
  
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const { width, height } = Dimensions.get('window');
 
 const HomeView = ( params ) => {
 	
+	// console.log('params home: ', params);
+	var { 
+		// mainStyle,
+		isConnected,
+		setIsConnected 
+	} = params.route.params;
+
 	var countMap = 0;
 
 	const mapRef = useRef(null);
@@ -61,7 +69,6 @@ const HomeView = ( params ) => {
 	};
 
 	const [orientation, setOrientation] = useState(getOrientation());
-	const [isConnected, setIsConnected] = useState(true)
 	const [refreshing, setRefreshing] = useState(false);
 	const [ratio, setRatio] = useState(1);
 	
@@ -88,7 +95,7 @@ const HomeView = ( params ) => {
 					setIsConnected(true);
 
 					countMap++;
-					console.log(countMap);
+					// console.log(countMap);
 				})
 				.catch(error => {
 					// console.log('no hay datos ');
@@ -239,61 +246,55 @@ const HomeView = ( params ) => {
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas
 
-	// console.log(isConnected);
-	if (!isConnected) {
-		return (
-			<BaseError data={companies} nav={navigation} errorType={'api'} />
-		)
-	} else {
-		return (
-			<ScrollView contentContainerStyle={styles.container} 
-				// refreshControl={
-				// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				// }
-				>
-				{userLogin.type === 'company' ? (
-					<View style={styles.conrolPanel}>
-						<CompanyPanel 
-							dataCompany={userLogin} 
-							// dataCompany={userLogin.data.company}
-							// windowWidth={windowWidth} 
-							// windowHeight={windowHeight}
-							/>
-					</View>
-				) : (
-					<View style={styles.viewMap}>
-						
-						{orientation === 'portrait' ? (				
-							<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
-						) : (
-							<></>
-						)}
-
-						<MapView
-							ref={mapRef}
-							// style={styles.map}
-							style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
-							onRegionChange={onRegionChange}
-							initialRegion={location}
-							zoomEnabled={true}
-							zoomControlEnabled={true}
-							showsUserLocation={true}
-						>
-							{showCompanyLocations()}
-
-						</MapView>
-	
-						<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
-							<RatioPanel 
-								onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
-								/>
-						</View>			
+	return (
+		<ScrollView contentContainerStyle={styles.container} 
+			// refreshControl={
+			// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			// }
+			>
+			{userLogin.type === 'company' ? (
+				<View style={styles.conrolPanel}>
+					<CompanyPanel 
+						dataCompany={userLogin} 
+						// dataCompany={userLogin.data.company}
+						// windowWidth={windowWidth} 
+						// windowHeight={windowHeight}
+						/>
+				</View>
+			) : (
+				<View style={styles.viewMap}>
 					
-					</View>
-				)}
-			</ScrollView>
-		);
-	}
+					{orientation === 'portrait' ? (				
+						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
+					) : (
+						<></>
+					)}
+
+					<MapView
+						ref={mapRef}
+						// style={styles.map}
+						style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
+						onRegionChange={onRegionChange}
+						initialRegion={location}
+						zoomEnabled={true}
+						zoomControlEnabled={true}
+						showsUserLocation={true}
+					>
+						{showCompanyLocations()}
+
+					</MapView>
+
+					<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
+						<RatioPanel 
+							onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
+							/>
+					</View>			
+				
+				</View>
+			)}
+		</ScrollView>
+	);
+	
 };
 
 const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
@@ -326,9 +327,6 @@ const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
 		</Marker>
 	);
 };
-
-var windowWidth = Dimensions.get('window').width;
-var windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
 	container: {

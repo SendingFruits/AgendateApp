@@ -14,6 +14,16 @@ import Main from './src/views/home/Main';
 
 import 'react-native-gesture-handler';
  
+const { width, height } = Dimensions.get('window');
+
+const checkConnection = (param) => {
+	if (param) {
+		return true
+	} else {
+		return false
+	}
+}; 
+
 const App = (config) => {
 	try {
 		var preferences = {
@@ -39,10 +49,9 @@ const App = (config) => {
 		}
 
 		const [userPreferences, setUserPreferences] = useState(preferences);
-		const [dbLoad, setDbLoad] = useState(true);
-		const [isConnected, setIsConnected] = useState(true)
+		const [isConnected, setIsConnected] = useState(false);
 
-		useEffect(() => {
+		const setLocalDB = () => {
 			SQLiteHandler.createDb('agendate')
 			.then(result => {
 				setDbLoad(true);
@@ -70,48 +79,47 @@ const App = (config) => {
 				setDbLoad(false);
 				// console.log('DB Error... ', error);
 			});
-
-			const checkConnection = () => {
-				// Implementa tu lógica para verificar la conexión aquí
-				// Puedes usar librerías como NetInfo o Navigator para esto
-				// Actualiza isConnected en consecuencia
-				// setIsConnected();
-			};
-			checkConnection();
-	
+		}
+		
+		useEffect(() => {
+			// setIsConnected(true);
 		}, []); 
 	
 		if (isConnected) {
 			return (
 				<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-					<Main style={styles.background} />
+					<Main 
+						isConnected={isConnected}
+						setIsConnected={setIsConnected}
+						// mainStyle={JSON.stringify(styles.main)}
+					/>
 				</UserContext.Provider>
 			);
 		} else {
 			return (
-				<BaseError errorType={'debug'} />
+				<BaseError 
+					errorType={'api'} 
+					setIsConnected={setIsConnected}
+					/>
 			);
 		}
 	} catch (error) {
 		console.log(error);
 		return (
-			// <UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-			// 	<Main style={styles.background} orientation={orientation} />
-			// </UserContext.Provider>
-			<BaseError errorType={error} />
+			<BaseError 
+				errorType={error}
+				setIsConnected={setIsConnected}
+				/>
 		);
 	}
 };
 
 export default App;
 
-var windowWidth = Dimensions.get('window').width;
-var windowHeight = Dimensions.get('window').height;
-
 // puedo agregar un estilo aca y usarlo en toda la aplicacion
 const styles = StyleSheet.create({
-	background: {
+	main: {
 		flex: 1,
-		backgroundColor: '#69ACDD'
+		// backgroundColor: '#'
 	},
 });

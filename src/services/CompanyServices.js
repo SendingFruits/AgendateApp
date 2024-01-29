@@ -17,7 +17,7 @@ class CompanyServices {
                 },
             };
              
-            console.log(urlCompleta);
+            // console.log(urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {

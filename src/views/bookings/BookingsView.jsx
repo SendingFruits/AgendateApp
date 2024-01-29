@@ -70,12 +70,12 @@ const BookingsView = ( params ) => {
 
             ServicesController.getServicesForCompany(guid)
             .then(serviceReturn => {
-                console.log('dateSelected: ', dateSelected);
+                // console.log('dateSelected: ', dateSelected);
                
                 BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
                 .then(bookingsReturn => {
-                    console.log('bookings: ', bookingsReturn);
-                    console.log('length: ', bookingsReturn.length);
+                    // console.log('bookings: ', bookingsReturn);
+                    // console.log('length: ', bookingsReturn.length);
                     if (bookingsReturn.length > 0) {
                         setCounter(bookingsReturn.length);
                         setList(bookingsReturn);
@@ -107,7 +107,7 @@ const BookingsView = ( params ) => {
         loadBookings(guid, type);
     }, [guid, type, dateSelected]);
 
-    console.log('list: ', list);
+    // console.log('list: ', list);
 
     return (
         <View style={styles.container}>

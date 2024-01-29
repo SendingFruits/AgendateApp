@@ -202,7 +202,12 @@ const MakeReservation = ({ route }) => {
 								</View>
 								<View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Dias: </Text>
-									<Text style={stylesMake.value}>{service.diasDefinidosSemana}</Text>
+
+									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'60%' }}>
+										{service.diasDefinidosSemana.split(';').map((word, index) => (
+											<Text key={index}> {word} </Text>
+										))}
+									</View>
 								</View>
 							</View>
 						) : <View style={stylesMake.span}>
@@ -227,7 +232,7 @@ const MakeReservation = ({ route }) => {
 									<ActivityIndicator size="large" color="#0000ff" />
 								) : (
 									<View>
-										<CalendarPicker 
+										<CalendarSelector 
 											compId={compId} 
 											userLogin={user} 
 											service={service} 
@@ -319,7 +324,7 @@ const stylesMake = StyleSheet.create({
     },
 });
 
-const CalendarPicker = ( params ) => {
+const CalendarSelector = ( params ) => {
 
 	// console.log(LocaleConfig);
 	const [list, setList] = useState(null);
@@ -547,7 +552,7 @@ const ScheduleList = ( params ) => {
 	} = params;
 
 
-	console.log(availableTimes);
+	// console.log(availableTimes);
 
 	const [selectedHour, setSelectedHour] = useState(null);
 	const [showModal, setShowModal] = useState(false);
@@ -564,8 +569,8 @@ const ScheduleList = ( params ) => {
 		}, 10000);
 	};
 
-	const confirmReservation = (hour) => {
-		console.log(hour);
+	const confirmReservation = async (hour) => {
+		// console.log(hour);
 
 		const formData = {
 			idCliente:userLogin.guid,

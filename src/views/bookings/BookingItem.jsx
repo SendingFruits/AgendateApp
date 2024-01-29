@@ -236,9 +236,35 @@ const BookingItem = ( params ) => {
                                             <Text>Correo: {item.correoCliente}</Text>
                                             <Text>Celular: {item.celularCliente}</Text>
                                         </View>
-                                    </View>
 
-                                    <View>
+                                        <View style={{ height:'auto'}}>
+
+                                        </View>
+
+                                        <View style={{ 
+                                            marginTop: 50,
+                                            marginBottom: 1,
+                                            flexDirection:'row',
+                                            flexWrap:'wrap',
+                                            justifyContent: 'flex-end',
+                                            // backgroundColor:'#fff',
+                                            // paddingTop: 65
+                                            }}>
+                                            <View style={{ width:82, margin:5 }}>
+                                                <MenuButtonItem
+                                                    icon = {null}
+                                                    text = "Aceptar"
+                                                    onPress = { () => console.log('Aceptar')}
+                                                    />
+                                            </View>
+                                            <View style={{ width:82, margin:5 }}>
+                                                <MenuButtonItem 
+                                                    icon = {null}
+                                                    text = "Rechazar"
+                                                    onPress = { () => console.log('Rechazar')}
+                                                    />
+                                            </View>
+                                        </View>
                                     </View>
                                 </>
                             )}
