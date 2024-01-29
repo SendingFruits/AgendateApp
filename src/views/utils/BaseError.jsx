@@ -10,29 +10,26 @@ import {
     Text 
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 
-const BaseError = ( param, debug=null ) => {
+const BaseError = ( params, debug=null ) => {
     
-    // console.log('nav: ', param.nav);
-    // console.log('err: ', param.errorType);
-    // console.log('dto: ', param.data);
+    // console.log(params);
+    var params = {
+        errorType,
+        setIsConnected
+    } = params;
 
-    const navigation = param.nav;
-    const errorType = param.errorType;
 
-    // const [data, setData] = useState(param.data);
-    const [from, setFrom] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-        setFrom(true);
 		setTimeout(() => {
 			setRefreshing(false);   
-            navigation.navigate('Inicio', params={from});
+            setIsConnected(true);
 		}, 2000);
-	}, [navigation]);
+	}, []);
 
     const errorView = (type) => {
         // console.log(type);
@@ -52,11 +49,7 @@ const BaseError = ( param, debug=null ) => {
     }
 
     useEffect(() => {
-		if (refreshing) {
-            setFrom(true);
-        } else {
-            setFrom(false);
-        }
+		// console.log('Error');
 	}, []); 
 
     return(
