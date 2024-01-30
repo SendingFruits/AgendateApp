@@ -52,7 +52,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Drawer = createDrawerNavigator();
-
+ 
 const Main = ( params ) => {
 
 	// console.log(params);
