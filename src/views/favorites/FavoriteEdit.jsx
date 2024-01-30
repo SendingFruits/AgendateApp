@@ -1,9 +1,9 @@
 import { Text, StyleSheet, View } from 'react-native';
 
-const ServiceEdit = () => {
+const FavoriteEdit = () => {
     return (
         <View style={styles.container}>
-            <Text>ServiceEdit</Text>
+            <Text>FavoriteEdit</Text>
         </View>
     );
 }
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ServiceEdit;
+export default FavoriteEdit;

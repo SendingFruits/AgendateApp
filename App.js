@@ -49,7 +49,7 @@ const App = (config) => {
 		}
 
 		const [userPreferences, setUserPreferences] = useState(preferences);
-		const [isConnected, setIsConnected] = useState(false);
+		const [isConnected, setIsConnected] = useState(true);
 
 		const setLocalDB = () => {
 			SQLiteHandler.createDb('agendate')

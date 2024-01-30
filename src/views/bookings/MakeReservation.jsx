@@ -204,9 +204,13 @@ const MakeReservation = ({ route }) => {
 									<Text style={stylesMake.label}>Dias: </Text>
 
 									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'60%' }}>
-										{service.diasDefinidosSemana.split(';').map((word, index) => (
+										{service.diasDefinidosSemana && service.diasDefinidosSemana.length > 0 ? (
+											service.diasDefinidosSemana.split(';').map((word, index) => (
 											<Text key={index}> {word} </Text>
-										))}
+											))
+										) : (
+											<Text>No hay días definidos</Text>
+										)}
 									</View>
 								</View>
 							</View>

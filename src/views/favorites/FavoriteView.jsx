@@ -21,7 +21,7 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-const ServicesView = ( params ) => {
+const FavoriteView = ( params ) => {
 
     const navigation = useNavigation();
 
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ServicesView;
+export default FavoriteView;

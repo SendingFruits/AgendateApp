@@ -42,7 +42,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ServiceCreate = (params) => {
+const FavoriteCreate = (params) => {
     
     const navigation = useNavigation();
     
@@ -147,7 +147,7 @@ const ServiceCreate = (params) => {
             guid,
 		};
 
-		ServicesController.handleServiceCreate(formData)
+		ServicesController.handleFavoriteCreate(formData)
 		.then(servReturn => {
 			console.log('servReturn: ', servReturn);
 			// if (servReturn) {
@@ -492,4 +492,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ServiceCreate;
+export default FavoriteCreate;

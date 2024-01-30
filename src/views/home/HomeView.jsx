@@ -2,7 +2,6 @@ import { UserContext } from '../../services/context/context';
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../../views/utils/Functions'; 
 
-import BaseError from '../../../src/views/utils/BaseError';
 import SearchPanel from './SearchPanel';
 import RatioPanel from './RatioPanel';
 import CompanyPanel from '../users/CompanyPanel';

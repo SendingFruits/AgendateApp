@@ -39,9 +39,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ServiceItem = (params) => {
+const FavoriteItem = (params) => {
     
-    // console.log('ServiceItem: ', params);
+    // console.log('FavoriteItem: ', params);
 
     var item = params.item;
     var edit = params.edit;
@@ -636,4 +636,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ServiceItem;
+export default FavoriteItem;
