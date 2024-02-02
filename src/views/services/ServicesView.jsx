@@ -34,6 +34,8 @@ const ServicesView = ( params ) => {
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
 
+
+    
     const handleEditItem = (item) => {
         console.log('handleEditItem', item);
     };
@@ -181,13 +183,12 @@ const ServicesView = ( params ) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#e9e9f8',
         alignItems: 'center',
         justifyContent: 'center',
     },
     scrollContainer: {
         flex: 1,
-        alignItems:'center',
         width: '100%',
     },
     btnCreate: {
@@ -201,13 +202,9 @@ const styles = StyleSheet.create({
         color:'#ffffff'
     },
     footer: {   
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,     
+        width:'95%',
         textAlignVertical:'bottom',
         alignItems:'center',
-        textAlign:'center',
         borderTopColor:'#011',
         borderTopWidth:0.6,
     },

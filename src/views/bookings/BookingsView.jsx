@@ -24,11 +24,9 @@ const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
 
-
     var guid = params.route.params.guid;
     var type = params.route.params.type;
 
-    
     const [list, setList] = useState([]);
     const [counter, setCounter] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -36,8 +34,6 @@ const BookingsView = ( params ) => {
     const [showModal, setShowModal] = useState(false);
     const [dateSelected, setDateSelected] = useState(null);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-    
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -132,7 +128,7 @@ const BookingsView = ( params ) => {
             {/* {(list !== null || (Array.isArray(list) && list.length !== 0)) ? ( */}
             {(list.length !== 0) ? (
                 <ScrollView 
-                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
@@ -162,7 +158,7 @@ const BookingsView = ( params ) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#e9e9f8',
         alignItems: 'center',
         justifyContent: 'center',
     },

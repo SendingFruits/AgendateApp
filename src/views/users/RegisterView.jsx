@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 
 import UsersController from '../../controllers/UsersController';
+import AlertModal from '../utils/AlertModal';
 
 import {
 	Alert,
@@ -17,10 +18,6 @@ import {
 	TextInput,
 	Button,
 } from 'react-native';
-
-
-import AlertModal from '../utils/AlertModal';
-
 
 const RegisterView = () => {
 
@@ -112,7 +109,8 @@ const RegisterView = () => {
 			// console.log('userReturn: ', userReturn);
 			if (userReturn) {
 				// AlertModal.showAlert('Enviado','Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
-				alert('Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
+				var text = 'Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.';
+				AlertModal.showAlert('', text);
 				navigation.navigate('Login');
 
 				setUsername('');
@@ -127,8 +125,7 @@ const RegisterView = () => {
 			}
 		})
 		.catch(error => {
-			// AlertModal.showAlert('Datos Incorrectos', error);
-			alert('Datos Incorrectos - '+ error);
+			AlertModal.showAlert('', error);
 		});
 	};
 
@@ -140,15 +137,14 @@ const RegisterView = () => {
 	}, []);
 
 	useEffect(() => {
-        // Comentar para test
-        // setUsername('');
-        // setPassword('');
-		// setFirstName('');
-		// setLastName('');
-		// setMovil('');
-		// setEmail('');
-		// setDocument('');
-		// setIsValidEmail(true);
+        setUsername('');
+        setPassword('');
+		setFirstName('');
+		setLastName('');
+		setMovil('');
+		setEmail('');
+		setDocument('');
+		setIsValidEmail(true);
 		setUserType('customer');
     }, []);
 

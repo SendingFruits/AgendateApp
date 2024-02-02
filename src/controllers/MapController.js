@@ -1,4 +1,3 @@
-import databaseData from '../services/database/database.json';
 import MapServices from '../services/MapServices';
 import * as Location from 'expo-location';
 
@@ -39,13 +38,26 @@ class MapController {
         return status;
     };
 
-    searchCompany = async (company) => {
-        try {
-            
-        } catch (error) {
-            console.log('Error al obtener la Empresa:', error);
-            throw error;
-        }
+    searchCompany = async (name) => {
+        return new Promise((resolve, reject) => {
+			// console.log('getServicesForCompany', guid);
+			if ((name == '') || (name == undefined)) {
+				reject('Ingrese la Razon Social de la empresa.');
+			}
+
+			MapServices.getSearch(name)
+			.then(serviceReturn => {
+				// console.log('serviceReturn', serviceReturn);
+				if (serviceReturn !== null) {
+					resolve(serviceReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getCompanyData', error);
+			});
+		});
     };
 
     companyLocations = async (loc,cte) => {
@@ -76,6 +88,7 @@ class MapController {
 
     getServicesForCompany = async (idCompany) =>  {
     };
+
 }
 
 export default new MapController();

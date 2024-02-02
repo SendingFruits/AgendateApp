@@ -87,7 +87,6 @@ class CompanyServices {
         });
     };
 
-    
     putCompanyData = async (json) => {
         return new Promise((resolve, reject) => {
   

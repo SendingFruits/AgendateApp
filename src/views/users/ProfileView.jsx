@@ -12,6 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import UsersController from '../../controllers/UsersController';
 import AlertModal from '../utils/AlertModal';
 import MenuButtonItem from '../home/MenuButtonItem';
+import CheckBox from '../utils/CheckBox';
 
 import {
     Dimensions,
@@ -52,6 +53,7 @@ const ProfileView = ( params ) => {
 	const [isValidEmail, setIsValidEmail] = useState(true);
     const [selectedPicture, setSelectedPicture] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [isChecked, setChecked] = useState(false);
 
 
 	const validateEmail = (email) => {
@@ -91,7 +93,7 @@ const ProfileView = ( params ) => {
 
     let openImageSavedAsync = async () => {
         const storedImageUri = await AsyncStorage.getItem(username);
-        console.log(storedImageUri);
+        // console.log(storedImageUri);
         if (storedImageUri) {
             setSelectedPicture(storedImageUri);
         }
@@ -275,7 +277,13 @@ const ProfileView = ( params ) => {
                             </View>
                         </TouchableOpacity>
                     </View>
-                ) : null }
+                ) : 
+                    <View style={{ padding: 20 }}>
+                        <TouchableOpacity>
+                            <></>
+                        </TouchableOpacity>
+                    </View>
+                }
 
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -332,6 +340,16 @@ const ProfileView = ( params ) => {
                         </Text>
                     }
                 </View>
+
+                <View style={styles.checkContainer}>
+                    <CheckBox 
+                        type={'normal'}
+                        text={'Recibir Notificaciones por Correo'}
+                        isChecked={isChecked}
+                        setChecked={setChecked}
+                        />
+                </View>
+                
 
             </ScrollView>
 
@@ -429,7 +447,17 @@ const styles = StyleSheet.create({
         marginHorizontal:45, 
         marginBottom:15, 
         textAlign:'center' 
-    }
+    },
+
+    checkContainer: {
+		flexDirection: 'column',
+		// backgroundColor: '#fff',
+        
+		marginHorizontal:15,
+		marginBottom: 5,
+		paddingHorizontal: 15,
+		paddingVertical: 3,
+	},
 })
 
 export default ProfileView;

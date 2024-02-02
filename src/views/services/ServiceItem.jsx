@@ -36,8 +36,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const { width, height } = Dimensions.get('window');
 
 const ServiceItem = (params) => {
     
@@ -57,6 +56,7 @@ const ServiceItem = (params) => {
     const [comienzo, setComienzo] = useState(item.horaInicio);
     const [termino, setTermino] = useState(item.horaFin);
     const [turno, setTurno] = useState(item.duracionTurno);
+    const [leyendaTurno, setLeyendaTurno] = useState('minutos');
 
     const [comienzoHora,setComienzoHora]= useState(convertHour(item.horaInicio,'toHours'));
     const [terminoHora, setTerminoHora] = useState(convertHour(item.horaFin, 'toHours'));
@@ -201,11 +201,27 @@ const ServiceItem = (params) => {
 
 
 	useEffect(() => {
+
         setBodyHeight(280);
         setEditMode(edit);
 		setIsCollapsed(false);
         setDatePickerVisibility1(false);
         setDatePickerVisibility2(false);
+    
+        setNombre(item.nombre);
+        setTipo(item.tipoServicio);
+        setCosto(item.costo);
+        setComienzo(item.horaInicio);
+        setTermino(item.horaFin);
+        setTurno(item.duracionTurno);
+        setLeyendaTurno('minutos');
+        setComienzoHora(convertHour(item.horaInicio,'toHours'));
+        setTerminoHora(convertHour(item.horaFin, 'toHours'));
+        setDescription(item.descripcion);
+        setSelectedDias(item.diasDefinidosSemana);
+        setDiasListArray([]);
+        setSelectedDatePicker1();
+        setSelectedDatePicker2();
 
         // console.log('selectedDias: ',selectedDias);
         if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
@@ -296,7 +312,17 @@ const ServiceItem = (params) => {
                                                 <Text style={styles.label}>Duración de Turnos:</Text>
                                             </View>
                                             <View style={styles.columnV}>
-                                                <Text>{item.duracionTurno}</Text>
+
+                                                {item.duracionTurno === 1 ? (
+                                                    <>
+                                                        <Text>{item.duracionTurno} {"Hora"}</Text>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Text>{item.duracionTurno} {"Minutos"}</Text>
+                                                    </>
+                                                )}
+
                                             </View>
                                         </View>
 
@@ -335,13 +361,30 @@ const ServiceItem = (params) => {
                                     end={{ x: 1.5, y: 0.5 }} 
                                     >
         
-                                    <View style={styles.btnEdit}>    
+                                    {/* {item.estado === 'Solicitada' ? ( */}
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => editItem()}> 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Editar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+                                    {/* ) : null } */}
+
+                                    {/* <View style={styles.btnEdit}>    
                                         <MenuButtonItem 
                                             icon = {null}
                                             text = {'Editar'}
                                             onPress={() => editItem()}
                                         />
-                                    </View>
+                                    </View> */}
         
                                     {/* {console.log('calendar: ', booking.calendar)} */}
                                     {/* {!booking.calendar ? (
@@ -510,20 +553,53 @@ const ServiceItem = (params) => {
                                 >
 
                                 <View style={styles.btns}>
-                                    <View style={styles.btnEdit}>    
+
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => editItem(false)}>
+                                                <Text style={{color:'#000', textAlign:'center' }}>Cancelar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+
+                                    {/* <View style={styles.btnEdit}>    
                                         <MenuButtonItem 
                                             icon = {null}
                                             text = {'Cancelar'}
                                             onPress={() => editItem(false)}
                                         />
-                                    </View>
-                                    <View style={styles.btnEdit}>    
+                                    </View> */}
+
+
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => saveItem()}>
+                                                <Text style={{color:'#000', textAlign:'center' }}>Guardar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+                                    
+                                    {/* <View style={styles.btnEdit}>    
                                         <MenuButtonItem 
                                             icon = {null}
                                             text = {'Guardar'}
                                             onPress={() => saveItem()}
                                         />
-                                    </View>
+                                    </View> */}
                                 </View>
     
                             </LinearGradient>
@@ -538,40 +614,43 @@ const ServiceItem = (params) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth - 40,
-        marginHorizontal: 20,
-        marginVertical: 10,
+        width: width - 5,
+        // marginHorizontal: 20,
+        marginVertical: 5,
         justifyContent: 'center',
-        borderRadius: 12,
-        borderWidth: 1,
-        padding:1.5,
+        borderRadius: 8,
+        borderTopWidth: 0.8,
+        borderBottomWidth: 0.8,
+        padding:1.2,
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems:'baseline',
-        paddingHorizontal: 10,
-        borderTopLeftRadius:12,
-        borderTopRightRadius:12,
+        justifyContent:'space-between',
     },
     textHeader: {
         flexDirection: 'row',
         alignItems:'baseline',
         fontWeight:'bold',
+        marginStart:10,
         paddingVertical:10,
     },
     buttonsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignContent:'flex-end',
+        // alignItems:'flex-end',
+        // alignSelf:'flex-end',
+        // justifyContent: 'space-between',
         position:'relative',
-        top:-10,
+        top:10,
+        right:10,
     },
     body: {
-        paddingTop: 15,
-        borderTopWidth: 0.5,
-        borderTopColor: '#000',
+        width: width - 5,
+        // height: 100,
+        borderTopWidth: 1,
+        borderTopColor: '#555',
         borderBottomWidth: 1,
-        paddingHorizontal:10,
+        borderBottomColor: '#556',
+        paddingHorizontal:8,
     },
 
     row: {
@@ -600,9 +679,11 @@ const styles = StyleSheet.create({
 
     footer: {
         alignItems: 'flex-end',
+        paddingVertical:6,
+
         backgroundColor:'#9a9',
-        borderBottomLeftRadius:12,
-        borderBottomRightRadius:12,
+        // borderBottomLeftRadius:12,
+        // borderBottomRightRadius:12,
     },
 
     btns: {
@@ -631,6 +712,15 @@ const styles = StyleSheet.create({
         textAlign:'right',
         paddingRight:5,
         backgroundColor:'#fff'
+    },
+
+    cancel: { 
+        padding: 10,
+        marginHorizontal: 5,
+        margin: 10,
+        backgroundColor:'#135054',
+        borderRadius: 10,
+        width: 85,
     }
 
 });

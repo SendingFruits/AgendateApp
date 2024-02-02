@@ -13,10 +13,12 @@ class UsersController {
 		return new Promise((resolve, reject) => {
 
 			if (username == '') {
-				throw new Error('Por favor ingrese el username.');
+				reject('Por favor ingrese el username.');
+				return;
 			}
 			if (password == '') {
-				throw new Error('Por favor ingrese la contraseña.');
+				reject('Por favor ingrese la contraseña.');
+				return;
 			}
 
 			UserServices.doLogin(username, password)
@@ -32,30 +34,30 @@ class UsersController {
 	handleRegister(data) {
 		return new Promise((resolve, reject) => {
 			
-			console.log(data);
+			// console.log(data);
 
 			if (data.username == '') {
-				throw new Error('Por favor ingrese el username.');
+				reject('Por favor ingrese el username.');
 			}
 			if (data.password == '') {
-				throw new Error('Por favor ingrese la contraseña.');
+				reject('Por favor ingrese la contraseña.');
 			}
 			if (data.nombre == '') {
-				throw new Error('Por favor ingrese el nombre.');
+				reject('Por favor ingrese el nombre.');
 			}
 			if (data.apellido == '') {
-				throw new Error('Por favor ingrese el apellido.');
+				reject('Por favor ingrese el apellido.');
 			}
 			if (data.email == '') {
-				throw new Error('Por favor ingrese el correo electrónico.');
+				reject('Por favor ingrese el correo electrónico.');
 			}
 
 			if (data.userType === 'customer' && data.document == '') {
-				throw new Error('Por favor ingrese su documento de identidad.');
+				reject('Por favor ingrese su documento de identidad.');
 			} 
 			
 			if (data.userType === 'company' && data.document == '') {
-				throw new Error('Por favor ingrese el RUT de su Empresa.');
+				reject('Por favor ingrese el RUT de su Empresa.');
 			} 
 		
 			var dataConvert = {};
@@ -109,19 +111,19 @@ class UsersController {
 		return new Promise((resolve, reject) => {
 		
 			if (data.pass == '') {
-				throw new Error('Falta la contraseña.');
+				reject('Falta la contraseña.');
 			}
 			if (data.firstName == '') {
-				throw new Error('Falta el nombre.');
+				reject('Falta el nombre.');
 			}
 			if (data.lastName == '') {
-				throw new Error('Falta el apellido.');
+				reject('Falta el apellido.');
 			}
 			if (data.email == '') {
-				throw new Error('Falta el correo electrónico.');
+				reject('Falta el correo electrónico.');
 			}
 			if (data.movil == '') {
-				throw new Error('Falta el celular.');
+				reject('Falta el celular.');
 			}
 
 			const dataConvert = {
@@ -146,10 +148,10 @@ class UsersController {
 		return new Promise((resolve, reject) => {
 
 			if (data.old === '') {
-				throw new Error('Debe ingresar la Contraseña Actual.');
+				reject('Debe ingresar la Contraseña Actual.');
 			}
 			if (data.new === '') {
-				throw new Error('Debe ingresar la Contraseña Nueva.');
+				reject('Debe ingresar la Contraseña Nueva.');
 			}
 
 			var json = {
@@ -167,7 +169,7 @@ class UsersController {
 					reject(error);
 				});
 			} else {
-				throw new Error('La contraseña sigue siendo igual, debe ser diferente');
+				reject('La contraseña sigue siendo igual, debe ser diferente');
 			}
 
 		});
@@ -178,7 +180,7 @@ class UsersController {
 		return new Promise((resolve, reject) => {
 			// console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
-				throw new Error('Se requiere ID de Empresa.');
+				reject('Se requiere ID de Empresa.');
 			}
 
 			CompanyServices.getDataCompany(guid)
@@ -200,22 +202,22 @@ class UsersController {
 		return new Promise((resolve, reject) => {
 		
 			if (data.rut == '') {
-				throw new Error('Falta el RUT.');
+				reject('Falta el RUT.');
 			}
 			// if (data.owner == '') {
-			// 	throw new Error('Falta el Nombre del Propietario.');
+			// 	reject('Falta el Nombre del Propietario.');
 			// }
 			// if (data.businessName == '') {
-			// 	throw new Error('Falta el Razon Social.');
+			// 	reject('Falta el Razon Social.');
 			// }
 			// if (data.category == '') {
-			// 	throw new Error('Falta el Rubro.');
+			// 	reject('Falta el Rubro.');
 			// }
 			// if (data.address == '') {
-			// 	throw new Error('Falta la Dirección.');
+			// 	reject('Falta la Dirección.');
 			// }
 			// if (data.description == '') {
-			// 	throw new Error('Falta la Ddescripción.');
+			// 	reject('Falta la Ddescripción.');
 			// }
 
 			if (data.location.latitude === undefined) data.location.latitude = 0.0;

@@ -103,7 +103,8 @@ const PassChanger = (params) => {
     return (
 
         <LinearGradient 
-            colors={['#135000', '#238162', '#2ECC71']}
+            colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
+            // colors={['#135000', '#238162', '#2ECC71']}
             start={{ x: 0.0, y: 0.95510 }}
             end={{ x: 0.0, y: 0.00010 }}
             style={styles.container}
@@ -175,8 +176,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1, 
         padding: 21,
-        borderWidth: 1,
-        borderColor: '#2EAe71',
+        // borderWidth: 1,
+        // borderColor: '#2EAe71',
     },
     inputContainer: {
 		flexDirection: 'row',

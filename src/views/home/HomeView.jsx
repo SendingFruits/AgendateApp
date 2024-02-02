@@ -8,6 +8,7 @@ import CompanyPanel from '../users/CompanyPanel';
 
 import MapController from '../../controllers/MapController';
 
+
 import React, { 
 	useRef, useState, useEffect, useContext
 } from 'react';
@@ -35,15 +36,17 @@ import {
  
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
 const { width, height } = Dimensions.get('window');
 
 const HomeView = ( params ) => {
 	
 	// console.log('params home: ', params);
 	var { 
-		// mainStyle,
+		setOptions,
 		isConnected,
-		setIsConnected 
+		setIsConnected
 	} = params.route.params;
 
 	var countMap = 0;
@@ -52,12 +55,11 @@ const HomeView = ( params ) => {
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
 	var userLogin = userPreferences.current_user;
 	
-	// estado de ubicación dispositivo
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
-	const [calloutVisible, setCalloutVisible] = useState(false);
+	const [selectedMarker, setSelectedMarker] = useState(null);
 
-	// console.log(companies); 
+	
 	const navigation = useNavigation();
 
 	var otherLocation = {
@@ -89,7 +91,7 @@ const HomeView = ( params ) => {
 				
 				MapController.companyLocations(region, ratio)
 				.then(companiesReturn => {
-					// console.log('hay datos ');
+					// console.log('hay datos: ', companiesReturn);
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 
@@ -140,37 +142,36 @@ const HomeView = ( params ) => {
 				var empresa = item;
 				// console.log(Marker);
 				return (
-					// <CustomMarker
-					// 	index={index}
-					// 	typeUser={userLogin.type}
-					// 	item={item}
-					// 	imgLogo={imgLogo}
-					// 	imgSize={1}
-					// 	/>
-					
 					<Marker
 						key={index}
 						pinColor='#00ffff'
 						coordinate={item.location}
+						onPress={() => setSelectedMarker(item)}
 						// icon={{uri:imgLogo}}
 						>
 
 						{/* <Image uri={imgLogo} style={{height: 35, width:35 }} /> */}
 
-						{userLogin.type === 'customer' ? (
-							<Callout 
-								style={styles.callout}
-								onPress={() => handleReservation(userLogin,empresa)} 
-								>
-								<Text style={styles.title}>{item.title}</Text>
-								<Text style={styles.description}>{item.description}</Text>
-							</Callout>
-						) : (
-							<Callout style={styles.callout} >
-								<Text style={styles.title}>{item.title}</Text>
-								<Text style={styles.description}>{item.description}</Text>
-							</Callout>
-						)}
+						{
+							userLogin.type === 'customer' ? (
+								<Callout 
+									style={styles.openCallout}
+									onPress={() => handleReservation(userLogin, empresa)} 
+									>
+									<Text style={styles.title}>{item.title}</Text>
+									<Text style={styles.description}>{item.description}</Text>
+								</Callout>
+							) : (
+								<Callout style={styles.openCallout} >
+									<Text style={styles.title}>{item.title}</Text>  
+									<Text style={styles.description}>{item.description}</Text>
+									<Text style={{ color:'#f00', fontSize:16, alignSelf:'center' }}>
+										Debe ingresar como Cliente
+									</Text>
+								</Callout>
+							)
+						}
+
 					</Marker>
 				)
 			});
@@ -180,26 +181,33 @@ const HomeView = ( params ) => {
 	const handleSearch = (query) => {
 		
 		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
-		const foundCompany = companies.find(company => regex.test(company.title.toLowerCase()));
-		// const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
+		// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
+		const foundCompanyBasic = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
 	
+		console.log('query: ', query);
+		MapController.searchCompany(query)
+		.then(foundCompany => {
+			console.log('foundCompany: ', foundCompany);
+			if (foundCompany === foundCompanyBasic) {
+				const newRegion = {
+					latitude: foundCompany.location.latitude,
+					longitude: foundCompany.location.longitude,
+					latitudeDelta: 0.00006,
+					longitudeDelta: 0.00006,
+				};
+				// Centra el mapa en la ubicación de la empresa encontrada
+				mapRef.current.animateToRegion(newRegion); 
+				Keyboard.dismiss();
+			}
+		})
+		.catch(error => {
+			alert(error);
+		});
 		
-
-		if (foundCompany) {
-			const newRegion = {
-				latitude: foundCompany.location.latitude,
-				longitude: foundCompany.location.longitude,
-				latitudeDelta: 0.00006,
-				longitudeDelta: 0.00006,
-			};
-			// Centra el mapa en la ubicación de la empresa encontrada
-			mapRef.current.animateToRegion(newRegion); 
-			Keyboard.dismiss();
-		}
 	};
 
 	const handleReservation = (userLogin, item) => {
-		// console.log('item: ', item);
+		console.log('userLogin: ', userLogin);
 		saveCompanyID(item.id);
 		navigation.navigate('Realizar Reserva', { userLogin, item })
 	}; 
@@ -238,12 +246,12 @@ const HomeView = ( params ) => {
 	};
 
 	useEffect(() => {
+		// setCalloutVisible(false);
 		fetchData();
-		// console.log('useEffect');
 		Dimensions.addEventListener('change', handleOrientationChange);
 	}, [isConnected]); 
 	// location - pasarle location para actualizar siempre que se geolocalice
-	// companies - pasarle companies para actualizar siempre las empresas
+	// companies - pasarle companies para actualizar siempre las empresas - bug
 
 	return (
 		<ScrollView contentContainerStyle={styles.container} 
@@ -261,34 +269,36 @@ const HomeView = ( params ) => {
 						/>
 				</View>
 			) : (
-				<View style={styles.viewMap}>
-					
-					{orientation === 'portrait' ? (				
-						<SearchPanel onSearch={handleSearch} mapRef={mapRef} />	
-					) : (
-						<></>
-					)}
+				<View>
+					{orientation === 'portrait' ? (
+						<View style={styles.search}>
+							<SearchPanel 
+								onSearch={handleSearch} 
+								mapRef={mapRef} 
+								width={width}
+								height={height}
+								/>
+						</View>
+					) : null }
 
 					<MapView
 						ref={mapRef}
-						// style={styles.map}
-						style={ orientation === 'portrait' ? styles.mapPortrait : styles.mapLandscape }
+						style={ orientation === 'portrait' 
+							? styles.mapPortrait : styles.mapLandscape 
+						}
 						onRegionChange={onRegionChange}
 						initialRegion={location}
 						zoomEnabled={true}
 						zoomControlEnabled={true}
 						showsUserLocation={true}
-					>
+						showsMyLocationButton={true} 
+						>
 						{showCompanyLocations()}
-
 					</MapView>
-
+					
 					<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
-						<RatioPanel 
-							onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
-							/>
-					</View>			
-				
+						<RatioPanel onRatioChange={(newRatio) => handleRatioChange(newRatio)} />
+					</View>	
 				</View>
 			)}
 		</ScrollView>
@@ -309,7 +319,7 @@ const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
 			>
 			{typeUser === 'customer' ? (
 				<Callout 
-					style={styles.callout}
+					style={{}}
 					onPress={() => navigation.navigate('Realizar Reserva', { item })} 
 					>
 					<Text style={styles.title}>{item.title}</Text>
@@ -317,7 +327,7 @@ const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
 				</Callout>
 			) : (
 				<Callout 
-					style={styles.callout}
+					style={{}}
 					>
 					<Text style={styles.title}>{item.title}</Text>
 					<Text style={styles.description}>{item.description}</Text>
@@ -328,6 +338,22 @@ const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
 };
 
 const styles = StyleSheet.create({
+	search: {
+		
+		// alignSelf:'center',
+		// marginHorizontal:50,
+		// marginVertical:15,
+		// width: width,
+
+		height: 1,
+		position:'absolute',
+        top: -20,
+        left: -50,
+        right: 0,
+        bottom: 0,
+        zIndex: 5,
+		backgroundColor:'#000'
+    },
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
@@ -340,27 +366,30 @@ const styles = StyleSheet.create({
 		marginTop:25,
 	},
 	viewMap: {
-		width: '100%',
-		height: '100%',
+		width: width,
+		height: height,
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor:'#355B54',
+		// backgroundColor:'#355B54',
 	},
 	map: {
-		width: '99%',
-		height: '91%',
+		flex: 1,
+		width: width-1,
+		height: height-1,
 		margin: 1,
 		padding: 1,
 	},
 	mapPortrait: {
-		width: '99%',
-		height: '91%',
+		flex: 1,
+		width: width-1,
+		height: height-1,
 		margin: 1,
 		padding: 1,
 	},
 	mapLandscape: {
-		width: '99%',
-		height: '97%',
+		flex: 2,
+		width: width-1,
+		height: height-1,
 		margin: 1,
 		padding: 1,
 	},
@@ -370,25 +399,34 @@ const styles = StyleSheet.create({
 		height: 200,
 		backgroundColor: '#888',
 	},
-	callout: {
-		flex: 1,
-		width: 160,
-		height: 120,
+
+	openCallout: {
+		width: 210,
+		height: 175,
 	},
+	closedCallout: {
+		width: 0,
+		height: 0,
+	},
+
+	rowCallout: {
+		flexBasis: 50,
+	},
+
 	title: {
-		flex: 1,
+		fontSize: 20,
 		alignSelf:'center',
 		marginTop: 3,
-		padding: 2,
 		color: '#21B081'
 	},
 	description: {
 		flex: 1,
-		alignSelf:'flex-start',
-		marginLeft: 3,
-		marginRight: 3,
+		width:'100%',
+		alignSelf:'center',
+		// marginLeft: 3,
+		// marginRight: 3,
 		paddingBottom: 1,
-		color: '#61A2DC'
+		color: '#011'
 	},
 
 	conrolPanel: {
@@ -416,6 +454,10 @@ const styles = StyleSheet.create({
 	marker: {
 		width: 1,
 		height: 1,
+	},
+
+	row: {
+		flexDirection:'row',
 	}
 })
 

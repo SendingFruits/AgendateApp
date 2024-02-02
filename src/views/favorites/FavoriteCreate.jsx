@@ -374,6 +374,7 @@ const FavoriteCreate = (params) => {
                                 <MenuButtonItem 
                                     icon = {null}
                                     text = {'Guardar'}
+                                    color = {null}
                                     onPress={() => saveItem()}
                                 />
                             </View>
@@ -381,6 +382,7 @@ const FavoriteCreate = (params) => {
                                 <MenuButtonItem 
                                     icon = {null}
                                     text = {'Cancelar'}
+                                    color = {null}
                                     onPress={() => navigation.navigate('Servicios')}
                                 />
 

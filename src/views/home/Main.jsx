@@ -2,7 +2,6 @@ import { UserContext } from '../../services/context/context';
 
 import HomeView from './HomeView';
 import MenuButtonItem from './MenuButtonItem';
-import BaseError from '../utils/BaseError';
 
 import BookingsView from '../bookings/BookingsView';
 import MakeReservation from '../bookings/MakeReservation';
@@ -16,12 +15,14 @@ import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
 import ServiceCreate from '../services/ServiceCreate';
+import SearchPanel from './SearchPanel';
 
 import React, { 
-	useContext, useEffect, useState 
+	useRef, useContext, useEffect, useState 
 } from 'react';
 
 import { 
+	Dimensions,
 	StyleSheet,
 	View, 
 	Text, 
@@ -32,6 +33,7 @@ import {
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
+import testing from '../utils/testing';
 
 import { 
 	faHome, 
@@ -51,220 +53,235 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 
+const { width, height } = Dimensions.get('window');
+
 const Drawer = createDrawerNavigator();
  
 const Main = ( params ) => {
 
-	// console.log(params);
+	const mapRef = useRef(null);
+
+	// console.log('params: ', params);
 	var {
-		mainStyle,
+		setOptions,
 		isConnected,
 		setIsConnected,
+		profileVisibleInit
 	} = params;
 
 	const { userPreferences, setUserPreferences } = useContext(UserContext);
+	// console.log('userPreferences: ', userPreferences);
 	var userLogin = userPreferences.current_user;
+	const [calloutVisible, setCalloutVisible] = useState(false);
+
+	const handleSearch = (query) => {
+		console.log(query);
+		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
+		const foundCompany = companies.find(company => regex.test(company.title.toLowerCase()));
+		// const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
 	
-	const [menuVisible, setMenuVisible] = useState(false);
-	const [profileVisibleInit, setProfileVisibleInit] = useState(false);
+		if (foundCompany) {
+			const newRegion = {
+				latitude: foundCompany.location.latitude,
+				longitude: foundCompany.location.longitude,
+				latitudeDelta: 0.00006,
+				longitudeDelta: 0.00006,
+			};
+			// Centra el mapa en la ubicación de la empresa encontrada
+			mapRef.current.animateToRegion(newRegion); 
+			Keyboard.dismiss();
+		}
+	};
 
 	return (
-		<NavigationContainer 
-			onStateChange={(state) => {
-				if ((state.history.length > 1)) {
-					for (const key in state.history) {
-						if (state.history[key].type == 'drawer') {
-							Keyboard.dismiss();
-							setMenuVisible(true);
-						} 
-					}
-				} else {
-					setMenuVisible(false);
-					setProfileVisibleInit(false);
-				}
-			}} > 
-		{/* <NavigationContainer>  */}
-			<Drawer.Navigator
-				options={{ title: null, headerShown: false, }}
-				initialRouteName="Inicio"
-				drawerContent = { 
-					(props) => <MenuItems { ...props} profile={profileVisibleInit} /> 
-				} >
+		<Drawer.Navigator
+			options={{ title: null, headerShown: false, }}
+			initialRouteName="Inicio"
+			drawerContent = { 
+				(props) => <MenuItems { ...props} profile={profileVisibleInit} /> 
+			} >
+			
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+
+							{/* <View style={styles.search}>
+								<SearchPanel 
+									onSearch={handleSearch} 
+									mapRef={mapRef} 
+									width={width}
+									height={height}
+									/>
+							</View> */}
+
+								
+						</LinearGradient>, 
+				}}
+				name="Inicio" 
+				initialParams={{
+					setOptions,
+					isConnected,
+					setIsConnected
+				}} 
+				component={HomeView}
+				/>
+
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name={userLogin.type === 'company' ? 'Agenda' : 'Reservas'}
+				// name="Reservas" 
+				initialParams={ userLogin } 
+				component={BookingsView} 
+				/>
 				
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Inicio" 
-					initialParams={{
-						mainStyle,
-						isConnected,
-						setIsConnected
-					}} 
-					component={HomeView}
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Servicios" 
+				initialParams={ userLogin } 
+				component={ServicesView} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name={userLogin.type === 'company' ? 'Agenda' : 'Reservas'}
-					// name="Reservas" 
-					initialParams={ userLogin } 
-					component={BookingsView} 
-					/>
-					
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Servicios" 
-					initialParams={ userLogin } 
-					component={ServicesView} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Favoritos" 
+				initialParams={ userLogin } 
+				component={FavoritesView} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Favoritos" 
-					initialParams={ userLogin } 
-					component={FavoritesView} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Crear Servicio" 
+				initialParams={ userLogin } 
+				component={ServiceCreate} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Crear Servicio" 
-					initialParams={ userLogin } 
-					component={ServiceCreate} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Promociones" 
+				initialParams={ userLogin }
+				component={PromosView} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Promociones" 
-					initialParams={ userLogin }
-					component={PromosView} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Realizar Reserva" 
+				// initialParams={{ userLogin: userLogin }} 
+				component={MakeReservation} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Realizar Reserva" 
-					// initialParams={{ userLogin: userLogin }} 
-					component={MakeReservation} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Horarios" 
+				component={ScheduleList} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Horarios" 
-					component={ScheduleList} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null, 
+				}}
+				name="Login" 
+				component={LoginView} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null, 
-					}}
-					name="Login" 
-					component={LoginView} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null, 
+					headerStyle: {
+						backgroundColor: '#efefef'
+					},
+				}}
+				name="Registro de Usuario" 
+				component={RegisterView} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null, 
-						headerStyle: {
-							backgroundColor: '#efefef'
-						},
-					}}
-					name="Registro de Usuario" 
-					component={RegisterView} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Password" 
+				initialParams={{ userLogin: userLogin }}
+				component={PassChanger} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Password" 
-					initialParams={{ userLogin: userLogin }}
-					component={PassChanger} 
-					/>
+			<Drawer.Screen 
+				options={{
+					title: null,
+					headerBackground: () =>
+						<LinearGradient 
+							colors={['#135000', '#238162', '#dfe4ff']} 
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+						</LinearGradient>, 
+				}}
+				name="Perfil de Usuario" 
+				initialParams={{ userLogin: userLogin }}
+				component={ProfileView} 
+				/>
+			
+			<Drawer.Screen 
+				options={{}}
+				name="testing" 
+				component={testing} 
+				/>
 
-				<Drawer.Screen 
-					options={{
-						title: null,
-						headerBackground: () =>
-							<LinearGradient 
-								colors={['#135000', '#238162', '#dfe4ff']} 
-								style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-							</LinearGradient>, 
-					}}
-					name="Perfil de Usuario" 
-					initialParams={{ userLogin: userLogin }}
-					component={ProfileView} 
-					/>
-
-				<Drawer.Screen 
-					options={{
-						title: null, 
-						headerShown: false 
-					}}
-					name="BaseError" 
-					component={BaseError} 
-					/>
-
-			</Drawer.Navigator>
-		</NavigationContainer>
+		</Drawer.Navigator>
 	);
 };
  
@@ -330,6 +347,7 @@ const MenuItems = ( { navigation, profile } ) => {
 					<MenuButtonItem 
 						icon = {faHome}
 						text = "Inicio"
+						color = {null}
 						onPress = { () => navigation.navigate('Inicio')}
 					/>
 
@@ -340,16 +358,19 @@ const MenuItems = ( { navigation, profile } ) => {
 									<MenuButtonItem 
 										icon = {faCalendar}
 										text = "Agenda"
+										color = {null}
 										onPress = { () => navigation.navigate('Agenda')}
 									/>
 									<MenuButtonItem 
 										icon = {faScrewdriverWrench}
 										text = "Servicios"
+										color = {null}
 										onPress = { () => navigation.navigate('Servicios', params={userLogin})}
 									/>
 									<MenuButtonItem 
 										icon = {faTags}
 										text = "Promociones"
+										color = {null}
 										onPress = { () => navigation.navigate('Promociones', params={userLogin})}
 									/>
 								</View>
@@ -360,11 +381,13 @@ const MenuItems = ( { navigation, profile } ) => {
 									<MenuButtonItem 
 										icon = {faCalendar}
 										text = "Reservas"
+										color = {null}
 										onPress = { () => navigation.navigate('Reservas')}
 										/>
 									<MenuButtonItem 
 										icon = {faStar}
 										text = "Favoritos"
+										color = {null}
 										onPress = { () => navigation.navigate('Favoritos')}
 										/>
 								</>
@@ -375,58 +398,74 @@ const MenuItems = ( { navigation, profile } ) => {
 				{/* Footer */}
 				<View style={styles.footer}>
 
-					{userLogin.user === 'none' ? (
-						<View>
+					<>
+						{userLogin.user === 'none' ? (
 							<View>
-								<MenuButtonItem 
-									icon = {faUser}
-									text = {'Iniciar Sesión'}
-									onPress = { () => navigation.navigate('Login')}
-								/>
-							</View>
+								<View>
+									<MenuButtonItem 
+										icon = {faUser}
+										text = {'Iniciar Sesión'}
+										color = {null}
+										onPress = { () => navigation.navigate('Login')}
+									/>
+								</View>
 
-							<View>
-								<MenuButtonItem 
-									icon = {faRegistered}
-									text = {'Registrarse'}
-									onPress = { () => navigation.navigate('Registro de Usuario')}
-								/>
+								<View>
+									<MenuButtonItem 
+										icon = {faRegistered}
+										text = {'Registrarse'}
+										color = {null}
+										onPress = { () => navigation.navigate('Registro de Usuario')}
+									/>
+								</View>
 							</View>
-						</View>
-					) : (
-						<View>
+						) : (
 							<View>
-								<MenuButtonItem 
-									icon = {faUser}
-									text = {userLogin.name}
-									// onPress={ () => setProfileVisible(!profileVisible)}
-									onPress={ () => navigation.navigate('Perfil de Usuario', userLogin)}
-								/>
-							</View>
+								<View>
+									<MenuButtonItem 
+										icon = {faUser}
+										text = {userLogin.name}
+										color = {null}
+										// onPress={ () => setProfileVisible(!profileVisible)}
+										onPress={ () => navigation.navigate('Perfil de Usuario', userLogin)}
+									/>
+								</View>
 
-							<View>
-								<TouchableOpacity 
-									style={styles.btnLogout} 
-									onPress={() => logout()} >
-									<FontAwesomeIcon icon={faRightFromBracket} />
-								</TouchableOpacity>
+								<View>
+									<TouchableOpacity 
+										style={styles.btnLogout} 
+										onPress={() => logout()} >
+										<FontAwesomeIcon icon={faRightFromBracket} />
+									</TouchableOpacity>
+								</View>
 							</View>
-						</View>
-					)}
+						)}
+						{/* { (profileVisible) ? (
+							<View>
+								<LinearGradient 
+									colors={['#135054', '#238162', '#a8ffe5']} 
+									style={styles.profile}>
+									{ (userLogin.user !== 'none') ? (
+										<View>
+											<MenuProfileView param={userLogin} />
+										</View>
+									) : null }
+								</LinearGradient>
+							</View>
+						) : null } */}
+					</>
 					
-					{/* { (profileVisible) ? (
-						<View>
-							<LinearGradient 
-								colors={['#135054', '#238162', '#a8ffe5']} 
-							 	style={styles.profile}>
-								{ (userLogin.user !== 'none') ? (
-									<View>
-										<MenuProfileView param={userLogin} />
-									</View>
-								) : null }
-							</LinearGradient>
-						</View>
-					) : null } */}
+					<>
+						{
+							userLogin.user === 'admin' ? (
+								<TouchableOpacity onPress={() => navigation.navigate('testing')} >
+									<Text>pantalla de testing</Text>
+								</TouchableOpacity>
+							) : ( null )
+						}
+					</>
+
+
 				</View>
 			</DrawerContentScrollView>
 		</LinearGradient>	

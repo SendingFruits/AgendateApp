@@ -3,11 +3,11 @@ import { useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import UsersController from '../../controllers/UsersController';
+import MenuButtonItem from '../home/MenuButtonItem';
+import AlertModal from '../utils/AlertModal';
 
 import React, { 
-	useState,
-	useEffect, 
-	useContext 
+	useState, useEffect, useContext 
 } from 'react';
 
 import { 
@@ -16,7 +16,6 @@ import {
 	Text, 
 	TextInput, 
 	Image, 
-	Button, 
 	TouchableOpacity
 } from 'react-native';
 import { 
@@ -43,7 +42,6 @@ const LoginView = () => {
 	const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        // Comentar para test, aca se le da el valor inicial al estado o cualquier variable
         setUsername('');
         setPassword('');
     }, []);
@@ -93,11 +91,13 @@ const LoginView = () => {
 				});
 
 				navigation.navigate('Inicio');
-				alert('Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre ));
+				// alert('Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre ));
+				var text = 'Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre );
+				AlertModal.showAlert('',text);
 			}
 		})
 		.catch(error => {
-			alert(error);
+			AlertModal.showAlert('',error);
 		});
 
 	};
@@ -105,7 +105,7 @@ const LoginView = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.body}>
-				<Image source={require('../../resources/images/user_login_2.png')} style={styles.avatar} />
+				<Image source={require('../../../assets/icon.png')} style={styles.avatar} />
 
 				<Text style={styles.title}>Bienvenido</Text>
 
@@ -138,19 +138,23 @@ const LoginView = () => {
 					{/* <Text style={styles.forgotPasswordText}>¿Olvidaste la contraseña?</Text> */}
 				</View>
 
-				<Button 
-					title="Iniciar Sesión" 
-					onPress={login}
-					color='#135944' 
+				<MenuButtonItem 
+					icon = {null}
+					text = "Iniciar Sesión"
+					// color = {['#dfe4ff', '#238162', '#2ECC71']}
+					color = {['#135f44', '#2ECC71', '#dfe4ff']}
+					onPress = { () => login() }
 					/>
 
 				<View style={styles.registerContainer}>
-					<Text style={styles.registerText}>¿Sos nuevo?</Text>
-					<Button 
-						title="Registrate" 
-						onPress = { () => navigation.navigate('Registro de Usuario')} 
-						color="#135944"
-						/>
+					<Text>¿Sos nuevo?</Text>
+					<View style={{ flexDirection:'row' }}>
+						<Text>Registrate </Text>
+						<TouchableOpacity
+							onPress = { () => navigation.navigate('Registro de Usuario')} >
+							<Text style={{ color:"#135f44" }}>Aquí</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 		</View>
