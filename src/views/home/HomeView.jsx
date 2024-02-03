@@ -63,7 +63,7 @@ const HomeView = ( params ) => {
 	const [orientation, setOrientation] = useState(getOrientation());
 	const [isConnected, setIsConnected] = useState(true)
 	const [refreshing, setRefreshing] = useState(false);
-	const [ratio, setRatio] = useState(1);
+	const [radio, setRadio] = useState(1);
 	
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -80,15 +80,14 @@ const HomeView = ( params ) => {
 				const region = await MapController.getLocation();
 				setLocation(region);
 				// const organizedCompanies = await MapController.companyLocations(region,1);
-				
-				MapController.companyLocations(region, ratio)
+				MapController.companyLocations(region, radio)
 				.then(companiesReturn => {
 					// console.log('hay datos ');
 					setCompanies(companiesReturn);
 					setIsConnected(true);
 
 					countMap++;
-					console.log(countMap);
+					//console.log(countMap);
 				})
 				.catch(error => {
 					// console.log('no hay datos ');
@@ -117,10 +116,17 @@ const HomeView = ( params ) => {
 	};
  
 	const handleRatioChange = (value) => {
-		// console.log(value);
-        setRatio(value);
-		fetchData();
+		setRadio(value);
     };
+
+	useEffect(() => {
+		fetchData();
+		// console.log('useEffect');
+		Dimensions.addEventListener('change', handleOrientationChange);
+	}, [isConnected, radio]); 
+	// location - pasarle location para actualizar siempre que se geolocalice
+	// companies - pasarle companies para actualizar siempre las empresas
+
 
 	const onRegionChange = (region, gesture) => {
 		// esta funcion sirve para sacar las coordenadas cuando el mapa se mueve
@@ -231,13 +237,6 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	useEffect(() => {
-		fetchData();
-		// console.log('useEffect');
-		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [isConnected]); 
-	// location - pasarle location para actualizar siempre que se geolocalice
-	// companies - pasarle companies para actualizar siempre las empresas
 
 	// console.log(isConnected);
 	if (!isConnected) {
@@ -284,9 +283,7 @@ const HomeView = ( params ) => {
 						</MapView>
 	
 						<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
-							<RatioPanel 
-								onRatioChange={(newRatio) => handleRatioChange(newRatio)} 
-								/>
+							<RatioPanel onRatioChange={handleRatioChange} mapRef={mapRef}/>
 						</View>			
 					
 					</View>
