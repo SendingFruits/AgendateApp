@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 
 import Slider from '@react-native-community/slider';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 const RatioPanel = ({ onRatioChange, mapRef }) => {
 
     const [ratio, setRatio] = useState(1);
     
-
     const handleRatioChange = (value) => {
         console.log();
             setRatio(value);

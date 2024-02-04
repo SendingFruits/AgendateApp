@@ -23,24 +23,26 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const ServicesView = ( params ) => {
 
-    const navigation = useNavigation();
+    const { data } = params.route.params || {};
 
-    var guid = params.route.params.guid; 
-    // console.log('guid: ', guid);
+    const navigation = useNavigation();
+    var guid = params.route.params.guid;
 
     const [list, setList] = useState(null);
     const [editing, setEditing] = useState(false);
+    const [editMode, setEditMode] = useState(false);
     const [isCreate, setIsCreate] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
 
+    
     const handleEditItem = (item) => {
         console.log('handleEditItem', item);
     };
  
     const createItem = (guid) => {
         // console.log('create', guid);
-        navigation.navigate('Crear Servicio');
+        navigation.navigate('Crear Servicio', {isCreate, setIsCreate});
     };
 
     const premiumUpdate = () => {
@@ -55,7 +57,7 @@ const ServicesView = ( params ) => {
             getServices();
 			// navigation.navigate('Servicios');
 		}, 2000);
-	}, []);
+	}, [list]);
 
     const handleOrientationChange = () => {
 		const newOrientation = getOrientation();
@@ -78,15 +80,15 @@ const ServicesView = ( params ) => {
     }
 
     const listServices = () => {
-        // console.log('list: ', list); 
-		if (list) {
+        console.log('list: ', list); 
+		if (list.length > 0) {
 			return list.map((item, index) => {
 				return item && (
 					<ServiceItem 
                         guid={guid}
                         key={index}
                         item={item} 
-                        edit={false}
+                        onRefresh={onRefresh()}
                         onPress={() => handleEditItem(item)} 
                     />
 				)
@@ -98,32 +100,34 @@ const ServicesView = ( params ) => {
 
     useEffect(() => {
         setEditing(false);
+        setIsCreate(false);
         getServices();
 
         Dimensions.addEventListener('change', handleOrientationChange);
 
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow', () => {
-                // console.log('Teclado abierto');
-                setEditing(true);
-            }
-        );     
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                // console.log('Teclado cerrado');
-                setEditing(false);
-            }
-        );
-    }, [guid]);
+        /**
+         * esto sirve para controlar el teclado:
+         */
+        // const keyboardDidShowListener = Keyboard.addListener(
+        //     'keyboardDidShow', () => {
+        //         // console.log('Teclado abierto');
+        //         setEditing(true);
+        //     }
+        // );     
+        // const keyboardDidHideListener = Keyboard.addListener(
+        //     'keyboardDidHide',
+        //     () => {
+        //         // console.log('Teclado cerrado');
+        //         setEditing(false);
+        //     }
+        // );
+
+    }, [guid,isCreate]);
 
 
     return (
         <View style={styles.container}>
 
-            {/* {console.log(list)}
-            {console.log(Array.isArray(list))} */}
-            
             {(list !== null && Array.isArray(list) && list.length > 0) ? (
                 <ScrollView 
                     contentContainerStyle={styles.scrollContainer}
@@ -131,12 +135,26 @@ const ServicesView = ( params ) => {
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
 
-                    {listServices()}
+                    {list.map((item, index) => (
+                        <View key={index}>
+                            <ServiceItem 
+                                guid={guid}
+                                key={index}
+                                item={item}
+                                editMode={editMode}
+                                setEditMode={setEditMode}
+                                navigation={navigation}
+                                onRefresh={onRefresh}
+                                onPress={() => handleEditItem(item)}
+                                />
+                            {/* <Text>{item.nombre}</Text> */}
+                        </View>
+                    ))}
 
                 </ScrollView>
             ) : (
-                <View style={styles.scrollContainer}>
-                    <Text>No tiene ningún Servicio Creado</Text>
+                <View style={{}}>
+                    <Text>No tiene un servicio creado aún</Text>
 
                     <LinearGradient
                         colors={['#135054', '#a8ffff', '#fff']}
@@ -144,7 +162,9 @@ const ServicesView = ( params ) => {
                         end={{ x: 0.5, y: 1.5 }}
                         style={styles.btnCreate}
                         >
-                        <TouchableOpacity onPress={() => createItem(guid)} >
+                        <TouchableOpacity 
+                            styles={{ alignContent:'center' }}
+                            onPress={() => createItem(guid)} >
                             <Text> Crear Servicio </Text>
                         </TouchableOpacity>
                     </LinearGradient>
@@ -153,19 +173,21 @@ const ServicesView = ( params ) => {
 
             {!editing ? (
                 <>
-                    {orientation === 'portrait' ? (				
-                        <View style={styles.footer}>
-                            <Text style={styles.textVersion1}>
-                                En esta versión solo puede tener un servicio</Text>
-                            <TouchableOpacity 
-                                onPress={() => premiumUpdate()} 
-                                style={{ alignItems:'center' }}>
-                                <Text>Necesita actualizar a la versión Premium</Text>
-                                <Text>si quiere manejar multiples servicios</Text>
-                            </TouchableOpacity>
-                            <View>        
-                            </View>
-                        </View>
+                    {orientation === 'portrait' ? (		
+                        <>
+                            {/* <View style={styles.footer}>
+                                <Text style={styles.textVersion1}>
+                                    En esta versión solo puede tener un servicio</Text>
+                                <TouchableOpacity 
+                                    onPress={() => premiumUpdate()} 
+                                    style={{ alignItems:'center' }}>
+                                    <Text>Necesita actualizar a la versión Premium</Text>
+                                    <Text>si quiere manejar multiples servicios</Text>
+                                </TouchableOpacity>
+                                <View>        
+                                </View>
+                            </View> */}
+                        </>		
                     ) : (
                         <></>
                     )}
@@ -181,13 +203,12 @@ const ServicesView = ( params ) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#e9e9f8',
         alignItems: 'center',
         justifyContent: 'center',
     },
     scrollContainer: {
         flex: 1,
-        alignItems:'center',
         width: '100%',
     },
     btnCreate: {
@@ -195,21 +216,20 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 6,
         marginTop: 15,
 		marginBottom: 15,
+        marginHorizontal: 45,
 		borderRadius: 10,
+        textAlign:'center'
     },
     textCreate: {
         color:'#ffffff'
     },
     footer: {   
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,     
+        width:'95%',
         textAlignVertical:'bottom',
         alignItems:'center',
-        textAlign:'center',
         borderTopColor:'#011',
         borderTopWidth:0.6,
+        
     },
     textVersion1: {
         fontWeight:'bold',

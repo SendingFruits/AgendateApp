@@ -42,7 +42,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ServiceCreate = (params) => {
+const FavoriteCreate = (params) => {
     
     const navigation = useNavigation();
     
@@ -147,7 +147,7 @@ const ServiceCreate = (params) => {
             guid,
 		};
 
-		ServicesController.handleServiceCreate(formData)
+		ServicesController.handleFavoriteCreate(formData)
 		.then(servReturn => {
 			console.log('servReturn: ', servReturn);
 			// if (servReturn) {
@@ -374,6 +374,7 @@ const ServiceCreate = (params) => {
                                 <MenuButtonItem 
                                     icon = {null}
                                     text = {'Guardar'}
+                                    color = {null}
                                     onPress={() => saveItem()}
                                 />
                             </View>
@@ -381,6 +382,7 @@ const ServiceCreate = (params) => {
                                 <MenuButtonItem 
                                     icon = {null}
                                     text = {'Cancelar'}
+                                    color = {null}
                                     onPress={() => navigation.navigate('Servicios')}
                                 />
 
@@ -492,4 +494,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ServiceCreate;
+export default FavoriteCreate;

@@ -15,6 +15,7 @@ import {
 	ScrollView, 
 	ActivityIndicator,
 	Modal,
+	Dimensions
 } from 'react-native';
  
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -28,6 +29,10 @@ import AlertModal from '../utils/AlertModal';
 
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+const { width, height } = Dimensions.get('window');
 
 const MakeReservation = ({ route }) => {
 	
@@ -90,7 +95,8 @@ const MakeReservation = ({ route }) => {
 				setCompany(companyReturn);
 			}
 		} catch (error) {
-			alert('ERROR al intentar cargar los Servicios, ' + error);
+			AlertModal.showAlert('Error al intentar cargar la Empresa', error);
+			// alert('ERROR al intentar cargar la Empresa, ' + error);
 		}
 	}
 
@@ -107,7 +113,8 @@ const MakeReservation = ({ route }) => {
 				setIsLoading(true);
 			}
 		} catch (error) {
-			alert('ERROR al intentar cargar los Servicios, ' + error);
+			AlertModal.showAlert('Error al intentar cargar el Servicio', error);
+			// alert('ERROR al intentar cargar el Servicio, ' + error);
 		}
     }
 
@@ -121,7 +128,8 @@ const MakeReservation = ({ route }) => {
 			getService(id);
 		})
 		.catch(error => {
-			alert('ERROR al intentar cargar la Empresa, ' + error);
+			AlertModal.showAlert('Error al intentar cargar la Empresa', error);
+			// alert('ERROR al intentar cargar la Empresa, ' + error);
 		});
 
 	};
@@ -202,7 +210,16 @@ const MakeReservation = ({ route }) => {
 								</View>
 								<View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Dias: </Text>
-									<Text style={stylesMake.value}>{service.diasDefinidosSemana}</Text>
+
+									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'60%' }}>
+										{service.diasDefinidosSemana && service.diasDefinidosSemana.length > 0 ? (
+											service.diasDefinidosSemana.split(';').map((word, index) => (
+											<Text key={index}> {word} </Text>
+											))
+										) : (
+											<Text>No hay días definidos</Text>
+										)}
+									</View>
 								</View>
 							</View>
 						) : <View style={stylesMake.span}>
@@ -227,7 +244,7 @@ const MakeReservation = ({ route }) => {
 									<ActivityIndicator size="large" color="#0000ff" />
 								) : (
 									<View>
-										<CalendarPicker 
+										<CalendarSelector 
 											compId={compId} 
 											userLogin={user} 
 											service={service} 
@@ -319,7 +336,7 @@ const stylesMake = StyleSheet.create({
     },
 });
 
-const CalendarPicker = ( params ) => {
+const CalendarSelector = ( params ) => {
 
 	// console.log(LocaleConfig);
 	const [list, setList] = useState(null);
@@ -406,7 +423,7 @@ const CalendarPicker = ( params ) => {
 
         SchedulesController.getSchedulesForService(id_server,day.dateString)
         .then(schedulesReturn => {
-            console.log('schedulesReturn: ', schedulesReturn.resultado);        
+            // console.log('schedulesReturn: ', schedulesReturn.resultado);        
 
             if (schedulesReturn !== null) {
                 setAvailableTimes(schedulesReturn.resultado);    
@@ -422,7 +439,8 @@ const CalendarPicker = ( params ) => {
 			setSchedulesVisible(true);
         })
         .catch(error => {
-            alert(error); 
+            // alert(error); 
+			AlertModal.showAlert('Horarios ', error);
         });
 
     };
@@ -547,7 +565,7 @@ const ScheduleList = ( params ) => {
 	} = params;
 
 
-	console.log(availableTimes);
+	// console.log(availableTimes);
 
 	const [selectedHour, setSelectedHour] = useState(null);
 	const [showModal, setShowModal] = useState(false);
@@ -564,8 +582,8 @@ const ScheduleList = ( params ) => {
 		}, 10000);
 	};
 
-	const confirmReservation = (hour) => {
-		console.log(hour);
+	const confirmReservation = async (hour) => {
+		// console.log(hour);
 
 		const formData = {
 			idCliente:userLogin.guid,
@@ -578,21 +596,14 @@ const ScheduleList = ( params ) => {
 		.then(userReturn => {
 			// console.log('userReturn: ', userReturn);
 			if (userReturn) {
-				alert('Se realizó la Reserva con éxito');
+				// alert('Se realizó la Reserva con éxito');
+				AlertModal.showAlert('Envio Exitoso ', 'Se realizó la Reserva.');
 				onRefresh();
 			}
 		})
 		.catch(error => {
 			alert(error);
 		});
-
-		// {
-		// 	"id": 0,
-		// 	"idCliente": 0,
-		// 	"idServicio": 0,
-		// 	"fechaHoraTurno": "2024-01-14T23:52:03.570Z",
-		// 	"estado": "string"
-		// }
 	};
 
 	return (

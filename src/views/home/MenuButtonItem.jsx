@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+	useEffect, useState
+} from 'react';
 
 import { 
 	StyleSheet,
@@ -14,10 +16,19 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-const MenuButtonItem = ({ icon, text, onPress }) => {
+const MenuButtonItem = ({ icon, text, color, onPress }) => {
+
+	var [colorButton, setColorButton] = useState(['#135054', '#d8ffff', '#d0e9e1']);
+
+	useEffect(() => {
+		if (color) {
+		  setColorButton(color);
+		}
+	}, [color]); 
+
 	return (	
 		<LinearGradient
-			colors={['#135054', '#d8ffff', '#d0e9e1']}
+			colors={colorButton}
 			start={{ x: 0.02, y: 0.50 }}
       		end={{ x: 1.55, y: 1.55 }}
 			style={styles.btnAside}

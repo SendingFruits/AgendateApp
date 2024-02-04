@@ -1,13 +1,13 @@
 import ApiConfig from './ApiConfig';
 import axios from 'axios';
 
-class CompanyServices {
+class FavoriteServices {
 
-    getServicesForCompany = async (guid) => {
+    getFavoritesList = async (guid) => {
         return new Promise((resolve, reject) => {
         
-            var method = 'Servicios/BuscarServicioPorIdEmpresa';
-            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
+            var method = 'Favoritos/ObtenerFavorito';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?idCliente=${guid}`;
     
             const options = {
                 method: 'GET',
@@ -17,7 +17,7 @@ class CompanyServices {
                 },
             };
              
-            // console.log(urlCompleta);
+            console.log(urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {
@@ -45,29 +45,25 @@ class CompanyServices {
         });
     };
 
-    getDataCompany = async (guid) => {
+
+    postFavorite = async (json) => {
         return new Promise((resolve, reject) => {
-  
-            var method = 'Empresas/ObtenerEmpresaPorId';
-            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
-    
-            const options = {
-                method: 'GET',
-                headers: {
-                    'accept': 'text/json',
-                    // 'verify': false
-                },
-            };
-             
-            // console.log(urlCompleta);
+            var method = 'Servicios/RegistrarServicio';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
-            axios.get(urlCompleta, options)
+            const headers = {
+                // Agrega aquí las cabeceras requeridas por la API
+            };
+            
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+            axios.post(urlCompleta, json, { headers })
             .then(function (response) {
-                // console.log('response.data: ', response.data);
+                console.log(response.data);
                 if (response.status == 200) {
-                    resolve(response.data);
+                    resolve(JSON.stringify(response.data));
                 } else {
-                    resolve(null);
+                    resolve(response.data);
                 }
             })
             .catch(function (error) {
@@ -75,7 +71,7 @@ class CompanyServices {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else {
                     if (error.response.status >= 500) {
-                        reject(-1);                
+                        reject('Error de Servidor. Verifique su conexión a Internet o consulte el proveedor.');                
                     } else if ((error.response.status >= 400) && (error.response.status < 500)) {
                         reject(error.response.data); 
                     } else {
@@ -83,11 +79,11 @@ class CompanyServices {
                     }
                 }
             });
-            
         });
-    };
+    }
 
-    putCompanyData = async (json) => {
+
+    putNotifications = async (json) => {
         return new Promise((resolve, reject) => {
   
             var method = 'Empresas/ActualizarEmpresa';
@@ -116,87 +112,8 @@ class CompanyServices {
         });   
     }
 
-    postServiceData = async (json) => {
-        return new Promise((resolve, reject) => {
-            var method = 'Servicios/RegistrarServicio';
-            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
-            const headers = {
-                // Agrega aquí las cabeceras requeridas por la API
-            };
-            
-            console.log('json: ', json);
-            console.log('urlCompleta: ', urlCompleta);
-
-            axios.post(urlCompleta, json, { headers })
-            .then(function (response) {
-                console.log(response.data);
-                if (response.status == 200) {
-                    resolve(JSON.stringify(response.data));
-                } else {
-                    resolve(response.data);
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-                if (error.message == 'Network Error') {
-                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
-                } else {
-                    if (error.response.status >= 500) {
-                        reject('Error de Servidor. Verifique su conexión a Internet o consulte el proveedor.');                
-                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
-                        reject(error.response.data); 
-                    } else {
-                        reject('Error Desconocido.');    
-                    }
-                }
-            });
-        });
-    }
-
-    putServiceData = async (json) => {
-        return new Promise((resolve, reject) => {
-  
-            var method = 'Servicios/ActualizarServicio';
-            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
-
-            const headers = {
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json'
-            };
-
-            // console.log('json: ', json);
-            // console.log('urlCompleta: ', urlCompleta);
-            axios.put(urlCompleta, json, { headers })
-            .then(function (response) {
-                // console.log(response);
-                if (response.status == 200) {
-                    // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
-                    resolve(JSON.stringify(response.data));
-                } else {
-                    resolve(response.errors);
-                }
-            })
-            .catch(function (error) {
-                // console.log('error: ', error);
-                // reject(error.response.data);
-
-                if (error.message == 'Network Error') {
-                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
-                } else {
-                    if (error.response.status >= 500) {
-                        reject(-1);                
-                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
-                        reject(error.response.data); 
-                    } else {
-                        reject('Error Desconocido.');    
-                    }
-                }
-            });
-        });
-    }
-
-    deleteService = async (guid) => {
+    deleteFavorite = async (guid) => {
         return new Promise((resolve, reject) => {
   
             var method = 'Servicios/EliminarServicio';
@@ -222,4 +139,4 @@ class CompanyServices {
     }
 }
 
-export default new CompanyServices();
+export default new FavoriteServices();

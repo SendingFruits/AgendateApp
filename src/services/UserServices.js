@@ -69,7 +69,7 @@ class UserServices {
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
                 // console.log('status: ',JSON.stringify(response.status));
-                console.log('response: ', response);
+                // console.log('response: ', response);
                 if (response.status == 200) {
                     resolve(JSON.stringify(response.data));
                 } else {
@@ -77,11 +77,11 @@ class UserServices {
                 }
             })
             .catch(function (error) {
-                console.log('error: ', error.message);
+                // console.log('error: ', error.response);
                 if (error.message == 'Network Error') {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else if (error.message == 'Request failed with status code 400') {
-                    reject(error.message); 
+                    reject(error.response.data); 
                 } else {
                     if (error.response.status >= 500) {
                         reject('Error de Servidor. Verifique su conexión a Internet o consulte el proveedor.');                
@@ -140,6 +140,32 @@ class UserServices {
             // console.log('urlCompleta: ', urlCompleta);
 
             axios.put(urlCompleta, json)
+            .then(response => {
+                // console.log('response: ', response);
+                if (response.status == 200) {
+                    resolve(response.data);
+                } else {
+                    resolve(false);
+                }
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+        });
+    }
+
+    putDelete = async (id) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Usuarios/EliminarUsuario';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${id}`;
+            
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+            
+            axios.put(urlCompleta,{},{})
             .then(response => {
                 // console.log('response: ', response);
                 if (response.status == 200) {

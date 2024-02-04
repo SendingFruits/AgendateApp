@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../utils/Functions'; 
 
-import ServiceItem from './FavoriteItem';
-import ServicesController from '../../controllers/ServicesController';
+import FavoriteItem from './FavoriteItem';
+import FavoriteController from '../../controllers/FavoritesController';
 
 import React, { 
     useState, useEffect
@@ -21,12 +21,13 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-const ServicesView = ( params ) => {
+
+const FavoriteView = ( params ) => {
 
     const navigation = useNavigation();
 
     var guid = params.route.params.guid; 
-    // console.log('guid: ', guid);
+    console.log('guid: ', guid);
 
     const [list, setList] = useState(null);
     const [editing, setEditing] = useState(false);
@@ -52,7 +53,7 @@ const ServicesView = ( params ) => {
 		setTimeout(() => {
 			setRefreshing(false);
             setEditing(false);
-            getServices();
+            getFavorites();
 			// navigation.navigate('Servicios');
 		}, 2000);
 	}, []);
@@ -62,12 +63,12 @@ const ServicesView = ( params ) => {
 		setOrientation(newOrientation);
 	};
 
-    const getServices = async () => {
-        ServicesController.getServicesForCompany(guid)
-        .then(serviceReturn => {
-            // console.log('serviceReturn: ', serviceReturn);
-            if (serviceReturn !== null) {
-                setList([serviceReturn]);
+    const getFavorites = async () => {
+        FavoriteController.getFavoritesForService(guid)
+        .then(favoritesReturn => {
+            console.log('favoritesReturn: ', favoritesReturn);
+            if (favoritesReturn !== null) {
+                setList([favoritesReturn]);
             } else {
                 setList([]);
             }
@@ -77,12 +78,12 @@ const ServicesView = ( params ) => {
         });
     }
 
-    const listServices = () => {
+    const listFavorites = () => {
         // console.log('list: ', list); 
 		if (list) {
 			return list.map((item, index) => {
 				return item && (
-					<ServiceItem 
+					<FavoriteItem 
                         guid={guid}
                         key={index}
                         item={item} 
@@ -97,9 +98,9 @@ const ServicesView = ( params ) => {
     
 
     useEffect(() => {
-        // setEditing(false);
-        
-    }, [list,guid]);
+        getFavorites();
+        console.log(list);
+    }, [guid]);
 
 
     return (
@@ -112,22 +113,11 @@ const ServicesView = ( params ) => {
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
 
-                    {listServices()}
+                    {listFavorites()}
 
                 </ScrollView>
             ) : null }
 
-            {!editing ? (
-                <>
-                    {orientation === 'portrait' ? (				
-                        <></>
-                    ) : (
-                        <></>
-                    )}
-                </>
-            ) : (
-                <></>
-            )}
 
         </View>
     );
@@ -177,4 +167,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ServicesView;
+export default FavoriteView;

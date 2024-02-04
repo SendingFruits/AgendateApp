@@ -10,29 +10,27 @@ import {
     Text 
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 
-const BaseError = ( param, debug=null ) => {
+const BaseError = ( params, debug=null ) => {
     
-    // console.log('nav: ', param.nav);
-    // console.log('err: ', param.errorType);
-    // console.log('dto: ', param.data);
+    // console.log('params error: ', params);
+    var params = {
+        errorType,
+        setIsConnected
+    } = params;
 
-    const navigation = param.nav;
-    const errorType = param.errorType;
+    // const navigation = useNavigation();
 
-    // const [data, setData] = useState(param.data);
-    const [from, setFrom] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-        setFrom(true);
 		setTimeout(() => {
 			setRefreshing(false);   
-            navigation.navigate('Inicio', params={from});
+            setIsConnected(true);
 		}, 2000);
-	}, [navigation]);
+	}, []);
 
     const errorView = (type) => {
         // console.log(type);
@@ -47,38 +45,52 @@ const BaseError = ( param, debug=null ) => {
                 return (<Text style={styles.message} >Error de Conexión a Internet</Text>);
                 break;
             default:
+                return null;
                 break;
         }
     }
 
     useEffect(() => {
-		if (refreshing) {
-            setFrom(true);
-        } else {
-            setFrom(false);
-        }
+		// console.log('Error');
 	}, []); 
 
-    return(
-        <ScrollView
-            style={{ flex: 1 }}
-			refreshControl={
-				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-			} >
-            <View style={{ flex: 1 }}>
-                {errorView(errorType)}
-            </View>    
-        </ScrollView>
+    return (
+        <View style={styles.container}>
+            <ScrollView
+                contentContainerStyle={styles.scrollView}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} 
+                        onRefresh={onRefresh} />
+                    }
+                >
+                <View style={styles.contentContainer}>
+                    {errorView(errorType)}
+                    <Text>Arrastra hacia abajo para recargar</Text>
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
 export default BaseError;
 
 const styles = StyleSheet.create({
-	message: {
+    container: {
         flex: 1,
-		padding: 10,
+        backgroundColor: '#ee',
+    },
+    scrollView: {
+        flex: 1,
+    },
+    contentContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // backgroundColor: '#ee2',
+    },
+    message: {
+        padding: 10,
         fontSize: 18,
-        alignSelf:'center'
-	},
+        fontWeight:'bold'
+    },
 });

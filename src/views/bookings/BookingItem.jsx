@@ -1,4 +1,4 @@
-import { formatDate } from '../../views/utils/Functions'; 
+import { formatDate, getDateFromString } from '../../views/utils/Functions'; 
 
 import { 
     useState, useEffect 
@@ -30,12 +30,11 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const { width, height } = Dimensions.get('window');
 
 const BookingItem = ( params ) => {
 
-    // console.log('params: ', params);
+    console.log('params: ', params);
     var {
         index,
         type,
@@ -50,8 +49,8 @@ const BookingItem = ( params ) => {
     var fecha = formatDate(dateString[0]);
     var hora = dateString[1].slice(0, -3);
 
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [bodyHeight, setBodyHeight] = useState(200);
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    const [bodyHeight, setBodyHeight] = useState(300);
 
     const setStatusColor = (estado) => {
         switch (estado) {
@@ -78,6 +77,32 @@ const BookingItem = ( params ) => {
 
     const editName = () => {
         console.log('editName');
+    };
+
+
+    const done = (id) => {
+        console.log('done of: ', id);
+        var text = '¿El cliente asitió en forma y hora al lugar?';
+
+        AlertModal.showConfirmationAlert(text)
+		.then(alertRes => {
+			console.log('alertRes: ', alertRes);
+			if (alertRes) {
+                // BookingController.handleCancelBooking(id)
+                // .then(resDelete => {
+                //     // console.log('userReturn: ', userReturn);
+                //     if (resDelete) {
+                //         onRefresh();
+                //     }
+                // })
+                // .catch(error => {
+                //     alert(error);
+                // });
+            }
+		})
+		.catch(error => {
+			alert(error);
+		});
     };
 
     const cancellation = (id) => {
@@ -110,8 +135,14 @@ const BookingItem = ( params ) => {
 
 
 	useEffect(() => {
-		setIsCollapsed(false);
-	}, []);
+		setIsCollapsed(true);
+
+        if (type === 'company') {
+            setBodyHeight(120);
+        } else {
+            setBodyHeight(245);
+        }
+	}, [type]);
     
     return (
         <View style={styles.container}>
@@ -127,47 +158,43 @@ const BookingItem = ( params ) => {
                         >
                         <View style={styles.lineHeader} >
 
-                            <View style={styles.leftLineHeader}>
-                                { type === 'customer' ? (
-                                    <Text>Reserva para el</Text>
-                                ) : ( 
-                                    <Text>Reserva para el</Text>
-                                )}
+                            <View style={{ flexDirection:'row' }}>
+                                <View style={styles.leftLineHeader}>
+                                    { type === 'customer' ? (
+                                        <Text>Reserva para el</Text>
+                                    ) : ( 
+                                        <Text>Reserva para el</Text>
+                                    )}
+                                </View>
+                                
+                                <View style={styles.centerLineHeader}>
+                                
+                                    <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
+                                    <Text style={{ fontWeight:'bold' }}> {hora}</Text>
+                                
+                                </View>
                             </View>
                             
-                            <View style={styles.centerLineHeader}>
-                                <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
-                                <Text style={{ fontWeight:'bold' }}> {hora}</Text>
-                            </View>
                           
                             <View style={styles.rightLineHeader}>
-                                {item.estado === 'Solicitada' ? (
-                                    <>
-                                        <Text style={{ 
-                                            fontWeight:'bold', 
-                                            marginHorizontal:5,
-                                            color: setStatusColor(item.estado) 
-                                            }}> {item.estado}
-                                        </Text>
-                                        <TouchableOpacity
-                                            style={{ marginHorizontal:5 }}
-                                            onPress={() => cancellation(item.id)} > 
-                                            <FontAwesomeIcon icon={faCircleXmark} />
-                                        </TouchableOpacity>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Text style={{ 
-                                            fontWeight:'bold', 
-                                            marginHorizontal:5, 
-                                            color: setStatusColor(item.estado) 
-                                            }}> {item.estado}
-                                        </Text>
-                                        <View style={{ marginHorizontal:5 }}> 
-                                            <FontAwesomeIcon icon={faCircleCheck} />
-                                        </View>
-                                    </>
-                                ) }
+
+                                { (getDateFromString(fecha) < new Date() && (item.estado !== 'Cancelada' && item.estado !== 'Realizada')) ? (
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:5, 
+                                        color: '#f50' 
+                                        }}> No Confirmada
+                                    </Text>
+                                ) : 
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:5, 
+                                        color: setStatusColor(item.estado) 
+                                        }}> {item.estado}
+                                    </Text> 
+                                }
+
+                                
                             </View>
                             
                         </View>
@@ -212,14 +239,14 @@ const BookingItem = ( params ) => {
                                             <Text>{item.descripcion}</Text>
                                         </View>
 
-                                        <View style={styles.row}>
+                                        {/* <View style={styles.row}> */}
                                             {/* <Text style={styles.label}>Comienza:</Text> */}
                                             {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
+                                        {/* </View>
+                                        <View style={styles.row}> */}
                                             {/* <Text style={styles.label}>Termina:</Text> */}
                                             {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                        </View>
+                                        {/* </View> */}
                                     </View>
                                 </>
                             ) : (  
@@ -237,9 +264,6 @@ const BookingItem = ( params ) => {
                                             <Text>Celular: {item.celularCliente}</Text>
                                         </View>
                                     </View>
-
-                                    <View>
-                                    </View>
                                 </>
                             )}
                         
@@ -252,6 +276,67 @@ const BookingItem = ( params ) => {
                         start={{ x: 0.2, y: 1.2 }}
                         end={{ x: 1.5, y: 0.5 }} 
                         >
+
+                        { type === 'company' ? (
+                            <View style={styles.rowInvi}>
+
+                                {item.estado === 'Solicitada' ? (
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => done(item.id)} > 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Realizada</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+                                ) : null }
+
+                                {item.estado === 'Solicitada' ? (
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => cancellation(item.id)} > 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Cancelar</Text>
+                                            </TouchableOpacity>    
+                                        </LinearGradient>
+                                    </>
+                                ) : null }
+                                
+                            </View>
+                        ) : ( 
+                            <>
+                                {item.estado === 'Solicitada' ? (
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => cancellation(item.id)} > 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Cancelar</Text>
+                                            </TouchableOpacity>    
+                                        </LinearGradient>
+                                    </>
+                                ) : null }
+                            </>
+                        )}
+
+
                     </LinearGradient> 
                 </View>
             ) : null }
@@ -263,22 +348,16 @@ const BookingItem = ( params ) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth - 40,
-        marginHorizontal: 20,
-        marginVertical: 10,
+        width: width-5,
+        // marginHorizontal: 3,
+        marginVertical: 5,
         justifyContent: 'center',
-        borderRadius: 12,
-        borderWidth: 1,
-        padding:1.5,
+        borderRadius: 8,
+        borderTopWidth: 0.8,
+        borderBottomWidth: 0.8,
+        padding:1.2,
     },
-    lineHeader: {
-        flexDirection: 'row',
-        alignContent:'space-between',
-        alignItems:'stretch',
-        paddingVertical:6,
-        paddingHorizontal:6,
-    },
-    
+
     lineHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -290,11 +369,12 @@ const styles = StyleSheet.create({
     leftLineHeader: {
         flexDirection: 'row',
         alignItems: 'flex-start',
+        width:'38%'
     },
     
     centerLineHeader: {
         flexDirection: 'row',
-        alignItems: 'center',
+        // backgroundColor:'#fff'
     },
     
     rightLineHeader: {
@@ -303,13 +383,13 @@ const styles = StyleSheet.create({
     },
 
     body: {
-        width: windowWidth - 55,
+        width: width - 5,
         // height: 100,
         borderTopWidth: 1,
         borderTopColor: '#555',
         borderBottomWidth: 1,
         borderBottomColor: '#556',
-        paddingHorizontal:10,
+        paddingHorizontal:8,
     },
     row: {
         flexDirection: 'row',
@@ -339,8 +419,8 @@ const styles = StyleSheet.create({
         paddingVertical:6,
         
         backgroundColor:'#9a9',
-        borderBottomLeftRadius:12,
-        borderBottomRightRadius:12,
+        // borderBottomLeftRadius:12,
+        // borderBottomRightRadius:12,
     },
     btnEdit: {
         backgroundColor: '#2ECC71',
@@ -363,6 +443,14 @@ const styles = StyleSheet.create({
     },
     txtbtnEdit:{
         color:'#fff'
+    },
+
+    cancel: { 
+        padding: 10,
+        marginHorizontal: 5,
+        backgroundColor:'#135054',
+        borderRadius: 10,
+        width: 85,
     }
 });
 

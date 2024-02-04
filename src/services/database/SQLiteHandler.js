@@ -1,6 +1,36 @@
 import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
 
+export const setLocalDB = () => {
+    SQLiteHandler.createDb('agendate')
+    .then(result => {
+        setDbLoad(true);
+        // console.log('DB Create... ', result);
+
+        // SQLiteHandler.generateTestData()
+        // .then(() => {
+        // 	console.log('Generate data ok... ');
+        // })
+        // .catch(error => {
+        // 	console.log('Generate data Error... ', error);
+        // });
+
+        // SQLiteHandler.updateDatos('Servicios', 4, {
+        // 	'DiasDefinidosSemana':'Lunes;Martes;Miercoles;Jueves;Viernes;'
+        // })
+        // .then(() => {
+        // 	console.log('Update data ok... ');
+        // })
+        // .catch(error => {
+        // 	console.log('Update data Error... ', error);
+        // });
+    })
+    .catch(error => {
+        setDbLoad(false);
+        // console.log('DB Error... ', error);
+    });
+}
+
 // C:\Users\Administrador\AppData\Local\Google\AndroidStudio2021.3\device-explorer\pixel_5_-_api_30 [emulator-5554]\data
 
 class SQLiteHandler {

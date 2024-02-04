@@ -1,117 +1,129 @@
 import { UserContext } from './src/services/context/context'; 
+
 import { 
 	StyleSheet, 
 	Dimensions,
+	Keyboard,
 } from 'react-native';
 
 import React, { 
 	useState, useEffect 
 } from 'react';
 
-import SQLiteHandler from './src/services/database/SQLiteHandler';
 import BaseError from './src/views/utils/BaseError'
 import Main from './src/views/home/Main';
 
 import 'react-native-gesture-handler';
  
-const App = (config) => {
-	try {
-		var preferences = {
-			'current_user' : {
-				'guid':'none',
-				'name':'none',
-				'last':'none',
-				'user':'none',
-				'pass':'none',
-				'type':'none',
-				'mail':'none', 
-				'docu':'none',
-				'celu':'none',
-				'logo':'none', 
-			},
-			'connection' : {
-				'string':'none',
-			},
-			'theme' : {
-				'dark': 0,
-				'white': 1,
-			}
-		}
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
-		const [userPreferences, setUserPreferences] = useState(preferences);
-		const [dbLoad, setDbLoad] = useState(true);
-		const [isConnected, setIsConnected] = useState(true)
+const { width, height } = Dimensions.get('window');
+
+const App = (config) => {
+
+	var preferences = {
+		'current_user' : {
+			'guid':'none',
+			'name':'none',
+			'last':'none',
+			'user':'none',
+			'pass':'none',
+			'type':'none',
+			'mail':'none', 
+			'docu':'none',
+			'celu':'none',
+			'logo':'none', 
+		},
+		'connection' : {
+			'string':'none',
+		},
+		'theme' : {
+			'dark': 0,
+			'white': 1,
+		}
+	}
+
+	const [isConnected, setIsConnected] = useState(true);
+	const [userPreferences, setUserPreferences] = useState(preferences);
+
+	const [menuVisible, setMenuVisible] = useState(false);
+	const [profileVisibleInit, setProfileVisibleInit] = useState(false);
+	
+	try {
+		
+		const setOptions = (navigation) => {
+			navigation.setOptions({
+				headerRight: () => (
+					<BaseError
+						isConnected={isConnected}
+						setIsConnected={setIsConnected}
+						/>
+				),
+			});
+		};
 
 		useEffect(() => {
-			SQLiteHandler.createDb('agendate')
-			.then(result => {
-				setDbLoad(true);
-				// console.log('DB Create... ', result);
-
-				// SQLiteHandler.generateTestData()
-				// .then(() => {
-				// 	console.log('Generate data ok... ');
-				// })
-				// .catch(error => {
-				// 	console.log('Generate data Error... ', error);
-				// });
-
-				// SQLiteHandler.updateDatos('Servicios', 4, {
-				// 	'DiasDefinidosSemana':'Lunes;Martes;Miercoles;Jueves;Viernes;'
-				// })
-				// .then(() => {
-				// 	console.log('Update data ok... ');
-				// })
-				// .catch(error => {
-				// 	console.log('Update data Error... ', error);
-				// });
-			})
-			.catch(error => {
-				setDbLoad(false);
-				// console.log('DB Error... ', error);
-			});
-
-			const checkConnection = () => {
-				// Implementa tu lógica para verificar la conexión aquí
-				// Puedes usar librerías como NetInfo o Navigator para esto
-				// Actualiza isConnected en consecuencia
-				// setIsConnected();
-			};
-			checkConnection();
-	
+			// setIsConnected(true);
 		}, []); 
 	
 		if (isConnected) {
 			return (
-				<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-					<Main style={styles.background} />
-				</UserContext.Provider>
+				<NavigationContainer 
+					onStateChange={(state) => {
+						if ((state.history.length > 1)) {
+							for (const key in state.history) {
+								if (state.history[key].type == 'drawer') {
+									Keyboard.dismiss();
+									setMenuVisible(true);
+								} 
+							}
+						} else {
+							setMenuVisible(false);
+							setProfileVisibleInit(false);
+						}
+					}
+				} > 
+					{isConnected ? (
+						<UserContext.Provider value={{ userPreferences, setUserPreferences }}>
+							<Main
+								style={styles.main}
+								setOptions={setOptions}
+								isConnected={isConnected}
+								setIsConnected={setIsConnected}
+								profileVisibleInit={profileVisibleInit}
+								/>
+						</UserContext.Provider>
+					) : (
+						<BaseError 
+							errorType={'api'} 
+							setIsConnected={setIsConnected} 
+							/>
+					)}
+			    </NavigationContainer>
 			);
 		} else {
 			return (
-				<BaseError errorType={'debug'} />
+				<BaseError 
+					errorType={'api'} 
+					setIsConnected={setIsConnected}
+					/>
 			);
 		}
 	} catch (error) {
 		console.log(error);
 		return (
-			// <UserContext.Provider value={{ userPreferences, setUserPreferences }}>
-			// 	<Main style={styles.background} orientation={orientation} />
-			// </UserContext.Provider>
-			<BaseError errorType={error} />
+			<BaseError 
+				errorType={error}
+				setIsConnected={setIsConnected}
+				/>
 		);
 	}
 };
 
 export default App;
 
-var windowWidth = Dimensions.get('window').width;
-var windowHeight = Dimensions.get('window').height;
-
-// puedo agregar un estilo aca y usarlo en toda la aplicacion
 const styles = StyleSheet.create({
-	background: {
+	main: {
 		flex: 1,
-		backgroundColor: '#69ACDD'
 	},
 });

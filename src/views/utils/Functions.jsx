@@ -10,24 +10,7 @@ export const getOrientation = () => {
     return ori;
 };
 
-export const showConfirmationAlert = () => {
-    return new Promise((resolve) => {
-        Alert.alert(
-            'Confirmación',
-            '¿Estás seguro de continuar?', [
-                {
-                    text: 'Cancelar',
-                    onPress: () => resolve(false),
-                    style: 'cancel',
-                },
-                {
-                    text: 'Aceptar',
-                    onPress: () => resolve(true),
-                },
-            ], { cancelable: false }
-        );
-    });
-};
+
 
 export const getBase64FromUri = async (uri) => {
     const fileContent = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
@@ -90,6 +73,14 @@ export function getFormattedDate() {
     return formattedDate;
 }
 
+export function getDateFromString(dateString) {
+    var dateParts = dateString.split("/");
+    var year = parseInt(dateParts[2], 10);
+    var month = parseInt(dateParts[1], 10) - 1;
+    var day = parseInt(dateParts[0], 10);
+    var newDate = new Date(year, month, day);
+    return newDate;
+}
 
 
 export function convertHour(valor, opcion) {

@@ -1,31 +1,54 @@
-import CompanyServices from '../services/CompanyServices';
+import FavoriteServices from '../services/FavoriteServices';
+
+class FavoriteController {
 
 
-class ServicesController {
-
-
-	getServicesForCompany(guid) {
+	getFavoriteForCompany(guid) {
 		return new Promise((resolve, reject) => {
-			// console.log('getServicesForCompany', guid);
+			// console.log('getFavoriteForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe pertenecer a una empresa.');
 			}
 
-			CompanyServices.getServicesForCompany(guid)
-			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
+			FavoriteServices.getFavoriteForCompany(guid)
+			.then(favoritesReturn => {
+				// console.log('favoritesReturn', favoritesReturn);
+				if (favoritesReturn !== null) {
+					resolve(favoritesReturn);
 				} else {
 					resolve(null);
 				}
 			})
 			.catch(error => {
-				reject('Error Controller getServicesForCompany', error);
+				reject('Error Controller getFavoriteForCompany', error);
 			});
-
 		});
 	}
+
+	getFavoritesForService(guid) {
+		return new Promise((resolve, reject) => {
+			// console.log('getFavoriteForCompany', guid);
+			if ((guid == '') || (guid == undefined)) {
+				throw new Error('Debe pertenecer a un Servicio.');
+			}
+
+			FavoriteServices.getFavoritesList(guid)
+			.then(favoritesReturn => {
+				// console.log('favoritesReturn', favoritesReturn);
+				if (favoritesReturn !== null) {
+					resolve(favoritesReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getFavoriteForCompany', error);
+			});
+		});
+	}
+
+
+
 
 
 	handleServiceUpdate(data) {
@@ -77,7 +100,7 @@ class ServicesController {
 			// 	"tipoServicio": "Prueba 2"
 			// }
 
-			CompanyServices.putServiceData(dataConvert)
+			FavoriteServices.putServiceData(dataConvert)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -90,7 +113,7 @@ class ServicesController {
 	handleServiceDelete(guid) {
 		return new Promise((resolve, reject) => {
 		
-			CompanyServices.deleteService(guid)
+			FavoriteServices.deleteService(guid)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -136,9 +159,9 @@ class ServicesController {
 				idEmpresa: data.guid
 			}
 			
-			// console.log('dataConvert: ', dataConvert);
+			console.log('dataConvert: ', dataConvert);
 
-			CompanyServices.postServiceData(dataConvert)
+			FavoriteServices.postServiceData(dataConvert)
 			.then(srvReturn => {
 				resolve(srvReturn);
 			})
@@ -150,4 +173,4 @@ class ServicesController {
 }
 
 
-export default new ServicesController();
+export default new FavoriteController();

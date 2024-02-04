@@ -24,11 +24,9 @@ const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
 
-
     var guid = params.route.params.guid;
     var type = params.route.params.type;
 
-    
     const [list, setList] = useState([]);
     const [counter, setCounter] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -36,8 +34,6 @@ const BookingsView = ( params ) => {
     const [showModal, setShowModal] = useState(false);
     const [dateSelected, setDateSelected] = useState(null);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-    
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -70,27 +66,29 @@ const BookingsView = ( params ) => {
 
             ServicesController.getServicesForCompany(guid)
             .then(serviceReturn => {
-                console.log('dateSelected: ', dateSelected);
+                console.log('serviceReturn: ', serviceReturn);
                
-                BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
-                .then(bookingsReturn => {
-                    console.log('bookings: ', bookingsReturn);
-                    console.log('length: ', bookingsReturn.length);
-                    if (bookingsReturn.length > 0) {
-                        setCounter(bookingsReturn.length);
-                        setList(bookingsReturn);
-                    } else {
-                        setCounter(0);
-                        setList([]);
-                    }
-                })
-                .catch(error => {
-                    alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
-                });
+                if (serviceReturn !== null) {        
+                    BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                    .then(bookingsReturn => {
+                        // console.log('bookings: ', bookingsReturn);
+                        // console.log('length: ', bookingsReturn.length);
+                        if (bookingsReturn.length > 0) {
+                            setCounter(bookingsReturn.length);
+                            setList(bookingsReturn);
+                        } else {
+                            setCounter(0);
+                            setList([]);
+                        }
+                    })
+                    .catch(error => {
+                        alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+                    });
+                }
                 
             })
             .catch(error => {
-                alert('ERROR al intentar cargar los Servicios, ' + error);
+                
             });
 
 
@@ -107,7 +105,7 @@ const BookingsView = ( params ) => {
         loadBookings(guid, type);
     }, [guid, type, dateSelected]);
 
-    console.log('list: ', list);
+    // console.log('list: ', list);
 
     return (
         <View style={styles.container}>
@@ -125,27 +123,24 @@ const BookingsView = ( params ) => {
                         style={{ paddingVertical:25 }}
                         />
                 </>
-            ) : (
-                <></>
-            ) }
+            ) : null }
 
             {/* {(list !== null || (Array.isArray(list) && list.length !== 0)) ? ( */}
             {(list.length !== 0) ? (
                 <ScrollView 
-                    style={styles.scrollContainer}
+                    contentContainerStyle={styles.scrollContainer}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
+                        
                     {list.map((item, index) => (
-                        <View key={item.id}>
+                        <View key={index}>
                             <BookingItem 
                                 index={index}
                                 type={type}
                                 item={item} 
                                 onRefresh={onRefresh}
                             />
-    
-                            {/* <Text key={index}>{item.costo}</Text> */}
                         </View>
                     ))}
                 </ScrollView>
@@ -162,7 +157,7 @@ const BookingsView = ( params ) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#e9e9f8',
         alignItems: 'center',
         justifyContent: 'center',
     },

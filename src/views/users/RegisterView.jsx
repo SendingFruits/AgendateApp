@@ -6,8 +6,10 @@ import React, {
 } from 'react';
 
 import UsersController from '../../controllers/UsersController';
+import AlertModal from '../utils/AlertModal';
 
 import {
+	Alert,
 	Text,
 	StyleSheet,
 	View,
@@ -16,7 +18,6 @@ import {
 	TextInput,
 	Button,
 } from 'react-native';
-
 
 const RegisterView = () => {
 
@@ -107,7 +108,9 @@ const RegisterView = () => {
 		.then(userReturn => {
 			// console.log('userReturn: ', userReturn);
 			if (userReturn) {
-				alert('Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
+				// AlertModal.showAlert('Enviado','Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.');
+				var text = 'Usuario creado con éxito \n Se le enviará un Correo Electrónico para confirmar su creación.';
+				AlertModal.showAlert('', text);
 				navigation.navigate('Login');
 
 				setUsername('');
@@ -122,7 +125,7 @@ const RegisterView = () => {
 			}
 		})
 		.catch(error => {
-			alert(error);
+			AlertModal.showAlert('', error);
 		});
 	};
 
@@ -130,12 +133,10 @@ const RegisterView = () => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-			// fetchData();
 		}, 2000);
 	}, []);
 
 	useEffect(() => {
-        // Comentar para test
         setUsername('');
         setPassword('');
 		setFirstName('');
