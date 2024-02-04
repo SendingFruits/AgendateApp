@@ -127,6 +127,7 @@ class CompanyServices {
             
             console.log('json: ', json);
             console.log('urlCompleta: ', urlCompleta);
+
             axios.post(urlCompleta, json, { headers })
             .then(function (response) {
                 console.log(response.data);
@@ -137,6 +138,7 @@ class CompanyServices {
                 }
             })
             .catch(function (error) {
+                console.log(error);
                 if (error.message == 'Network Error') {
                     reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
                 } else {

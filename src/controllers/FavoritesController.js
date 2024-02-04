@@ -2,14 +2,6 @@ import FavoriteServices from '../services/FavoriteServices';
 
 class FavoriteController {
 
-	getFavoriteForCompanyJson(guid) {
-		return new Promise((resolve, reject) => {
-			var serviceReturn = null;
-			const servicesList = databaseData.Favorite;
-			serviceReturn = servicesList.filter(serv => serv.idCompany === parseInt(guid));
-			resolve(serviceReturn); // porque es uno solo
-		});
-	}
 
 	getFavoriteForCompany(guid) {
 		return new Promise((resolve, reject) => {
@@ -19,10 +11,10 @@ class FavoriteController {
 			}
 
 			FavoriteServices.getFavoriteForCompany(guid)
-			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
+			.then(favoritesReturn => {
+				// console.log('favoritesReturn', favoritesReturn);
+				if (favoritesReturn !== null) {
+					resolve(favoritesReturn);
 				} else {
 					resolve(null);
 				}
@@ -30,16 +22,33 @@ class FavoriteController {
 			.catch(error => {
 				reject('Error Controller getFavoriteForCompany', error);
 			});
-
-			// SQLiteHandler.selectServiciosEmpresa(guid)
-			// .then(serviceReturn => {
-			// 	resolve(serviceReturn);
-			// })
-			// .catch(error => {
-			// 	reject('Error Controller selectServiciosEmpresa', error);
-			// });
 		});
 	}
+
+	getFavoritesForService(guid) {
+		return new Promise((resolve, reject) => {
+			// console.log('getFavoriteForCompany', guid);
+			if ((guid == '') || (guid == undefined)) {
+				throw new Error('Debe pertenecer a un Servicio.');
+			}
+
+			FavoriteServices.getFavoritesList(guid)
+			.then(favoritesReturn => {
+				// console.log('favoritesReturn', favoritesReturn);
+				if (favoritesReturn !== null) {
+					resolve(favoritesReturn);
+				} else {
+					resolve(null);
+				}
+			})
+			.catch(error => {
+				reject('Error Controller getFavoriteForCompany', error);
+			});
+		});
+	}
+
+
+
 
 
 	handleServiceUpdate(data) {

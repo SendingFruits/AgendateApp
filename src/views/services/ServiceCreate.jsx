@@ -42,12 +42,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const ServiceCreate = (params) => {
+const ServiceCreate = ( params ) => {
     
+    var {
+        guid,
+        isCreate,
+        setIsCreate
+    } = params.route.params;
+
     const navigation = useNavigation();
-    
-    var edit = false; // params.edit;
-    var guid = params.route.params.guid;
+
+
+    var edit = false;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [bodyHeight, setBodyHeight] = useState(480); 
@@ -124,8 +130,6 @@ const ServiceCreate = (params) => {
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
-  
-    const editItem = (p=true) => {};
 
     const saveItem = () => {
 
@@ -150,10 +154,12 @@ const ServiceCreate = (params) => {
 		ServicesController.handleServiceCreate(formData)
 		.then(servReturn => {
 			console.log('servReturn: ', servReturn);
-			// if (servReturn) {
-            //     alert('Se creó el Servicio Exitosamente');
-			// }
-            navigation.navigate('Servicios');
+			if (servReturn) {
+                AlertModal.showAlert('Envio Exitoso', 'Se creó el Servicio');
+                setIsCreate(true);
+                navigation.navigate('Servicios', { isCreate });
+                // navigation.goBack();
+			}
 		})
 		.catch(error => {
 			alert(error);
@@ -317,7 +323,7 @@ const ServiceCreate = (params) => {
                                             <Picker.Item label="1 hora" value={1} />
                                         </Picker>
                                     </View>
-                                </View>
+                            </View>
                             <View style={styles.row}>
                                 <View style={styles.columnT}>
                                     <Text style={styles.label}>Dias:</Text>

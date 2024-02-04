@@ -1,14 +1,13 @@
-import AlertModal from '../utils/AlertModal';
-import MultiPicker from '../utils/MultiPicker';
-import MenuButtonItem from '../home/MenuButtonItem';
-import ServicesController from '../../controllers/ServicesController';
-
 import { 
     formatDate, convertHour, createDateTimeFromDecimalHour
 } from '../../views/utils/Functions'; 
 
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import AlertModal from '../utils/AlertModal';
+import MultiPicker from '../utils/MultiPicker';
+import ServicesController from '../../controllers/ServicesController';
 
 import { 
     useState, useEffect 
@@ -40,15 +39,17 @@ const { width, height } = Dimensions.get('window');
 
 const ServiceItem = (params) => {
     
-    // console.log('ServiceItem: ', params);
-
-    var item = params.item;
-    var edit = params.edit;
-    var guid = params.guid;
-
+    var {
+        guid,
+        item,
+        editMode,
+        setEditMode,
+        navigation,
+        onRefresh
+    } = params;
+   
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [bodyHeight, setBodyHeight] = useState(280); 
-    const [editMode, setEditMode] = useState(edit);
 
     const [nombre, setNombre] = useState(item.nombre);
     const [tipo, setTipo] = useState(item.tipoServicio);
@@ -162,7 +163,9 @@ const ServiceItem = (params) => {
 		.then(servReturn => {
 			// console.log('servReturn: ', servReturn);
 			if (servReturn) {
-                alert('Se actualizaron los datos del Servicio');
+                // alert('Se actualizaron los datos del Servicio');
+                AlertModal.showAlert('Envio Exitoso','Se actualizaron los datos del Servicio');
+                onRefresh();
 			}
 		})
 		.catch(error => {
@@ -178,32 +181,29 @@ const ServiceItem = (params) => {
 
         AlertModal.showConfirmationAlert(text)
 		.then(alertRes => {
-			console.log('alertRes: ', alertRes);
+			// console.log('alertRes: ', alertRes);
 			if (alertRes) {
                 ServicesController.handleServiceDelete(id)
                 .then(deleted => {
-                	console.log('deleted: ', deleted); 
+                    onRefresh();
                 })
                 .catch(error => {
-                	alert(error);
+                	AlertModal.showAlert('Hubo un error', error);
                 });
             }
 		})
 		.catch(error => {
-			alert(error);
+			AlertModal.showAlert('Hubo un error', error);
 		});
 
 
     };
 
-    const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
-    const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
-
 
 	useEffect(() => {
 
         setBodyHeight(280);
-        setEditMode(edit);
+        setEditMode(editMode);
 		setIsCollapsed(false);
         setDatePickerVisibility1(false);
         setDatePickerVisibility2(false);
@@ -228,7 +228,7 @@ const ServiceItem = (params) => {
             var listAux = selectedDias.split(';');
             setDiasListArray(listAux);
         }
-	}, [edit]);
+	}, []);
     
     return (
         <View style={styles.container}>

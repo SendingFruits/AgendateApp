@@ -26,7 +26,7 @@ import {
 
 import { 
 	faTrash,
-    faPen
+    faStar
 } from '@fortawesome/free-solid-svg-icons';
 
 import { 
@@ -36,12 +36,11 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const { width, height } = Dimensions.get('window');
 
 const FavoriteItem = (params) => {
     
-    // console.log('FavoriteItem: ', params);
+    console.log('FavoriteItem: ', params);
 
     var item = params.item;
     var edit = params.edit;
@@ -58,6 +57,7 @@ const FavoriteItem = (params) => {
     const [termino, setTermino] = useState(item.horaFin);
     const [turno, setTurno] = useState(item.duracionTurno);
 
+
     const [comienzoHora,setComienzoHora]= useState(convertHour(item.horaInicio,'toHours'));
     const [terminoHora, setTerminoHora] = useState(convertHour(item.horaFin, 'toHours'));
 
@@ -68,110 +68,18 @@ const FavoriteItem = (params) => {
     var [diasListArray, setDiasListArray] = useState([]);
     
 
-    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
-    const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
 
-    const [selectedDatePicker1, setSelectedDatePicker1] = useState(new Date());
-    const [selectedDatePicker2, setSelectedDatePicker2] = useState(new Date());
-
-
-    const handleDiasSelectionChange = (selectedItems) => {
-        console.log(selectedItems);
-        var joinerArrayInString = selectedItems.join(';');
-        setSelectedDias(joinerArrayInString);
-        var listAux = joinerArrayInString.split(';');
-        setDiasListArray(listAux);
-    };
-
-
-    const showDatePicker= (field) => {
-        if (field === 'comienzo') {
-            setDatePickerVisibility1(true);
-            setSelectedDatePicker1(createDateTimeFromDecimalHour(comienzo));
-        }
-        if (field === 'termino') {
-            setDatePickerVisibility2(true);
-            setSelectedDatePicker2(createDateTimeFromDecimalHour(termino));
-        }
-    }
-
-    const handleDateConfirm = (date,field) => {
-        // console.log(date);
-        
-        const fecha = new Date(date);
-        const hora = `${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2, '0')}`;
-        var decimal = convertHour(hora, 'toDecimal');
-    
-        if (field == 'comienzo') {
-            setSelectedDatePicker1(createDateTimeFromDecimalHour(decimal));
-            setComienzo(decimal);
-            setComienzoHora(hora);
-            // console.log(decimal);
-        }
-        if (field == 'termino') {
-            setSelectedDatePicker2(createDateTimeFromDecimalHour(decimal));
-            setTermino(decimal);
-            setTerminoHora(hora);
-            // console.log(decimal);
-        }
-
-        setDatePickerVisibility1(false);
-        setDatePickerVisibility2(false);
- 
-    };
 
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
   
-    const editItem = (p=true) => {
-        // console.log('editItem');
-        if (p == false) {
-            setEditMode(false);
-            setBodyHeight(280);
-        } else {
-            setEditMode(true);
-            setBodyHeight(480);
-        }
-    };
+    
 
-    const saveItem = () => {
+   
 
-        setEditMode(false);
-        setBodyHeight(280);
-
-        var id = params.item.id;
-
-        console.log('selectedDias: ',selectedDias);
-        setSelectedDias(selectedDias);
-
-        const formData = {
-            id,
-			nombre,
-			tipo,
-			costo,
-			comienzo,
-			termino,
-			turno,
-			descripcion,
-			selectedDias,
-            guid,
-		};
-
-		ServicesController.handleServiceUpdate(formData)
-		.then(servReturn => {
-			// console.log('servReturn: ', servReturn);
-			if (servReturn) {
-                alert('Se actualizaron los datos del Servicio');
-			}
-		})
-		.catch(error => {
-			alert(error);
-		});
-    };
-
-    const deleteItem = () => {
-        console.log('deleteItem');
+    const switchItem = () => {
+        console.log('switchItem');
 
         var id = params.item.id;
         var text = '¿Seguro desea eliminar este Servicio?';
@@ -202,10 +110,7 @@ const FavoriteItem = (params) => {
 
 	useEffect(() => {
         setBodyHeight(280);
-        setEditMode(edit);
 		setIsCollapsed(false);
-        setDatePickerVisibility1(false);
-        setDatePickerVisibility2(false);
 
         // console.log('selectedDias: ',selectedDias);
         if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
@@ -218,28 +123,21 @@ const FavoriteItem = (params) => {
         <View style={styles.container}>
             {!editMode ? (
                 <>
-                    <View>
-                        <LinearGradient
-                            style={styles.header}
-                            colors={['#135054', '#e9e9f8', '#efffff']} 
-                            start={{ x: 0.2, y: 1.2 }}
-                            end={{ x: 1.5, y: 0.5 }} 
-                            >    
-                            <TouchableOpacity onPress={() => toggleCollapse()} >
-                                <View style={styles.textHeader}>
-                                    <Text>{item.nombre}</Text>
-                                </View>
+                    <LinearGradient
+                        style={styles.header}
+                        colors={['#135054', '#e9e9f8', '#efffff']} 
+                        start={{ x: 0.2, y: 1.2 }}
+                        end={{ x: 1.5, y: 0.5 }} 
+                        >    
+                        
+                        <View style={{ flexDirection:'row', marginHorizontal: 20, }}>
+                            <TouchableOpacity onPress={() => switchItem()} >
+                                <FontAwesomeIcon icon={faStar} />
                             </TouchableOpacity>
-        
-                            <View style={styles.buttonsRow}>
-                                <TouchableOpacity onPress={() => deleteItem()} >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </TouchableOpacity>
-                            </View>
-        
-                        </LinearGradient>
-                    </View>
-        
+                        </View>
+    
+                    </LinearGradient>
+                 
                     {!isCollapsed ? (
                         <View>
                             <LinearGradient
@@ -296,7 +194,17 @@ const FavoriteItem = (params) => {
                                                 <Text style={styles.label}>Duración de Turnos:</Text>
                                             </View>
                                             <View style={styles.columnV}>
-                                                <Text>{item.duracionTurno}</Text>
+
+                                                {item.duracionTurno === 1 ? (
+                                                    <>
+                                                        <Text>{item.duracionTurno} {"Hora"}</Text>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Text>{item.duracionTurno} {"Minutos"}</Text>
+                                                    </>
+                                                )}
+
                                             </View>
                                         </View>
 
@@ -335,23 +243,6 @@ const FavoriteItem = (params) => {
                                     end={{ x: 1.5, y: 0.5 }} 
                                     >
         
-                                    <View style={styles.btnEdit}>    
-                                        <MenuButtonItem 
-                                            icon = {null}
-                                            text = {'Editar'}
-                                            color = {null}
-                                            onPress={() => editItem()}
-                                        />
-                                    </View>
-        
-                                    {/* {console.log('calendar: ', booking.calendar)} */}
-                                    {/* {!booking.calendar ? (
-                                        <TouchableOpacity style={styles.btnEdit}>
-                                            <Text style={styles.txtbtnEdit}>Editar</Text>
-                                        </TouchableOpacity>
-                                    ) : (
-                                        null
-                                    )} */}
                                 </LinearGradient>
                             </View>
                         </View>
@@ -360,180 +251,7 @@ const FavoriteItem = (params) => {
                     )}
                 </>
             ) : (
-                <>
-                    <View>
-                        <LinearGradient
-                            colors={['#fff', '#fff', '#032']} 
-                            start={{ x: 0.2, y: 1.2 }}
-                            end={{ x: 1.5, y: 0.5 }} 
-                            >
-                            <View>
-                                <ScrollView style={{ ...styles.body, height: bodyHeight }} >
-                                
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Nombre:</Text>    
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <TextInput 
-                                                style={styles.dataEdit} 
-                                                value={nombre}
-                                                onChangeText={setNombre}
-                                                />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Tipo:</Text>    
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <TextInput 
-                                                style={styles.dataEdit} 
-                                                value={tipo}
-                                                onChangeText={setTipo}
-                                                />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Costo:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                        <TextInput 
-                                            style={styles.dataEdit} 
-                                            value={costo.toString()}
-                                            onChangeText={setCosto}
-                                            />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Comienza:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <TouchableOpacity onPress={(param) => showDatePicker('comienzo')}>
-                                                <TextInput 
-                                                    editable={false}
-                                                    style={styles.dataEdit} 
-                                                    value={comienzoHora.toString()}
-                                                    />
-                                            </TouchableOpacity>
-                                            <DateTimePickerModal
-                                                isVisible={isDatePickerVisible1}
-                                                mode="time"
-                                                display="spinner"
-                                                is24Hour={true}
-                                                date = {selectedDatePicker1}
-                                                minuteInterval={30}
-                                                onConfirm={(date) => handleDateConfirm(date,'comienzo')}
-                                                onCancel={() => setDatePickerVisibility1(false)}
-                                                />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Termina:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <TouchableOpacity onPress={(param) => showDatePicker('termino')}>
-                                                <TextInput 
-                                                    editable={false}
-                                                    style={styles.dataEdit} 
-                                                    value={terminoHora.toString()}
-                                                    />
-                                            </TouchableOpacity>
-                                            <DateTimePickerModal
-                                                isVisible={isDatePickerVisible2}
-                                                mode="time"
-                                                display="spinner"
-                                                is24Hour={true}
-                                                date = {selectedDatePicker2}
-                                                minuteInterval={30}
-                                                onConfirm={(date) => handleDateConfirm(date,'termino')}
-                                                onCancel={() => setDatePickerVisibility2(false)}
-                                                />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Descripción:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                            <TextInput 
-                                                multiline
-                                                style={styles.dataEdit} 
-                                                value={descripcion}
-                                                onChangeText={setDescription}
-                                                />
-                                        </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Duración de Turnos:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Picker
-                                                    // style={styles.picker}
-                                                    // placeholder="Tipo"
-                                                    selectedValue={turno}
-                                                    onValueChange={(itemValue) => setTurno(itemValue)}
-                                                    // onValueChange={(itemValue) => handleFieldChange(itemValue, 'userType')}
-                                                    >
-                                                    <Picker.Item label="30 min" value={30} />
-                                                    <Picker.Item label="1 hora" value={60} />
-                                                </Picker>
-                                            </View>
-                                    </View>
-                                    <View style={styles.row}>
-                                        <View style={styles.columnT}>
-                                            <Text style={styles.label}>Dias:</Text>
-                                        </View>
-                                        <View style={styles.columnV}>
-                                           
-                                            <MultiPicker 
-                                                list={diasListArray} 
-                                                onSelectionChange={(selectedItems) => handleDiasSelectionChange(selectedItems)}
-                                                />
-                                           
-                                        </View>
-                                    </View>
-    
-                                </ScrollView>
-                            </View>
-                        </LinearGradient>
-
-                        <View>
-                            <LinearGradient
-                                style={styles.footer}
-                                colors={['#135054', '#e9e9f8', '#efffff']} 
-                                start={{ x: 0.2, y: 1.2 }}
-                                end={{ x: 1.5, y: 0.5 }} 
-                                >
-
-                                <View style={styles.btns}>
-                                    <View style={styles.btnEdit}>    
-                                        <MenuButtonItem 
-                                            icon = {null}
-                                            text = {'Cancelar'}
-                                            color = {null}
-                                            onPress={() => editItem(false)}
-                                        />
-                                    </View>
-                                    <View style={styles.btnEdit}>    
-                                        <MenuButtonItem 
-                                            icon = {null}
-                                            text = {'Guardar'}
-                                            color = {null}
-                                            onPress={() => saveItem()}
-                                        />
-                                    </View>
-                                </View>
-    
-                               
-                            </LinearGradient>
-                        </View>
-                    </View> 
-                </>
+                <></>
             )}
         </View>
     );
@@ -542,40 +260,44 @@ const FavoriteItem = (params) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth - 40,
-        marginHorizontal: 20,
-        marginVertical: 10,
+        width: width - 5,
+        // marginHorizontal: 20,
+        marginVertical: 5,
         justifyContent: 'center',
-        borderRadius: 12,
-        borderWidth: 1,
-        padding:1.5,
+        borderRadius: 8,
+        borderTopWidth: 0.8,
+        borderBottomWidth: 0.8,
+        padding:1.2,
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems:'baseline',
-        paddingHorizontal: 10,
-        borderTopLeftRadius:12,
-        borderTopRightRadius:12,
+        justifyContent:'space-between',
+        paddingVertical: 10
     },
     textHeader: {
         flexDirection: 'row',
         alignItems:'baseline',
         fontWeight:'bold',
+        marginStart:10,
         paddingVertical:10,
     },
     buttonsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignContent:'flex-end',
+        // alignItems:'flex-end',
+        // alignSelf:'flex-end',
+        // justifyContent: 'space-between',
         position:'relative',
-        top:-10,
+        top:10,
+        right:10,
     },
     body: {
-        paddingTop: 15,
-        borderTopWidth: 0.5,
-        borderTopColor: '#000',
+        width: width - 5,
+        // height: 100,
+        borderTopWidth: 1,
+        borderTopColor: '#555',
         borderBottomWidth: 1,
-        paddingHorizontal:10,
+        borderBottomColor: '#556',
+        paddingHorizontal:8,
     },
 
     row: {
@@ -604,9 +326,11 @@ const styles = StyleSheet.create({
 
     footer: {
         alignItems: 'flex-end',
+        paddingVertical:6,
+
         backgroundColor:'#9a9',
-        borderBottomLeftRadius:12,
-        borderBottomRightRadius:12,
+        // borderBottomLeftRadius:12,
+        // borderBottomRightRadius:12,
     },
 
     btns: {
@@ -635,6 +359,15 @@ const styles = StyleSheet.create({
         textAlign:'right',
         paddingRight:5,
         backgroundColor:'#fff'
+    },
+
+    cancel: { 
+        padding: 10,
+        marginHorizontal: 5,
+        margin: 10,
+        backgroundColor:'#135054',
+        borderRadius: 10,
+        width: 85,
     }
 
 });

@@ -1,4 +1,4 @@
-import { formatDate } from '../../views/utils/Functions'; 
+import { formatDate, getDateFromString } from '../../views/utils/Functions'; 
 
 import { 
     useState, useEffect 
@@ -34,7 +34,7 @@ const { width, height } = Dimensions.get('window');
 
 const BookingItem = ( params ) => {
 
-    // console.log('params: ', params);
+    console.log('params: ', params);
     var {
         index,
         type,
@@ -139,6 +139,8 @@ const BookingItem = ( params ) => {
 
         if (type === 'company') {
             setBodyHeight(120);
+        } else {
+            setBodyHeight(245);
         }
 	}, [type]);
     
@@ -156,26 +158,43 @@ const BookingItem = ( params ) => {
                         >
                         <View style={styles.lineHeader} >
 
-                            <View style={styles.leftLineHeader}>
-                                { type === 'customer' ? (
-                                    <Text>Reserva para el</Text>
-                                ) : ( 
-                                    <Text>Reserva para el</Text>
-                                )}
+                            <View style={{ flexDirection:'row' }}>
+                                <View style={styles.leftLineHeader}>
+                                    { type === 'customer' ? (
+                                        <Text>Reserva para el</Text>
+                                    ) : ( 
+                                        <Text>Reserva para el</Text>
+                                    )}
+                                </View>
+                                
+                                <View style={styles.centerLineHeader}>
+                                
+                                    <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
+                                    <Text style={{ fontWeight:'bold' }}> {hora}</Text>
+                                
+                                </View>
                             </View>
                             
-                            <View style={styles.centerLineHeader}>
-                                <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
-                                <Text style={{ fontWeight:'bold' }}> {hora}</Text>
-                            </View>
                           
                             <View style={styles.rightLineHeader}>
-                                <Text style={{ 
-                                    fontWeight:'bold', 
-                                    marginHorizontal:5, 
-                                    color: setStatusColor(item.estado) 
-                                    }}> {item.estado}
-                                </Text>
+
+                                { (getDateFromString(fecha) < new Date() && (item.estado !== 'Cancelada' && item.estado !== 'Realizada')) ? (
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:5, 
+                                        color: '#f50' 
+                                        }}> No Confirmada
+                                    </Text>
+                                ) : 
+                                    <Text style={{ 
+                                        fontWeight:'bold', 
+                                        marginHorizontal:5, 
+                                        color: setStatusColor(item.estado) 
+                                        }}> {item.estado}
+                                    </Text> 
+                                }
+
+                                
                             </View>
                             
                         </View>
@@ -220,14 +239,14 @@ const BookingItem = ( params ) => {
                                             <Text>{item.descripcion}</Text>
                                         </View>
 
-                                        <View style={styles.row}>
+                                        {/* <View style={styles.row}> */}
                                             {/* <Text style={styles.label}>Comienza:</Text> */}
                                             {/* <Text style={styles.value}>{formatDate(booking.dateInit)}</Text> */}
-                                        </View>
-                                        <View style={styles.row}>
+                                        {/* </View>
+                                        <View style={styles.row}> */}
                                             {/* <Text style={styles.label}>Termina:</Text> */}
                                             {/* <Text style={styles.value}>{formatDate(booking.dateEnd)}</Text> */}
-                                        </View>
+                                        {/* </View> */}
                                     </View>
                                 </>
                             ) : (  
@@ -297,7 +316,24 @@ const BookingItem = ( params ) => {
                                 
                             </View>
                         ) : ( 
-                            <></>
+                            <>
+                                {item.estado === 'Solicitada' ? (
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => cancellation(item.id)} > 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Cancelar</Text>
+                                            </TouchableOpacity>    
+                                        </LinearGradient>
+                                    </>
+                                ) : null }
+                            </>
                         )}
 
 
@@ -333,11 +369,12 @@ const styles = StyleSheet.create({
     leftLineHeader: {
         flexDirection: 'row',
         alignItems: 'flex-start',
+        width:'38%'
     },
     
     centerLineHeader: {
         flexDirection: 'row',
-        alignItems: 'center',
+        // backgroundColor:'#fff'
     },
     
     rightLineHeader: {

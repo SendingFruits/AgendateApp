@@ -40,10 +40,10 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
                 // maximumTrackTintColor="#000000"
                 thumbTintColor="#389338" 
                 step={1}
-                value={ratio}
+                // value={ratio}
                 onValueChange={handleRatioChange}
                 // onSlidingComplete={handleRatioChange}
-                renderThumb={ratio}
+                // renderThumb={ratio}
             />
             <View style={styles.labels}>
                 <Text style={styles.km}> 1 Km</Text>

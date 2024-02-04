@@ -66,27 +66,29 @@ const BookingsView = ( params ) => {
 
             ServicesController.getServicesForCompany(guid)
             .then(serviceReturn => {
-                // console.log('dateSelected: ', dateSelected);
+                console.log('serviceReturn: ', serviceReturn);
                
-                BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
-                .then(bookingsReturn => {
-                    // console.log('bookings: ', bookingsReturn);
-                    // console.log('length: ', bookingsReturn.length);
-                    if (bookingsReturn.length > 0) {
-                        setCounter(bookingsReturn.length);
-                        setList(bookingsReturn);
-                    } else {
-                        setCounter(0);
-                        setList([]);
-                    }
-                })
-                .catch(error => {
-                    alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
-                });
+                if (serviceReturn !== null) {        
+                    BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                    .then(bookingsReturn => {
+                        // console.log('bookings: ', bookingsReturn);
+                        // console.log('length: ', bookingsReturn.length);
+                        if (bookingsReturn.length > 0) {
+                            setCounter(bookingsReturn.length);
+                            setList(bookingsReturn);
+                        } else {
+                            setCounter(0);
+                            setList([]);
+                        }
+                    })
+                    .catch(error => {
+                        alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+                    });
+                }
                 
             })
             .catch(error => {
-                alert('ERROR al intentar cargar los Servicios, ' + error);
+                
             });
 
 
@@ -121,9 +123,7 @@ const BookingsView = ( params ) => {
                         style={{ paddingVertical:25 }}
                         />
                 </>
-            ) : (
-                <></>
-            ) }
+            ) : null }
 
             {/* {(list !== null || (Array.isArray(list) && list.length !== 0)) ? ( */}
             {(list.length !== 0) ? (
@@ -132,16 +132,15 @@ const BookingsView = ( params ) => {
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }>
+                        
                     {list.map((item, index) => (
-                        <View key={item.id}>
+                        <View key={index}>
                             <BookingItem 
                                 index={index}
                                 type={type}
                                 item={item} 
                                 onRefresh={onRefresh}
                             />
-    
-                            {/* <Text key={index}>{item.costo}</Text> */}
                         </View>
                     ))}
                 </ScrollView>

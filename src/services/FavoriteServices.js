@@ -1,7 +1,7 @@
 import ApiConfig from './ApiConfig';
 import axios from 'axios';
 
-class CompanyServices {
+class FavoriteServices {
 
     getFavoritesList = async (guid) => {
         return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ class CompanyServices {
                 },
             };
              
-            // console.log(urlCompleta);
+            console.log(urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {
@@ -139,4 +139,4 @@ class CompanyServices {
     }
 }
 
-export default new CompanyServices();
+export default new FavoriteServices();

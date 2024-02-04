@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff'
     },
     modal: {
-		width: 360,
+		width: 200,
 		height: 220,
 		alignSelf: 'center',
 		marginHorizontal: 40,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 	closeModal: {
 		position: 'absolute',
 		top: -65,
-		right: 50,
+		right: -25,
         // bottom: 0,
 		borderRadius: 15,
 		// width: 30,

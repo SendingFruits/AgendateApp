@@ -7,7 +7,7 @@ import RatioPanel from './RatioPanel';
 import CompanyPanel from '../users/CompanyPanel';
 
 import MapController from '../../controllers/MapController';
-
+import AlertModal from '../utils/AlertModal';
 
 import React, { 
 	useRef, useState, useEffect, useContext
@@ -22,7 +22,8 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Keyboard,
-	Image
+	Image,
+	Modal
 } from 'react-native';
 import 
 	MapView, { 
@@ -30,10 +31,15 @@ import
 		Callout,
 	} 
 from 'react-native-maps';
-import { 
+import {
+	faStar,
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
  
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -71,8 +77,10 @@ const HomeView = ( params ) => {
 
 	const [orientation, setOrientation] = useState(getOrientation());
 	const [refreshing, setRefreshing] = useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const [ratio, setRatio] = useState(1);
 	
+
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
@@ -99,8 +107,9 @@ const HomeView = ( params ) => {
 					// console.log(countMap);
 				})
 				.catch(error => {
-					// console.log('no hay datos ');
-					alert('Problemas de Conexión...'); 
+					// console.log(error);
+					AlertModal.showAlert('API','Problemas de Conexión...');
+					// alert('Problemas de Conexión...'); 
 					setCompanies([]);
 					setIsConnected(false);
 
@@ -158,16 +167,21 @@ const HomeView = ( params ) => {
 									style={styles.openCallout}
 									onPress={() => handleReservation(userLogin, empresa)} 
 									>
-									<Text style={styles.title}>{item.title}</Text>
+									<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+										<Text style={styles.title}>{item.title}</Text>
+										{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+									</View>
 									<Text style={styles.description}>{item.description}</Text>
 								</Callout>
 							) : (
-								<Callout style={styles.openCallout} >
+								<Callout style={styles.openCallout} 
+									onPress={() => handleReservation(null, null)} 
+									>
 									<Text style={styles.title}>{item.title}</Text>  
 									<Text style={styles.description}>{item.description}</Text>
-									<Text style={{ color:'#f00', fontSize:16, alignSelf:'center' }}>
+									{/* <Text style={{ color:'#f00', fontSize:16, alignSelf:'center' }}>
 										Debe ingresar como Cliente
-									</Text>
+									</Text> */}
 								</Callout>
 							)
 						}
@@ -182,13 +196,13 @@ const HomeView = ( params ) => {
 		
 		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
 		// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
-		const foundCompanyBasic = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
+		const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
 	
-		console.log('query: ', query);
-		MapController.searchCompany(query)
-		.then(foundCompany => {
-			console.log('foundCompany: ', foundCompany);
-			if (foundCompany === foundCompanyBasic) {
+		// console.log('query: ', query);
+		// MapController.searchCompany(query)
+		// .then(foundCompany => {
+		// 	console.log('foundCompany: ', foundCompany);
+			// if (foundCompany === foundCompanyBasic) {
 				const newRegion = {
 					latitude: foundCompany.location.latitude,
 					longitude: foundCompany.location.longitude,
@@ -198,18 +212,27 @@ const HomeView = ( params ) => {
 				// Centra el mapa en la ubicación de la empresa encontrada
 				mapRef.current.animateToRegion(newRegion); 
 				Keyboard.dismiss();
-			}
-		})
-		.catch(error => {
-			alert(error);
-		});
+		// 	}
+		// })
+		// .catch(error => {
+		// 	alert(error);
+		// });
 		
 	};
 
 	const handleReservation = (userLogin, item) => {
-		console.log('userLogin: ', userLogin);
-		saveCompanyID(item.id);
-		navigation.navigate('Realizar Reserva', { userLogin, item })
+		// console.log('userLogin: ', userLogin);
+
+		if (userLogin === null) {
+			setShowModal(true);
+			setTimeout(() => {
+				setShowModal(false);
+			}, 5000);
+		} else {
+			saveCompanyID(item.id);
+			navigation.navigate('Realizar Reserva', { userLogin, item })
+		}
+
 	}; 
 
 	const saveCompanyID = async (id) => {
@@ -245,11 +268,17 @@ const HomeView = ( params ) => {
 		}
 	};
 
+	const addFavorite = (userLogin, item) => {
+		
+	};
+
+	
 	useEffect(() => {
-		// setCalloutVisible(false);
+		onRefresh();
 		fetchData();
+		setShowModal(false);
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [isConnected]); 
+	}, [isConnected, ratio, countMap]); 
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas - bug
 
@@ -278,6 +307,23 @@ const HomeView = ( params ) => {
 								width={width}
 								height={height}
 								/>
+
+							<Modal
+								visible={showModal} 
+								transparent={true}
+								animationIn="slideInRight" 
+								animationOut="slideOutRight"  
+								// animationType="fade" 
+								>
+								<View style={{ 
+									paddingHorizontal:85,
+									paddingVertical:120,
+									}}>	
+									<Text style={styles.alertNoLogin}> 
+										Debe ingresar como Cliente para poder realizar reservas
+									</Text>
+								</View>
+							</Modal>
 						</View>
 					) : null }
 
@@ -458,6 +504,12 @@ const styles = StyleSheet.create({
 
 	row: {
 		flexDirection:'row',
+	},
+
+	alertNoLogin: { 
+		color:'#f20', 
+		fontSize:16, 
+		textAlign:'center'
 	}
 })
 
