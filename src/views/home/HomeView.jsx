@@ -1,7 +1,7 @@
 import { UserContext } from '../../services/context/context'; 
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../../views/utils/Functions'; 
-
+ 
 import SearchPanel from './SearchPanel';
 import RatioPanel from './RatioPanel';
 import CompanyPanel from '../users/CompanyPanel';

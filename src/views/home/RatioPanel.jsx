@@ -17,17 +17,9 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
     const [ratio, setRatio] = useState(1);
     
     const handleRatioChange = (value) => {
-        // if (
-        //     (value === 1)  || 
-        //     (value === 10) || 
-        //     (value === 15) || 
-        //     (value === 20) || 
-        //     (value === 25)
-        // ) {
-            setRatio(value);
-            // Llama a la función de devolución de llamada con el nuevo valor
-            onRatioChange(value);
-        // }
+        setRatio(value);
+        // Llama a la función de devolución de llamada con el nuevo valor
+        onRatioChange(value);
     };
   
     return (
@@ -40,10 +32,7 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
                 // maximumTrackTintColor="#000000"
                 thumbTintColor="#389338" 
                 step={1}
-                // value={ratio}
-                onValueChange={handleRatioChange}
-                // onSlidingComplete={handleRatioChange}
-                // renderThumb={ratio}
+                onSlidingComplete={handleRatioChange}
             />
             <View style={styles.labels}>
                 <Text style={styles.km}> 1 Km</Text>
