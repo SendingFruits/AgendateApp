@@ -102,9 +102,7 @@ const HomeView = ( params ) => {
 					// console.log('hay datos: ', companiesReturn);
 					setCompanies(companiesReturn);
 					setIsConnected(true);
-
 					countMap++;
-					// console.log(countMap);
 				})
 				.catch(error => {
 					// console.log(error);
@@ -112,7 +110,6 @@ const HomeView = ( params ) => {
 					// alert('Problemas de Conexión...'); 
 					setCompanies([]);
 					setIsConnected(false);
-
 					countMap = 0;
 				});
 
@@ -136,7 +133,7 @@ const HomeView = ( params ) => {
 	const handleRatioChange = (value) => {
 		// console.log(value);
         setRatio(value);
-		fetchData();
+		// fetchData();
     };
 
 	const onRegionChange = (region, gesture) => {
@@ -274,7 +271,6 @@ const HomeView = ( params ) => {
 
 	
 	useEffect(() => {
-		onRefresh();
 		fetchData();
 		setShowModal(false);
 		Dimensions.addEventListener('change', handleOrientationChange);
