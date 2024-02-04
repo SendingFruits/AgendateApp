@@ -25,7 +25,7 @@ import {
 } from 'react-native';
 
 import { 
-	faTrash,
+	faMapLocation,
     faStar
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -40,11 +40,14 @@ const { width, height } = Dimensions.get('window');
 
 const FavoriteItem = (params) => {
     
-    console.log('FavoriteItem: ', params);
+    // console.log('FavoriteItem: ', params);
 
-    var item = params.item;
-    var edit = params.edit;
-    var guid = params.guid;
+    var {
+        item,
+        edit,
+        guid,
+        onRefresh
+    } = params;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [bodyHeight, setBodyHeight] = useState(280); 
@@ -75,42 +78,22 @@ const FavoriteItem = (params) => {
     };
   
     
-
+    const goToMap = (location) => {
+        console.log(location);
+    }
    
 
     const switchItem = () => {
-        console.log('switchItem');
-
+        console.log('quitar Favorito');
         var id = params.item.id;
-        var text = '¿Seguro desea eliminar este Servicio?';
-
-        AlertModal.showConfirmationAlert(text)
-		.then(alertRes => {
-			console.log('alertRes: ', alertRes);
-			if (alertRes) {
-                ServicesController.handleServiceDelete(id)
-                .then(deleted => {
-                	console.log('deleted: ', deleted); 
-                })
-                .catch(error => {
-                	alert(error);
-                });
-            }
-		})
-		.catch(error => {
-			alert(error);
-		});
-
-
+        
+        onRefresh();
     };
-
-    const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
-    const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
 
 
 	useEffect(() => {
-        setBodyHeight(280);
-		setIsCollapsed(false);
+        setBodyHeight(130);
+		// setIsCollapsed(true);
 
         // console.log('selectedDias: ',selectedDias);
         if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
@@ -123,20 +106,37 @@ const FavoriteItem = (params) => {
         <View style={styles.container}>
             {!editMode ? (
                 <>
-                    <LinearGradient
-                        style={styles.header}
-                        colors={['#135054', '#e9e9f8', '#efffff']} 
-                        start={{ x: 0.2, y: 1.2 }}
-                        end={{ x: 1.5, y: 0.5 }} 
-                        >    
-                        
-                        <View style={{ flexDirection:'row', marginHorizontal: 20, }}>
-                            <TouchableOpacity onPress={() => switchItem()} >
-                                <FontAwesomeIcon icon={faStar} />
-                            </TouchableOpacity>
-                        </View>
+                    <TouchableOpacity onPress={() => toggleCollapse()} >
+                        <LinearGradient
+                            style={styles.header}
+                            colors={['#135054', '#e9e9f8', '#efffff']} 
+                            start={{ x: 0.2, y: 1.2 }}
+                            end={{ x: 1.5, y: 0.5 }} 
+                            >                                
+                            <View style={{ 
+                                flexDirection:'row',
+                                alignItems:'center',
+                                marginHorizontal: 20,
+                                }}>
+                                <TouchableOpacity onPress={() => switchItem()} >
+                                    <FontAwesomeIcon icon={faStar} />
+                                </TouchableOpacity>
+                                <Text style={{ marginLeft:6 }}>Quitar Favorito</Text>
+                            </View>
+
+                            <View style={{ 
+                                flexDirection:'row',
+                                alignItems:'center',
+                                marginHorizontal: 20,
+                                }}>
+                                <TouchableOpacity onPress={() => goToMap({latitude:item.latitude, longitude:item.longitude})} >
+                                    <FontAwesomeIcon icon={faMapLocation} />
+                                </TouchableOpacity>
+                                <Text style={{ marginLeft:6 }}>Ver en mapa</Text>
+                            </View>
     
-                    </LinearGradient>
+                        </LinearGradient>
+                    </TouchableOpacity>
                  
                     {!isCollapsed ? (
                         <View>
@@ -150,86 +150,40 @@ const FavoriteItem = (params) => {
                                     
                                         <View style={styles.row}>
                                             <View style={styles.columnT}>
-                                                <Text style={styles.label}>Tipo:</Text>    
+                                                <Text style={styles.label}>Empresa:</Text>    
+                                            </View>
+                                            <View style={styles.columnV}>
+                                                <Text> {item.razonSocial}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.row}>
+                                            <View style={styles.columnT}>
+                                                <Text style={styles.label}>Direccion:</Text>
+                                            </View>
+                                            <View style={styles.columnV}>
+                                                <Text> {item.direccionEmpresa}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.row}>
+                                            <View style={styles.columnT}>
+                                                <Text style={styles.label}>Servicio:</Text>
+                                            </View>
+                                            <View style={styles.columnV}>
+                                                <Text> {item.nombreServicio}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.row}>
+                                            <View style={styles.columnT}>
+                                                <Text style={styles.label}>Tipo:</Text>
                                             </View>
                                             <View style={styles.columnV}>
                                                 <Text> {item.tipoServicio}</Text>
                                             </View>
                                         </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Costo:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.costo}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Comienza:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {comienzoHora}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Termina:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {terminoHora}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Descripción:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.descripcion}</Text>
-                                            </View>
-                                        </View>
+                                        {/* <View style={styles.row}>
+                                            
+                                        </View> */}
 
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Duración de Turnos:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-
-                                                {item.duracionTurno === 1 ? (
-                                                    <>
-                                                        <Text>{item.duracionTurno} {"Hora"}</Text>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Text>{item.duracionTurno} {"Minutos"}</Text>
-                                                    </>
-                                                )}
-
-                                            </View>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Dias:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-
-                                                {/* {console.log(diasListArray)} */}
-
-                                                {diasListArray && diasListArray !== undefined ? (
-                                                    <View style={{
-                                                        flexDirection: 'row',
-                                                        flexWrap: 'wrap',
-                                                    }}>
-                                                        {diasListArray.map((dia, index) => (
-                                                            <Text key={index}>{dia},</Text>
-                                                        ))}
-                                                    </View>
-                                                ) : (
-                                                    <Text>No hay días seleccionados</Text>
-                                                )}
-                                            </View>
-                                        </View>
         
                                     </ScrollView>
                                 </View>

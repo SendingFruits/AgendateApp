@@ -39,12 +39,12 @@ import {
 	faHome, 
 	faUser, 
 	faStar, 
-	faDoorOpen, 
 	faRegistered,
 	faCalendar,
 	faRightFromBracket,
 	faScrewdriverWrench,
-	faTags
+	faTags,
+	faPowerOff
 } from '@fortawesome/free-solid-svg-icons';
 
 import { 
@@ -397,7 +397,6 @@ const MenuItems = ( { navigation, profile } ) => {
 				</View>
 				{/* Footer */}
 				<View style={styles.footer}>
-
 					<>
 						{userLogin.user === 'none' ? (
 							<View>
@@ -431,13 +430,7 @@ const MenuItems = ( { navigation, profile } ) => {
 									/>
 								</View>
 
-								<View>
-									<TouchableOpacity 
-										style={styles.btnLogout} 
-										onPress={() => logout()} >
-										<FontAwesomeIcon icon={faRightFromBracket} />
-									</TouchableOpacity>
-								</View>
+								
 							</View>
 						)}
 						{/* { (profileVisible) ? (
@@ -453,8 +446,7 @@ const MenuItems = ( { navigation, profile } ) => {
 								</LinearGradient>
 							</View>
 						) : null } */}
-					</>
-					
+					</>				
 					<>
 						{
 							userLogin.user === 'admin' ? (
@@ -467,7 +459,33 @@ const MenuItems = ( { navigation, profile } ) => {
 
 
 				</View>
+				
 			</DrawerContentScrollView>
+
+			{userLogin.user !== 'none' ? (	
+				<View style={styles.btnLogoutContainer}>
+					<TouchableOpacity 
+						style={styles.btnLogout} 
+						onPress={() => logout()} >
+						<FontAwesomeIcon icon={faPowerOff} size={22} />
+						<Text style={{ fontWeight:'bold' }}>Cerrar Sesión</Text>
+					</TouchableOpacity>
+				</View>
+			) : null }
+
+			{/* <LinearGradient
+				colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
+				start={{ x: 1, y: 1 }} // Punto de inicio en la esquina superior izquierda
+				end={{ x: 0, y: 0 }} // Punto final en la esquina inferior derecha
+				style={styles.btnLogoutContainer}
+				> */}
+				{/* <TouchableOpacity 
+					style={styles.btnLogout} 
+					onPress={() => logout()} >
+					<FontAwesomeIcon icon={faPowerOff} size={35}/>
+				</TouchableOpacity> */}
+			{/* </LinearGradient> */}
+			
 		</LinearGradient>	
 	)
 }
@@ -509,12 +527,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		zIndex: 3,
 	},
-	btnLogout:{
-		position:'absolute',
-		bottom:26,
-		left:220,
-		zIndex: 4,
-	},
+
 	textLogin: {
 		marginStart: 7,
 		fontWeight: 'bold'
@@ -528,7 +541,29 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		// backgroundColor:'#a8ffe5',
 		borderRadius: 15,
-	}
+	},
+
+	btnLogoutContainer: {
+		flex: 0.1,
+		flexDirection:'row',
+		justifyContent:'center',
+		alignItems:'center',
+		backgroundColor:'#',
+		opacity: 50,
+		marginHorizontal: 30,
+		marginVertical: 30,
+		borderRadius: 30,
+		// borderWidth: 0.8,
+		
+	},
+	btnLogout:{
+		flexDirection:'column',
+		justifyContent:'center',
+		alignItems:'center',
+		fontSize: 25
+	},
+
+
 });
 
 export default Main;

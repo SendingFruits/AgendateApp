@@ -25,9 +25,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const FavoriteView = ( params ) => {
 
     const navigation = useNavigation();
-
     var guid = params.route.params.guid; 
-    console.log('guid: ', guid);
 
     const [list, setList] = useState(null);
     const [editing, setEditing] = useState(false);
@@ -68,7 +66,7 @@ const FavoriteView = ( params ) => {
         .then(favoritesReturn => {
             console.log('favoritesReturn: ', favoritesReturn);
             if (favoritesReturn !== null) {
-                setList([favoritesReturn]);
+                setList(favoritesReturn);
             } else {
                 setList([]);
             }
@@ -88,6 +86,7 @@ const FavoriteView = ( params ) => {
                         key={index}
                         item={item} 
                         edit={false}
+                        onRefresh={onRefresh}
                         onPress={() => handleEditItem(item)} 
                     />
 				)

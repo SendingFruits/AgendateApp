@@ -341,14 +341,17 @@ const ProfileView = ( params ) => {
                     }
                 </View>
 
-                <View style={styles.checkContainer}>
-                    <CheckBox 
-                        type={'normal'}
-                        text={'Recibir Notificaciones por Correo'}
-                        isChecked={isChecked}
-                        setChecked={setChecked}
-                        />
-                </View>
+
+                { (user.type === 'customer') ? (
+                    <View style={styles.checkContainer}>
+                        <CheckBox 
+                            type={'normal'}
+                            text={'Recibir promociones por correo'}
+                            isChecked={isChecked}
+                            setChecked={setChecked}
+                            />
+                    </View>
+                ) : null }
                 
 
             </ScrollView>
@@ -453,7 +456,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		// backgroundColor: '#fff',
         
-		marginHorizontal:15,
+		marginHorizontal:20,
 		marginBottom: 5,
 		paddingHorizontal: 15,
 		paddingVertical: 3,

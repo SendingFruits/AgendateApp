@@ -235,25 +235,26 @@ const ServiceItem = (params) => {
             {!editMode ? (
                 <>
                     <View>
-                        <LinearGradient
-                            style={styles.header}
-                            colors={['#135054', '#e9e9f8', '#efffff']} 
-                            start={{ x: 0.2, y: 1.2 }}
-                            end={{ x: 1.5, y: 0.5 }} 
-                            >    
-                            <TouchableOpacity onPress={() => toggleCollapse()} >
+                        <TouchableOpacity onPress={() => toggleCollapse()} >
+                            <LinearGradient
+                                style={styles.header}
+                                colors={['#135054', '#e9e9f8', '#efffff']} 
+                                start={{ x: 0.2, y: 1.2 }}
+                                end={{ x: 1.5, y: 0.5 }} 
+                                >    
+                            
                                 <View style={styles.textHeader}>
                                     <Text>{item.nombre}</Text>
                                 </View>
-                            </TouchableOpacity>
         
-                            <View style={styles.buttonsRow}>
-                                <TouchableOpacity onPress={() => deleteItem()} >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </TouchableOpacity>
-                            </View>
+                                <View style={styles.buttonsRow}>
+                                    <TouchableOpacity onPress={() => deleteItem()} >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </TouchableOpacity>
+                                </View>
         
-                        </LinearGradient>
+                            </LinearGradient>
+                        </TouchableOpacity>
                     </View>
         
                     {!isCollapsed ? (
