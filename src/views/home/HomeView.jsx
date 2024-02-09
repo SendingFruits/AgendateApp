@@ -48,12 +48,14 @@ const { width, height } = Dimensions.get('window');
 
 const HomeView = ( params ) => {
 	
-	// console.log('params home: ', params);
+	// console.log(params.route.params);
 	var { 
 		setOptions,
 		isConnected,
-		setIsConnected
-	} = params.route.params;
+		setIsConnected,
+		coordinates,
+		item,
+	} = params.route.params || {};
 
 	var countMap = 0;
 
@@ -79,6 +81,7 @@ const HomeView = ( params ) => {
 	const [refreshing, setRefreshing] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [ratio, setRatio] = useState(1);
+	const [fav, setFav] = useState(null);
 	
 
 	const onRefresh = React.useCallback(() => {
@@ -146,18 +149,26 @@ const HomeView = ( params ) => {
 			return companies.map((item, index) => {
 				var imgLogo = (item.logo !== '') ? 'data:image/png;base64, '+item.logo : null;
 				var empresa = item;
-				// console.log(Marker);
+				// console.log(imgLogo);
 				return (
 					<Marker
 						key={index}
-						pinColor='#00ffff'
+						pinColor='#0af'
 						coordinate={item.location}
 						onPress={() => setSelectedMarker(item)}
-						// icon={{uri:imgLogo}}
+						anchor={{ x: 0.5, y: 0.5 }} 
 						>
 
-						{/* <Image uri={imgLogo} style={{height: 35, width:35 }} /> */}
-
+						{imgLogo ? (
+							<View>
+								<Image source={{ uri: imgLogo }} style={{ width: 35, height: 35, borderWidth: 2, borderRadius: 10, borderColor:'#0af' }} />
+							</View>
+						) : (
+							<View>
+								<FontAwesomeIcon style={{ color:'#0af' }} icon={faBuilding} size={35} />
+							</View>
+						)}
+						
 						{
 							userLogin.type === 'customer' ? (
 								<Callout 
@@ -269,10 +280,51 @@ const HomeView = ( params ) => {
 		
 	};
 
+	const favoriteTarget = (coordinates, item) => {
+		if (item !== null && item !== undefined) {
+			if (coordinates !== null) {
+				mapRef.current.animateToRegion(coordinates); 
+			}
+			return (
+				<Marker
+					// key={index}
+					pinColor='#0af'
+					coordinate={coordinates}
+					onPress={() => setSelectedMarker(item)}
+					anchor={{ x: 0.5, y: 0.5 }} 
+					>
+
+					<View>
+						<FontAwesomeIcon style={{ color:'#0af' }} icon={faStar} size={35} />
+					</View>
+
+					<Callout 
+						style={styles.openCallout}
+						onPress={() => handleReservation(userLogin, empresa)} 
+						>
+						<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+							<Text style={styles.title}>{item.title}</Text>
+							{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+						</View>
+						<Text style={styles.description}>{item.description}</Text>
+					</Callout>
+					
+				</Marker>
+			);
+		}
+	}
 	
 	useEffect(() => {
 		fetchData();
 		setShowModal(false);
+
+		if ((coordinates !== null) && (coordinates !== undefined)) {
+			setFav(coordinates);
+			favoriteTarget(fav);
+		} else {
+			setFav(null);
+		}
+
 		Dimensions.addEventListener('change', handleOrientationChange);
 	}, [isConnected, ratio, countMap]); 
 	// location - pasarle location para actualizar siempre que se geolocalice
@@ -336,6 +388,9 @@ const HomeView = ( params ) => {
 						showsMyLocationButton={true} 
 						>
 						{showCompanyLocations()}
+						{ userLogin.type === 'customer' ? (
+							favoriteTarget(coordinates, item)
+						) : null }
 					</MapView>
 					
 					<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>

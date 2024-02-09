@@ -15,7 +15,6 @@ import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
 import ServiceCreate from '../services/ServiceCreate';
-import SearchPanel from './SearchPanel';
 
 import React, { 
 	useRef, useContext, useEffect, useState 

@@ -24,8 +24,9 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import { 
-	faMapLocation,
+import {
+    faMapMarker,
+    faClose,
     faStar
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,7 +47,8 @@ const FavoriteItem = (params) => {
         item,
         edit,
         guid,
-        onRefresh
+        onRefresh,
+        navigation,
     } = params;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
@@ -78,8 +80,9 @@ const FavoriteItem = (params) => {
     };
   
     
-    const goToMap = (location) => {
-        console.log(location);
+    const goToMap = (coordinates, item) => {
+        // console.log(coordinates);
+        navigation.navigate('Inicio', {coordinates, item});
     }
    
 
@@ -112,16 +115,20 @@ const FavoriteItem = (params) => {
                             colors={['#135054', '#e9e9f8', '#efffff']} 
                             start={{ x: 0.2, y: 1.2 }}
                             end={{ x: 1.5, y: 0.5 }} 
-                            >                                
+                            >
+
                             <View style={{ 
                                 flexDirection:'row',
                                 alignItems:'center',
-                                marginHorizontal: 20,
+                                marginHorizontal: 10,
                                 }}>
-                                <TouchableOpacity onPress={() => switchItem()} >
-                                    <FontAwesomeIcon icon={faStar} />
+                                <TouchableOpacity 
+                                    style={{ flexDirection:'row', alignItems:'center', }} 
+                                    onPress={() => goToMap({latitude:item.latitude, longitude:item.longitude}, item)} >
+                                    <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} />
+                                    <FontAwesomeIcon style={{ color:'#0af', marginLeft:6 }} icon={faMapMarker} />
+                                    <Text style={{ marginLeft:6 }}>Ver en mapa</Text>
                                 </TouchableOpacity>
-                                <Text style={{ marginLeft:6 }}>Quitar Favorito</Text>
                             </View>
 
                             <View style={{ 
@@ -129,11 +136,14 @@ const FavoriteItem = (params) => {
                                 alignItems:'center',
                                 marginHorizontal: 20,
                                 }}>
-                                <TouchableOpacity onPress={() => goToMap({latitude:item.latitude, longitude:item.longitude})} >
-                                    <FontAwesomeIcon icon={faMapLocation} />
+                                <TouchableOpacity 
+                                    style={{ flexDirection:'row', alignItems:'center', }} 
+                                    onPress={() => switchItem()} >
+                                    {/* <Text style={{ marginLeft:6 }}>Quitar</Text> */}
+                                    <FontAwesomeIcon icon={faClose} />
                                 </TouchableOpacity>
-                                <Text style={{ marginLeft:6 }}>Ver en mapa</Text>
                             </View>
+
     
                         </LinearGradient>
                     </TouchableOpacity>

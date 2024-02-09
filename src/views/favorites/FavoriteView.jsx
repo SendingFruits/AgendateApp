@@ -64,7 +64,7 @@ const FavoriteView = ( params ) => {
     const getFavorites = async () => {
         FavoriteController.getFavoritesForService(guid)
         .then(favoritesReturn => {
-            console.log('favoritesReturn: ', favoritesReturn);
+            // console.log('favoritesReturn: ', favoritesReturn);
             if (favoritesReturn !== null) {
                 setList(favoritesReturn);
             } else {
@@ -87,7 +87,8 @@ const FavoriteView = ( params ) => {
                         item={item} 
                         edit={false}
                         onRefresh={onRefresh}
-                        onPress={() => handleEditItem(item)} 
+                        onPress={() => handleEditItem(item)}
+                        navigation={navigation}
                     />
 				)
 			});
@@ -98,7 +99,7 @@ const FavoriteView = ( params ) => {
 
     useEffect(() => {
         getFavorites();
-        console.log(list);
+        // console.log(list);
     }, [guid]);
 
 
