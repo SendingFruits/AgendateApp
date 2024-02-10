@@ -53,9 +53,9 @@ const PassChanger = (params) => {
 	};
 
     useEffect(() => {
-        setOldPass('');
+        //setOldPass('');
         setIconEye1(false);
-        setNewPass('');
+        //setNewPass('');
         setIconEye2(false);
 	}, []);
 
@@ -86,7 +86,6 @@ const PassChanger = (params) => {
 	};
 
     const handleFieldChange = (text,field) => {
-        // console.log(text);
 		switch (field) {
 			case 'oldpass':
 				setOldPass(text);
@@ -162,7 +161,7 @@ const PassChanger = (params) => {
                     <MenuButtonItem 
 						icon = {null}
 						text = "Cambiar"
-						onPress = { () => navigation.navigate('Inicio')}
+						onPress = { () => changePassword(user)}
 					/>
                 </View>
 
