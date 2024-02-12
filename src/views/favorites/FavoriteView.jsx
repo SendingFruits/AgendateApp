@@ -72,7 +72,7 @@ const FavoriteView = ( params ) => {
             }
         })
         .catch(error => {
-            alert('ERROR al intentar cargar los Servicios, ' + error);
+            alert('ERROR al intentar cargar los Favoritos, ' + error);
         });
     }
 

@@ -1,13 +1,13 @@
 import ApiConfig from './ApiConfig';
 import axios from 'axios';
 
-class FavoriteServices {
+class PromoServices {
 
-    getFavoritesList = async (guid) => {
+    getPromosList = async (guid) => {
         return new Promise((resolve, reject) => {
         
-            var method = 'Favoritos/ObtenerFavorito';
-            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?idCliente=${guid}`;
+            var method = 'Promociones/ObtenerPromocionPorEmpresa';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?empresaId=${guid}`;
     
             const options = {
                 method: 'GET',
@@ -17,7 +17,7 @@ class FavoriteServices {
                 },
             };
              
-            // console.log(urlCompleta);
+            console.log(urlCompleta);
 
             axios.get(urlCompleta, options)
             .then(function (response) {
@@ -46,52 +46,9 @@ class FavoriteServices {
     };
 
 
-    getFavorite = async (idCliente,idServicio) => {
+    postPromo = async (json) => {
         return new Promise((resolve, reject) => {
-        
-            var method = 'Favoritos/ObtenerIdFavorito';
-            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?idCliente=${idCliente}&idServicio=${idServicio}`;
-    
-            const options = {
-                method: 'GET',
-                headers: {
-                    'accept': 'text/json',
-                    // 'verify': false
-                },
-            };
-             
-            // console.log(urlCompleta);
-
-            axios.get(urlCompleta, options)
-            .then(function (response) {
-                // console.log('response.data: ', response.data);
-                if (response.status == 200) {
-                    resolve(response.data);
-                } else {
-                    resolve(null);
-                }
-            })
-            .catch(function (error) {
-                if (error.message == 'Network Error') {
-                    reject('Error de Conexión. Verifique su conexión a Internet o consulte el proveedor.');  
-                } else {
-                    if (error.response.status >= 500) {
-                        reject(-1);                
-                    } else if ((error.response.status >= 400) && (error.response.status < 500)) {
-                        reject(error.response.data); 
-                    } else {
-                        reject('Error Desconocido.');    
-                    }
-                }
-            });
-            
-        });
-    };
-
-
-    postFavorite = async (json) => {
-        return new Promise((resolve, reject) => {
-            var method = 'Favoritos/AgregarFavorito';
+            var method = 'Servicios/RegistrarServicio';
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
             const headers = {
@@ -156,10 +113,10 @@ class FavoriteServices {
     }
 
 
-    deleteFavorite = async (guid) => {
+    deletePromo = async (guid) => {
         return new Promise((resolve, reject) => {
   
-            var method = 'Favoritos/EliminarFavorito';
+            var method = 'Servicios/EliminarServicio';
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
 
             const headers = {
@@ -182,4 +139,4 @@ class FavoriteServices {
     }
 }
 
-export default new FavoriteServices();
+export default new PromoServices();

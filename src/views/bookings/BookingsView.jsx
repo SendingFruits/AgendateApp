@@ -26,6 +26,7 @@ const BookingsView = ( params ) => {
 
     var guid = params.route.params.guid;
     var type = params.route.params.type;
+    console.log(guid);
 
     const [list, setList] = useState([]);
     const [counter, setCounter] = useState([]);
@@ -68,23 +69,26 @@ const BookingsView = ( params ) => {
             .then(serviceReturn => {
                 console.log('serviceReturn: ', serviceReturn);
                
-                if (serviceReturn !== null) {        
-                    BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
-                    .then(bookingsReturn => {
-                        // console.log('bookings: ', bookingsReturn);
-                        // console.log('length: ', bookingsReturn.length);
-                        if (bookingsReturn.length > 0) {
-                            setCounter(bookingsReturn.length);
-                            setList(bookingsReturn);
-                        } else {
-                            setCounter(0);
-                            setList([]);
-                        }
-                    })
-                    .catch(error => {
-                        alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
-                    });
-                }
+                // for (const key in serviceReturn) {
+                   
+                    if (serviceReturn !== null) {        
+                        BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                        .then(bookingsReturn => {
+                            console.log('bookings: ', bookingsReturn);
+                            // console.log('length: ', bookingsReturn.length);
+                            if (bookingsReturn.length > 0) {
+                                setCounter(bookingsReturn.length);
+                                setList(bookingsReturn);
+                            } else {
+                                setCounter(0);
+                                setList([]);
+                            }
+                        })
+                        .catch(error => {
+                            alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
+                        });
+                    }
+                // }
                 
             })
             .catch(error => {
@@ -105,7 +109,7 @@ const BookingsView = ( params ) => {
         loadBookings(guid, type);
     }, [guid, type, dateSelected]);
 
-    // console.log('list: ', list);
+    console.log('list: ', list);
 
     return (
         <View style={styles.container}>

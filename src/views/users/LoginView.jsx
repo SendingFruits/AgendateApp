@@ -47,10 +47,12 @@ const LoginView = () => {
     }, []);
 
 
-	const saveId = async (id) => {
+	const saveId = async (token,id) => {
 		try {
 			// await AsyncStorage.clear();
 			await AsyncStorage.setItem('userLoginId', id.toString());
+			// await AsyncStorage.setItem('token', token.toString());
+			// await AsyncStorage.getItem('token');
 		} catch (error) {
 			console.error('Error al limpiar AsyncStorage:', error);
 		}
@@ -62,7 +64,7 @@ const LoginView = () => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
 
-				saveId(user.id);
+				saveId('user.token',user.id);
 				
 				setUserPreferences({
 					current_user: {
@@ -93,11 +95,11 @@ const LoginView = () => {
 				navigation.navigate('Inicio');
 				// alert('Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre ));
 				var text = 'Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre );
-				AlertModal.showAlert('',text);
+				AlertModal.showAlert('Autenticación',text);
 			}
 		})
 		.catch(error => {
-			AlertModal.showAlert('',error);
+			AlertModal.showAlert('Autenticación',error);
 		});
 
 	};

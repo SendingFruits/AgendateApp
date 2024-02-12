@@ -30,6 +30,14 @@ import AlertModal from '../utils/AlertModal';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { 
+	faStar
+} from '@fortawesome/free-solid-svg-icons';
+
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
@@ -61,6 +69,8 @@ const MakeReservation = ({ route }) => {
 	const [isLoadingSchedules, setLoadingSchedules] = useState(true);
 	const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
+	const [favorite, setFavorite] = useState(false);
+
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -86,6 +96,43 @@ const MakeReservation = ({ route }) => {
 		});
     }
 
+
+	const switchFavorite = (idServicio) => {
+
+		console.log(idServicio);
+		console.log(user);
+
+        var idCliente = user.id;
+		var idServicio = idServicio;
+
+		FavoritesController.getFavorite(idCliente,idServicio)
+		.then(favoReturn => {
+			if (favoReturn) {
+				setFavorite(true);
+			}
+		})
+		.catch(error => {
+			alert(error);
+		});
+
+		// FavoritesController.handleFavoriteCreate(formData)
+		// .then(favoReturn => {
+		// 	console.log('favoReturn: ', favoReturn);
+		// 	setFavorite(true);
+		// })
+		// .catch(error => {
+		// 	alert(error);
+		// });
+
+		// FavoritesController.handleFavoriteCreate(formData)
+		// .then(favoReturn => {
+		// 	console.log('favoReturn: ', favoReturn);
+		// 	setFavorite(true);
+		// })
+		// .catch(error => {
+		// 	alert(error);
+		// });
+    };
 
 	const getCompany = async (id) => {
 		try {
@@ -164,6 +211,24 @@ const MakeReservation = ({ route }) => {
 				<View>
 					<View>
 						<Text style={stylesMake.title}>{company.razonSocial}</Text>
+
+						<View style={{ 
+							flex: 1,
+							alignContent:'flex-end',
+							alignItems:'flex-end',
+							position:'absolute',
+							left: 0, right: 5, top: 0, bottom: 0
+							}}>
+
+							{ service !== null ? (
+								<TouchableOpacity
+									style={{ flexDirection:'row', alignItems:'center', }} 
+									onPress={() => switchFavorite(service.id)} >
+									<FontAwesomeIcon icon={faStar} color={favorite ? '#fa0' : 'black'} size={30} />
+								</TouchableOpacity>
+							) : null}
+							
+						</View>
 					</View>
 					
 					<View>

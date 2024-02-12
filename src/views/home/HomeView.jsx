@@ -134,9 +134,27 @@ const HomeView = ( params ) => {
 	};
  
 	const handleRatioChange = (value) => {
-		// console.log(value);
+		console.log(value);
         setRatio(value);
-		// fetchData();
+
+		var rango = 0.010;
+
+		if (value >= 1 && value <= 4)
+			rango = 0.020; 
+		else if (value >= 4 && value <= 9)
+			rango = 0.050; 
+		else if (value >= 9 && value <= 14)
+			rango = 0.080; 
+		else if (value >= 14)
+			rango = 0.120; 
+
+		var myLoc = {
+			latitude: location.latitude,
+			latitudeDelta: rango,
+			longitude: location.longitude,
+			longitudeDelta: rango
+		};
+		mapRef.current.animateToRegion(myLoc); 
     };
 
 	const onRegionChange = (region, gesture) => {
@@ -201,31 +219,33 @@ const HomeView = ( params ) => {
 	};
 
 	const handleSearch = (query) => {
-		
 		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
 		// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
 		const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
-	
+		/**
+		 * codigo
+		 */
+		const newRegion = {
+			latitude: foundCompany.location.latitude,
+			longitude: foundCompany.location.longitude,
+			latitudeDelta: 0.00006,
+			longitudeDelta: 0.00006,
+		};
+		// Centra el mapa en la ubicación de la empresa encontrada
+		mapRef.current.animateToRegion(newRegion); 
+		Keyboard.dismiss();
+
 		// console.log('query: ', query);
 		// MapController.searchCompany(query)
 		// .then(foundCompany => {
 		// 	console.log('foundCompany: ', foundCompany);
 			// if (foundCompany === foundCompanyBasic) {
-				const newRegion = {
-					latitude: foundCompany.location.latitude,
-					longitude: foundCompany.location.longitude,
-					latitudeDelta: 0.00006,
-					longitudeDelta: 0.00006,
-				};
-				// Centra el mapa en la ubicación de la empresa encontrada
-				mapRef.current.animateToRegion(newRegion); 
-				Keyboard.dismiss();
+			// mismo codigo	
 		// 	}
 		// })
 		// .catch(error => {
 		// 	alert(error);
 		// });
-		
 	};
 
 	const handleReservation = (userLogin, item) => {
@@ -237,7 +257,15 @@ const HomeView = ( params ) => {
 				setShowModal(false);
 			}, 5000);
 		} else {
-			saveCompanyID(item.id);
+ 
+			if (item.idCliente !== undefined && item.idCliente !== '') {
+				// console.log('vengo de favorito');
+				saveCompanyID(item.idEmpresa);
+			} else {
+				// console.log('vengo de mapa');
+				saveCompanyID(item.id);
+			}
+
 			navigation.navigate('Realizar Reserva', { userLogin, item })
 		}
 
@@ -276,41 +304,51 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	const addFavorite = (userLogin, item) => {
-		
-	};
-
 	const favoriteTarget = (coordinates, item) => {
 		if (item !== null && item !== undefined) {
 			if (coordinates !== null) {
-				mapRef.current.animateToRegion(coordinates); 
-			}
-			return (
-				<Marker
-					// key={index}
-					pinColor='#0af'
-					coordinate={coordinates}
-					onPress={() => setSelectedMarker(item)}
-					anchor={{ x: 0.5, y: 0.5 }} 
-					>
+				// console.log(coordinates);
+				// console.log(item);
+				var empresa = item;
 
-					<View>
-						<FontAwesomeIcon style={{ color:'#0af' }} icon={faStar} size={35} />
-					</View>
+				var newCoord = {
+					latitude: coordinates.latitude,
+					longitude: coordinates.longitude,
+					latitudeDelta: 0.0010,
+					longitudeDelta: 0.0010,
+				};
 
-					<Callout 
-						style={styles.openCallout}
-						onPress={() => handleReservation(userLogin, empresa)} 
+				mapRef.current.animateToRegion(newCoord); 
+			
+				return (
+					<Marker
+						// key={index}
+						pinColor='#0af'
+						coordinate={newCoord}
+						onPress={() => setSelectedMarker(item)}
+						anchor={{ x: 0.5, y: 0.5 }} 
 						>
-						<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
-							<Text style={styles.title}>{item.title}</Text>
-							{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+	
+						<View>
+							<FontAwesomeIcon style={{ 
+								color:'#fa0', borderColor:'#0af', borderWidth: 1, 
+								}} icon={faStar} size={35} />
 						</View>
-						<Text style={styles.description}>{item.description}</Text>
-					</Callout>
-					
-				</Marker>
-			);
+	
+						<Callout 
+							style={styles.openCallout}
+							onPress={() => handleReservation(userLogin, empresa)} 
+							>
+							<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+								<Text style={styles.title}>{item.razonSocial}</Text>
+								{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+							</View>
+							<Text style={styles.description}>{item.descripcionEmpresa}</Text>
+						</Callout>
+						
+					</Marker>
+				);
+			}
 		}
 	}
 	
@@ -320,8 +358,8 @@ const HomeView = ( params ) => {
 
 		if ((coordinates !== null) && (coordinates !== undefined)) {
 			setFav(coordinates);
-			favoriteTarget(fav);
-		} else {
+		} 
+		else {
 			setFav(null);
 		}
 
@@ -403,36 +441,6 @@ const HomeView = ( params ) => {
 	
 };
 
-const CustomMarker = ( index, typeUser, item, imgLogo, imgSize ) => {
-	return (
-		<Marker
-			key={index}
-			pinColor='#00ffff'
-			coordinate={item.location}
-			image={{
-				uri: imgLogo,
-				scale: 0.01
-			}} 
-			>
-			{typeUser === 'customer' ? (
-				<Callout 
-					style={{}}
-					onPress={() => navigation.navigate('Realizar Reserva', { item })} 
-					>
-					<Text style={styles.title}>{item.title}</Text>
-					<Text style={styles.description}>{item.description}</Text>
-				</Callout>
-			) : (
-				<Callout 
-					style={{}}
-					>
-					<Text style={styles.title}>{item.title}</Text>
-					<Text style={styles.description}>{item.description}</Text>
-				</Callout>
-			)}
-		</Marker>
-	);
-};
 
 const styles = StyleSheet.create({
 	search: {

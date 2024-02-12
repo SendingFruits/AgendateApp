@@ -49,6 +49,8 @@ const App = (config) => {
 	const [menuVisible, setMenuVisible] = useState(false);
 	const [profileVisibleInit, setProfileVisibleInit] = useState(false);
 	
+	const [token, setToken] = useState(null);
+	
 	try {
 		
 		const setOptions = (navigation) => {

@@ -16,7 +16,7 @@ class MapServices {
                 method: 'GET',
                 headers: {
                     'accept': 'text/json',
-                    // 'verify': false
+                    // 'Authorization': `Bearer ${ApiConfig.JWT}`
                 },
             };
     

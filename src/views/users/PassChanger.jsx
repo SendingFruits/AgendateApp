@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { UserContext } from '../../services/context/context';
 import { useNavigation } from '@react-navigation/native';
+
+import React, { 
+    useState, useEffect, useContext
+} from 'react';
 
 import MenuButtonItem from '../home/MenuButtonItem';
 import UsersController from '../../controllers/UsersController';
+import AlertModal from '../utils/AlertModal';
 
 import { 
     Text, 
@@ -25,15 +30,23 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const PassChanger = (params) => {
 
-    var user = params.route.params.userLogin;
-    // console.log(user);
+    // console.log(params);
+    const { 
+        userLogin, 
+        // oldpass: initialOldPass, 
+        // setOldPass, 
+        // newpass: initialNewPass, 
+        // setNewPass 
+    } = params.route.params;
+    // console.log(userLogin);
 
+    const { userPreferences, setUserPreferences } = useContext(UserContext);
     const navigation = useNavigation();
 
-    const [iconEye1, setIconEye1] = useState(false);
-    const [iconEye2, setIconEye2] = useState(false);
     const [secureTextEntryValue1, setSecureTextEntryValue1] = useState(true);
     const [secureTextEntryValue2, setSecureTextEntryValue2] = useState(true);
+    const [iconEye1, setIconEye1] = useState(false);
+    const [iconEye2, setIconEye2] = useState(false);
     const [oldpass, setOldPass] = useState('');
     const [newpass, setNewPass] = useState('');
 
@@ -47,37 +60,38 @@ const PassChanger = (params) => {
         setSecureTextEntryValue2(iconEye2);
     };
 
-    const handleEmailChange = (text) => {
-		setEmail(text);
-		setIsValidEmail(validateEmail(text));
-	};
+    const handleOldPassChange = (text) => {
+        // console.log('Updating old password:', text);
+        setOldPass(text);
+    };
+    
+    const handleNewPassChange = (text) => {
+        // console.log('Updating new password:', text);
+        setNewPass(text);
+    };
 
-    useEffect(() => {
-        setOldPass('');
-        setIconEye1(false);
-        setNewPass('');
-        setIconEye2(false);
-	}, []);
-
-    const changePassword = (user) => {
+    const changePassword = () => {
 
         var valuesChange = {
-            'idu': user.guid,
+            'idu': userLogin.guid,
             'old': oldpass,
             'new': newpass,
         }
-
+        // console.log(valuesChange);
         UsersController.handleUpdatePass(valuesChange)
 		.then(msgReturn => {
 			if (msgReturn != null) {
-				// console.log('msgReturn: ', msgReturn);	
-				// setUserPreferences({
-				// 	current_user: {
-				// 		pass: user.contrasenia,
-				// 	},   
-				// });
-				navigation.navigate('Inicio');
-				alert(msgReturn);
+				navigation.navigate('Perfil de Usuario');
+				AlertModal.showAlert('Envio Exitoso',msgReturn.replace('exitosamente','correctamente'));
+
+                // var updatedUserPreferences = {
+                //     ...userPreferences,
+                //     userLogin: {
+                //         ...userLogin, pass: newpass, 
+                //     },
+                // };
+
+                // setUserPreferences(updatedUserPreferences);
 			}
 		})
 		.catch(error => {
@@ -85,20 +99,15 @@ const PassChanger = (params) => {
 		});
 	};
 
-    const handleFieldChange = (text,field) => {
-        // console.log(text);
-		switch (field) {
-			case 'oldpass':
-				setOldPass(text);
-				break;
-			case 'newpass':
-				setNewPass(text);
-				break;
 
-			default:
-				break;
-		}
-	};
+    useEffect(() => {
+        handleOldPassChange('');
+        setIconEye1(false);
+        handleNewPassChange('');
+        setIconEye2(false);
+	}, [userLogin.pass]);
+
+
 
     return (
 
@@ -113,8 +122,9 @@ const PassChanger = (params) => {
                 <Text style={styles.txtUpdate}>Contraseña Actual: </Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.input}
+                        value={oldpass}
                         secureTextEntry={secureTextEntryValue1}
-                        onChangeText={(text) => handleFieldChange(text, 'oldpass')}
+                        onChangeText={(text) => handleOldPassChange(text)}
                     />
                     <TouchableOpacity style={styles.iconEye}
                         onPress={() => handleToggleIconOldPass()}
@@ -134,8 +144,9 @@ const PassChanger = (params) => {
                 <Text style={styles.txtUpdate}>Contraseña Nueva: </Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.input} 
+                        value={newpass}
                         secureTextEntry={secureTextEntryValue2}
-                        onChangeText={(text) => handleFieldChange(text, 'newpass')}
+                        onChangeText={(text) => handleNewPassChange(text)}
                     />
                     <TouchableOpacity style={styles.iconEye}
                         onPress={() => handleToggleIconNewPass()}
@@ -153,16 +164,11 @@ const PassChanger = (params) => {
                 </View>
 
                 <View style={styles.btnChangePassword}>
-                    {/* <TouchableOpacity 
-                        style={styles.btnChangePassword}
-                        onPress={() => changePassword(user)} >
-                        <Text>Cambiar</Text>
-                    </TouchableOpacity> */}
-
+               
                     <MenuButtonItem 
 						icon = {null}
 						text = "Cambiar"
-						onPress = { () => navigation.navigate('Inicio')}
+						onPress = { () => changePassword()}
 					/>
                 </View>
 

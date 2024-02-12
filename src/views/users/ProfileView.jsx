@@ -55,6 +55,9 @@ const ProfileView = ( params ) => {
     const [refreshing, setRefreshing] = useState(false);
     const [isChecked, setChecked] = useState(false);
 
+    const [oldpass, setOldPass] = useState('');
+    const [newpass, setNewPass] = useState('');
+
 
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -153,6 +156,12 @@ const ProfileView = ( params ) => {
 
     const updatePass = () => {
         // setModalPass(true);
+        // navigation.navigate('Password',{
+        //     oldpass: oldpass,
+        //     setOldPass: setOldPass,
+        //     newpass: newpass,
+        //     setNewPass: setNewPass
+        // });
         navigation.navigate('Password');
 	};
 
@@ -238,16 +247,9 @@ const ProfileView = ( params ) => {
     
 
 	useEffect(() => {
+        setOldPass('');
+        setNewPass('');
         Dimensions.addEventListener('change', handleOrientationChange);
-
-        // console.log(DeviceInfo); // no funciona ningun metodo...
-        // try {
-        //     const phoneNumber = DeviceInfo; 
-        //     console.log('Número de teléfono:', phoneNumber);
-        // } catch (error) {
-        //     console.error('Error al obtener el número de teléfono:', error);
-        // } 
-
         openImageSavedAsync();
 	}, []);
 
@@ -353,6 +355,10 @@ const ProfileView = ( params ) => {
                     </View>
                 ) : null }
                 
+                <View>
+                    <Text>{oldpass}</Text>
+                    <Text>{newpass}</Text>
+                </View>
 
             </ScrollView>
 
@@ -362,7 +368,7 @@ const ProfileView = ( params ) => {
                     <MenuButtonItem 
                         icon = {null}
                         text = {'Cambiar Contraseña'}
-                        onPress={() => updatePass(user)}
+                        onPress={() => updatePass()}
                     /> 
 
                     <MenuButtonItem

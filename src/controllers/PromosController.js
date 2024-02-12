@@ -1,58 +1,31 @@
-import CompanyServices from '../services/CompanyServices';
+import PromosServices from '../services/PromoServices';
 
+class PromosController {
 
-class ServicesController {
-
-
-	getServicesForCompany(guid) {
+	getPromosForCompany(guid) {
 		return new Promise((resolve, reject) => {
-			// console.log('getServicesForCompany', guid);
+			// console.log('getPromosForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe pertenecer a una empresa.');
 			}
 
-			CompanyServices.getServicesForCompany(guid)
-			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
+			PromosServices.getPromosList(guid)
+			.then(promosReturn => {
+				// console.log('promosReturn', promosReturn);
+				if (promosReturn !== null) {
+					resolve(promosReturn);
 				} else {
 					resolve(null);
 				}
 			})
 			.catch(error => {
-				reject('Error Controller getServicesForCompany', error);
+				reject('Error Controller getPromosForCompany', error);
 			});
-
-		});
-	}
-
-	getServicesOfCompany(guid) {
-		return new Promise((resolve, reject) => {
-			console.log('getServicesForCompany', guid);
-			if ((guid == '') || (guid == undefined)) {
-				throw new Error('Debe pertenecer a una empresa.');
-			}
-
-			CompanyServices.getServicesOfCompany(guid)
-			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
-				} else {
-					resolve(null);
-				}
-			})
-			.catch(error => {
-				reject('Error Controller getServicesForCompany', error);
-			});
-
 		});
 	}
 
 
-
-	handleServiceUpdate(data) {
+	handlePromoUpdate(data) {
 		return new Promise((resolve, reject) => {
 		
 			if (data.nombre == '') {
@@ -101,7 +74,7 @@ class ServicesController {
 			// 	"tipoServicio": "Prueba 2"
 			// }
 
-			CompanyServices.putServiceData(dataConvert)
+			PromosServices.putServiceData(dataConvert)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -111,10 +84,10 @@ class ServicesController {
 		});
 	}
 
-	handleServiceDelete(guid) {
+	handlePromoDelete(guid) {
 		return new Promise((resolve, reject) => {
 		
-			CompanyServices.deleteService(guid)
+			PromosServices.deleteService(guid)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -124,7 +97,7 @@ class ServicesController {
 		});
 	}
 
-	handleServiceCreate(data) {
+	handlePromoCreate(data) {
 		return new Promise((resolve, reject) => {
 			
 			if (data.nombre == '') {
@@ -160,9 +133,9 @@ class ServicesController {
 				idEmpresa: data.guid
 			}
 			
-			// console.log('dataConvert: ', dataConvert);
+			console.log('dataConvert: ', dataConvert);
 
-			CompanyServices.postServiceData(dataConvert)
+			PromosServices.postServiceData(dataConvert)
 			.then(srvReturn => {
 				resolve(srvReturn);
 			})
@@ -174,4 +147,4 @@ class ServicesController {
 }
 
 
-export default new ServicesController();
+export default new PromosController();

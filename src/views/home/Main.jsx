@@ -40,7 +40,6 @@ import {
 	faStar, 
 	faRegistered,
 	faCalendar,
-	faRightFromBracket,
 	faScrewdriverWrench,
 	faTags,
 	faPowerOff
@@ -60,7 +59,6 @@ const Main = ( params ) => {
 
 	const mapRef = useRef(null);
 
-	// console.log('params: ', params);
 	var {
 		setOptions,
 		isConnected,
@@ -566,3 +564,4 @@ const styles = StyleSheet.create({
 });
 
 export default Main;
+
