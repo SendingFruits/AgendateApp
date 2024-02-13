@@ -83,6 +83,8 @@ const HomeView = ( params ) => {
 	const [ratio, setRatio] = useState(1);
 	const [fav, setFav] = useState(null);
 	
+	const [favoriteCallout, setFavoriteCallout] = useState(false);
+
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -134,27 +136,28 @@ const HomeView = ( params ) => {
 	};
  
 	const handleRatioChange = (value) => {
-		console.log(value);
-        setRatio(value);
-
 		var rango = 0.010;
+		if (location !== null) {
+			setRatio(value);
+			
+			if (value >= 1 && value <= 4)
+				rango = 0.020; 
+			else if (value >= 4 && value <= 9)
+				rango = 0.050; 
+			else if (value >= 9 && value <= 14)
+				rango = 0.080; 
+			else if (value >= 14)
+				rango = 0.120; 
+	
+			var myLoc = {
+				latitude: location.latitude,
+				latitudeDelta: rango,
+				longitude: location.longitude,
+				longitudeDelta: rango
+			};
+			mapRef.current.animateToRegion(myLoc); 
+		}
 
-		if (value >= 1 && value <= 4)
-			rango = 0.020; 
-		else if (value >= 4 && value <= 9)
-			rango = 0.050; 
-		else if (value >= 9 && value <= 14)
-			rango = 0.080; 
-		else if (value >= 14)
-			rango = 0.120; 
-
-		var myLoc = {
-			latitude: location.latitude,
-			latitudeDelta: rango,
-			longitude: location.longitude,
-			longitudeDelta: rango
-		};
-		mapRef.current.animateToRegion(myLoc); 
     };
 
 	const onRegionChange = (region, gesture) => {
@@ -325,26 +328,31 @@ const HomeView = ( params ) => {
 						// key={index}
 						pinColor='#0af'
 						coordinate={newCoord}
-						onPress={() => setSelectedMarker(item)}
+						onPress={() => {
+							setSelectedMarker(item)
+							setFavoriteCallout(true)
+						}}
 						anchor={{ x: 0.5, y: 0.5 }} 
 						>
 	
 						<View>
 							<FontAwesomeIcon style={{ 
 								color:'#fa0', borderColor:'#0af', borderWidth: 1, 
-								}} icon={faStar} size={35} />
+								}} icon={faBuilding} size={35} />
 						</View>
 	
-						<Callout 
-							style={styles.openCallout}
-							onPress={() => handleReservation(userLogin, empresa)} 
-							>
-							<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
-								<Text style={styles.title}>{item.razonSocial}</Text>
-								{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
-							</View>
-							<Text style={styles.description}>{item.descripcionEmpresa}</Text>
-						</Callout>
+						{favoriteCallout && (
+							<Callout 
+								style={styles.openCallout}
+								onPress={() => handleReservation(userLogin, empresa)} 
+								>
+								<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+									<Text style={styles.title}>{item.razonSocial}</Text>
+									{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+								</View>
+								<Text style={styles.description}>{item.descripcionEmpresa}</Text>
+							</Callout>
+						)}
 						
 					</Marker>
 				);
@@ -355,7 +363,8 @@ const HomeView = ( params ) => {
 	useEffect(() => {
 		fetchData();
 		setShowModal(false);
-
+		setFavoriteCallout(false)
+		// console.log('favoriteCallout: ', favoriteCallout);
 		if ((coordinates !== null) && (coordinates !== undefined)) {
 			setFav(coordinates);
 		} 

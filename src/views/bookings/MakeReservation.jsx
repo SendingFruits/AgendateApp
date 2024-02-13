@@ -24,6 +24,7 @@ import ServicesController from '../../controllers/ServicesController';
 import UsersController from '../../controllers/UsersController';
 import BookingController from '../../controllers/BookingController';
 import SchedulesController from '../../controllers/SchedulesController'
+import FavoritesController from '../../controllers/FavoritesController';
 
 import AlertModal from '../utils/AlertModal';
 
@@ -55,6 +56,7 @@ const MakeReservation = ({ route }) => {
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState([]);
+	const [days, setDays] = useState([]);
 
     const [isInforVisible, setInforVisible] = useState(false);
 	const [isCalendarVisible, setCalendarVisible] = useState(false);
@@ -70,6 +72,7 @@ const MakeReservation = ({ route }) => {
 	const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
 	const [favorite, setFavorite] = useState(false);
+	const [idFavorite, setIdFavorite] = useState(null);
 
 
 	const onRefresh = React.useCallback(() => {
@@ -97,41 +100,45 @@ const MakeReservation = ({ route }) => {
     }
 
 
-	const switchFavorite = (idServicio) => {
-
-		console.log(idServicio);
-		console.log(user);
-
-        var idCliente = user.id;
-		var idServicio = idServicio;
-
-		FavoritesController.getFavorite(idCliente,idServicio)
+	const isFavorite = (serv_id) => {
+		FavoritesController.getFavorite(user.guid,serv_id)
 		.then(favoReturn => {
 			if (favoReturn) {
+				setIdFavorite(favoReturn);
 				setFavorite(true);
 			}
 		})
 		.catch(error => {
 			alert(error);
 		});
+	}
 
-		// FavoritesController.handleFavoriteCreate(formData)
-		// .then(favoReturn => {
-		// 	console.log('favoReturn: ', favoReturn);
-		// 	setFavorite(true);
-		// })
-		// .catch(error => {
-		// 	alert(error);
-		// });
+	const switchFavorite = (idServicio) => {
 
-		// FavoritesController.handleFavoriteCreate(formData)
-		// .then(favoReturn => {
-		// 	console.log('favoReturn: ', favoReturn);
-		// 	setFavorite(true);
-		// })
-		// .catch(error => {
-		// 	alert(error);
-		// });
+		// console.log(user);
+		// console.log(idServicio);
+
+        var idCliente = user.guid;
+		var idServicio = idServicio;
+
+		if (favorite) {
+			FavoritesController.handleFavoriteDelete(idFavorite)
+			.then(() => {
+				setFavorite(false);
+			})
+			.catch(error => {
+				alert(error);
+			});
+		} else {
+			FavoritesController.handleFavoriteCreate({idCliente,idServicio})
+			.then(favoReturn => {
+				// console.log('return create: ', favoReturn);
+				setFavorite(true);
+			})
+			.catch(error => {
+				alert(error);
+			});
+		}
     };
 
 	const getCompany = async (id) => {
@@ -154,7 +161,9 @@ const MakeReservation = ({ route }) => {
 			if (serviceReturn !== null) {
 				setService(serviceReturn);
 				setIsLoading(false);
-				// saveServiceStorage();
+
+				setDays(JSON.parse(serviceReturn.jsonDiasHorariosDisponibilidadServicio));
+				isFavorite(serviceReturn.id)
 			} else {
 				setService(null);
 				setIsLoading(true);
@@ -196,6 +205,7 @@ const MakeReservation = ({ route }) => {
         setCalendarVisible(true);
 		setSchedulesVisible(false);
 
+		console.log(days);
 	}, [compId,route]);
 
 	return ( 
@@ -265,21 +275,29 @@ const MakeReservation = ({ route }) => {
 										<Text style={stylesMake.value}>De {service.duracionTurno} hora</Text>
 									}
 								</View>
-								<View style={stylesMake.row}>
+
+								{/* Esto podria ser un horario habitual... */}
+							
+								{/* <View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Abierto desde las: </Text>
 									<Text style={stylesMake.value}>{service.horaInicio} horas</Text>
 								</View>
 								<View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Cierra a las: </Text>
 									<Text style={stylesMake.value}>{service.horaFin} horas</Text>
-								</View>
+								</View> */}
+
 								<View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Dias: </Text>
 
-									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'60%' }}>
-										{service.diasDefinidosSemana && service.diasDefinidosSemana.length > 0 ? (
-											service.diasDefinidosSemana.split(';').map((word, index) => (
-											<Text key={index}> {word} </Text>
+									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'80%' }}>
+										{days !== null ? (
+											Object.keys(days).map((day, index) => (
+												<>
+													{ days[day].horaInicio !== null && days[day].horaFin !== null ? (
+														<Text key={index}> {day} </Text>
+													) : null }
+												</>
 											))
 										) : (
 											<Text>No hay días definidos</Text>
@@ -644,7 +662,7 @@ const ScheduleList = ( params ) => {
 		setTimeout(() => {
 			setShowModal(false);
 			onRefresh();
-		}, 10000);
+		}, 2000);
 	};
 
 	const confirmReservation = async (hour) => {

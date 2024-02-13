@@ -29,12 +29,11 @@ const ServicesView = ( params ) => {
     var guid = params.route.params.guid;
 
     const [list, setList] = useState(null);
-    const [editing, setEditing] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [isCreate, setIsCreate] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
-
+    const [bodyHeight, setBodyHeight] = useState(370); 
     
     const handleEditItem = (item) => {
         console.log('handleEditItem', item);
@@ -53,11 +52,11 @@ const ServicesView = ( params ) => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-            setEditing(false);
+            setEditMode(false);
             getServices();
 			// navigation.navigate('Servicios');
 		}, 2000);
-	}, [list]);
+	}, [editMode,list]);
 
     const handleOrientationChange = () => {
 		const newOrientation = getOrientation();
@@ -79,27 +78,15 @@ const ServicesView = ( params ) => {
         });
     }
 
-    const listServices = () => {
-        console.log('list: ', list); 
-		if (list.length > 0) {
-			return list.map((item, index) => {
-				return item && (
-					<ServiceItem 
-                        guid={guid}
-                        key={index}
-                        item={item} 
-                        onRefresh={onRefresh()}
-                        onPress={() => handleEditItem(item)} 
-                    />
-				)
-			});
-		}
-		
-	};
-    
-
     useEffect(() => {
-        setEditing(false);
+    
+        if (editMode) {
+            setBodyHeight(480);
+        } else {
+            setBodyHeight(370);
+        }
+
+        setEditMode(false);
         setIsCreate(false);
         getServices();
 
@@ -122,7 +109,7 @@ const ServicesView = ( params ) => {
         //     }
         // );
 
-    }, [guid,isCreate]);
+    }, [params,isCreate]);
 
 
     return (
@@ -143,6 +130,8 @@ const ServicesView = ( params ) => {
                                 item={item}
                                 editMode={editMode}
                                 setEditMode={setEditMode}
+                                bodyHeight={bodyHeight}
+                                setBodyHeight={setBodyHeight}
                                 navigation={navigation}
                                 onRefresh={onRefresh}
                                 onPress={() => handleEditItem(item)}
@@ -171,7 +160,7 @@ const ServicesView = ( params ) => {
                 </View>
             )}
 
-            {!editing ? (
+            {!editMode ? (
                 <>
                     {orientation === 'portrait' ? (		
                         <>

@@ -79,27 +79,13 @@ class ServicesController {
 				nombre: data.nombre,
 				tipoServicio: data.tipo,
 				costo: data.costo,
-				horaInicio: data.comienzo,
-				horaFin: data.termino,
+				// horaInicio: data.comienzo,
+				// horaFin: data.termino,
 				duracionTurno: data.turno,
 				descripcion: data.descripcion,
-				diasDefinidosSemana: data.selectedDias,
+				jsonDiasHorariosDisponibilidadServicio: JSON.stringify(data.dias),
 				idEmpresa: data.guid
 			}
-
-			// console.log('dataConvert: ', dataConvert);
-
-			// {
-			// 	"costo": "1300",
-			// 	"descripcion": "Descripcion del Servicio de prueba...",
-			// 	"diasDefinidosSemana": "Lunes;Martes;Miercoles;Jueves;",
-			// 	"duracionTurno": 60,
-			// 	"horaFin": 17.5,
-			// 	"horaInicio": 8.5,
-			// 	"idEmpresa": 2,
-			// 	"nombre": "Prueba de Servicio asd asasd",
-			// 	"tipoServicio": "Prueba 2"
-			// }
 
 			CompanyServices.putServiceData(dataConvert)
 			.then(servReturn => {

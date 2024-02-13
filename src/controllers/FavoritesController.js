@@ -76,9 +76,9 @@ class FavoriteController {
 	handleFavoriteDelete(guid) {
 		return new Promise((resolve, reject) => {
 		
-			FavoriteServices.deleteService(guid)
-			.then(servReturn => {
-				resolve(servReturn);
+			FavoriteServices.deleteFavorite(guid)
+			.then(favoReturn => {
+				resolve(favoReturn);
 			})
 			.catch(error => {
 				reject(error);
@@ -89,44 +89,16 @@ class FavoriteController {
 	handleFavoriteCreate(data) {
 		return new Promise((resolve, reject) => {
 			
-			if (data.nombre == '') {
-				throw new Error('Falta el Nombre.');
+			if (data.idcliente == '') {
+				throw new Error('Falta el Cliente.');
 			}
-			if (data.tipo == '') {
-				throw new Error('Falta el Tipo.');
-			}
-			if (data.comienzo == '') {
-				throw new Error('Falta la hora de Comienzo.');
-			}
-			if (data.termino == '') {
-				throw new Error('Falta la hora de Termino.');
-			}
-			if (data.dias == '') {
-				throw new Error('Falta seleccionar algun dia.');
+			if (data.idServicio == '') {
+				throw new Error('Falta el Servicio.');
 			}
 
-			// var dias = data.diasList.filter(Boolean).join(';');
-
-			descReplace = data.descripcion.replace(/\n/g, "\\n");
-
-			var dataConvert = {	
-				// id: data.id,
-				nombre: data.nombre,
-				tipoServicio: data.tipo,
-				costo: data.costo,
-				horaInicio: data.comienzo,
-				horaFin: data.termino,
-				duracionTurno: data.turno,
-				descripcion: descReplace,
-				diasDefinidosSemana: data.selectedDias,
-				idEmpresa: data.guid
-			}
-			
-			console.log('dataConvert: ', dataConvert);
-
-			FavoriteServices.postServiceData(dataConvert)
-			.then(srvReturn => {
-				resolve(srvReturn);
+			FavoriteServices.postFavorite(data)
+			.then(favoReturn => {
+				resolve(favoReturn);
 			})
 			.catch(error => {
 				reject(error);

@@ -127,8 +127,8 @@ const FavoriteItem = (params) => {
                                     onPress={() => goToMap({latitude:item.latitude, longitude:item.longitude}, item)} >
                                     <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} />
                                     <FontAwesomeIcon style={{ color:'#0af', marginLeft:6 }} icon={faMapMarker} />
-                                    <Text style={{ marginLeft:6 }}>Ver en mapa</Text>
                                 </TouchableOpacity>
+                                    <Text style={{ marginLeft:6 }}>{item.razonSocial}</Text>
                             </View>
 
                             <View style={{ 
@@ -158,14 +158,14 @@ const FavoriteItem = (params) => {
                                 <View>
                                     <ScrollView style={{ ...styles.body, height: bodyHeight }} >
                                     
-                                        <View style={styles.row}>
+                                        {/* <View style={styles.row}>
                                             <View style={styles.columnT}>
                                                 <Text style={styles.label}>Empresa:</Text>    
                                             </View>
                                             <View style={styles.columnV}>
                                                 <Text> {item.razonSocial}</Text>
                                             </View>
-                                        </View>
+                                        </View> */}
                                         <View style={styles.row}>
                                             <View style={styles.columnT}>
                                                 <Text style={styles.label}>Direccion:</Text>

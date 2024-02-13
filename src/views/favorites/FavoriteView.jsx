@@ -54,7 +54,7 @@ const FavoriteView = ( params ) => {
             getFavorites();
 			// navigation.navigate('Servicios');
 		}, 2000);
-	}, []);
+	}, [list]);
 
     const handleOrientationChange = () => {
 		const newOrientation = getOrientation();
