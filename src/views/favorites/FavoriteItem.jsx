@@ -136,12 +136,11 @@ const FavoriteItem = (params) => {
                                 alignItems:'center',
                                 marginHorizontal: 20,
                                 }}>
-                                <TouchableOpacity 
+                                {/* <TouchableOpacity 
                                     style={{ flexDirection:'row', alignItems:'center', }} 
                                     onPress={() => switchItem()} >
-                                    {/* <Text style={{ marginLeft:6 }}>Quitar</Text> */}
                                     <FontAwesomeIcon icon={faClose} />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
 
     

@@ -100,7 +100,7 @@ const FavoriteView = ( params ) => {
     useEffect(() => {
         getFavorites();
         // console.log(list);
-    }, [guid]);
+    }, [guid,list]);
 
 
     return (
