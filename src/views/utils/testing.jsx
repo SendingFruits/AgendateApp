@@ -1,5 +1,4 @@
 import ApiConfig from '../../services/ApiConfig';
-import Testing from '../../views/utils/';
 
 import React, { 
 	useLayoutEffect, useState

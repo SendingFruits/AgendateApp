@@ -32,7 +32,7 @@ import {
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer';
-import testing from '../utils/testing';
+import Testing from '../utils/Testing';
 
 import { 
 	faHome, 
@@ -275,7 +275,7 @@ const Main = ( params ) => {
 			<Drawer.Screen 
 				options={{}}
 				name="testing" 
-				component={testing} 
+				component={Testing} 
 				/>
 
 		</Drawer.Navigator>
