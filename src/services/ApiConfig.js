@@ -1,7 +1,7 @@
 class ApiConfig {
 
     constructor() {
-        this.API_URL_TOKEN = 'c4ad-2800-a4-1238-100-cd32-e57d-3a47-96e5';
+        this.API_URL_TOKEN = 'f497-2800-a4-145d-1c00-341a-1d01-d841-9c8e';
         this.API_BASE_URL = 'https://'+this.API_URL_TOKEN+'.ngrok-free.app/api/';
         this.API_LOCALHOST = 'https://192.168.1.7:9083/api/';
         this.JWT = '123';
