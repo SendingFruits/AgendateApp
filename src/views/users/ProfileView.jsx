@@ -23,7 +23,8 @@ import {
     RefreshControl,
     TextInput,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native';
 
 
@@ -58,6 +59,7 @@ const ProfileView = ( params ) => {
     const [oldpass, setOldPass] = useState('');
     const [newpass, setNewPass] = useState('');
 
+    const [showButtons, setShowButtons] = useState(true);
 
 	const validateEmail = (email) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -251,6 +253,23 @@ const ProfileView = ( params ) => {
         setNewPass('');
         Dimensions.addEventListener('change', handleOrientationChange);
         openImageSavedAsync();
+
+        /**
+         * esto sirve para controlar el teclado:
+         */
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', () => {
+                // console.log('Teclado abierto');
+                setShowButtons(false);
+            }
+        );     
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                // console.log('Teclado cerrado');
+                setShowButtons(true);
+            }
+        );
 	}, []);
 
     return (
@@ -332,7 +351,7 @@ const ProfileView = ( params ) => {
                         style={styles.input}
                         value={email}
                         autoCapitalize="none"
-                        onChangeText={setEmail}
+                        onChangeText={(text) => handleEmailChange(text)}
                         // onChangeText={(text) => handleFieldChange(text, 'email')}
                     />
                     {
@@ -355,37 +374,39 @@ const ProfileView = ( params ) => {
                     </View>
                 ) : null }
                 
-                <View>
+                {/* <View>
                     <Text>{oldpass}</Text>
                     <Text>{newpass}</Text>
-                </View>
+                </View> */}
 
             </ScrollView>
 
-            <View style={styles.footer}>
+            {showButtons ? (
+                <View style={styles.footer}>
 
-                <View style={styles.buttons}>
-                    <MenuButtonItem 
-                        icon = {null}
-                        text = {'Cambiar Contraseña'}
-                        onPress={() => updatePass()}
-                    /> 
+                    <View style={styles.buttons}>
+                        <MenuButtonItem 
+                            icon = {null}
+                            text = {'Cambiar Contraseña'}
+                            onPress={() => updatePass()}
+                        /> 
 
-                    <MenuButtonItem
-                        style={{marginHorizontal:20}}
-                        icon = {null}
-                        text = {'Actualizar Datos'}
-                        onPress={() => updateData()}
-                    />
+                        <MenuButtonItem
+                            style={{marginHorizontal:20}}
+                            icon = {null}
+                            text = {'Actualizar Datos'}
+                            onPress={() => updateData()}
+                        />
 
-                    <MenuButtonItem
-                        style={{marginHorizontal:20}}
-                        icon = {null}
-                        text = {'Eliminar Cuenta'}
-                        onPress={() => deleteAccount()}
-                    />
+                        <MenuButtonItem
+                            style={{marginHorizontal:20}}
+                            icon = {null}
+                            text = {'Eliminar Cuenta'}
+                            onPress={() => deleteAccount()}
+                        />
+                    </View>
                 </View>
-            </View>
+            ) : null}
         </View>
     );
 }
@@ -459,13 +480,11 @@ const styles = StyleSheet.create({
     },
 
     checkContainer: {
-		flexDirection: 'column',
-		// backgroundColor: '#fff',
-        
+		flex: 1,
+        flexDirection: 'column',
+        alignItems:'center',
 		marginHorizontal:20,
-		marginBottom: 5,
-		paddingHorizontal: 15,
-		paddingVertical: 3,
+		marginVertical:25,
 	},
 })
 

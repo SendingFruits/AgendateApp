@@ -23,7 +23,7 @@ const App = (config) => {
 
 	var preferences = {
 		'current_user' : {
-			'guid':'none',
+			'guid': 56,
 			'name':'none',
 			'last':'none',
 			'user':'none',

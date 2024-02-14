@@ -119,12 +119,6 @@ class ServicesController {
 			if (data.tipo == '') {
 				throw new Error('Falta el Tipo.');
 			}
-			if (data.comienzo == '') {
-				throw new Error('Falta la hora de Comienzo.');
-			}
-			if (data.termino == '') {
-				throw new Error('Falta la hora de Termino.');
-			}
 			if (data.dias == '') {
 				throw new Error('Falta seleccionar algun dia.');
 			}
@@ -138,11 +132,9 @@ class ServicesController {
 				nombre: data.nombre,
 				tipoServicio: data.tipo,
 				costo: data.costo,
-				horaInicio: data.comienzo,
-				horaFin: data.termino,
 				duracionTurno: data.turno,
 				descripcion: descReplace,
-				diasDefinidosSemana: data.selectedDias,
+				jsonDiasHorariosDisponibilidadServicio: JSON.stringify(data.dias),
 				idEmpresa: data.guid
 			}
 			

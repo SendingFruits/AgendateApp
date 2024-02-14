@@ -416,24 +416,7 @@ const ServiceItem = (params) => {
                                         </View>
                                     </View>
                                     <View style={styles.row}>
-                                        <DaysSelector dias={dias} setDias={setDias} />
-                                        {/* {dias !== null ? (
-                                            <View style={{ flex:1 }}>
-                                                {Object.keys(dias).map((day, index) => (
-                                                    <View key={index} style={styles.rowSche}>
-                                                        <View key={index} style={styles.rowSche}>
-                                                            <Text style={{ fontSize: 13, width:'25%' }}>{day}: </Text>
-                                                            <Text style={{ fontSize: 13, width:'30%' }}>
-                                                                desde las {convertHour(dias[day].horaInicio, 'toHours')}</Text>
-                                                            <Text style={{ fontSize: 13, width:'35%' }}>
-                                                                hasta las {convertHour(dias[day].horaFin, 'toHours')}</Text>
-                                                        </View>
-                                                    </View>
-                                                ))}
-                                            </View>
-                                        ) : (
-                                            <Text>No hay dias seleccionados</Text>
-                                        )} */}
+                                        <DaysSelector dias={dias} setDias={setDias} create={false} />
                                     </View>
     
                                 </ScrollView>
@@ -589,7 +572,6 @@ const styles = StyleSheet.create({
     footer: {
         alignItems: 'flex-end',
         paddingVertical:6,
-
         backgroundColor:'#9a9',
         // borderBottomLeftRadius:12,
         // borderBottomRightRadius:12,

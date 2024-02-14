@@ -1,16 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 
 import AlertModal from '../utils/AlertModal';
-import MultiPicker from '../utils/MultiPicker';
+import DaysSelector from '../utils/DaysSelector';
 import MenuButtonItem from '../home/MenuButtonItem';
 import ServicesController from '../../controllers/ServicesController';
 
-import { 
-    formatDate, convertHour, createDateTimeFromDecimalHour
-} from '../../views/utils/Functions'; 
-
 import { Picker } from '@react-native-picker/picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { 
     useState, useEffect 
@@ -23,24 +18,12 @@ import {
     TextInput,
     View,
     ScrollView,
-    TouchableOpacity,
-    Alert
+    Keyboard
 } from 'react-native';
-
-import { 
-	faTrash,
-    faPen
-} from '@fortawesome/free-solid-svg-icons';
-
-import { 
-	FontAwesomeIcon 
-} from '@fortawesome/react-native-fontawesome';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const { width, height } = Dimensions.get('window');
 
 const ServiceCreate = ( params ) => {
     
@@ -52,102 +35,30 @@ const ServiceCreate = ( params ) => {
 
     const navigation = useNavigation();
 
-
+    var jsonString = '{"Lunes": {"horaInicio": 0,"horaFin": 0},\n"Martes": {"horaInicio": null,"horaFin": null},\n"Miercoles": {"horaInicio": null,"horaFin": null},\n"Jueves": {"horaInicio": null,"horaFin": null},\n"Viernes": {"horaInicio": null,"horaFin": null},\n"Sabado": {"horaInicio": null,"horaFin": null},\n"Domingo": {"horaInicio": null,"horaFin": null}}';
     var edit = false;
 
-    const [isCollapsed, setIsCollapsed] = useState(true);
     const [bodyHeight, setBodyHeight] = useState(480); 
 
     const [nombre, setNombre] = useState('');
     const [tipo, setTipo] = useState('');
     const [costo, setCosto] = useState(0);
-    const [comienzo, setComienzo] = useState('');
-    const [termino, setTermino] = useState('');
     const [turno, setTurno] = useState(30);
-
-    const [comienzoHora,setComienzoHora]= useState(convertHour(0.00,'toHours'));
-    const [terminoHora, setTerminoHora] = useState(convertHour(0.00, 'toHours'));
-
     const [descripcion, setDescription] = useState('');
+    const [dias, setDias] = useState(JSON.parse(jsonString));
+    // JSON.parse(item.jsonDiasHorariosDisponibilidadServicio)
 
-
-    var [selectedDias, setSelectedDias] = useState([]);
-    var [diasListArray, setDiasListArray] = useState([]);
-    
-
-    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
-    const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
-
-    const [selectedDatePicker1, setSelectedDatePicker1] = useState(new Date());
-    const [selectedDatePicker2, setSelectedDatePicker2] = useState(new Date());
-
-
-    const handleDiasSelectionChange = (selectedItems) => {
-        console.log(selectedItems);
-        var joinerArrayInString = selectedItems.join(';');
-        setSelectedDias(joinerArrayInString);
-        var listAux = joinerArrayInString.split(';');
-        setDiasListArray(listAux);
-    };
-
-
-    const showDatePicker= (field) => {
-        if (field === 'comienzo') {
-            setDatePickerVisibility1(true);
-            setSelectedDatePicker1(createDateTimeFromDecimalHour(comienzo));
-        }
-        if (field === 'termino') {
-            setDatePickerVisibility2(true);
-            setSelectedDatePicker2(createDateTimeFromDecimalHour(termino));
-        }
-    }
-
-    const handleDateConfirm = (date,field) => {
-        // console.log(date);
-        
-        const fecha = new Date(date);
-        const hora = `${fecha.getHours()}:${String(fecha.getMinutes()).padStart(2, '0')}`;
-        var decimal = convertHour(hora, 'toDecimal');
-    
-        if (field == 'comienzo') {
-            setSelectedDatePicker1(createDateTimeFromDecimalHour(decimal));
-            setComienzo(decimal);
-            setComienzoHora(hora);
-            // console.log(decimal);
-        }
-        if (field == 'termino') {
-            setSelectedDatePicker2(createDateTimeFromDecimalHour(decimal));
-            setTermino(decimal);
-            setTerminoHora(hora);
-            // console.log(decimal);
-        }
-
-        setDatePickerVisibility1(false);
-        setDatePickerVisibility2(false);
- 
-    };
-
-    const toggleCollapse = () => {
-        setIsCollapsed(!isCollapsed);
-    };
+    const [marginStatusTop, setMarginStatusTop] = useState(0);
 
     const saveItem = () => {
 
-        // var id = params.item.id;
-
-        console.log('selectedDias: ',selectedDias);
-        setSelectedDias(selectedDias);
-
         const formData = {
-            // id,
 			nombre,
 			tipo,
 			costo,
-			comienzo,
-			termino,
 			turno,
 			descripcion,
-			selectedDias,
+			dias,
             guid,
 		};
 
@@ -166,37 +77,36 @@ const ServiceCreate = ( params ) => {
 		});
     };
 
-    const deleteItem = () => {};
-
-    const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
-    const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
-
-
 	useEffect(() => {
-        setBodyHeight(480); 
+        setBodyHeight(560); 
 
-        // setNombre('');
-        // setTipo('');
-        // setCosto(0.00);
-        // setComienzo('00:00');
-        // setTermino('00:00');
-        // setTurno(30);
-        // setDescription('');
-        
-        // setComienzoHora(0.00);
-        // setTerminoHoras(0.00);
-        
-        // setSelectedDias([]);
-        // setDiasListArray([]);
+        setNombre('');
+        setTipo('');
+        setCosto(0.00);
+        setTurno(30);
+        setDescription('');
 
-        setDatePickerVisibility1(false);
-        setDatePickerVisibility2(false);
+        setDias(JSON.parse(jsonString));
 
-        // console.log('selectedDias: ',selectedDias);
-        if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
-            var listAux = selectedDias.split(';');
-            setDiasListArray(listAux);
-        }
+        /**
+         * esto sirve para controlar el teclado:
+         */
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', () => {
+                // console.log('Teclado abierto');
+                setMarginStatusTop(20);
+                setBodyHeight(450);
+            }
+        );     
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                // console.log('Teclado cerrado');
+                setMarginStatusTop(0);
+                setBodyHeight(560);
+            }
+        );
+
 	}, [edit]);
     
     return (
@@ -208,7 +118,7 @@ const ServiceCreate = ( params ) => {
                     end={{ x: 1.5, y: 0.5 }} 
                     >
                     <View>
-                        <ScrollView style={{ ...styles.body, height: bodyHeight }} >
+                        <ScrollView style={{ ...styles.body, height: bodyHeight, marginTop:marginStatusTop }} >
                         
                             <View style={styles.row}>
                                 <View style={styles.columnT}>
@@ -246,54 +156,7 @@ const ServiceCreate = ( params ) => {
                                     />
                                 </View>
                             </View>
-                            <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Comienza:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                    <TouchableOpacity onPress={(param) => showDatePicker('comienzo')}>
-                                        <TextInput 
-                                            editable={false}
-                                            style={styles.dataEdit} 
-                                            value={comienzoHora.toString()}
-                                            />
-                                    </TouchableOpacity>
-                                    <DateTimePickerModal
-                                        isVisible={isDatePickerVisible1}
-                                        mode="time"
-                                        display="spinner"
-                                        is24Hour={true}
-                                        date = {selectedDatePicker1}
-                                        minuteInterval={30}
-                                        onConfirm={(date) => handleDateConfirm(date,'comienzo')}
-                                        onCancel={() => setDatePickerVisibility1(false)}
-                                        />
-                                </View>
-                            </View>
-                            <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Termina:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                    <TouchableOpacity onPress={(param) => showDatePicker('termino')}>
-                                        <TextInput 
-                                            editable={false}
-                                            style={styles.dataEdit} 
-                                            value={terminoHora.toString()}
-                                            />
-                                    </TouchableOpacity>
-                                    <DateTimePickerModal
-                                        isVisible={isDatePickerVisible2}
-                                        mode="time"
-                                        display="spinner"
-                                        is24Hour={true}
-                                        date = {selectedDatePicker2}
-                                        minuteInterval={30}
-                                        onConfirm={(date) => handleDateConfirm(date,'termino')}
-                                        onCancel={() => setDatePickerVisibility2(false)}
-                                        />
-                                </View>
-                            </View>
+                           
                             <View style={styles.row}>
                                 <View style={styles.columnT}>
                                     <Text style={styles.label}>Descripción:</Text>
@@ -325,43 +188,13 @@ const ServiceCreate = ( params ) => {
                                     </View>
                             </View>
                             <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Dias:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                    {/* <TouchableOpacity>
-                                        <TextInput 
-                                            editable={false}
-                                            style={styles.dataEdit} 
-                                            value={terminoHora.toString()}
-                                            />
-                                    </TouchableOpacity> */}
-
-                                    <MultiPicker 
-                                        list={diasListArray} 
-                                        onSelectionChange={(selectedItems) => handleDiasSelectionChange(selectedItems)}
-                                        />
-                                    
+                                <View style={styles.column}>
+                                    <Text style={styles.label}>Dias de Actividad</Text>
                                 </View>
                             </View>
-
-                            {/* <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Ultima Fecha:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                    <Text>{formatDate(''t>
-                                
-                                </View>
-                            </View> */}
-
-                            {/* <EditField 
-                                icon={null} 
-                                text={formatDate('')}
-                                type={'date'}
-                                attr={'ultima'}
-                                onPress={() => editField('')}
-                            /> */}
+                            <View style={styles.row}>
+                                <DaysSelector dias={dias} setDias={setDias} create={true} />
+                            </View>
                         </ScrollView>
                     </View>
                 </LinearGradient>
@@ -374,7 +207,7 @@ const ServiceCreate = ( params ) => {
                         end={{ x: 1.5, y: 0.5 }} 
                         >
 
-                        <View style={styles.btnEdit}>    
+                        <View style={styles.btnEdit}>
 
                             <View style={{marginEnd:10, marginTop:7}}>
                                 <MenuButtonItem 
@@ -393,7 +226,6 @@ const ServiceCreate = ( params ) => {
                             </View>
                         </View>
 
-                        
                     </LinearGradient>
                 </View>
             </View> 
@@ -404,13 +236,14 @@ const ServiceCreate = ( params ) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: windowWidth - 40,
-        marginHorizontal: 20,
-        marginVertical: 10,
+        width: width - 5,
+        // marginHorizontal: 20,
+        marginVertical: 5,
         justifyContent: 'center',
-        borderRadius: 12,
-        borderWidth: 1,
-        padding:1.5,
+        borderRadius: 8,
+        borderTopWidth: 0.8,
+        borderBottomWidth: 0.8,
+        padding:1.2,
     },
     header: {
         flexDirection: 'row',
@@ -427,17 +260,23 @@ const styles = StyleSheet.create({
         paddingVertical:10,
     },
     buttonsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignContent:'flex-end',
+        // alignItems:'flex-end',
+        // alignSelf:'flex-end',
+        // justifyContent: 'space-between',
         position:'relative',
-        top:-10,
+        top:10,
+        right:10,
     },
     body: {
-        paddingTop: 15,
-        borderTopWidth: 0.5,
-        borderTopColor: '#000',
+        width: width - 5,
+        // height: 100,
+        // borderTopWidth: 1,
+        borderTopColor: '#555',
         borderBottomWidth: 1,
-        paddingHorizontal:10,
+        borderBottomColor: '#556',
+        paddingHorizontal:8,
+        marginTop: 10
     },
 
     row: {
@@ -447,6 +286,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderBottomColor: '#000',
 
+    },
+    column: {
+        width:'100%',
+        paddingLeft:5,
+        // backgroundColor:'red',
     },
     columnT: {
         width:'30%',
@@ -466,9 +310,10 @@ const styles = StyleSheet.create({
 
     footer: {
         alignItems: 'flex-end',
+        paddingVertical:6,
         backgroundColor:'#9a9',
-        borderBottomLeftRadius:12,
-        borderBottomRightRadius:12,
+        // borderBottomLeftRadius:12,
+        // borderBottomRightRadius:12,
     },
     btnEdit: {
         flexDirection: 'row',

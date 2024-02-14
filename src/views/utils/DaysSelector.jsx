@@ -28,12 +28,13 @@ import {
 
 const DaysSelector = ( params ) => {
 
+    // console.log(params);
+
     var {
         dias,
         setDias,
+        create,
     } = params;
-
-    // console.log(dias);
 
     const [schedules, setSchedules] = useState(dias);
     const [selectedDay, setSelectedDay] = useState(null);
@@ -147,10 +148,10 @@ const DaysSelector = ( params ) => {
                                     dias[day].horaInicio = null, dias[day].horaFin = null   
                                 )}
 
-                                <View style={{ marginRight: 5 }}>
+                                <View style={{ alignItems:'flex-end', marginRight: 5 }}>
                                     <CheckBox 
                                         style={{
-                                            width:'5%',
+                                            width:30,
                                         }}
                                         type={'normal'}
                                         text={null}
