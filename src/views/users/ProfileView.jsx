@@ -1,18 +1,19 @@
-import { UserContext } from '../../services/context/context'; 
-import { useNavigation } from '@react-navigation/native';
-import { getOrientation } from '../utils/Functions';
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
+import UsersController from '../../controllers/UsersController';
+import AlertModal from '../utils/AlertModal';
+import MenuButtonItem from '../home/MenuButtonItem';
+import CheckBox from '../utils/CheckBox';
 
 import React, { 
     useState, useEffect, useContext 
 } from 'react';
 
-// import DeviceInfo from 'react-native-device-info-2';
+import { useNavigation } from '@react-navigation/native';
 
 import * as ImagePicker from "expo-image-picker";
-import UsersController from '../../controllers/UsersController';
-import AlertModal from '../utils/AlertModal';
-import MenuButtonItem from '../home/MenuButtonItem';
-import CheckBox from '../utils/CheckBox';
 
 import {
     Dimensions,
@@ -27,19 +28,18 @@ import {
     Keyboard
 } from 'react-native';
 
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
 const ProfileView = ( params ) => {
 
+    const { currentUser, setCurrentUser } = useContext(AuthContext);
+    var userLogin = currentUser;
+
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
-    var userLogin = params.route.params;
-    const { setUserPreferences } = useContext(UserContext);
     const navigation = useNavigation();
 
     const [user, setUser] = useState(userLogin);
@@ -126,6 +126,7 @@ const ProfileView = ( params ) => {
 			lastname,
 			movil,
             email,
+            recibe:isChecked,
 		};
 
         // console.log('formData: ', formData);
@@ -134,17 +135,15 @@ const ProfileView = ( params ) => {
 			// console.log('userReturn: ', userReturn);
 			if (userReturn) {
 				alert('Los datos del usuario se han actualizado.');
-                setUserPreferences({
-                    current_user: {
-                        guid: formData.guid,
-                        name: formData.firstname,
-                        last: formData.lastname,
-						pass: user.pass,
-						user: user.user,
-                        celu: formData.movil,
-						mail: formData.email,
-						type: 'customer',
-                    },   
+                setCurrentUser({
+                    guid: formData.guid,
+                    name: formData.firstname,
+                    last: formData.lastname,
+                    pass: user.pass,
+                    user: user.user,
+                    celu: formData.movil,
+                    mail: formData.email,
+                    // type: 'customer', -- no iria por ahora
                 });
 
                 // setUser(userReturn);
@@ -157,13 +156,6 @@ const ProfileView = ( params ) => {
 	};
 
     const updatePass = () => {
-        // setModalPass(true);
-        // navigation.navigate('Password',{
-        //     oldpass: oldpass,
-        //     setOldPass: setOldPass,
-        //     newpass: newpass,
-        //     setNewPass: setNewPass
-        // });
         navigation.navigate('Password');
 	};
 
@@ -177,19 +169,17 @@ const ProfileView = ( params ) => {
                 .then(resDelete => {
                     // console.log('userReturn: ', userReturn);
                     if (resDelete) {
-                        setUserPreferences({
-                            current_user : {
-                                'guid':'none',
-                                'name':'none',
-                                'last':'none',
-                                'user':'none',
-                                'pass':'none',
-                                'type':'none',
-                                'mail':'none', 
-                                'docu':'none',
-                                'celu':'none',
-                                'logo':'none', 
-                            },   
+                        setCurrentUser({
+                            'guid':'none',
+                            'name':'none',
+                            'last':'none',
+                            'user':'none',
+                            'pass':'none',
+                            'type':'none',
+                            'mail':'none', 
+                            'docu':'none',
+                            'celu':'none',
+                            'logo':'none', 
                         });
                         onRefresh();
                         navigation.navigate('Inicio');
@@ -206,51 +196,21 @@ const ProfileView = ( params ) => {
 		});
 	};
 
-
-    const handleFieldChange = (text,field) => {
-		switch (field) {
-			case 'username':
-				setUsername(text);
-				break;
-            case 'firstName':
-                setFirstName(text);
-                break;
-            case 'lastName':
-                setLastName(text);
-                break;
-            case 'movil':
-                setMovil(text);
-                break;
-            case 'email':
-                setEmail(text);
-                setIsValidEmail(validateEmail(text));	
-                break; 
-
-			default:
-				break;
-		}
-	};
-
     const handleOrientationChange = () => {
         const { width, height } = Dimensions.get('window');
         setWidthMax(width);
         setHeightMax(height);
-
-        // if (getOrientation() === 'portrait') {
-        //     setContainer({
-        //         flex: 1,
-        //         width: widthMax,
-        //         height: heightMax
-        //     });
-        // } else {
-
-        // }
     };
     
 
 	useEffect(() => {
+
+        setUser(userLogin);
+        setGuid(userLogin.guid);
+
         setOldPass('');
         setNewPass('');
+
         Dimensions.addEventListener('change', handleOrientationChange);
         openImageSavedAsync();
 
@@ -343,17 +303,13 @@ const ProfileView = ( params ) => {
                     />
                 </View>
 
-                <View style={[styles.inputContainer,
-                    !isValidEmail && styles.invalidInput]}
-                >
+                <View style={[styles.inputContainer, !isValidEmail && styles.invalidInput]} >
                     <TextInput
                         keyboardType="email-address"
                         style={styles.input}
                         value={email}
                         autoCapitalize="none"
-                        onChangeText={(text) => handleEmailChange(text)}
-                        // onChangeText={(text) => handleFieldChange(text, 'email')}
-                    />
+                        onChangeText={(text) => handleEmailChange(text)} />
                     {
                         !isValidEmail &&
                         <Text style={styles.errorText}>

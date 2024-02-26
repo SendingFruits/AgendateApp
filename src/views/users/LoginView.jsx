@@ -1,14 +1,16 @@
-import { UserContext } from '../../services/context/context'; 
-import { useNavigation } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
 
 import UsersController from '../../controllers/UsersController';
 import MenuButtonItem from '../home/MenuButtonItem';
 import AlertModal from '../utils/AlertModal';
 
 import React, { 
-	useState, useEffect, useContext 
+	useContext, useState, useEffect 
 } from 'react';
+
+import { useNavigation } from '@react-navigation/native';
 
 import { 
 	StyleSheet,
@@ -18,23 +20,20 @@ import {
 	Image, 
 	TouchableOpacity
 } from 'react-native';
+
 import { 
-	faUser, 
-	faLock
+	faUser, faLock
 } from '@fortawesome/free-solid-svg-icons';
+
 import { 
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-const Drawer = createDrawerNavigator();
-
-const LoginView = () => {
+const LoginView = ( params ) => {
 
 	const navigation = useNavigation();
-	const { setUserPreferences } = useContext(UserContext);
+	const { setIsLogin, setUser } = useContext(AuthContext);
+	// console.log('isLogin: ', isLogin);
 
     const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -46,51 +45,38 @@ const LoginView = () => {
         setPassword('');
     }, []);
 
-
-	const saveId = async (token,id) => {
-		try {
-			// await AsyncStorage.clear();
-			await AsyncStorage.setItem('userLoginId', id.toString());
-			// await AsyncStorage.setItem('token', token.toString());
-			// await AsyncStorage.getItem('token');
-		} catch (error) {
-			console.error('Error al limpiar AsyncStorage:', error);
-		}
-    }
-
-	const login = () => {
+	const login = async  () => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
 
-				saveId('user.token',user.id);
-				
-				setUserPreferences({
-					current_user: {
-						guid: user.id,
-						name: user.nombre,
-						last: user.apellido,
-						user: user.nombreUsuario,
-						pass: user.contrasenia,
-						celu: user.celular,
-						mail: user.correo,
-						type: user.tipoUsuario,
-						docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
-						...(user.tipoUsuario === 'company' && {
-							rut: user.rutDocumento,
-							businessName: user.razonSocial,
-							owner: user.nombrePropietario,
-							category: user.rubro,
-							address: user.direccion,
-							city: user.ciudad,
-							description: user.descripcion,
-							latitude: user.latitude,
-							longitude: user.longitude,
-							logo: user.logo,
-						}),
-					},
-				});
+				var currentUser = {
+					guid: user.id,
+					name: user.nombre,
+					last: user.apellido,
+					user: user.nombreUsuario,
+					pass: user.contrasenia,
+					celu: user.celular,
+					mail: user.correo,
+					type: user.tipoUsuario,
+					docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
+					...(user.tipoUsuario === 'company' && {
+						rut: user.rutDocumento,
+						businessName: user.razonSocial,
+						owner: user.nombrePropietario,
+						category: user.rubro,
+						address: user.direccion,
+						city: user.ciudad,
+						description: user.descripcion,
+						latitude: user.latitude,
+						longitude: user.longitude,
+						logo: user.logo,
+					}),
+				};
+
+				setUser(currentUser);
+				setIsLogin(true);
 
 				navigation.navigate('Inicio');
 				// alert('Bienvenido '+ (userReturn.firstname !== undefined ? userReturn.firstname : user.nombre ));

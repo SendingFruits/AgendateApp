@@ -1,3 +1,7 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../utils/Functions'; 
 
@@ -5,27 +9,21 @@ import FavoriteItem from './FavoriteItem';
 import FavoriteController from '../../controllers/FavoritesController';
 
 import React, { 
-    useState, useEffect
+    useContext, useState, useEffect
 } from 'react';
 
 import { 
-    Dimensions,
     StyleSheet, 
-    Text, 
     View, 
     ScrollView,
     RefreshControl,
-    TouchableOpacity,
-    Keyboard
 } from 'react-native';
-
-import { LinearGradient } from 'expo-linear-gradient';
-
 
 const FavoriteView = ( params ) => {
 
     const navigation = useNavigation();
-    var guid = params.route.params.guid; 
+    const { currentUser } = useContext(AuthContext);
+    var guid = currentUser.guid; 
 
     const [list, setList] = useState(null);
     const [editing, setEditing] = useState(false);
@@ -100,7 +98,7 @@ const FavoriteView = ( params ) => {
     useEffect(() => {
         getFavorites();
         // console.log(list);
-    }, [guid,list]);
+    }, [guid]);
 
 
     return (

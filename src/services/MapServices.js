@@ -16,11 +16,16 @@ class MapServices {
                 method: 'GET',
                 headers: {
                     'accept': 'text/json',
+                    // 'verify': false
                     // 'Authorization': `Bearer ${ApiConfig.JWT}`
                 },
             };
     
             // console.log('urlCompleta: ',urlCompleta); 
+
+            // axios.defaults.httpsAgent = new https.Agent({  
+            //     rejectUnauthorized: false
+            // });
 
             axios.get(urlCompleta, options)
             .then(function (response) {

@@ -93,7 +93,9 @@ class UsersController {
 					contrasenia: data.password,
 					celular: data.movil,
 					correo: data.email,
-					tipoUsuario: data.userType
+					tipoUsuario: data.userType,
+
+					// tieneNotificaciones: data.recibe
 				}
 			}
 

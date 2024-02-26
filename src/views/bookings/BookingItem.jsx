@@ -4,9 +4,7 @@ import {
     useState, useEffect 
 } from 'react';
 
-import UsersController from '../../controllers/UsersController';
 import BookingController from '../../controllers/BookingController';
-import MenuButtonItem from '../home/MenuButtonItem';
 import AlertModal from '../utils/AlertModal';
 
 import { 
@@ -18,23 +16,12 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import { 
-	faCircleXmark,
-    faCircleCheck
-} from '@fortawesome/free-solid-svg-icons';
-
-import { 
-	FontAwesomeIcon 
-} from '@fortawesome/react-native-fontawesome';
-
 import { LinearGradient } from 'expo-linear-gradient';
-
 
 const { width, height } = Dimensions.get('window');
 
 const BookingItem = ( params ) => {
 
-    console.log('params: ', params);
     var {
         index,
         type,

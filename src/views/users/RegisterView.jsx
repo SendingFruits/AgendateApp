@@ -9,7 +9,6 @@ import UsersController from '../../controllers/UsersController';
 import AlertModal from '../utils/AlertModal';
 
 import {
-	Alert,
 	Text,
 	StyleSheet,
 	View,

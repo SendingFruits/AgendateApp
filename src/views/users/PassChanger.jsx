@@ -1,4 +1,3 @@
-import { UserContext } from '../../services/context/context';
 import { useNavigation } from '@react-navigation/native';
 
 import React, { 

@@ -1,8 +1,20 @@
-import { UserContext } from '../../services/context/context'; 
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
+import ServicesController from '../../controllers/ServicesController';
+import UsersController from '../../controllers/UsersController';
+import BookingController from '../../controllers/BookingController';
+import SchedulesController from '../../controllers/SchedulesController'
+import FavoritesController from '../../controllers/FavoritesController';
+import AlertModal from '../utils/AlertModal';
+
+import { useNavigation } from '@react-navigation/native';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { formatDate, formatDate2 } from '../utils/Functions'
 
 import React, { 
-	useState, useEffect, useContext, useRef 
+	useContext, useState, useEffect, useRef 
 } from 'react';
 
 import { 
@@ -15,20 +27,8 @@ import {
 	ScrollView, 
 	ActivityIndicator,
 	Modal,
-	Dimensions
 } from 'react-native';
  
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-
-import ServicesController from '../../controllers/ServicesController';
-import UsersController from '../../controllers/UsersController';
-import BookingController from '../../controllers/BookingController';
-import SchedulesController from '../../controllers/SchedulesController'
-import FavoritesController from '../../controllers/FavoritesController';
-
-import AlertModal from '../utils/AlertModal';
-
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { 
@@ -39,16 +39,10 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
-const { width, height } = Dimensions.get('window');
-
-const MakeReservation = ({ route }) => {
+const MakeReservation = ( params ) => {
 	
-	// console.log(route);
-
-	const { userPreferences, setUserPreferences } = useContext(UserContext);
-	var user = userPreferences.current_user;
+	const { currentUser } = useContext(AuthContext);
+	var user = currentUser;
 	var [compId, setCompId] = useState(null);
 
 	const navigation = useNavigation();
@@ -205,8 +199,8 @@ const MakeReservation = ({ route }) => {
         setCalendarVisible(true);
 		setSchedulesVisible(false);
 
-		console.log(days);
-	}, [compId,route]);
+		// console.log(days);
+	}, [compId, params]);
 
 	return ( 
 		<ScrollView 
@@ -276,28 +270,17 @@ const MakeReservation = ({ route }) => {
 									}
 								</View>
 
-								{/* Esto podria ser un horario habitual... */}
-							
-								{/* <View style={stylesMake.row}>
-									<Text style={stylesMake.label}>Abierto desde las: </Text>
-									<Text style={stylesMake.value}>{service.horaInicio} horas</Text>
-								</View>
-								<View style={stylesMake.row}>
-									<Text style={stylesMake.label}>Cierra a las: </Text>
-									<Text style={stylesMake.value}>{service.horaFin} horas</Text>
-								</View> */}
-
 								<View style={stylesMake.row}>
 									<Text style={stylesMake.label}>Dias: </Text>
 
 									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'80%' }}>
 										{days !== null ? (
 											Object.keys(days).map((day, index) => (
-												<>
+												<View key={index}>
 													{ days[day].horaInicio !== null && days[day].horaFin !== null ? (
 														<Text key={index}> {day} </Text>
 													) : null }
-												</>
+												</View>
 											))
 										) : (
 											<Text>No hay días definidos</Text>
@@ -662,7 +645,7 @@ const ScheduleList = ( params ) => {
 		setTimeout(() => {
 			setShowModal(false);
 			onRefresh();
-		}, 2000);
+		}, 10000);
 	};
 
 	const confirmReservation = async (hour) => {
@@ -747,96 +730,6 @@ const ScheduleList = ( params ) => {
 					</Modal>
 				</View>
 			)}
-		</View>
-	);
-};
-
-const stylesSchedules = StyleSheet.create({
-	container: {
-		backgroundColor: '#e3e0ef',
-	},
-	title: {
-		alignSelf:'center',
-		marginTop: 3,
-		padding: 2,
-		color:'#000000',
-		fontWeight:'bold',
-		backgroundColor:'#e3eeee',
-		width:'100%',
-		textAlign:'center'
-	},
-	scheduleItem: {
-		flexDirection: 'row',
-		paddingVertical: 4,
-		paddingHorizontal: 20,
-		marginTop: 5,
-		marginBottom: 5,
-		borderBottomColor: '#8DA9A4',
-		borderBottomWidth: 1,
-		borderBottomLeftRadius: 10,
-		borderBottomRightRadius: 10,
-	},
-	hourItem: {
-		fontWeight: 'normal',
-		marginRight: 20,
-	},
-	statusItem: {
-		fontWeight: 'bold',
-		textAlign: 'right',
-	},
-	modal: {
-		width: 360,
-		height: 220,
-		alignSelf: 'center',
-		marginHorizontal: 40,
-		marginVertical: 220,
-		paddingHorizontal: 10,
-		paddingVertical: 20,
-		borderRadius: 20,
-		borderColor: 'green',
-		borderWidth: 1,
-		backgroundColor: 'white',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	closeModal: {
-		position: 'absolute',
-		top: 10,
-		right: 10,
-		borderRadius: 15,
-		width: 30,
-		height: 30,
-		justifyContent: 'center',
-		alignItems: 'center',
-
-	},
-	cross: {
-		color: 'green',
-	},
-	textConfirm: {
-		fontSize: 21,
-		textAlign: 'center',
-		marginHorizontal: 2,
-		marginVertical: 2,
-		paddingHorizontal: 6,
-		paddingVertical: 6,
-	},
-});
-
-const CalendarHeader = ({ month, onMonthChange }) => {
-	return (
-		<View>
-			<View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-				<Text>{month}</Text>
-			</View>
-			<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-				<Text style={{ marginHorizontal: 16 }}>Lun</Text>
-				<Text style={{ marginHorizontal: 16 }}>Mar</Text>
-				<Text style={{ marginHorizontal: 16 }}>Mie</Text>
-				<Text style={{ marginHorizontal: 16 }}>Jue</Text>
-				<Text style={{ marginHorizontal: 16 }}>Vie</Text>
-				<Text style={{ marginHorizontal: 16 }}>Sab</Text>
-			</View>
 		</View>
 	);
 };

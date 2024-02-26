@@ -1,7 +1,7 @@
-import { UserContext } from '../../services/context/context'; 
-import { useNavigation } from '@react-navigation/native';
-import { getOrientation } from '../../views/utils/Functions'; 
- 
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import SearchPanel from './SearchPanel';
 import RatioPanel from './RatioPanel';
 import CompanyPanel from '../users/CompanyPanel';
@@ -10,7 +10,7 @@ import MapController from '../../controllers/MapController';
 import AlertModal from '../utils/AlertModal';
 
 import React, { 
-	useRef, useState, useEffect, useContext
+	useContext, useRef, useState, useEffect
 } from 'react';
 
 import { 
@@ -20,19 +20,17 @@ import {
 	Text, 
 	View,
 	ScrollView,
-	TouchableOpacity,
 	Keyboard,
 	Image,
 	Modal
 } from 'react-native';
-import 
-	MapView, { 
-		Marker, 
-		Callout,
-	} 
-from 'react-native-maps';
+
+import MapView, { Marker, Callout } from 'react-native-maps';
+
+import { useNavigation } from '@react-navigation/native';
+import { getOrientation } from '../../views/utils/Functions'; 
+
 import {
-	faStar,
 	faBuilding
 } from '@fortawesome/free-solid-svg-icons';
  
@@ -42,17 +40,13 @@ import {
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
 const { width, height } = Dimensions.get('window');
 
 const HomeView = ( params ) => {
 	
-	// console.log(params.route.params);
+	const { currentUser } = useContext(AuthContext);
+
 	var { 
-		setOptions,
-		isConnected,
-		setIsConnected,
 		coordinates,
 		item,
 	} = params.route.params || {};
@@ -60,8 +54,7 @@ const HomeView = ( params ) => {
 	var countMap = 0;
 
 	const mapRef = useRef(null);
-	const { userPreferences, setUserPreferences } = useContext(UserContext);
-	var userLogin = userPreferences.current_user;
+	var userLogin = currentUser;
 	
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
@@ -106,7 +99,7 @@ const HomeView = ( params ) => {
 				.then(companiesReturn => {
 					// console.log('hay datos: ', companiesReturn);
 					setCompanies(companiesReturn);
-					setIsConnected(true);
+					// setIsConnected(true);
 					countMap++;
 				})
 				.catch(error => {
@@ -114,7 +107,7 @@ const HomeView = ( params ) => {
 					AlertModal.showAlert('API','Problemas de Conexión...');
 					// alert('Problemas de Conexión...'); 
 					setCompanies([]);
-					setIsConnected(false);
+					// setIsConnected(false);
 					countMap = 0;
 				});
 
@@ -258,7 +251,7 @@ const HomeView = ( params ) => {
 			setShowModal(true);
 			setTimeout(() => {
 				setShowModal(false);
-			}, 5000);
+			}, 6000);
 		} else {
  
 			if (item.idCliente !== undefined && item.idCliente !== '') {
@@ -296,15 +289,6 @@ const HomeView = ( params ) => {
 				reject(error);
 			}
 		});
-	};
-
-	const clearAsyncStorage = async () => {
-		try {
-			await AsyncStorage.clear();
-			console.log('AsyncStorage limpiada correctamente.');
-		} catch (error) {
-		  	console.error('Error al limpiar AsyncStorage: ', error);
-		}
 	};
 
 	const favoriteTarget = (coordinates, item) => {
@@ -371,9 +355,8 @@ const HomeView = ( params ) => {
 		else {
 			setFav(null);
 		}
-
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [isConnected, ratio, countMap]); 
+	}, [ratio, countMap]); // isConnected
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas - bug
 
@@ -382,15 +365,10 @@ const HomeView = ( params ) => {
 			// refreshControl={
 			// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			// }
-			>
+		> 
 			{userLogin.type === 'company' ? (
 				<View style={styles.conrolPanel}>
-					<CompanyPanel 
-						dataCompany={userLogin} 
-						// dataCompany={userLogin.data.company}
-						// windowWidth={windowWidth} 
-						// windowHeight={windowHeight}
-						/>
+					<CompanyPanel dataCompany={userLogin} />
 				</View>
 			) : (
 				<View>
@@ -410,10 +388,7 @@ const HomeView = ( params ) => {
 								animationOut="slideOutRight"  
 								// animationType="fade" 
 								>
-								<View style={{ 
-									paddingHorizontal:85,
-									paddingVertical:120,
-									}}>	
+								<View style={{ paddingHorizontal:85, paddingVertical:120 }}>	
 									<Text style={styles.alertNoLogin}> 
 										Debe ingresar como Cliente para poder realizar reservas
 									</Text>
@@ -577,7 +552,9 @@ const styles = StyleSheet.create({
 	alertNoLogin: { 
 		color:'#f20', 
 		fontSize:16, 
-		textAlign:'center'
+		textAlign:'center',
+		backgroundColor: '#fff',
+		padding: 9
 	}
 })
 

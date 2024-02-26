@@ -6,13 +6,7 @@ import React, {
 
 import { 
     View, 
-    Button,
-    TouchableOpacity, 
     StyleSheet, 
-    Text, 
-    ScrollView, 
-    ActivityIndicator,
-    Modal
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 

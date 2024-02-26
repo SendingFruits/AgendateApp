@@ -1,5 +1,5 @@
 import { 
-	useState
+	useState, useEffect
 } from 'react';
 
 import { 
@@ -22,6 +22,11 @@ const RatioPanel = ({ onRatioChange, mapRef }) => {
         onRatioChange(value);
     };
   
+    
+    useEffect(() => {
+		setRatio(1);
+	}, []); // isConnected
+
     return (
         <View style={{ backgroundColor: '#fff', borderWidth: 0.4, borderColor: '#389338'}}>
             <Slider
