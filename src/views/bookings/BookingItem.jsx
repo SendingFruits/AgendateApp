@@ -93,12 +93,12 @@ const BookingItem = ( params ) => {
     };
 
     const cancellation = (id) => {
-        console.log('cancellation of: ', id);
+        // console.log('cancellation of: ', id);
         var text = '¿Seguro desea cancelar la Reserva?';
 
         AlertModal.showConfirmationAlert(text)
 		.then(alertRes => {
-			console.log('alertRes: ', alertRes);
+			// console.log('alertRes: ', alertRes);
 			if (alertRes) {
                 BookingController.handleCancelBooking(id)
                 .then(resDelete => {
@@ -162,7 +162,6 @@ const BookingItem = ( params ) => {
                                 </View>
                             </View>
                             
-                          
                             <View style={styles.rightLineHeader}>
 
                                 { (getDateFromString(fecha) < new Date() && (item.estado !== 'Cancelada' && item.estado !== 'Realizada')) ? (

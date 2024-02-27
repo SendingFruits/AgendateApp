@@ -4,7 +4,10 @@ class SchedulesController {
 
 	getSchedulesForService(guid, date) {
 		return new Promise((resolve, reject) => {
-			// console.log('getSchedulesForService', guid);
+
+			// console.log('service', guid);
+			// console.log('date', date);
+
 			if ((guid == '') || (guid == undefined)) {
 				throw new Error('Debe existir un servicio.');
 			}

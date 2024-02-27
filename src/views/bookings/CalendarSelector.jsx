@@ -1,27 +1,25 @@
 import React, { 
-    useState 
+    useState, useEffect
 } from 'react';
 
+import ScheduleList from './ScheduleList';
+
 import { 
-    View, StyleSheet,
+    View, StyleSheet
 } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 const CalendarSelector = ( params ) => {
 
-	// console.log(LocaleConfig);
-	const [list, setList] = useState(null);
-	
-	const { 
-		setInforVisible, 
-		setCalendarVisible,
-		setSchedulesVisible,
-		setSelectedDate,
-		setAvailableTimes,
-		setTimePickerVisible,
+	const {
+		company,
+		service,
+		navigation
 	} = params;
 
-    var id_server = params.service.id;
+    var idServer = service.id;
+	var idCompany = company.id;
 
     const markedDates = {};
     const disabledDates = {};
@@ -57,64 +55,25 @@ const CalendarSelector = ( params ) => {
 		today: 'Hoja',
 	};
 
+	const [minDate, setMinDate] = useState('');
+	const [colorSelected, setColorSelected] = useState('#000');
+	const [paramsSchedules, setParamsSchedules] = useState('');
 
-    const getAsyncStorageData = async () => {
-        const keys = await AsyncStorage.getAllKeys();
-        const values = await AsyncStorage.multiGet(keys);
-        // console.log('values: ', values);
-    } 
-
-    const getCompanyData = async () => {
-        var dataCompany = await AsyncStorage.getItem('dataCompany');
-        console.log('dataCompany: ', dataCompany);
-        if (dataCompany !== null) {
-            var companyJSON = JSON.parse(dataCompany);
-            // console.log('serviceJSON: ', serviceJSON);
-            if (companyJSON !== null) {
-                setCompanyData(companyJSON);
-                // console.log('serverSelectId: ', serverSelectId);
-            }
-        }
-    }
-
-    const getServiceId = async () => {
-        var selectedService = await AsyncStorage.getItem('selectedService');
-        console.log('selectedService: ', selectedService);
-        if (selectedService !== null) {
-            var serviceJSON = JSON.parse(selectedService);
-            // console.log('serviceJSON: ', serviceJSON);
-            if (serviceJSON !== null) {
-                setServerSelectId(serviceJSON.id);
-                // console.log('serverSelectId: ', serverSelectId);
-            }
-        }
-    }
-
-    const handleDateSelect = (day) => {
-
-        SchedulesController.getSchedulesForService(id_server,day.dateString)
-        .then(schedulesReturn => {
-            // console.log('schedulesReturn: ', schedulesReturn.resultado);        
-
-            if (schedulesReturn !== null) {
-                setAvailableTimes(schedulesReturn.resultado);    
-            } else {
-                setAvailableTimes([]);
-            }
-
-            setSelectedDate(day.dateString);
-            setTimePickerVisible(true);
-
-			setInforVisible(false);
-			setCalendarVisible(false);
-			setSchedulesVisible(true);
-        })
-        .catch(error => {
-            // alert(error); 
-			AlertModal.showAlert('Horarios ', error);
-        });
-
+    const handleDateSelect = (date) => {
+		console.log('dia seleccionado:', date);
+		var day = date.dateString;
+		setParamsSchedules(JSON.stringify({day, idServer, navigation}));
+		// navigation.navigate('Horarios', JSON.stringify({day, idServer, navigation}));
     };
+
+
+	useEffect(() => {
+		const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+		setMinDate(`${year}-${month}-${day}`);
+	}, []);
 
 	return ( 
         <View>
@@ -122,10 +81,10 @@ const CalendarSelector = ( params ) => {
                 style={styles.calendar}
                 theme={{
                     backgroundColor: '#ffffff',
-                    calendarBackground: '#ffffff',
+                    calendarBackground: '#dfe4ff',
                     textSectionTitleColor: '#b6c1cd',
                     selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#ffffff',
+                    selectedDayTextColor: '#000000',
                     todayTextColor: '#00adf5',
                     dayTextColor: '#000000',
                     textDisabledColor: '#d9e1e8',
@@ -140,10 +99,15 @@ const CalendarSelector = ( params ) => {
                 onDayPress={(day) => handleDateSelect(day)}
                 markingType="multi-dot"
                 disabledDates={disabledDates}
+				minDate={minDate}
 				// customHeader={({ date, onMonthChange }) => (
 				// 	<CalendarHeader month={date} onMonthChange={onMonthChange} />
 				// )}
             />
+
+			{paramsSchedules ? 
+				<ScheduleList params={paramsSchedules} />
+			: null}
         </View>
 	);
 };
@@ -151,7 +115,7 @@ const CalendarSelector = ( params ) => {
 const styles = StyleSheet.create({
 	calendar: {
         // height: '25%',
-		backgroundColor: '#e3e0ef',
+		backgroundColor: '#dfe4ff',
 	},
     title: {
 		alignSelf:'center',
@@ -223,4 +187,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default CalendarPicker;
+export default CalendarSelector;

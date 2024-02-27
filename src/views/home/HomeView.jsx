@@ -129,18 +129,19 @@ const HomeView = ( params ) => {
 	};
  
 	const handleRatioChange = (value) => {
+		// console.log(value);
 		var rango = 0.010;
 		if (location !== null) {
 			setRatio(value);
 			
 			if (value >= 1 && value <= 4)
-				rango = 0.020; 
-			else if (value >= 4 && value <= 9)
+				rango = 0.010; 
+			else if (value >= 4 && value < 9)
 				rango = 0.050; 
-			else if (value >= 9 && value <= 14)
-				rango = 0.080; 
-			else if (value >= 14)
-				rango = 0.120; 
+			else if (value >= 9 && value < 15)
+				rango = 0.210; 
+			else if (value >= 15)
+				rango = 0.350; 
 	
 			var myLoc = {
 				latitude: location.latitude,
@@ -218,30 +219,18 @@ const HomeView = ( params ) => {
 		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
 		// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
 		const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
-		/**
-		 * codigo
-		 */
-		const newRegion = {
-			latitude: foundCompany.location.latitude,
-			longitude: foundCompany.location.longitude,
-			latitudeDelta: 0.00006,
-			longitudeDelta: 0.00006,
-		};
-		// Centra el mapa en la ubicación de la empresa encontrada
-		mapRef.current.animateToRegion(newRegion); 
-		Keyboard.dismiss();
-
-		// console.log('query: ', query);
-		// MapController.searchCompany(query)
-		// .then(foundCompany => {
-		// 	console.log('foundCompany: ', foundCompany);
-			// if (foundCompany === foundCompanyBasic) {
-			// mismo codigo	
-		// 	}
-		// })
-		// .catch(error => {
-		// 	alert(error);
-		// });
+		
+		if (location !== null) {		
+			const newRegion = {
+				latitude: foundCompany.location.latitude,
+				longitude: foundCompany.location.longitude,
+				latitudeDelta: 0.00006,
+				longitudeDelta: 0.00006,
+			};
+			// Centra el mapa en la ubicación de la empresa encontrada
+			mapRef.current.animateToRegion(newRegion); 
+			Keyboard.dismiss();
+		}
 	};
 
 	const handleReservation = (userLogin, item) => {
@@ -262,7 +251,7 @@ const HomeView = ( params ) => {
 				saveCompanyID(item.id);
 			}
 
-			navigation.navigate('Realizar Reserva', { userLogin, item })
+			navigation.navigate('Realizar Reserva');
 		}
 
 	}; 
@@ -272,7 +261,7 @@ const HomeView = ( params ) => {
 			await clearAsyncStorageItem('selectedCompanyID');
 			await AsyncStorage.setItem('selectedCompanyID', id.toString());
 			var selected = await AsyncStorage.getItem('selectedCompanyID');
-			console.log('id seleccionado: ', selected);
+			// console.log('id seleccionado: ', selected);
 		} catch (error) {
 			alert('ERROR al intentar cargar la Empresa, ' + error);
 		}
@@ -424,7 +413,6 @@ const HomeView = ( params ) => {
 	);
 	
 };
-
 
 const styles = StyleSheet.create({
 	search: {
