@@ -49,7 +49,9 @@ const MakeReservation = ( params ) => {
 	const [company, setCompany] = useState({});
 	const [service, setService] = useState({});
 
-	const [isLoading, setIsLoading] = useState(true);
+	const [selectedCompanyID, setSelectedCompanyID] = useState(null);
+
+	const [isLoading, setIsLoading] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 
 	const [favorite, setFavorite] = useState(false);
@@ -68,18 +70,6 @@ const MakeReservation = ( params ) => {
 		}, 2000);
 	}, []);
 	
-	
-	const getCompanyIdStorage = async () => {
-		return new Promise((resolve, reject) => {
-			try {
-				var id = AsyncStorage.getItem('selectedCompanyID');
-				resolve(id);
-			} catch (error) {
-				reject(null);
-			}
-		});
-    }
-
 
 	const isFavorite = (serv_id) => {
 		if (user.guid !== 'none') {
@@ -124,171 +114,158 @@ const MakeReservation = ( params ) => {
 		}
     };
 
-	const getCompany = async (id) => {
+	const fetchData = async () => {
 		try {
-			const companyReturn = await UsersController.getCompanyData(id);
-			// console.log('companyReturn ', companyReturn);
-			if (companyReturn !== null) {
-				setCompany(companyReturn);
-			}
-		} catch (error) {
-			AlertModal.showAlert('Error al intentar cargar la Empresa', error);
-			// alert('ERROR al intentar cargar la Empresa, ' + error);
-		}
-	}
-
-	const getService = async (id) => {
-		try {
-			const serviceReturn = await ServicesController.getServicesForCompany(id);
-			// console.log('serviceReturn ', serviceReturn);
-			if (serviceReturn !== null) {
-				setService(serviceReturn);
+			setIsLoading(true);
+			const id = await AsyncStorage.getItem('selectedCompanyID');
+			console.log(id);
+			setSelectedCompanyID(id);
+		
+			if (id !== null) {
+		
+				const [companyReturn, serviceReturn] = await Promise.all([
+					UsersController.getCompanyData(id),
+					ServicesController.getServicesForCompany(id)
+				]);
+		
+				if (companyReturn !== null) {
+					setCompany(companyReturn);
+				}
+		
+				if (serviceReturn !== null) {
+					setService(serviceReturn);
+					setDays(JSON.parse(serviceReturn.jsonDiasHorariosDisponibilidadServicio));
+					isFavorite(serviceReturn.id);
+				} else {
+					setService(null);
+				}
+		
 				setIsLoading(false);
-
-				setDays(JSON.parse(serviceReturn.jsonDiasHorariosDisponibilidadServicio));
-				isFavorite(serviceReturn.id)
-			} else {
-				setService(null);
-				setIsLoading(true);
 			}
 		} catch (error) {
-			AlertModal.showAlert('Error al intentar cargar el Servicio', error);
-			// alert('ERROR al intentar cargar el Servicio, ' + error);
+			console.error('Error fetching data:', error);
+			setIsLoading(false);
+			// Manejar errores aquí
 		}
-    }
-
-	const fetchData = async () => {	
-		getCompanyIdStorage()
-		.then(id => {
-			getCompany(id);
-			getService(id);
-		})
-		.catch(error => {
-			AlertModal.showAlert('Error al intentar cargar la Empresa', error);
-			// alert('ERROR al intentar cargar la Empresa, ' + error);
-		});
 	};
 
 
 	useEffect(() => {
 		fetchData();
-		if (isLoading) {
-			// setTimeout(() => {
-			// 	setIsLoading(false);
-			// }, 5000);
-		}
-	}, [params]);
+	}, [params, user]);
 
 	return (
-		// <> {isLoading ? ( <ActivityIndicator size={20} color="#0000ff" /> ) : (
-			<>
-				<ScrollView 
-					contentContainerStyle={styles.container}
-					ref={scrollViewRef}
-					refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-					} >
-					{service !== null ? (
-						<>
-							<View style={{ flex:1 }}>
-								<View style={styles.row}>		
-									<Text style={styles.label}>Razón Social: </Text>					
-									<Text style={styles.value}>{company.razonSocial}</Text>
-								</View>
+		<> 
+			{isLoading ? ( <ActivityIndicator size={20} color="#0000ff" /> ) : (
+				<>
+					<ScrollView 
+						contentContainerStyle={styles.container}
+						ref={scrollViewRef}
+						// refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}  /> } 
+						>
+						{service !== null ? (
+							<>
+								<View style={{ flex:1 }}>
+									<View style={styles.row}>		
+										<Text style={styles.label}>Razón Social: </Text>					
+										<Text style={styles.value}>{company.razonSocial}</Text>
+									</View>
 
-								<View style={{ 
-									flex: 1,
-									alignContent:'flex-end',
-									alignItems:'flex-end',
-									position:'absolute',
-									left: 0, right: 5, top: 0, bottom: 0
-									}}>
+									<View style={{ 
+										flex: 1,
+										alignContent:'flex-end',
+										alignItems:'flex-end',
+										position:'absolute',
+										left: 0, right: 5, top: 0, bottom: 0
+										}}>
 
-									{ service !== null ? (
-										<TouchableOpacity
-											style={{ flexDirection:'row', alignItems:'center', }} 
-											onPress={() => switchFavorite(service.id)} >
-											<FontAwesomeIcon icon={faStar} color={favorite ? '#fa0' : 'black'} size={30} />
-										</TouchableOpacity>
-									) : null}
+										{ service !== null ? (
+											<TouchableOpacity
+												style={{ flexDirection:'row', alignItems:'center', }} 
+												onPress={() => switchFavorite(service.id)} >
+												<FontAwesomeIcon icon={faStar} color={favorite ? '#fa0' : 'black'} size={30} />
+											</TouchableOpacity>
+										) : null}
+										
+									</View>
+							
+									<View style={styles.row}>
+										<Text style={styles.label}>Descripción: </Text>
+										<Text style={styles.value}>{company.descripcion}</Text>
+									</View>
+
+									<View style={styles.row}>
+										<Text style={styles.label}>Rubro: </Text>
+										<Text style={styles.value}>{company.rubro}</Text>
+									</View>
+
+									<View style={styles.row}>
+										<Text style={styles.label}>Dirección: </Text>
+										<Text style={styles.value}>{company.direccion}</Text>
+									</View>
+							
+									<View style={styles.row}>
+										<Text style={styles.label}>Servicio: </Text>
+										<Text style={styles.value}>{service.nombre}{"\n"}{service.descripcion}</Text>
+									</View>
+
+									<View style={styles.row}>
+										<Text style={styles.label}>Costo: </Text>
+										<Text style={styles.value}>$ {service.costo}</Text>
+									</View>
+
+									<View style={styles.row}>
+										<Text style={styles.label}>Turnos: </Text>
+										{service.duracionTurno === 30 ? (
+											<Text style={styles.value}>De {service.duracionTurno} minutos</Text>
+										) : 
+											<Text style={styles.value}>De {service.duracionTurno} hora</Text>
+										}
+									</View>
+
+									<View style={styles.row}>
+										<Text style={styles.label}>Dias: </Text>
+
+										<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'80%' }}>
+											{days !== null ? (
+												Object.keys(days).map((day, index) => (
+													<View key={index}>
+														{ days[day].horaInicio !== null && days[day].horaFin !== null ? (
+															<Text key={index}> {day} </Text>
+														) : null }
+													</View>
+												))
+											) : (
+												<Text>No hay días definidos</Text>
+											)}
+										</View>
+									</View>
+												
+									<View>
+										<CalendarSelector company={company} service={service} navigation={navigation} />
+									</View>
 									
 								</View>
-						
-								<View style={styles.row}>
-									<Text style={styles.label}>Descripción: </Text>
-									<Text style={styles.value}>{company.descripcion}</Text>
+							</> 
+						) : (
+							<>
+								<View style={styles.span}>
+									<Text style={{fontWeight:'bold'}}>Esta empresa aún no publicó un Servicio.</Text>
 								</View>
+							</>
+						)}
+					</ScrollView>
 
-								<View style={styles.row}>
-									<Text style={styles.label}>Rubro: </Text>
-									<Text style={styles.value}>{company.rubro}</Text>
-								</View>
-
-								<View style={styles.row}>
-									<Text style={styles.label}>Dirección: </Text>
-									<Text style={styles.value}>{company.direccion}</Text>
-								</View>
-						
-								<View style={styles.row}>
-									<Text style={styles.label}>Servicio: </Text>
-									<Text style={styles.value}>{service.nombre}{"\n"}{service.descripcion}</Text>
-								</View>
-
-								<View style={styles.row}>
-									<Text style={styles.label}>Costo: </Text>
-									<Text style={styles.value}>$ {service.costo}</Text>
-								</View>
-
-								<View style={styles.row}>
-									<Text style={styles.label}>Turnos: </Text>
-									{service.duracionTurno === 30 ? (
-										<Text style={styles.value}>De {service.duracionTurno} minutos</Text>
-									) : 
-										<Text style={styles.value}>De {service.duracionTurno} hora</Text>
-									}
-								</View>
-
-								<View style={styles.row}>
-									<Text style={styles.label}>Dias: </Text>
-
-									<View style={{ flexDirection: 'row', flexWrap: 'wrap', width:'80%' }}>
-										{days !== null ? (
-											Object.keys(days).map((day, index) => (
-												<View key={index}>
-													{ days[day].horaInicio !== null && days[day].horaFin !== null ? (
-														<Text key={index}> {day} </Text>
-													) : null }
-												</View>
-											))
-										) : (
-											<Text>No hay días definidos</Text>
-										)}
-									</View>
-								</View>
-											
-								<View>
-									<CalendarSelector company={company} service={service} navigation={navigation} />
-								</View>
-								
-							</View>
-						</> 
-					) : (
-						<>
-							<View style={styles.span}>
-								<Text style={{fontWeight:'bold'}}>Esta empresa aún no publicó un Servicio.</Text>
-							</View>
-						</>
-					)}
-				</ScrollView>
-
-				<LinearGradient 
-					colors={['#dfe7ff', '#238162', '#135000' ]} 
-					style={{ padding: 10, justifyContent: 'center', alignItems: 'center' }} >
-					<TouchableOpacity onPress={() => navigation.navigate('Inicio')} >
-						<Text style={{ fontWeight:'bold', color:'#fff' }}>VOLVER</Text>
-					</TouchableOpacity>
-				</LinearGradient>
-			</>
-		// )} </>
+					<LinearGradient 
+						colors={['#dfe7ff', '#238162', '#135000' ]} 
+						style={{ padding: 10, justifyContent: 'center', alignItems: 'center' }} >
+						<TouchableOpacity onPress={() => navigation.navigate('Inicio')} >
+							<Text style={{ fontWeight:'bold', color:'#fff' }}>VOLVER</Text>
+						</TouchableOpacity>
+					</LinearGradient>
+				</>
+			)} 
+		</>
 	);
 };
 

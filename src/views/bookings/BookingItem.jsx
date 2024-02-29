@@ -30,8 +30,6 @@ const BookingItem = ( params ) => {
         onPress,
 	} = params;
 
-    // var item = params.item;
-
     var dateString = item.fechaHoraTurno.split('T');
     var fecha = formatDate(dateString[0]);
     var hora = dateString[1].slice(0, -3);
@@ -116,10 +114,6 @@ const BookingItem = ( params ) => {
 			alert(error);
 		});
     };
-
-    const bodyStyles = isCollapsed ? styles.collapsedBody : styles.expandedBody;
-    const footerStyles = isCollapsed ? styles.collapsedFooter : styles.expandedFooter;
-
 
 	useEffect(() => {
 		setIsCollapsed(true);
@@ -211,7 +205,7 @@ const BookingItem = ( params ) => {
                                         <View>
                                             <Text>Rubro: {item.rubro}</Text>
                                             <Text>Ciudad: {item.ciudad}</Text>
-                                            <Text>Celular:</Text>
+                                            <Text>Celular: {item.celular}</Text>
                                         </View>
                                     </View>
 

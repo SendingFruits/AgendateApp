@@ -92,7 +92,7 @@ const Menu = ( params ) => {
 										icon = {faCalendar}
 										text = "Agenda"
 										color = {null}
-										onPress = { () => navigation.navigate('Agenda')}
+										onPress = { () => navigation.navigate('Reservas')}
 									/>
 									<MenuButtonItem 
 										icon = {faScrewdriverWrench}

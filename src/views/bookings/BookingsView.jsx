@@ -9,6 +9,7 @@ import BookingItem from './BookingItem';
 import FilterPanel from './FilterPanel';
 import BookingController from '../../controllers/BookingController';
 import ServicesController from '../../controllers/ServicesController';
+import AlertModal from '../utils/AlertModal';
 
 import React, { 
     useContext, useState, useEffect
@@ -26,9 +27,9 @@ const BookingsView = ( params ) => {
 
     const navigation = useNavigation();
     const { currentUser } = useContext(AuthContext);
+
     var guid = currentUser.guid;
     var type = currentUser.type;
-    // console.log(guid);
 
     const [list, setList] = useState([]);
     const [counter, setCounter] = useState([]);
@@ -52,45 +53,48 @@ const BookingsView = ( params ) => {
 		}, 2000);
 	}, []);
 
-    const loadBookings = (guid, type) => {
-        if (type === 'customer') {
-            BookingController.getBookingsForCustomer(guid)
-            .then(bookingsReturn => {
-                // console.log('bookingsReturn: ', bookingsReturn);
-                setList(bookingsReturn);
-                // console.log('bookings: ', bookings);
-                // ecualList = (bookings === list) ? true : false;
-                // console.log('ecualList: ', ecualList);
-            })
-            .catch(error => {
-                alert('ERROR al intentar cargar las Reservas del Cliente '+error);
-            });
-        } else {
-            ServicesController.getServicesForCompany(guid)
-            .then(serviceReturn => {
-                // console.log('serviceReturn: ', serviceReturn);
-               
-                if (serviceReturn !== null) {        
-                    BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
-                    .then(bookingsReturn => {
-                        // console.log('bookings: ', bookingsReturn);
-                        // console.log('length: ', bookingsReturn.length);
-                        if (bookingsReturn.length > 0) {
-                            setCounter(bookingsReturn.length);
-                            setList(bookingsReturn);
-                        } else {
-                            setCounter(0);
-                            setList([]);
-                        }
-                    })
-                    .catch(error => {
-                        alert('ERROR al intentar cargar las Reservas de la Empresa '+error);
-                    });
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const handleDateSelect = (day) => {
+        var date = day.dateString;
+        console.log(date);
+        setDateSelected(date);
+		console.log(dateSelected);
+        setShowModal(false);
+		// onRefresh();
+    };
+
+    const loadBookings = () => {
+        if (type !== 'none' && guid !== 'none') {
+            if (type === 'customer') {
+                BookingController.getBookingsForCustomer(guid)
+                .then(bookingsReturn => {
+                    setList(bookingsReturn);
+                })
+                .catch(error => {
+                    AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas del Cliente '+error);
+                });
+            } else {
+                ServicesController.getServicesForCompany(guid)
+                .then(serviceReturn => {
+                    if (serviceReturn !== null) {        
+                        BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                        .then(bookingsReturn => {
+                            if (bookingsReturn.length > 0) {
+                                setCounter(bookingsReturn.length);
+                                setList(bookingsReturn);
+                            } else {
+                                setCounter(0);
+                                setList([]);
+                            }
+                        })
+                        .catch(error => {
+                            AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas de la Empresa '+error);
+                        });
+                    }
+                })
+                .catch(error => {
+                    AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas de la Empresa '+error);
+                });
+            }
         }
     }
 
@@ -101,26 +105,23 @@ const BookingsView = ( params ) => {
     useEffect(() => {
         if (dateSelected === null) 
             setDateSelected(getFormattedDate());
-        loadBookings(guid, type);
+        loadBookings();
     }, [guid, type, dateSelected]);
 
     // console.log('list: ', list);
 
     return (
-        <View style={styles.container}>
-           
+        <View style={styles.container}>        
             {type === 'company' ? (
                 <>
-                    <FilterPanel
-                        onRefresh={onRefresh}
-                        dateSelected={dateSelected}
-                        setDateSelected={setDateSelected}
+                    <FilterPanel 
+                        onRefresh={onRefresh} 
+                        dateSelected={dateSelected} 
+                        handleDateSelect={handleDateSelect} 
                         showModal={showModal}
                         setShowModal={setShowModal}
                         />
-                    <View 
-                        style={{ paddingVertical:25 }}
-                        />
+                    <View style={{ paddingVertical:25 }} />
                 </>
             ) : null }
 
@@ -128,10 +129,7 @@ const BookingsView = ( params ) => {
             {(list.length !== 0) ? (
                 <ScrollView 
                     contentContainerStyle={styles.scrollContainer}
-                    refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }>
-                        
+                    refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }>
                     {list.map((item, index) => (
                         <View key={index}>
                             <BookingItem 

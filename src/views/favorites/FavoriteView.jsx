@@ -60,18 +60,20 @@ const FavoriteView = ( params ) => {
 	};
 
     const getFavorites = async () => {
-        FavoriteController.getFavoritesForService(guid)
-        .then(favoritesReturn => {
-            // console.log('favoritesReturn: ', favoritesReturn);
-            if (favoritesReturn !== null) {
-                setList(favoritesReturn);
-            } else {
-                setList([]);
-            }
-        })
-        .catch(error => {
-            alert('ERROR al intentar cargar los Favoritos, ' + error);
-        });
+        if (guid !== 'none') {
+            FavoriteController.getFavoritesForService(guid)
+            .then(favoritesReturn => {
+                // console.log('favoritesReturn: ', favoritesReturn);
+                if (favoritesReturn !== null) {
+                    setList(favoritesReturn);
+                } else {
+                    setList([]);
+                }
+            })
+            .catch(error => {
+                alert('ERROR al intentar cargar los Favoritos, ' + error);
+            });
+        }
     }
 
     const listFavorites = () => {

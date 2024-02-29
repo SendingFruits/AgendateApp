@@ -46,7 +46,8 @@ const HomeView = ( params ) => {
 	
 	const { currentUser } = useContext(AuthContext);
 
-	var { 
+	var {
+		// ubicacion,
 		coordinates,
 		item,
 	} = params.route.params || {};
@@ -337,6 +338,11 @@ const HomeView = ( params ) => {
 		fetchData();
 		setShowModal(false);
 		setFavoriteCallout(false)
+
+		// if (ubicacion !== null) {
+		// 	setLocation(ubicacion);
+		// }
+
 		// console.log('favoriteCallout: ', favoriteCallout);
 		if ((coordinates !== null) && (coordinates !== undefined)) {
 			setFav(coordinates);
@@ -345,7 +351,7 @@ const HomeView = ( params ) => {
 			setFav(null);
 		}
 		Dimensions.addEventListener('change', handleOrientationChange);
-	}, [ratio, countMap]); // isConnected
+	}, [ratio, countMap ]); // isConnected, ubicacion
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas - bug
 

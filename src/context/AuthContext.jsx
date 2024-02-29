@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 
 import AlertModal from '../views/utils/AlertModal';
+import MapController from '../controllers/MapController'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext();
@@ -77,9 +78,11 @@ export const AuthProvider = ({ children }) => {
             if (isLogin) {
                 setIsLogin(false);
                 AlertModal.showAlert('Sesión Caducada',  'Vuelva a iniciar sesión.');
-                navigation.navigate('Inicio');
+
+                const ubicacion = MapController.getLocation();
+                navigation.navigate('Inicio', ubicacion);
             }
-        }, 600000); // milisegundos
+        }, 1200000); // milisegundos
         // Limpia el temporizador cuando el componente se desmonta o cuando se cambia el usuario
         return () => clearTimeout(timer);
     }, [currentUser]); // Se vuelve a iniciar el temporizador cada vez que currentUser cambia
