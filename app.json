@@ -4,7 +4,7 @@
     "slug": "agendate-app",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/icon.png",
+    "icon": "./assn kjets/Eicon.png",
     "userInterfaceStyle": "light",
     "runtimeVersion": "1.0.0",
     "splash": {
@@ -32,7 +32,7 @@
         "android.permission.FOREGROUND_SERVICE"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Eicon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.ethelvan.agendateapp"

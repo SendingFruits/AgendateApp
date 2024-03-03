@@ -103,11 +103,13 @@ const LoginView = () => {
 		});
 
 	};
-
+   const handleCoogleSing=()=>{
+	
+   }
 	return (
 		<View style={styles.container}>
 			<View style={styles.body}>
-				<Image source={require('../../../assets/icon.png')} style={styles.avatar} />
+				<Image source={require('../../../assets/Eicon.png')} style={styles.avatar} />
 
 				<Text style={styles.title}>Bienvenido</Text>
 

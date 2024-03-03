@@ -1,10 +1,11 @@
 class ApiConfig {
 
     constructor() {
-        this.API_URL_TOKEN = 'f497-2800-a4-145d-1c00-341a-1d01-d841-9c8e';
-        this.API_BASE_URL = 'https://'+this.API_URL_TOKEN+'.ngrok-free.app/api/';
-        this.API_LOCALHOST = 'https://192.168.1.7:9083/api/';
-        this.JWT = '123';
+        //this.API_URL_TOKEN = '4bed-2800-a4-29c2-8600-cd18-1613-fcd2-d0c8.';
+        this.API_BASE_URL =  'https://localhost:7170/swagger/index.html',
+        //this.API_BASE_URL = 'https://'+this.API_URL_TOKEN+'.ngrok-free.app/api/';
+       // this.API_LOCALHOST = 'https://192.168.1.7:9083/api/';
+       // this.JWT = '123';
     }
 
     
