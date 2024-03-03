@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
                 const ubicacion = MapController.getLocation();
                 navigation.navigate('Inicio', ubicacion);
             }
-        }, 1200000); // milisegundos
+        }, 600000); // milisegundos
         // Limpia el temporizador cuando el componente se desmonta o cuando se cambia el usuario
         return () => clearTimeout(timer);
     }, [currentUser]); // Se vuelve a iniciar el temporizador cada vez que currentUser cambia

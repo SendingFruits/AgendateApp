@@ -37,15 +37,16 @@ const CalendarPicker = ( params ) => {
 	return ( 
         <View>
             <Calendar
+                locale={'es'}
                 theme={{
                     backgroundColor: 'transparent',
                     calendarBackground: 'transparent',
-                    textSectionTitleColor: '#b6c1cd',
+                    textSectionTitleColor: '#305835',
                     selectedDayBackgroundColor: '#00adf5',
                     selectedDayTextColor: '#000000',
                     todayTextColor: '#00adf5',
                     dayTextColor: '#000000',
-                    textDisabledColor: '#d9e1e8',
+                    textDisabledColor: '#E51515',
                     dotColor: '#00adf5',
                     selectedDotColor: '#ffffff',
                     arrowColor: 'green',

@@ -1,3 +1,7 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../utils/Functions'; 
 
@@ -5,7 +9,7 @@ import ServiceItem from './ServiceItem';
 import ServicesController from '../../controllers/ServicesController';
 
 import React, { 
-    useState, useEffect
+    useContext, useState, useEffect
 } from 'react';
 
 import { 
@@ -25,8 +29,10 @@ const ServicesView = ( params ) => {
 
     const { data } = params.route.params || {};
 
+    const { currentUser } = useContext(AuthContext);
+
     const navigation = useNavigation();
-    var guid = params.route.params.guid;
+    var guid = currentUser.guid;
 
     const [list, setList] = useState(null);
     const [editMode, setEditMode] = useState(false);

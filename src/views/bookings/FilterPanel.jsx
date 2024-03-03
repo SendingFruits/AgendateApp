@@ -25,13 +25,13 @@ const FilterPanel = ( params ) => {
 	} = params;
 
     const showCalendar = () => {
-        // setShowModal(true);      
+        setShowModal(true);      
         // console.log(showModal)
     }
  
-    useEffect(() => {
-        setShowModal(false);
-    }, []);
+    // useEffect(() => {
+    //     setShowModal(false);
+    // }, []);
 
     return (
         <>
@@ -60,7 +60,7 @@ const FilterPanel = ( params ) => {
 
                     <TouchableOpacity
                         style={styles.closeModal}
-                        // onPress={() => setShowModal(false)} 
+                        onPress={() => setShowModal(false)} 
                         >
                         <Text style={styles.cross}>x</Text>
                     </TouchableOpacity>
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
 	},
 	cross: {
 		color: 'gray',
+        fontSize: 20
 	},
 });
 

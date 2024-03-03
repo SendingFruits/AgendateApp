@@ -38,6 +38,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const MakeReservation = ( params ) => {
 	
+	var idSelect = params.route.params;
+	// console.log(idSelect);
+
 	const navigation = useNavigation();
 	const { currentUser } = useContext(AuthContext);
 	var user = currentUser;
@@ -48,8 +51,6 @@ const MakeReservation = ( params ) => {
 
 	const [company, setCompany] = useState({});
 	const [service, setService] = useState({});
-
-	const [selectedCompanyID, setSelectedCompanyID] = useState(null);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
@@ -117,15 +118,14 @@ const MakeReservation = ( params ) => {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const id = await AsyncStorage.getItem('selectedCompanyID');
-			console.log(id);
-			setSelectedCompanyID(id);
+			// const id = await AsyncStorage.getItem('selectedCompanyID');
+			// console.log('id: ', id);
 		
-			if (id !== null) {
+			if (idSelect !== null) {
 		
 				const [companyReturn, serviceReturn] = await Promise.all([
-					UsersController.getCompanyData(id),
-					ServicesController.getServicesForCompany(id)
+					UsersController.getCompanyData(idSelect),
+					ServicesController.getServicesForCompany(idSelect)
 				]);
 		
 				if (companyReturn !== null) {
@@ -152,7 +152,7 @@ const MakeReservation = ( params ) => {
 
 	useEffect(() => {
 		fetchData();
-	}, [params, user]);
+	}, [idSelect, user]);
 
 	return (
 		<> 

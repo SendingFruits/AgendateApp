@@ -1,14 +1,11 @@
-import AlertModal from '../utils/AlertModal';
-import MultiPicker from '../utils/MultiPicker';
-import MenuButtonItem from '../home/MenuButtonItem';
-import ServicesController from '../../controllers/ServicesController';
-
 import { 
     formatDate, convertHour, createDateTimeFromDecimalHour
 } from '../utils/Functions'; 
 
-import { Picker } from '@react-native-picker/picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AlertModal from '../utils/AlertModal';
+import MultiPicker from '../utils/MultiPicker';
+import MenuButtonItem from '../home/MenuButtonItem';
+import PromosController from '../../controllers/PromosController';
 
 import { 
     useState, useEffect 
@@ -25,9 +22,7 @@ import {
 } from 'react-native';
 
 import {
-    faMapMarker,
     faClose,
-    faStar
 } from '@fortawesome/free-solid-svg-icons';
 
 import { 
@@ -44,59 +39,76 @@ const PromoItem = (params) => {
     // console.log('PromoItem: ', params);
 
     var {
-        item,
-        edit,
         guid,
+        item,
+        editMode,
+        setEditMode,
         onRefresh,
         navigation,
     } = params;
 
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [bodyHeight, setBodyHeight] = useState(280); 
-    const [editMode, setEditMode] = useState(edit);
+    const [bodyHeight, setBodyHeight] = useState(130); 
 
-    const [nombre, setNombre] = useState(item.nombre);
-    const [tipo, setTipo] = useState(item.tipoServicio);
-    const [costo, setCosto] = useState(item.costo);
-    const [comienzo, setComienzo] = useState(item.horaInicio);
-    const [termino, setTermino] = useState(item.horaFin);
-    const [turno, setTurno] = useState(item.duracionTurno);
-
-
-    const [comienzoHora,setComienzoHora]= useState(convertHour(item.horaInicio,'toHours'));
-    const [terminoHora, setTerminoHora] = useState(convertHour(item.horaFin, 'toHours'));
-
-    const [descripcion, setDescription] = useState(item.descripcion);
-
-
-    var [selectedDias, setSelectedDias] = useState(item.diasDefinidosSemana);
-    var [diasListArray, setDiasListArray] = useState([]);
-    
-
+    const [asunto, setAsunto] = useState(item.asuntoMensaje);
+    const [mensaje, setMensaje] = useState(item.cuerpoMensaje);
 
 
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
   
-    const switchItem = () => {
-        console.log('quitar Favorito');
-        var id = params.item.id;
-        
+    const editItem = (p) => {
+        // console.log('editItem');
+        if (p == false) {
+            setEditMode(false);
+            setBodyHeight(130);
+        } else {
+            setEditMode(true);
+            setBodyHeight(280);
+        }
+    };
+
+    const deleteItem = () => {
+        var id = item.id;
+        console.log('quitar Promo: ', id);
         onRefresh();
+    };
+
+    const saveItem = () => {
+
+        setEditMode(false);
+        setBodyHeight(130);
+
+        var id = params.item.id;
+
+        const formData = {
+            id,
+			asunto,
+            mensaje,
+		};
+
+		ServicesController.handleServiceUpdate(formData)
+		.then(servReturn => {
+			// console.log('servReturn: ', servReturn);
+			if (servReturn) {
+                // alert('Se actualizaron los datos del Servicio');
+                AlertModal.showAlert('Envio Exitoso','Se actualizaron los datos de la promoción');
+                onRefresh();
+			}
+		})
+		.catch(error => {
+			AlertModal.showAlert('Errro de Envio', error);
+		});
     };
 
 
 	useEffect(() => {
+        setEditMode(false);
+        setAsunto(item.asuntoMensaje);
+        setMensaje(item.cuerpoMensaje);
         setBodyHeight(130);
-		// setIsCollapsed(true);
-
-        // console.log('selectedDias: ',selectedDias);
-        if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
-            var listAux = selectedDias.split(';');
-            setDiasListArray(listAux);
-        }
-	}, [edit]);
+	}, []);
     
     return (
         <View style={styles.container}>
@@ -110,19 +122,13 @@ const PromoItem = (params) => {
                             end={{ x: 1.5, y: 0.5 }} 
                             >
 
-                            {/* <View style={{ 
+                            <View style={{ 
                                 flexDirection:'row',
                                 alignItems:'center',
                                 marginHorizontal: 10,
                                 }}>
-                                <TouchableOpacity 
-                                    style={{ flexDirection:'row', alignItems:'center', }} 
-                                    onPress={() => goToMap({latitude:item.latitude, longitude:item.longitude}, item)} >
-                                    <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} />
-                                    <FontAwesomeIcon style={{ color:'#0af', marginLeft:6 }} icon={faMapMarker} />
-                                    <Text style={{ marginLeft:6 }}>Ver en mapa</Text>
-                                </TouchableOpacity>
-                            </View> */}
+                                <Text>{item.asuntoMensaje}</Text>
+                            </View>
 
                             <View style={{ 
                                 flexDirection:'row',
@@ -131,7 +137,7 @@ const PromoItem = (params) => {
                                 }}>
                                 <TouchableOpacity 
                                     style={{ flexDirection:'row', alignItems:'center', }} 
-                                    onPress={() => switchItem()} >
+                                    onPress={() => deleteItem()} >
                                     {/* <Text style={{ marginLeft:6 }}>Quitar</Text> */}
                                     <FontAwesomeIcon icon={faClose} />
                                 </TouchableOpacity>
@@ -151,15 +157,19 @@ const PromoItem = (params) => {
                                 <View>
                                     <ScrollView style={{ ...styles.body, height: bodyHeight }} >
                                     
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Empresa:</Text>    
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.razonSocial}</Text>
+                                        <View style={styles.rowT}>
+                                            <View style={styles.column}>
+                                                <Text style={styles.label}>Mensaje:</Text>    
                                             </View>
                                         </View>
-                                        <View style={styles.row}>
+
+                                        <View>
+                                            <View>
+                                                <Text> {item.cuerpoMensaje}</Text>
+                                            </View>
+                                        </View>
+
+                                        {/* <View style={styles.row}>
                                             <View style={styles.columnT}>
                                                 <Text style={styles.label}>Direccion:</Text>
                                             </View>
@@ -182,9 +192,6 @@ const PromoItem = (params) => {
                                             <View style={styles.columnV}>
                                                 <Text> {item.tipoServicio}</Text>
                                             </View>
-                                        </View>
-                                        {/* <View style={styles.row}>
-                                            
                                         </View> */}
 
         
@@ -199,7 +206,20 @@ const PromoItem = (params) => {
                                     start={{ x: 0.2, y: 1.2 }}
                                     end={{ x: 1.5, y: 0.5 }} 
                                     >
-        
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => editItem()}> 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Editar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
                                 </LinearGradient>
                             </View>
                         </View>
@@ -208,7 +228,108 @@ const PromoItem = (params) => {
                     )}
                 </>
             ) : (
-                <></>
+                <>
+                    <View>
+                        <LinearGradient
+                            colors={['#fff', '#fff', '#032']} 
+                            start={{ x: 0.2, y: 1.2 }}
+                            end={{ x: 1.5, y: 0.5 }} 
+                            >
+                            <View>
+                                <ScrollView style={{ ...styles.body, height: bodyHeight }} >
+                                
+                                    <View>
+                                        <View style={styles.column}>
+                                            <Text style={styles.label}>Asunto:</Text>    
+                                        </View>
+                                        <View>
+                                            <TextInput 
+                                                style={styles.dataEdit} 
+                                                value={asunto}
+                                                onChangeText={setAsunto}
+                                                />
+                                        </View>
+                                    </View>
+                                    <View>
+                                        <View style={styles.column}>
+                                            <Text style={styles.label}>Mensaje:</Text>    
+                                        </View>
+                                        <View>
+                                            <TextInput 
+                                                multiline={true}
+                                                style={styles.dataEdit} 
+                                                value={mensaje}
+                                                onChangeText={setMensaje}
+                                                />
+                                        </View>
+                                    </View>
+    
+                                </ScrollView>
+                            </View>
+                        </LinearGradient>
+
+                        <View>
+                            <LinearGradient
+                                style={styles.footer}
+                                colors={['#135054', '#e9e9f8', '#efffff']} 
+                                start={{ x: 0.2, y: 1.2 }}
+                                end={{ x: 1.5, y: 0.5 }} 
+                                >
+
+                                <View style={styles.btns}>
+
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => editItem(false)}>
+                                                <Text style={{color:'#000', textAlign:'center' }}>Cancelar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+
+                                    {/* <View style={styles.btnEdit}>    
+                                        <MenuButtonItem 
+                                            icon = {null}
+                                            text = {'Cancelar'}
+                                            onPress={() => editItem(false)}
+                                        />
+                                    </View> */}
+
+
+                                    <>
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => saveItem()}>
+                                                <Text style={{color:'#000', textAlign:'center' }}>Guardar</Text>
+                                            </TouchableOpacity>   
+                                        </LinearGradient>
+                                    </>
+                                    
+                                    {/* <View style={styles.btnEdit}>    
+                                        <MenuButtonItem 
+                                            icon = {null}
+                                            text = {'Guardar'}
+                                            onPress={() => saveItem()}
+                                        />
+                                    </View> */}
+                                </View>
+    
+                            </LinearGradient>
+                        </View>
+                    </View> 
+                </>
             )}
         </View>
     );
@@ -257,6 +378,13 @@ const styles = StyleSheet.create({
         paddingHorizontal:8,
     },
 
+    rowT: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginBottom: 10,
+
+    },
+
     row: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -264,6 +392,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderBottomColor: '#000',
 
+    },
+
+    column: {
+        width:'100%',
+        paddingLeft:5,
+        // backgroundColor:'red',
     },
     columnT: {
         width:'30%',
@@ -313,7 +447,6 @@ const styles = StyleSheet.create({
         color:'#fff'
     },
     dataEdit: {
-        textAlign:'right',
         paddingRight:5,
         backgroundColor:'#fff'
     },

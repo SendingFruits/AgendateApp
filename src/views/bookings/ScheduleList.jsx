@@ -23,6 +23,14 @@ import {
 	ActivityIndicator
 } from 'react-native';
 
+import { 
+	faCaretLeft, faCaretRight
+} from '@fortawesome/free-solid-svg-icons';
+
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import { LinearGradient } from 'expo-linear-gradient';
 
 const ScheduleList = ( params ) => {
@@ -51,9 +59,6 @@ const ScheduleList = ( params ) => {
 	const [showModal, setShowModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const [dataCompany, setDataCompany] = useState({});
-	const [dataService, setDataService] = useState({});
-
 
     const getCompanyData = async () => {
         var selectedcompany = await AsyncStorage.getItem('dataCompany');
@@ -76,7 +81,7 @@ const ScheduleList = ( params ) => {
     }
 
     const createReservation = (item) => {
-		// console.log(item);
+		console.log('item: ', item);
 		// setSelectedItem(item);
 		setSelectedHour(item.fechaHora);
 		setShowModal(true);
@@ -91,32 +96,21 @@ const ScheduleList = ( params ) => {
 	};
 
 	const confirmReservation = async (hour) => {
-		// console.log(hour);
-
+		
 		const formData = {
 			idCliente:currentUser.guid,
-			idServicio:service.id,
+			idServicio:idServer,
 			fechaHoraTurno:hour,
 			estado: '',
 		};
 
-
-		try {
-			
-		} catch (error) {
-			
-		}
-
 		BookingController.handleCreateBooking(formData)
-		.then(userReturn => {
-			// console.log('userReturn: ', userReturn);
-			if (userReturn) {
+		.then(bookingReturn => {
+			// console.log('bookingReturn: ', bookingReturn);
+			if (bookingReturn) {
 				// alert('Se realizó la Reserva con éxito');
 				AlertModal.showAlert('Envio Exitoso ', 'Se realizó la Reserva.');
-				setIsLoading(true);
-				setTimeout(() => {
-					setIsLoading(false);
-				}, 3000);
+				// setIsLoading(true);
 			}
 		})
 		.catch(error => {
@@ -125,27 +119,33 @@ const ScheduleList = ( params ) => {
 	};
 
 	const scheduleList = () => {
-        SchedulesController.getSchedulesForService(idServer,day)
-        .then(schedulesReturn => {
-            console.log('schedulesReturn: ', schedulesReturn.resultado);        
-
-            if (schedulesReturn !== null) {
-                setAvailableTimes(schedulesReturn.resultado);    
-            } else {
-                setAvailableTimes([]);
-            }
-
-            setSelectedDate(day);
-        })
-        .catch(error => {
-            console.log(error);
-			AlertModal.showAlert('Horarios ', JSON.stringify(error));
-        });
+		console.log(idServer);
+		if (idServer !== '' && day !== '') {
+			SchedulesController.getSchedulesForService(idServer,day)
+			.then(schedulesReturn => {
+				// console.log('schedulesReturn: ', schedulesReturn);        
+				console.log('schedulesReturn.resultado: ', schedulesReturn.resultado);        
+				if (typeof schedulesReturn.resultado !== 'string') {
+					setAvailableTimes(schedulesReturn.resultado);
+				} 
+				setSelectedDate(day);
+			})
+			.catch(error => {
+				// console.log(error);
+				AlertModal.showAlert('Horarios ', JSON.stringify(error));
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+		}
     };
 
 
 	useEffect(() => {
-		scheduleList();
+		setAvailableTimes([]);
+		if (!isLoading) {
+			scheduleList();
+		}
 	}, [idServer,day,isLoading]);
 
 	return (
@@ -157,30 +157,36 @@ const ScheduleList = ( params ) => {
 							<View>
 								<Text style={styles.title}>Horarios disponibles para el dia {formatDate(day)}</Text>
 			
-								<ScrollView horizontal={true} >
-									{availableTimes.map((item, index) => (
-										<View key={index}>
-			
-											<TouchableOpacity
-												style={{ flexDirection:'column', alignItems:'center' }}
-												onPress={() => createReservation(item)}>
-												<View style={styles.scheduleItemComp}>
-													<Text style={styles.hourItem}>{formatDate2(item.fechaHora)}</Text>
-													{/* <Text style={[styles.statusItem, { color: item.disponible ? 'green' : 'red' }]}>
-														{item.disponible ? 'Libre' : 'Ocupado'}
-													</Text> */}
-												</View>
-											</TouchableOpacity>
-			
-										</View>
-									))}
-								</ScrollView>
+								<View  style={{ flexDirection:'row' }} >
+									<FontAwesomeIcon icon={faCaretLeft} color={'#135000'} size={50} style={{ marginTop: 4 }}/>
+
+									<ScrollView horizontal={true} >
+										{availableTimes.map((item, index) => (
+											<View key={index}>
+												{item.disponible ?
+													<TouchableOpacity
+														style={{ flexDirection:'column', alignItems:'center' }}
+														onPress={() => createReservation(item)}>
+														<View style={styles.scheduleItemComp}>
+															<Text style={styles.hourItem}>{formatDate2(item.fechaHora)}</Text>
+															{/* <Text style={[styles.statusItem, { color: item.disponible ? 'green' : 'red' }]}>
+																{item.disponible ? 'Libre' : 'Ocupado'}
+															</Text> */}
+														</View>
+													</TouchableOpacity>
+												: null}
+											</View>
+										))}
+									</ScrollView>
+
+									<FontAwesomeIcon icon={faCaretRight} color={'#135000'} size={50} style={{ marginTop: 4 }}/>
+								</View>
 							</View>
 						</>
 					) : (
-						<View>
+						<>
 							<Text style={styles.title}>Sin horarios para el dia {formatDate(day)}</Text>
-						</View>
+						</>
 					)}
 
 					<Modal
@@ -251,19 +257,22 @@ const styles = StyleSheet.create({
 		borderBottomRightRadius: 10,
 	},
 	scheduleItemComp: {
-		margin: 10,
-		padding: 15,
 		flexDirection:'row',
-		alignItems:'center',
 		justifyContent:'center',
+		alignItems:'center',
+		textAlign:'center',
+		margin: 8,
+		padding: 10,
 		borderBottomColor: '#8DA9A4',
 		borderWidth: 0.7,
 		borderRadius: 20,
 	},
 	hourItem: {
+		flexDirection:'row',
+		justifyContent:'center',
 		textAlign:'center',
 		fontWeight: 'normal',
-		marginRight: 20,
+		marginRight: 8,
 	},
 	statusItem: {
 		fontWeight: 'bold',

@@ -55,11 +55,11 @@ const BookingsView = ( params ) => {
 
     const handleDateSelect = (day) => {
         var date = day.dateString;
-        console.log(date);
+        console.log('date: ', date);
         setDateSelected(date);
-		console.log(dateSelected);
+        console.log('dateSelected: ', dateSelected);
+     
         setShowModal(false);
-		// onRefresh();
     };
 
     const loadBookings = () => {
@@ -103,8 +103,9 @@ const BookingsView = ( params ) => {
     }
 
     useEffect(() => {
-        if (dateSelected === null) 
+        if (dateSelected === null) {
             setDateSelected(getFormattedDate());
+        }
         loadBookings();
     }, [guid, type, dateSelected]);
 

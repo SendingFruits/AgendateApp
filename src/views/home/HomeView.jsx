@@ -243,16 +243,20 @@ const HomeView = ( params ) => {
 				setShowModal(false);
 			}, 6000);
 		} else {
- 
+			
+			var idSelect;
+
 			if (item.idCliente !== undefined && item.idCliente !== '') {
 				// console.log('vengo de favorito');
-				saveCompanyID(item.idEmpresa);
+				idSelect = item.idEmpresa;
 			} else {
 				// console.log('vengo de mapa');
-				saveCompanyID(item.id);
+				idSelect = item.id;
 			}
 
-			navigation.navigate('Realizar Reserva');
+			saveCompanyID(idSelect);
+
+			navigation.navigate('Realizar Reserva', idSelect);
 		}
 
 	}; 
@@ -272,10 +276,10 @@ const HomeView = ( params ) => {
 		return new Promise((resolve, reject) => {
 			try {
 				AsyncStorage.removeItem(key);
-				console.log(`Elemento con clave "${key}" eliminado.`);
+				// console.log(`Elemento con clave "${key}" eliminado.`);
 				resolve(true);
 			} catch (error) {
-				console.error(`Error al eliminar el elemento con clave "${key}" `, error);
+				// console.error(`Error al eliminar el elemento con clave "${key}" `, error);
 				reject(error);
 			}
 		});

@@ -45,10 +45,9 @@ class PromoServices {
         });
     };
 
-
     postPromo = async (json) => {
         return new Promise((resolve, reject) => {
-            var method = 'Servicios/RegistrarServicio';
+            var method = 'Promociones/RegistrarServicio';
             var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
 
             const headers = {
@@ -82,6 +81,32 @@ class PromoServices {
         });
     }
 
+    deletePromo = async (guid) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Promociones/EliminarPromocion';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            axios.delete(urlCompleta, { headers })
+            .then(function (response) {
+                if (response.status == 200) {
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
+                reject(error.response.data);
+            });
+        });
+    }
+
+
 
     putNotifications = async (json) => {
         return new Promise((resolve, reject) => {
@@ -112,31 +137,6 @@ class PromoServices {
         });   
     }
 
-
-    deletePromo = async (guid) => {
-        return new Promise((resolve, reject) => {
-  
-            var method = 'Servicios/EliminarServicio';
-            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}?id=${guid}`;
-
-            const headers = {
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json'
-            };
-
-            axios.delete(urlCompleta, { headers })
-            .then(function (response) {
-                if (response.status == 200) {
-                    resolve(JSON.stringify(response.data));
-                } else {
-                    resolve(response.errors);
-                }
-            })
-            .catch(function (error) {
-                reject(error.response.data);
-            });
-        });
-    }
 }
 
 export default new PromoServices();

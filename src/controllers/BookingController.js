@@ -55,7 +55,7 @@ class BookingController {
 	handleCreateBooking(data) {
 		return new Promise((resolve, reject) => {
 			
-			// console.log(data);
+			console.log('data: ', data);
 			// if (data.username == '') {
 			// 	throw new Error('Por favor ingrese el username.');
 			// }
@@ -85,7 +85,20 @@ class BookingController {
 	handleCancelBooking(guid) {
 		return new Promise((resolve, reject) => {
 			
-			BookingServices.putBookingStatus(guid)
+			BookingServices.putBookingStatus(guid, 'cancel')
+			.then(userReturn => {
+				resolve(userReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
+
+	handleDoneBooking(guid) {
+		return new Promise((resolve, reject) => {
+			
+			BookingServices.putBookingStatus(guid, 'done')
 			.then(userReturn => {
 				resolve(userReturn);
 			})

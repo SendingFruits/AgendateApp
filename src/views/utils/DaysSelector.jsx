@@ -15,7 +15,8 @@ import {
 } from 'react-native';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import CheckBox from '../utils/CheckBox';
+import CheckBox from './CheckBox';
+import AlertModal from './AlertModal';
 
 import { 
 	faClock,
@@ -58,16 +59,30 @@ const DaysSelector = ( params ) => {
         setEndTimePickerVisible(true);
     };
   
+
+    const datesControl = (start,end) => {
+        if (end < start) {
+            AlertModal.showAlert('Mensaje', 'La fecha de fin debe ser posterior a la fecha de inicio.');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
     const handleStartTimeConfirm = (date) => {
         // console.log(date);
         const updatedSchedule = { ...schedules };
         var selectedHours = date.getHours();
         var selectedMinutes = date.getMinutes();
         var selectedTimeInHours = selectedHours + selectedMinutes / 60;
-        // console.log(selectedTimeInHours);
-        updatedSchedule[selectedDay].horaInicio = selectedTimeInHours;
-        setSchedules(updatedSchedule);
-        setDias(updatedSchedule);
+
+        if (datesControl(selectedTimeInHours, updatedSchedule[selectedDay].horaFin)) {
+            console.log(selectedTimeInHours);
+            updatedSchedule[selectedDay].horaInicio = selectedTimeInHours;
+            setSchedules(updatedSchedule);
+            setDias(updatedSchedule);
+        }
         setStartTimePickerVisible(false);
     };
   
@@ -76,9 +91,13 @@ const DaysSelector = ( params ) => {
         var selectedHours = date.getHours();
         var selectedMinutes = date.getMinutes();
         var selectedTimeInHours = selectedHours + selectedMinutes / 60;
-        updatedSchedule[selectedDay].horaFin = selectedTimeInHours;
-        setSchedules(updatedSchedule);
-        setDias(updatedSchedule);
+
+        if (datesControl(updatedSchedule[selectedDay].horaInicio, selectedTimeInHours)) {
+            console.log(selectedTimeInHours);
+            updatedSchedule[selectedDay].horaFin = selectedTimeInHours;
+            setSchedules(updatedSchedule);
+            setDias(updatedSchedule);
+        }
         setEndTimePickerVisible(false);
     };
   

@@ -90,7 +90,7 @@ const Menu = ( params ) => {
 								<>
 									<MenuButtonItem 
 										icon = {faCalendar}
-										text = "Agenda"
+										text = "Reservas"
 										color = {null}
 										onPress = { () => navigation.navigate('Reservas')}
 									/>

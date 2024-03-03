@@ -45,10 +45,10 @@ const SearchPanel = ( params ) => {
         },
         input: {
             top: 2.2,
-            padding: 10,
+            paddingHorizontal: 10,
         },
         icon: {
-            
+            marginTop: 5
         }
     });
 
@@ -88,7 +88,7 @@ const SearchPanel = ( params ) => {
                     style={{ marginEnd:20 }}
                     onPress={ () => handleSearch() }
                     >
-                    <FontAwesomeIcon icon={faSearch} style={{color:'#060'}} />
+                    <FontAwesomeIcon icon={faSearch} color={'#060'} style={styles.icon} />
                 </TouchableOpacity>
             </View>
         </LinearGradient>

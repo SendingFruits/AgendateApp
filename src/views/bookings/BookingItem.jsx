@@ -69,7 +69,7 @@ const BookingItem = ( params ) => {
         console.log('done of: ', id);
         var text = '¿El cliente asitió en forma y hora al lugar?';
 
-        AlertModal.showConfirmationAlert(text)
+        AlertModal.showBoolAlert(text)
 		.then(alertRes => {
 			console.log('alertRes: ', alertRes);
 			if (alertRes) {
@@ -141,18 +141,12 @@ const BookingItem = ( params ) => {
 
                             <View style={{ flexDirection:'row' }}>
                                 <View style={styles.leftLineHeader}>
-                                    { type === 'customer' ? (
-                                        <Text>Reserva para el</Text>
-                                    ) : ( 
-                                        <Text>Reserva para el</Text>
-                                    )}
+                                    <Text>Reserva para el</Text>
                                 </View>
                                 
-                                <View style={styles.centerLineHeader}>
-                                
+                                <View style={styles.centerLineHeader}>                     
                                     <Text style={{ marginLeft:1, fontWeight:'bold' }}> {fecha}</Text>
                                     <Text style={{ fontWeight:'bold' }}> {hora}</Text>
-                                
                                 </View>
                             </View>
                             
@@ -173,8 +167,6 @@ const BookingItem = ( params ) => {
                                         }}> {item.estado}
                                     </Text> 
                                 }
-
-                                
                             </View>
                             
                         </View>
@@ -315,8 +307,6 @@ const BookingItem = ( params ) => {
                                 ) : null }
                             </>
                         )}
-
-
                     </LinearGradient> 
                 </View>
             ) : null }
