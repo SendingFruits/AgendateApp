@@ -12,7 +12,8 @@ const App = () => {
 	const [isConnected, setIsConnected] = useState(true);
 	
 	useEffect(() => {
-		setIsConnected(true);
+		console.log(isConnected);
+		// setIsConnected(true);
 	}, [isConnected]); 
 
 	return (
@@ -20,7 +21,7 @@ const App = () => {
 			{isConnected ? <>
 				<Main isConnected={isConnected} setIsConnected={setIsConnected} />
 			</> : <>
-				<BaseError errorType={'api'} />
+				<BaseError errorType={'api'} setIsConnected={setIsConnected} />
 			</> }
 		</>
 	);

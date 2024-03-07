@@ -75,7 +75,7 @@ const BookingsView = ( params ) => {
             } else {
                 ServicesController.getServicesForCompany(guid)
                 .then(serviceReturn => {
-                    if (serviceReturn !== null) {        
+                    if (serviceReturn !== null) {
                         BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
                         .then(bookingsReturn => {
                             if (bookingsReturn.length > 0) {

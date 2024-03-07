@@ -65,15 +65,16 @@ export const AuthProvider = ({ children }) => {
             // Cierra la sesión después de cierto tiempo de inactividad
             setUser({
                 'guid':'none',
+                'docu':'none',
                 'name':'none',
                 'last':'none',
                 'user':'none',
                 'pass':'none',
                 'type':'none',
                 'mail':'none', 
-                'docu':'none',
                 'celu':'none',
-                'logo':'none', 
+                'logo':'none',
+                'noti':'none', 
             });
             if (isLogin) {
                 setIsLogin(false);

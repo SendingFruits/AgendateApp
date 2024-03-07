@@ -41,7 +41,6 @@ const Main = ( params ) => {
 		setIsConnected,
 	} = params;
 
-	const [screenFrom, setScreenFrom] = useState('main');
 	const [currentUser, setCurrentUser] = useState({});
 
 	var menuParams = {
@@ -53,12 +52,8 @@ const Main = ( params ) => {
 	}
 
 	var homeParams = {
-		screenFrom:screenFrom,
-		setScreenFrom:setScreenFrom,
 		isConnected:isConnected,
 		setIsConnected:setIsConnected,
-		currentUser:currentUser,
-		setCurrentUser:setCurrentUser
 	}
 
 	useEffect(() => {
@@ -97,10 +92,9 @@ const Main = ( params ) => {
 									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
 						}}
 						name="Inicio" 
-						// initialParams={ homeParams } 
+						initialParams={homeParams} 
 						component={HomeView}
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -113,7 +107,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={BookingsView} 
 						/>
-						
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -126,7 +119,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={ServicesView} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -139,7 +131,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={FavoritesView} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -152,7 +143,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={ServiceCreate} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -165,7 +155,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={PromosView} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -178,7 +167,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={MakeReservation} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -191,33 +179,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={ScheduleList} 
 						/>
-
-					<Drawer.Screen 
-						options={{
-							title: null,
-							headerBackground: () =>
-								<LinearGradient 
-									colors={['#fff','#fff']} 
-									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
-						}}
-						name="Login" 
-						// initialParams={ menuParams } 
-						component={LoginView} 
-						/>
-
-					<Drawer.Screen 
-						options={{
-							title: null,
-							headerBackground: () =>
-								<LinearGradient 
-									colors={['#efefef','#efefef']} 
-									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
-						}}
-						name="Registro de Usuario" 
-						// initialParams={ homeParams } 
-						component={RegisterView} 
-						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -230,7 +191,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={PassChanger} 
 						/>
-
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -243,7 +203,6 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={ProfileView} 
 						/>
-					
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -256,7 +215,32 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={Testing} 
 						/>
-
+		
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#fff','#fff']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="Login" 
+						// initialParams={ menuParams } 
+						component={LoginView} 
+						/>
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#efefef','#efefef']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="Registro de Usuario" 
+						// initialParams={ homeParams } 
+						component={RegisterView} 
+						/>
+			
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</AuthProvider>

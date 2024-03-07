@@ -139,7 +139,8 @@ class UserServices {
         });
     };
     
-    putUserData = async (json) => {
+
+    putUserDataCompany = async (json) => {
         return new Promise((resolve, reject) => {
   
             var method = 'Usuarios/ActualizarDatosBasicosUsuarios';
@@ -151,7 +152,8 @@ class UserServices {
             };
 
             // console.log('json: ', json);
-            // console.log('urlCompleta: ', urlCompleta);
+            console.log('urlCompleta: ', urlCompleta);
+
             axios.put(urlCompleta, json, { headers })
             .then(function (response) {
                 // console.log(response.status);
@@ -168,6 +170,38 @@ class UserServices {
             });
         });
     };
+
+    putUserDataCustomer = async (json) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Clientes/ActualizarDatosBasicosCliente';
+            var urlCompleta = `${ApiConfig.API_BASE_URL}${method}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            // console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+
+            axios.put(urlCompleta, json, { headers })
+            .then(function (response) {
+                // console.log(response.status);
+                if (response.status == 200) {
+                    // deberia devolver el objeto con los datos nuevos, pero no devuelve nada
+                    resolve(JSON.stringify(response.data));
+                } else {
+                    resolve(response.errors);
+                }
+            })
+            .catch(function (error) {
+                console.log('error.response.data: ', error.response.data);
+                reject(error.response.data);
+            });
+        });
+    };
+
 
     putPassword = async (json) => {
         return new Promise((resolve, reject) => {

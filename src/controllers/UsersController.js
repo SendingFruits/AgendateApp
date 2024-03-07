@@ -109,9 +109,13 @@ class UsersController {
 		});
 	}
 
-	handleUpdate(data) {
+	handleUpdate(data, type) {
 		return new Promise((resolve, reject) => {
 		
+			if (data.type === 'customer' 
+			 && data.docu == '') {
+				reject('Falta el Documento.');
+			}
 			if (data.pass == '') {
 				reject('Falta la contraseña.');
 			}
@@ -128,21 +132,48 @@ class UsersController {
 				reject('Falta el celular.');
 			}
 
-			const dataConvert = {
-				id: data.guid,
-				nombre: data.firstname,
-				apellido: data.lastname,
-				celular: data.movil,
-				correo: data.email,
-			}
+			console.log(type);
 
-			UserServices.putUserData(dataConvert)
-			.then(userReturn => {
-				resolve(userReturn);
-			})
-			.catch(error => {
-				reject(error);
-			});
+			if (type === 'customer') {
+
+				const dataConvert = {
+					id: data.guid,
+					documento: data.docu,
+					nombre: data.firstname,
+					apellido: data.lastname,
+					celular: data.movil,
+					correo: data.email,
+					foto: data.foto,
+					tieneNotificaciones: data.recibe,
+				}
+
+				console.log(dataConvert);
+
+				UserServices.putUserDataCustomer(dataConvert)
+				.then(userReturn => {
+					resolve(userReturn);
+				})
+				.catch(error => {
+					reject(error);
+				});
+			} else {
+
+				const dataConvert = {
+					id: data.guid,
+					nombre: data.firstname,
+					apellido: data.lastname,
+					celular: data.movil,
+					correo: data.email,
+				}
+
+				UserServices.putUserDataCompany(dataConvert)
+				.then(userReturn => {
+					resolve(userReturn);
+				})
+				.catch(error => {
+					reject(error);
+				});
+			}
 		});
 	}
 

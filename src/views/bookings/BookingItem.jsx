@@ -73,16 +73,16 @@ const BookingItem = ( params ) => {
 		.then(alertRes => {
 			console.log('alertRes: ', alertRes);
 			if (alertRes) {
-                // BookingController.handleCancelBooking(id)
-                // .then(resDelete => {
-                //     // console.log('userReturn: ', userReturn);
-                //     if (resDelete) {
-                //         onRefresh();
-                //     }
-                // })
-                // .catch(error => {
-                //     alert(error);
-                // });
+                BookingController.handleDoneBooking(id)
+                .then(resDone => {
+                    // console.log('userReturn: ', userReturn);
+                    if (resDone) {
+                        onRefresh();
+                    }
+                })
+                .catch(error => {
+                    AlertModal.showAlert('ERROR', error);
+                });
             }
 		})
 		.catch(error => {

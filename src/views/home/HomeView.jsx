@@ -45,12 +45,17 @@ const { width, height } = Dimensions.get('window');
 const HomeView = ( params ) => {
 	
 	const { currentUser } = useContext(AuthContext);
-
+	// console.log(params);
 	var {
-		// ubicacion,
 		coordinates,
 		item,
+		isConnected,
+		setIsConnected,
 	} = params.route.params || {};
+
+	
+	// console.log('isConnected: ', isConnected);
+	// console.log('setIsConnected: ', setIsConnected);
 
 	var countMap = 0;
 
@@ -100,7 +105,7 @@ const HomeView = ( params ) => {
 				.then(companiesReturn => {
 					// console.log('hay datos: ', companiesReturn);
 					setCompanies(companiesReturn);
-					// setIsConnected(true);
+					setIsConnected(true);
 					countMap++;
 				})
 				.catch(error => {
@@ -108,7 +113,7 @@ const HomeView = ( params ) => {
 					AlertModal.showAlert('API','Problemas de Conexión...');
 					// alert('Problemas de Conexión...'); 
 					setCompanies([]);
-					// setIsConnected(false);
+					setIsConnected(false);
 					countMap = 0;
 				});
 

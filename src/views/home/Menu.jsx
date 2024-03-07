@@ -37,7 +37,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 const Menu = ( params ) => {	
 
 	const { navigation } = params;
-    const { isLogin, setIsLogin, currentUser, setCurrentUser, setNavigation } = useContext(AuthContext);
+    const { 
+		isLogin, setIsLogin, currentUser, setCurrentUser, setNavigation 
+	} = useContext(AuthContext);
 	// console.log('currentUser Menu: ', currentUser);
 
 	const logout = () => {
@@ -53,6 +55,7 @@ const Menu = ( params ) => {
             'docu':'none',
             'celu':'none',
             'logo':'none', 
+			'noti':'none', 
         });
 	};
 	
@@ -81,7 +84,7 @@ const Menu = ( params ) => {
 						icon = {faHome}
 						text = "Inicio"
 						color = {null}
-						onPress = { () => navigation.navigate('Inicio')}
+						onPress = { () => navigation.navigate('Inicio') }
 					/>
 	
 					{(currentUser.type !== 'none') ? (

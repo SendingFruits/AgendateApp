@@ -50,7 +50,7 @@ const LoginView = ( params ) => {
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
-
+				console.log(user);
 				var currentUser = {
 					guid: user.id,
 					name: user.nombre,
@@ -60,6 +60,8 @@ const LoginView = ( params ) => {
 					celu: user.celular,
 					mail: user.correo,
 					type: user.tipoUsuario,
+					logo: user.foto,
+					noti: user.tieneNotificaciones,
 					docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
 					...(user.tipoUsuario === 'company' && {
 						rut: user.rutDocumento,

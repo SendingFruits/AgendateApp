@@ -2,6 +2,8 @@ import {
     AuthContext 
 } from '../../context/AuthContext';
 
+import { getBase64FromUri, loadImageFromBase64 } from '../utils/Functions'
+
 import UsersController from '../../controllers/UsersController';
 import AlertModal from '../utils/AlertModal';
 import MenuButtonItem from '../home/MenuButtonItem';
@@ -36,7 +38,7 @@ const ProfileView = () => {
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
     var userLogin = currentUser;
-
+    console.log('ProfileView userLogin: ', userLogin);
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
@@ -45,16 +47,20 @@ const ProfileView = () => {
     const [user, setUser] = useState(userLogin);
     const [guid, setGuid] = useState(userLogin.guid);
 
+    const [docu, setDocu] = useState(user.docu);
     const [username, setUsername] = useState(user.user);
     const [firstname, setFirstname] = useState(user.name);
     const [lastname, setLastname] = useState(user.last);
     const [movil, setMovil] = useState(user.celu);
     const [email, setEmail] = useState(user.mail);
 
-	const [isValidEmail, setIsValidEmail] = useState(true);
+    const [logoBase, setLogoBase] = useState('');
+    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(userLogin.logo));
     const [selectedPicture, setSelectedPicture] = useState(null);
+    
+	const [isValidEmail, setIsValidEmail] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
-    const [isChecked, setChecked] = useState(false);
+    const [isChecked, setChecked] = useState((user.noti === 'True' ? true : false));
 
     const [oldpass, setOldPass] = useState('');
     const [newpass, setNewPass] = useState('');
@@ -72,7 +78,7 @@ const ProfileView = () => {
 	};
 
 
-    let openImagePickerAsync = async () => {
+    let openLogoPickerAsync = async () => {
         try {
             let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
             // console.log(permissionResult.granted);
@@ -84,11 +90,12 @@ const ProfileView = () => {
             const pickerResult = await ImagePicker.launchImageLibraryAsync()
             // eslint-disable-next-line
             if (!pickerResult.canceled) {
-                const newSelectedImage = pickerResult.assets[0].uri;
-                console.log(newSelectedImage);
-                setSelectedPicture(newSelectedImage);
-    
-                await AsyncStorage.setItem(username, newSelectedImage);
+                const uri = pickerResult.assets[0].uri;
+                const base64 = await getBase64FromUri(uri);
+                // console.log(base64);
+                setLogoBase(base64);
+                setSelectedPicture(uri);
+                // await AsyncStorage.setItem(username, newSelectedImage);
             }
             
         } catch (error) {
@@ -106,14 +113,13 @@ const ProfileView = () => {
 
 
     const handleImagePicker = () => {
-		openImagePickerAsync();
+		openLogoPickerAsync();
 	};
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-            
 		}, 2000);
 	}, []);
 
@@ -122,30 +128,34 @@ const ProfileView = () => {
         
         const formData = {
             guid,
+            docu,
 			firstname,
 			lastname,
 			movil,
             email,
+            foto:logoBase,
             recibe:isChecked,
 		};
 
         // console.log('formData: ', formData);
-        UsersController.handleUpdate(formData)
+        UsersController.handleUpdate(formData,userLogin.type)
         .then(userReturn => {
-			// console.log('userReturn: ', userReturn);
+			console.log('ProfileView userReturn: ', userReturn);
 			if (userReturn) {
 				alert('Los datos del usuario se han actualizado.');
                 setCurrentUser({
                     guid: formData.guid,
+                    docu: formData.docu,
                     name: formData.firstname,
                     last: formData.lastname,
                     pass: user.pass,
                     user: user.user,
                     celu: formData.movil,
                     mail: formData.email,
-                    // type: 'customer', -- no iria por ahora
+                    logo: formData.foto,
+                    noti: formData.recibe,
+                    type: user.type,
                 });
-
                 // setUser(userReturn);
                 onRefresh();
 			}
@@ -180,6 +190,7 @@ const ProfileView = () => {
                             'docu':'none',
                             'celu':'none',
                             'logo':'none', 
+                            'noti':'none', 
                         });
                         onRefresh();
                         navigation.navigate('Inicio');
@@ -204,6 +215,8 @@ const ProfileView = () => {
     
 
 	useEffect(() => {
+
+        setSelectedPicture(logoUrl);
 
         setUser(userLogin);
         setGuid(userLogin.guid);
@@ -250,10 +263,7 @@ const ProfileView = () => {
                                 { (!selectedPicture) ? (
                                     <Text style={styles.imageText}>Foto</Text>
                                 ) : 
-                                    <Image 
-                                        style={styles.image} 
-                                        source={{ uri: selectedPicture }} 
-                                        />
+                                    <Image style={styles.image} source={{ uri: selectedPicture }} />
                                 }
                             </View>
                         </TouchableOpacity>
@@ -276,6 +286,18 @@ const ProfileView = () => {
                     />
                 </View>
  
+                { (user.type === 'customer') ? (      
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            value={docu}
+                            onChangeText={setDocu}
+                            // onChangeText={(text) => handleFieldChange(text, 'firstname')}
+                        />
+                    </View>
+                ) : null}
+                
+
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}

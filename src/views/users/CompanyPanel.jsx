@@ -178,8 +178,6 @@ const CompanyPanel = (params) => {
     });
 
     
-
-
     const [rut, setRut] = useState(data.rut);
     const [owner, setOwner] = useState(data.owner);
     const [businessName, setBusinessName] = useState(data.businessName);
@@ -298,7 +296,7 @@ const CompanyPanel = (params) => {
         //         height: heightMax
         //     });
         // } else {
-
+        //
         // }
     };
 
@@ -308,7 +306,6 @@ const CompanyPanel = (params) => {
         // setLogoUrl(loadImageFromBase64());
 
         setSelectedPicture(logoUrl);
-
         Dimensions.addEventListener('change', handleOrientationChange);
 
         setTimeout(() => {

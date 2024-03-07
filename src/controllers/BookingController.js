@@ -73,8 +73,8 @@ class BookingController {
 			// console.log('dataConvert: ', dataConvert);
 
 			BookingServices.postBooking(dataConvert)
-			.then(userReturn => {
-				resolve(userReturn);
+			.then(bookReturn => {
+				resolve(bookReturn);
 			})
 			.catch(error => {
 				reject(error);
@@ -86,8 +86,8 @@ class BookingController {
 		return new Promise((resolve, reject) => {
 			
 			BookingServices.putBookingStatus(guid, 'cancel')
-			.then(userReturn => {
-				resolve(userReturn);
+			.then(bookReturn => {
+				resolve(bookReturn);
 			})
 			.catch(error => {
 				reject(error);
@@ -99,8 +99,8 @@ class BookingController {
 		return new Promise((resolve, reject) => {
 			
 			BookingServices.putBookingStatus(guid, 'done')
-			.then(userReturn => {
-				resolve(userReturn);
+			.then(bookReturn => {
+				resolve(bookReturn);
 			})
 			.catch(error => {
 				reject(error);
