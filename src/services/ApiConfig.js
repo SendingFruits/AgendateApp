@@ -1,10 +1,10 @@
 class ApiConfig {
 
     constructor() {
-        this.API_URL_TOKEN = 'ef62-2800-a4-c076-cc00-d88d-eb58-e5f6-9143';
-        this.API_BASE_URL = 'https://'+this.API_URL_TOKEN+'.ngrok-free.app/api/';
-        this.API_LOCALHOST = 'https://192.168.1.7:9083/api/';
-        // this.API_BASE_URL = 'https://186.48.52.221:9083/api/';
+        this.AZURE = 'https://192.168.1.7:9083/api/';
+        this.LOCAL = 'https://186.48.52.221:9083/api/';
+        this.NGORK_TOKEN = 'ef62-2800-a4-c076-cc00-d88d-eb58-e5f6-9143';
+        this.API_BASE_URL = 'https://'+this.NGORK_TOKEN+'.ngrok-free.app/api/';
     }
 
     getToken = async () => {

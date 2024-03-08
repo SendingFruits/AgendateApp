@@ -144,7 +144,9 @@ const BookingsView = ( params ) => {
                 </ScrollView>
             ) : (
                 <View>
-                    <Text>No hay Reservas para el {formatDate(dateSelected)}</Text>
+                    {type === 'company' ? 
+                       <Text>No hay Reservas para el {formatDate(dateSelected)}</Text> 
+                    : <Text>No realizó Reservas aún</Text> }
                 </View>
             )}
           

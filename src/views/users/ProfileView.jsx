@@ -30,6 +30,14 @@ import {
     Keyboard
 } from 'react-native';
 
+import { 
+	faCircleUser
+} from '@fortawesome/free-solid-svg-icons';
+
+import { 
+	FontAwesomeIcon 
+} from '@fortawesome/react-native-fontawesome';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
@@ -37,25 +45,26 @@ const { width, height } = Dimensions.get('window');
 const ProfileView = () => {
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
-    var userLogin = currentUser;
-    console.log('ProfileView userLogin: ', userLogin);
+
+    console.log('ProfileView currentUser: ', currentUser);
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
     const navigation = useNavigation();
 
-    const [user, setUser] = useState(userLogin);
-    const [guid, setGuid] = useState(userLogin.guid);
+    const [user, setUser] = useState(currentUser);
+    const [guid, setGuid] = useState(currentUser.guid);
 
-    const [docu, setDocu] = useState(user.docu);
-    const [username, setUsername] = useState(user.user);
-    const [firstname, setFirstname] = useState(user.name);
-    const [lastname, setLastname] = useState(user.last);
-    const [movil, setMovil] = useState(user.celu);
-    const [email, setEmail] = useState(user.mail);
+    const [type, setType] = useState(currentUser.type);
+    const [docu, setDocu] = useState(currentUser.docu);
+    const [username, setUsername] = useState(currentUser.user);
+    const [firstname, setFirstname] = useState(currentUser.name);
+    const [lastname, setLastname] = useState(currentUser.last);
+    const [movil, setMovil] = useState(currentUser.celu);
+    const [email, setEmail] = useState(currentUser.mail);
 
     const [logoBase, setLogoBase] = useState('');
-    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(userLogin.logo));
+    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(currentUser.logo));
     const [selectedPicture, setSelectedPicture] = useState(null);
     
 	const [isValidEmail, setIsValidEmail] = useState(true);
@@ -138,7 +147,7 @@ const ProfileView = () => {
 		};
 
         // console.log('formData: ', formData);
-        UsersController.handleUpdate(formData,userLogin.type)
+        UsersController.handleUpdate(formData,currentUser.type)
         .then(userReturn => {
 			console.log('ProfileView userReturn: ', userReturn);
 			if (userReturn) {
@@ -216,10 +225,18 @@ const ProfileView = () => {
 
 	useEffect(() => {
 
+        setType(currentUser.type);
+        setDocu(currentUser.docu);
+        setUsername(currentUser.user);
+        setFirstname(currentUser.name);
+        setLastname(currentUser.last);
+        setMovil(currentUser.celu);
+        setEmail(currentUser.mail);
+
         setSelectedPicture(logoUrl);
 
-        setUser(userLogin);
-        setGuid(userLogin.guid);
+        setUser(currentUser);
+        setGuid(currentUser.guid);
 
         setOldPass('');
         setNewPass('');
@@ -243,7 +260,7 @@ const ProfileView = () => {
                 setShowButtons(true);
             }
         );
-	}, []);
+	}, [currentUser]);
 
     return (
         <View style={styles.container}>
@@ -254,18 +271,17 @@ const ProfileView = () => {
                 } >
 
                 { (user.type === 'customer') ? (
-                    <View style={styles.imageContainer}>
-                        <TouchableOpacity 
-                            style={styles.imageButton}
-                            onPress={ () => handleImagePicker(0) } > 	
-                            {/* file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540ethelvan%252Fagendate-app/ImagePicker/a67ed7c4-a8b9-4e8f-9e89-ee6812f4a5dc.jpeg */}
-                            <View style={styles.buttonImageContent}>
-                                { (!selectedPicture) ? (
-                                    <Text style={styles.imageText}>Foto</Text>
-                                ) : 
-                                    <Image style={styles.image} source={{ uri: selectedPicture }} />
-                                }
-                            </View>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={ () => handleImagePicker(0) } > 	                      
+                     
+                            { (!selectedPicture) ? (
+                                <FontAwesomeIcon 
+                                    style={styles.image} icon={faCircleUser} color={'#0a7a75'}/>
+                                
+                            ) : 
+                                <Image style={styles.image} source={{ uri: selectedPicture }} />
+                            }
+                          
                         </TouchableOpacity>
                     </View>
                 ) : 
@@ -425,14 +441,15 @@ const styles = StyleSheet.create({
 	},
 
     imageContainer: {
-		height: 120,
-		width: 120,
+		height: 106,
+		width: 106,
 		margin: 10,
 		alignSelf: 'center',
-		borderRadius: 20,
+		borderRadius: 60,
 		backgroundColor: '#fff',
 		alignItems: 'center', // Centrar horizontalmente
 		justifyContent: 'center', // Centrar verticalmente
+        // backgroundColor: '#aaa'
 	},
     imageButton: {
         alignItems:'center'
@@ -441,11 +458,11 @@ const styles = StyleSheet.create({
 		marginHorizontal:20,
 	},
 	image: {
-		flex: 1,
-		height: 120,
-		width: 120,
-		borderRadius: 20,
-        resizeMode: 'cover',
+		margin: 20,
+		padding: 50,
+		borderRadius: 50,
+        borderColor:'#fff',
+        borderWidth:2
 	},
     buttonImageContent: {
         flexDirection: 'row',
@@ -464,6 +481,14 @@ const styles = StyleSheet.create({
 		marginHorizontal:20,
 		marginVertical:25,
 	},
+
+    header: {
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        // backgroundColor:'#fff'
+    }
 })
 
 export default ProfileView;

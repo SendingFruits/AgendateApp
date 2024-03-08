@@ -221,21 +221,79 @@ const HomeView = ( params ) => {
 		}	
 	};
 
+	const removeAccents = (str) => {
+		const vocals = {
+			'á': 'a', 
+			'é': 'e', 
+			'í': 'i', 
+			'ó': 'o', 
+			'ú': 'u',
+			'Á': 'A', 
+			'É': 'E', 
+			'Í': 'I', 
+			'Ó': 'O', 
+			'Ú': 'U'
+		};
+	
+		var normalizedStr = '';
+	
+		for (var i = 0; i < str.length; i++) {
+			const char = str[i];
+			const normalizedChar = vocals[char] || char; // Si no es una vocal con tilde, se deja igual
+			normalizedStr += normalizedChar;
+		}
+	
+		return normalizedStr;
+	};
+
+
 	const handleSearch = (query) => {
-		const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
-		// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
-		const foundCompany = companies.find(company => company.title.toLowerCase().includes(query.toLowerCase()));
+		try {
+			if (query !== '') {
+
+				const vocals = {
+					'á': 'a', 
+					'é': 'e', 
+					'í': 'i', 
+					'ó': 'o', 
+					'ú': 'u',
+					'Á': 'A', 
+					'É': 'E', 
+					'Í': 'I', 
+					'Ó': 'O', 
+					'Ú': 'U'
+				};
+				
+				var normalizedQuery = removeAccents(query);
 		
-		if (location !== null) {		
-			const newRegion = {
-				latitude: foundCompany.location.latitude,
-				longitude: foundCompany.location.longitude,
-				latitudeDelta: 0.00006,
-				longitudeDelta: 0.00006,
-			};
-			// Centra el mapa en la ubicación de la empresa encontrada
-			mapRef.current.animateToRegion(newRegion); 
-			Keyboard.dismiss();
+				const companiesWithoutAccents = companies.map(company => ({
+					...company,
+					title: removeAccents(company.title)
+				}));
+
+				// console.log(companies);
+				// console.log(normalizedQuery);
+				
+				// const regex = new RegExp(`\\b${query.toLowerCase()}\\b`); 
+				// const foundCompanyBasic = companies.find(company => regex.test(company.title.toLowerCase()));
+
+				const foundCompany = companiesWithoutAccents.find(company => 
+					company.title.toLowerCase().includes(normalizedQuery.toLowerCase()));
+				// console.log(foundCompany);
+				if (foundCompany !== null && foundCompany !== undefined) {		
+					const newRegion = {
+						latitude: foundCompany.location.latitude,
+						longitude: foundCompany.location.longitude,
+						latitudeDelta: 0.00006,
+						longitudeDelta: 0.00006,
+					};
+					// Centra el mapa en la ubicación de la empresa encontrada
+					mapRef.current.animateToRegion(newRegion); 
+					Keyboard.dismiss();
+				}
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -343,14 +401,21 @@ const HomeView = ( params ) => {
 		}
 	}
 	
+	const clearCache = async () => {
+		try {
+			await AsyncStorage.clear();
+			console.log('Cache cleared successfully.');
+		} catch (error) {
+		  	console.error('Error clearing cache:', error);
+		}
+	};
+
 	useEffect(() => {
 		fetchData();
 		setShowModal(false);
 		setFavoriteCallout(false)
 
-		// if (ubicacion !== null) {
-		// 	setLocation(ubicacion);
-		// }
+		clearCache();
 
 		// console.log('favoriteCallout: ', favoriteCallout);
 		if ((coordinates !== null) && (coordinates !== undefined)) {

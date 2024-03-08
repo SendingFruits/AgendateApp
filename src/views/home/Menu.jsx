@@ -34,6 +34,8 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Menu = ( params ) => {	
 
 	const { navigation } = params;
@@ -41,6 +43,15 @@ const Menu = ( params ) => {
 		isLogin, setIsLogin, currentUser, setCurrentUser, setNavigation 
 	} = useContext(AuthContext);
 	// console.log('currentUser Menu: ', currentUser);
+
+	const clearCache = async () => {
+		try {
+			await AsyncStorage.clear();
+			console.log('Cache cleared successfully.');
+		} catch (error) {
+		  	console.error('Error clearing cache:', error);
+		}
+	};
 
 	const logout = () => {
 		setIsLogin(false);
@@ -57,6 +68,7 @@ const Menu = ( params ) => {
             'logo':'none', 
 			'noti':'none', 
         });
+		clearCache();
 	};
 	
 	useEffect(() => {

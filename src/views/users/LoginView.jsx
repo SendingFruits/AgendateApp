@@ -50,7 +50,7 @@ const LoginView = ( params ) => {
 		.then(userReturn => {
 			if (userReturn != null) {
 				var user = JSON.parse(userReturn);
-				console.log(user);
+				// console.log(user);
 				var currentUser = {
 					guid: user.id,
 					name: user.nombre,
