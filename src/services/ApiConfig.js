@@ -1,13 +1,13 @@
 class ApiConfig {
 
     constructor() {
-        this.AZURE = 'https://192.168.1.7:9083/api/';
-        this.LOCAL = 'https://186.48.52.221:9083/api/';
-        this.NGORK_TOKEN = 'ef62-2800-a4-c076-cc00-d88d-eb58-e5f6-9143';
-        this.API_BASE_URL = 'https://'+this.NGORK_TOKEN+'.ngrok-free.app/api/';
+        this.AZURE_HOST = 'https://agendateapp-api.azurewebsites.net/api/';
+        this.LOCAL_HOST = 'https://186.48.52.221:9083/api/';
+        this.NGORK_HOST = 'https://be25-2800-a4-c1fd-b00-bd46-61f0-e947-33fb.ngrok-free.app/api/';
+        this.API_BASE_URL = this.NGORK_HOST;
     }
 
-    getToken = async () => {
+    setURL = async () => {
         return this.API_URL_TOKEN;
     };
 
@@ -15,8 +15,18 @@ class ApiConfig {
         return this.API_BASE_URL;
     };
 
-    setNgrokToken = async (code) => {
-        this.API_URL_TOKEN = getToken();
+    
+    setHost = async (method) => {
+        switch (method) {
+            case 'Ngrok':
+                break;
+            case 'Localhost':
+                break;
+            case 'Azure':
+                break;
+            default:
+                break;
+        }
     }
 }
 

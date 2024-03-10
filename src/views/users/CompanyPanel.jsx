@@ -6,6 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import MenuButtonItem from '../home/MenuButtonItem';
 import MapController from '../../controllers/MapController';
 import UsersController from '../../controllers/UsersController';
+import AlertModal from '../utils/AlertModal';
 
 import { 
     useState, useEffect
@@ -20,6 +21,7 @@ import {
     TextInput,
     TouchableOpacity,
     SafeAreaView,
+    RefreshControl,
     Image
 } from 'react-native';
 
@@ -226,9 +228,9 @@ const CompanyPanel = (params) => {
 
 		UsersController.handleCompanyUpdate(formData)
 		.then(dataReturn => {
-			// console.log('dataReturn: ', dataReturn);
+			console.log('dataReturn: ', dataReturn);
 			if (dataReturn) {
-				alert('Datos de la empresa Actualizados.');
+				AlertModal.showAlert('Envio Exitoso', 'Datos de la empresa Actualizados.');
 
                 // setRut('');
                 // setOwner('');
@@ -241,7 +243,7 @@ const CompanyPanel = (params) => {
 			}
 		})
 		.catch(error => {
-			alert(error);
+			AlertModal.showAlert('Ocurrió un Error', error);
 		});
     };
 
@@ -305,7 +307,7 @@ const CompanyPanel = (params) => {
         // console.log(logoUrl);
         // setLogoUrl(loadImageFromBase64());
 
-        setSelectedPicture(logoUrl);
+        // setSelectedPicture(loadImageFromBase64(logoUrl));
         Dimensions.addEventListener('change', handleOrientationChange);
 
         setTimeout(() => {

@@ -42,6 +42,7 @@ const SearchPanel = ( params ) => {
             borderWidth: 0.8,
             borderColor:'#393',
             borderRadius: 10,
+            backgroundColor:'#ffffee80',
         },
         input: {
             top: 2.2,
@@ -74,7 +75,8 @@ const SearchPanel = ( params ) => {
     // );
 
     return (
-        <LinearGradient colors={['#dfe4ff', '#ffffee']} style={styles.gradient}>
+        // <LinearGradient colors={['#dfe4ff', '#ffffee']} style={styles.gradient}>
+        <View style={styles.gradient}>
             <View style={{ flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
                 <TextInput
                     style={styles.input}
@@ -91,10 +93,9 @@ const SearchPanel = ( params ) => {
                     <FontAwesomeIcon icon={faSearch} color={'#060'} style={styles.icon} />
                 </TouchableOpacity>
             </View>
-        </LinearGradient>
+        </View>
+        // </LinearGradient>
     );
 }
-
-
 
 export default SearchPanel;
