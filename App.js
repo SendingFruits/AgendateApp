@@ -1,21 +1,12 @@
 import Main from './src/views/home/Main';
 import BaseError from './src/views/utils/BaseError';
-
-import { StyleSheet } from 'react-native';
-
-import React, { useState, useEffect } from 'react';
-
 import 'react-native-gesture-handler';
+import React, { useState } from 'react';
 
 const App = () => {
 
 	const [isConnected, setIsConnected] = useState(true);
 	
-	useEffect(() => {
-		console.log(isConnected);
-		// setIsConnected(true);
-	}, [isConnected]); 
-
 	return (
 		<>
 			{isConnected ? <>
@@ -28,12 +19,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-	main: {
-		flex: 1,
-		alignItems:'center',
-		justifyContent:'center',
-	},
-});
-

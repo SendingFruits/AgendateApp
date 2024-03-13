@@ -22,6 +22,7 @@ import {
 	ScrollView,
 	Keyboard,
 	Image,
+	Button,
 	Modal
 } from 'react-native';
 
@@ -85,6 +86,32 @@ const HomeView = ( params ) => {
 	const [favoriteCallout, setFavoriteCallout] = useState(false);
 
 
+	const errorPermission = async () => {
+		// return (
+		// 	<Modal
+		// 		animationType="slide"
+		// 		visible={true}
+		// 		transparent={true}
+		// 		>
+		// 		<View style={styles.modal}>
+					
+		// 			<Text>
+		// 				Debe tener Aceptar los permisos de Ubicación para el correcto funcionamiento de la aplicación
+		// 			</Text>
+
+		// 			<Button
+		// 				title="Confirmar"
+		// 				onPress={() => {
+		// 					confirmReservation(selectedHour);
+		// 					setShowModal(false);
+		// 				}} />
+		// 		</View>
+		// 	</Modal>
+		// );
+		// console.log('error permisos');
+		AlertModal.showAlert('Mapa','No tiene permisos para obtener la ubicación.');
+	}
+
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
@@ -118,14 +145,18 @@ const HomeView = ( params ) => {
 				});
 
 			} else {
+				console.log('No tiene permisos para obtener la ubicación.');
 				alert('No tiene permisos para obtener la ubicación.');
 			}
 		} catch (error) {
-			console.log('ERROR fetchData: '+error);
-			if (error == -1) {
-				setCompanies([]);
+			// console.log(error.message);
+
+			if (error.message == 'Permiso de acceso a la ubicación denegado.') {
+				errorPermission();
+			} else {
 				setIsConnected(false);
 			}
+			setCompanies([]);
 		}
 	};
 
@@ -551,10 +582,19 @@ const styles = StyleSheet.create({
 		padding: 1,
 	},
 	modal: {
-		flex: 1,
-		width: 200,
-		height: 200,
-		backgroundColor: '#888',
+		width: 360,
+		height: 220,
+		alignSelf: 'center',
+		marginHorizontal: 40,
+		marginVertical: 220,
+		paddingHorizontal: 10,
+		paddingVertical: 20,
+		borderRadius: 20,
+		borderColor: 'green',
+		borderWidth: 1,
+		backgroundColor: '#fff',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 
 	openCallout: {

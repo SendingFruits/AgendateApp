@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": "^5.9.3"
+    "version": "7.4.0"
   },
   "build": {
     "testing": {
@@ -8,6 +8,12 @@
         "buildType":"apk"
       },
       "channel": "testing"
+    },
+    "testing_ngrok": {
+      "android": {
+        "buildType":"apk"
+      },
+      "channel": "testing_ngrok"
     },
     "preview": {
       "android": {
