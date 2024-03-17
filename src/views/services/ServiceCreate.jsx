@@ -1,3 +1,7 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import { useNavigation } from '@react-navigation/native';
 
 import AlertModal from '../utils/AlertModal';
@@ -8,7 +12,7 @@ import ServicesController from '../../controllers/ServicesController';
 import { Picker } from '@react-native-picker/picker';
 
 import { 
-    useState, useEffect 
+    useContext, useState, useEffect 
 } from 'react';
 
 import { 
@@ -28,11 +32,11 @@ const { width, height } = Dimensions.get('window');
 const ServiceCreate = ( params ) => {
     
     var {
-        guid,
         isCreate,
         setIsCreate
     } = params.route.params;
 
+    const { currentUser } = useContext(AuthContext);
     const navigation = useNavigation();
 
     var jsonString = '{"Lunes": {"horaInicio": 0,"horaFin": 0},\n"Martes": {"horaInicio": null,"horaFin": null},\n"Miercoles": {"horaInicio": null,"horaFin": null},\n"Jueves": {"horaInicio": null,"horaFin": null},\n"Viernes": {"horaInicio": null,"horaFin": null},\n"Sabado": {"horaInicio": null,"horaFin": null},\n"Domingo": {"horaInicio": null,"horaFin": null}}';
@@ -59,7 +63,7 @@ const ServiceCreate = ( params ) => {
 			turno,
 			descripcion,
 			dias,
-            guid,
+            guid:currentUser.guid,
 		};
 
 		ServicesController.handleServiceCreate(formData)
@@ -149,7 +153,8 @@ const ServiceCreate = ( params ) => {
                                     <Text style={styles.label}>Costo:</Text>
                                 </View>
                                 <View style={styles.columnV}>
-                                <TextInput 
+                                <TextInput
+                                    keyboardType="numeric"
                                     style={styles.dataEdit} 
                                     value={costo.toString()}
                                     onChangeText={setCosto}

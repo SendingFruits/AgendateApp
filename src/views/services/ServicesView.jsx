@@ -27,8 +27,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const ServicesView = ( params ) => {
 
-    const { data } = params.route.params || {};
-
     const { currentUser } = useContext(AuthContext);
 
     const navigation = useNavigation();
@@ -120,7 +118,6 @@ const ServicesView = ( params ) => {
 
     return (
         <View style={styles.container}>
-
             {(list !== null && Array.isArray(list) && list.length > 0) ? (
                 <ScrollView 
                     contentContainerStyle={styles.scrollContainer}
@@ -148,7 +145,11 @@ const ServicesView = ( params ) => {
 
                 </ScrollView>
             ) : (
-                <View style={{}}>
+                <View style={{
+                    flexDirection:'column',
+                    justifyContent:'center',
+                    alignItems:'center'
+                }}>
                     <Text>No tiene un servicio creado aún</Text>
 
                     <LinearGradient
@@ -211,9 +212,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 6,
         marginTop: 15,
 		marginBottom: 15,
-        marginHorizontal: 45,
 		borderRadius: 10,
-        textAlign:'center'
     },
     textCreate: {
         color:'#ffffff'

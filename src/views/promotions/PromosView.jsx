@@ -111,32 +111,37 @@ const PromosView = ( params ) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView 
+            {(list !== null && Array.isArray(list) && list.length > 0) ? (
+                <ScrollView 
                 contentContainerStyle={styles.scrollContainer}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
-                {(list !== null && Array.isArray(list) && list.length > 0) ? (
-                    listPromos()
-                ) : (
-                    <View style={{}}>
-                        <Text>No tiene una promoción creada aún</Text>
+                    {listPromos()}
+                </ScrollView>
+            ) : (
+                <View style={{
+                    flexDirection:'column',
+                    justifyContent:'center',
+                    alignItems:'center'
+                }}>
+                    <Text>No tiene una promoción creada aún</Text>
 
-                        <LinearGradient
-                            colors={['#135054', '#a8ffff', '#fff']}
-                            start={{ x: 0.5, y: 0 }}
-                            end={{ x: 0.5, y: 1.5 }}
-                            style={styles.btnCreate}
-                            >
-                            <TouchableOpacity 
-                                styles={{ alignContent:'center' }}
-                                onPress={() => createItem(guid)} >
-                                <Text> Crear Servicio </Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                    </View>
-                )}
-            </ScrollView>
+                    <LinearGradient
+                        colors={['#135054', '#a8ffff', '#fff']}
+                        start={{ x: 0.5, y: 0 }}
+                        end={{ x: 0.5, y: 1.5 }}
+                        style={styles.btnCreate}
+                        >
+                        <TouchableOpacity 
+                            styles={{ alignContent:'center' }}
+                            onPress={() => createItem(guid)} >
+                            <Text> Crear Promoción </Text>
+                        </TouchableOpacity>
+                    </LinearGradient>
+                </View>
+            )}
+        
         </View>
     );
 };
@@ -144,7 +149,7 @@ const PromosView = ( params ) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#e9e9f8',
         alignItems: 'center',
         justifyContent: 'center',
     },

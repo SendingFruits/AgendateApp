@@ -1,3 +1,8 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
+
 import { useNavigation } from '@react-navigation/native';
 import { getBase64FromUri, loadImageFromBase64, getOrientation } from '../utils/Functions'
 
@@ -9,7 +14,7 @@ import UsersController from '../../controllers/UsersController';
 import AlertModal from '../utils/AlertModal';
 
 import { 
-    useState, useEffect
+    useContext, useState, useEffect
 } from 'react';
 
 import { 
@@ -34,7 +39,10 @@ const CompanyPanel = (params) => {
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
-    var data = params.dataCompany;
+
+    const { currentUser, setCurrentUser } = useContext(AuthContext);
+    console.log(currentUser);
+    var data = currentUser;
     const navigation = useNavigation();
 
     var guid = data.guid;
@@ -307,7 +315,7 @@ const CompanyPanel = (params) => {
         // console.log(logoUrl);
         // setLogoUrl(loadImageFromBase64());
 
-        // setSelectedPicture(loadImageFromBase64(logoUrl));
+        setSelectedPicture(logoUrl);
         Dimensions.addEventListener('change', handleOrientationChange);
 
         setTimeout(() => {

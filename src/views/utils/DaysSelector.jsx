@@ -61,7 +61,9 @@ const DaysSelector = ( params ) => {
   
 
     const datesControl = (start,end) => {
-        if (end < start) {
+        console.log(start);
+        console.log(end);
+        if (end < start && end !== null) {
             AlertModal.showAlert('Mensaje', 'La fecha de fin debe ser posterior a la fecha de inicio.');
             return false;
         } else {

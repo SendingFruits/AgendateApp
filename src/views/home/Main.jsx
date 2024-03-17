@@ -16,6 +16,7 @@ import LoginView from '../users/LoginView';
 import RegisterView from '../users/RegisterView';
 import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
+import PassRecover from '../users/PassRecover';
 import ServiceCreate from '../services/ServiceCreate';
 import Testing from '../utils/Testing';
 
@@ -179,18 +180,7 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={ScheduleList} 
 						/>
-					<Drawer.Screen 
-						options={{
-							title: null,
-							headerBackground: () =>
-								<LinearGradient 
-									colors={['#135000', '#238162', '#dfe4ff']} 
-									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
-						}}
-						name="Password" 
-						// initialParams={ homeParams } 
-						component={PassChanger} 
-						/>
+
 					<Drawer.Screen 
 						options={{
 							title: null,
@@ -240,7 +230,33 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={RegisterView} 
 						/>
-			
+
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#135000', '#238162', '#dfe4ff']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="Password" 
+						// initialParams={ homeParams } 
+						component={PassChanger} 
+						/>
+
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#135000', '#238162', '#dfe4ff']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="Recuperar" 
+						// initialParams={ homeParams } 
+						component={PassRecover} 
+						/>
+
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</AuthProvider>

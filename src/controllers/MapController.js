@@ -19,8 +19,8 @@ class MapController {
             const initialRegion = {
                 latitude,
                 longitude,
-                latitudeDelta: 0.0050,
-                longitudeDelta: 0.0050
+                latitudeDelta: 0.0200,
+                longitudeDelta: 0.0200
             };
             // console.log(initialRegion);
             return initialRegion;

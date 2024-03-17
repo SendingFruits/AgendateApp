@@ -208,6 +208,40 @@ class UsersController {
 		});
 	}
 
+	handleRecoveryPass(dataJSON) {
+		return new Promise((resolve, reject) => {
+
+			console.log('dataJSON: ', dataJSON);
+			var data = JSON.parse(dataJSON);
+			console.log('data: ', data);
+
+			if (data.user === '') {
+				reject('Debe ingresar su nombre de usuario.');
+			}
+			if (data.email === '') {
+				reject('Debe ingresar su correo electronico.');
+			}
+			if (data.movil === '') {
+				reject('Debe ingresar su número de teléfono.');
+			}
+
+			var json = {
+                'user':data.user,
+                'email':data.email,
+                'movil':data.movil,
+            }
+			
+			UserServices.recoveryPass(json)
+			.then(msgReturn => {
+				resolve(msgReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+	
+		});
+	}
+
 
 	getCompanyData(guid) {
 		return new Promise((resolve, reject) => {

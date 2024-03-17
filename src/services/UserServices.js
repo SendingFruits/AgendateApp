@@ -232,6 +232,39 @@ class UserServices {
         });
     }
 
+    recoveryPass = async (json) => {
+        return new Promise((resolve, reject) => {
+  
+            var method = 'Usuarios/GenerarClaveRecuperacionUsuario';
+            const urlCompleta = `${ApiConfig.API_BASE_URL}${method}?`
+                +`nomUsuario=${json.user}&`
+                +`correoUsuario=${json.email}&`
+                +`celular=${json.movil}`;
+
+            const headers = {
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json'
+            };
+
+            console.log('json: ', json);
+            console.log('urlCompleta: ', urlCompleta);
+
+            axios.post(urlCompleta, {})
+            .then(response => {
+                console.log('response: ', response);
+                if (response.status == 200) {
+                    resolve(response.data);
+                } else {
+                    resolve('Error al enviar la información...');
+                }
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+        });
+    }
+
+
     putDelete = async (id) => {
         return new Promise((resolve, reject) => {
   

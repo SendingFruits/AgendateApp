@@ -166,20 +166,18 @@ const HomeView = ( params ) => {
 	};
  
 	const handleRatioChange = (value) => {
-		// console.log(value);
-		var rango = 0.010;
+		console.log(value);
+		var rango = 0.0200;
 		if (location !== null) {
 			setRatio(value);
 			
-			if (value >= 1 && value <= 4)
-				rango = 0.010; 
-			else if (value >= 4 && value < 9)
-				rango = 0.050; 
-			else if (value >= 9 && value < 15)
-				rango = 0.210; 
-			else if (value >= 15)
-				rango = 0.350; 
-	
+			if (value == 0 )
+				rango = 0.0200;
+			if (value == 5 )
+				rango = 0.1100; 
+			if (value == 10)
+				rango = 0.2200; 
+				
 			var myLoc = {
 				latitude: location.latitude,
 				latitudeDelta: rango,
@@ -638,7 +636,7 @@ const styles = StyleSheet.create({
 	ratioPanelPortrait: {
 		position: 'absolute',
 		top: '88%',
-		left: '24%',
+		left: '28%',
 		zIndex: 2,
 	},	
 	ratioPanelLandscape: {

@@ -49,8 +49,9 @@ const LoginView = ( params ) => {
 		UsersController.handleLogin(username, password)
 		.then(userReturn => {
 			if (userReturn != null) {
+
 				var user = JSON.parse(userReturn);
-				// console.log(user);
+				
 				var currentUser = {
 					guid: user.id,
 					name: user.nombre,
@@ -60,7 +61,7 @@ const LoginView = ( params ) => {
 					celu: user.celular,
 					mail: user.correo,
 					type: user.tipoUsuario,
-					logo: user.foto,
+					logo: (user.foto !== null) ? user.foto : 'none',
 					noti: user.tieneNotificaciones,
 					docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
 					...(user.tipoUsuario === 'company' && {
@@ -73,7 +74,7 @@ const LoginView = ( params ) => {
 						description: user.descripcion,
 						latitude: user.latitude,
 						longitude: user.longitude,
-						logo: user.logo,
+						logo: (user.logo !== null) ? user.logo : 'none',
 					}),
 				};
 
@@ -136,6 +137,17 @@ const LoginView = ( params ) => {
 					onPress = { () => login() }
 					/>
 
+
+				<View style={styles.recoveryContainer}>
+					<Text>¿Olvidaste tu contraseña?</Text>
+					<View style={{ flexDirection:'row' }}>
+						<TouchableOpacity
+							onPress = { () => navigation.navigate('Recuperar')} >
+							<Text style={{ color:"#135f44" }}> Recuperar</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+
 				<View style={styles.registerContainer}>
 					<Text>¿Sos nuevo?</Text>
 					<View style={{ flexDirection:'row' }}>
@@ -146,6 +158,8 @@ const LoginView = ( params ) => {
 						</TouchableOpacity>
 					</View>
 				</View>
+
+
 			</View>
 		</View>
   	);
@@ -224,7 +238,12 @@ const styles = StyleSheet.create({
 	registerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 60,
+		marginTop: 10,
+	},
+	recoveryContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 50,
 	},
 	registerText: {
 		color: 'darkgray',

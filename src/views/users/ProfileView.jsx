@@ -46,7 +46,7 @@ const ProfileView = () => {
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
 
-    console.log('ProfileView currentUser: ', currentUser);
+    // console.log('ProfileView currentUser: ', currentUser);
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
@@ -92,7 +92,7 @@ const ProfileView = () => {
             let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
             // console.log(permissionResult.granted);
             if (permissionResult.granted === false) {
-                alert('Se requiere permisos de acceso a la camara.');
+                AlertModal.showAlert('Camara', 'Se requiere permisos de acceso a la camara.');
                 return;
             }
     
@@ -103,12 +103,13 @@ const ProfileView = () => {
                 const base64 = await getBase64FromUri(uri);
                 // console.log(base64);
                 setLogoBase(base64);
+                setLogoUrl(uri);
                 setSelectedPicture(uri);
                 // await AsyncStorage.setItem(username, newSelectedImage);
             }
             
         } catch (error) {
-           alert('Error al manejar la selección de imagen. ', error);
+            AlertModal.showAlert('Error al manejar la selección de imagen. ', error);
         }
 	}
 
@@ -117,6 +118,7 @@ const ProfileView = () => {
         // console.log(storedImageUri);
         if (storedImageUri) {
             setSelectedPicture(storedImageUri);
+            setLogoUrl(storedImageUri);
         }
     }
 
@@ -233,6 +235,7 @@ const ProfileView = () => {
         setMovil(currentUser.celu);
         setEmail(currentUser.mail);
 
+        setLogoUrl(loadImageFromBase64(currentUser.logo));
         setSelectedPicture(logoUrl);
 
         setUser(currentUser);
@@ -272,14 +275,16 @@ const ProfileView = () => {
 
                 { (user.type === 'customer') ? (
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={ () => handleImagePicker(0) } > 	                      
-                     
-                            { (!selectedPicture) ? (
+                        <TouchableOpacity 
+                            // style={{ backgroundColor:'#e12' }}
+                            onPress={ () => handleImagePicker(0) } > 	                      
+                            {console.log(logoUrl)}
+                            { (logoUrl === 'data:image/png;base64,none') ? (
                                 <FontAwesomeIcon 
                                     style={styles.image} icon={faCircleUser} color={'#0a7a75'}/>
-                                
                             ) : 
-                                <Image style={styles.image} source={{ uri: selectedPicture }} />
+                                <Image 
+                                    style={styles.image} source={{ uri: logoUrl }} />
                             }
                           
                         </TouchableOpacity>

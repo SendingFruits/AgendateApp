@@ -1,3 +1,7 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import { useNavigation } from '@react-navigation/native';
 
 import React, { 
@@ -29,17 +33,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const PassChanger = (params) => {
 
-    // console.log(params);
-    const { 
-        userLogin, 
-        // oldpass: initialOldPass, 
-        // setOldPass, 
-        // newpass: initialNewPass, 
-        // setNewPass 
-    } = params.route.params;
-    // console.log(userLogin);
-
-    const { userPreferences, setUserPreferences } = useContext(UserContext);
+    const { currentUser, setPassword } = useContext(AuthContext);
     const navigation = useNavigation();
 
     const [secureTextEntryValue1, setSecureTextEntryValue1] = useState(true);
@@ -72,7 +66,7 @@ const PassChanger = (params) => {
     const changePassword = () => {
 
         var valuesChange = {
-            'idu': userLogin.guid,
+            'idu': currentUser.guid,
             'old': oldpass,
             'new': newpass,
         }
@@ -83,14 +77,6 @@ const PassChanger = (params) => {
 				navigation.navigate('Perfil de Usuario');
 				AlertModal.showAlert('Envio Exitoso',msgReturn.replace('exitosamente','correctamente'));
 
-                // var updatedUserPreferences = {
-                //     ...userPreferences,
-                //     userLogin: {
-                //         ...userLogin, pass: newpass, 
-                //     },
-                // };
-
-                // setUserPreferences(updatedUserPreferences);
 			}
 		})
 		.catch(error => {
@@ -104,12 +90,9 @@ const PassChanger = (params) => {
         setIconEye1(false);
         handleNewPassChange('');
         setIconEye2(false);
-	}, [userLogin.pass]);
-
-
+	}, [currentUser.pass]);
 
     return (
-
         <LinearGradient 
             colors={['#2ECC71', '#D0E4D0', '#dfe4ff']}
             // colors={['#135000', '#238162', '#2ECC71']}

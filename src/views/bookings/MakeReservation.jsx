@@ -39,12 +39,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 const MakeReservation = ( params ) => {
 	
 	var idSelect = params.route.params;
-	// console.log(idSelect);
+	console.log(idSelect);
 
 	const navigation = useNavigation();
 	const { currentUser } = useContext(AuthContext);
 	var user = currentUser;
-	
+	console.log('user: ', user);
 	const scrollViewRef = useRef(null);
 
 	const [days, setDays] = useState([]);
@@ -121,7 +121,7 @@ const MakeReservation = ( params ) => {
 			// const id = await AsyncStorage.getItem('selectedCompanyID');
 			// console.log('id: ', id);
 		
-			if (idSelect !== null) {
+			if ((idSelect !== null) && (idSelect !== '')) {
 		
 				const [companyReturn, serviceReturn] = await Promise.all([
 					UsersController.getCompanyData(idSelect),

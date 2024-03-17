@@ -60,6 +60,18 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const setPassword = async (newPassword) => {
+        try {
+            const updatedUser = { ...currentUser, pass: newPassword };
+            await AsyncStorage.setItem('userAgentateApp', JSON.stringify(updatedUser));
+            setCurrentUser(updatedUser);
+            return true;
+        } catch (error) {
+            console.error('Error al intentar cambiar la contraseña:', error);
+            return false;
+        }
+    }
+
     useEffect(() => {
         const timer = setTimeout(() => {
             // Cierra la sesión después de cierto tiempo de inactividad
@@ -97,6 +109,7 @@ export const AuthProvider = ({ children }) => {
                 setCurrentUser,
                 getUser,
                 setUser,
+                setPassword,
                 navigation, 
                 setNavigation
             }}>
