@@ -51,7 +51,7 @@ const LoginView = ( params ) => {
 			if (userReturn != null) {
 
 				var user = JSON.parse(userReturn);
-				
+				console.log('user: ', user);
 				var currentUser = {
 					guid: user.id,
 					name: user.nombre,
@@ -61,7 +61,7 @@ const LoginView = ( params ) => {
 					celu: user.celular,
 					mail: user.correo,
 					type: user.tipoUsuario,
-					logo: (user.foto !== null) ? user.foto : 'none',
+					logo: (user.foto === null || user.foto === '') ? 'none' : user.foto,
 					noti: user.tieneNotificaciones,
 					docu: user.tipoUsuario === 'company' ? user.rutDocumento : user.documento,
 					...(user.tipoUsuario === 'company' && {
@@ -74,7 +74,7 @@ const LoginView = ( params ) => {
 						description: user.descripcion,
 						latitude: user.latitude,
 						longitude: user.longitude,
-						logo: (user.logo !== null) ? user.logo : 'none',
+						logo: (user.logo === null || user.logo === '') ? 'none' : user.logo,
 					}),
 				};
 

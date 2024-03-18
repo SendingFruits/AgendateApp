@@ -43,7 +43,7 @@ const PromosView = ( params ) => {
  
     const createItem = (guid) => {
         // console.log('create', guid);
-        navigation.navigate('Crear Servicio');
+        navigation.navigate('Crear Promo', {isCreate, setIsCreate});
     };
 
     const premiumUpdate = () => {

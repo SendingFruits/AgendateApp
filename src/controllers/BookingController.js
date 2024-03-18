@@ -28,26 +28,25 @@ class BookingController {
 
     getBookingsForCompany = async (guid, date) => {
 		return new Promise((resolve, reject) => {
-			// console.log('getSchedulesForService', guid);
-			if ((guid == '') || (guid == undefined)) {
-				throw new Error('Debe existir una Empresa.');
-			}
-			if (date === null) {
-				date = getFormattedDate();
+
+			// console.log('guid', guid);
+			// console.log('date', date);
+
+			if ((date !== null) && (guid !== '')) {	
+				BookingServices.getBookings(guid, date, 'Empresas')
+				.then(serviceReturn => {
+					// console.log('serviceReturn', serviceReturn);
+					if (serviceReturn !== null) {
+						resolve(serviceReturn);
+					} else {
+						resolve(null);
+					}
+				})
+				.catch(error => {
+					reject(error.mensaje);
+				});
 			}
 
-			BookingServices.getBookings(guid, date, 'Empresas')
-			.then(serviceReturn => {
-				// console.log('serviceReturn', serviceReturn);
-				if (serviceReturn !== null) {
-					resolve(serviceReturn);
-				} else {
-					resolve(null);
-				}
-			})
-			.catch(error => {
-				reject('Error Controller getBookingsForCompany', error);
-			});
 		});
     };
 

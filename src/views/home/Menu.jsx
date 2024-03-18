@@ -69,6 +69,13 @@ const Menu = ( params ) => {
 			'noti':'none', 
         });
 		clearCache();
+		navigation.reset({
+			index: 0,
+			routes: [
+			  { name: 'Inicio' },
+			],
+		});
+		setNavigation(navigation);
 	};
 	
 	useEffect(() => {

@@ -9,7 +9,8 @@ import {
     TextInput, 
     StyleSheet, 
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    showDatePicker
 } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
@@ -21,12 +22,13 @@ const FilterPanel = ( params ) => {
         dateSelected,
         handleDateSelect,
         showModal,
-        setShowModal
+        setShowModal,
+        showDatePicker
 	} = params;
 
     const showCalendar = () => {
-        setShowModal(true);      
-        // console.log(showModal)
+        setShowModal(true);
+        // showDatePicker(false,true);
     }
  
     // useEffect(() => {

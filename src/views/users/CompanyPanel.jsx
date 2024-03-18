@@ -34,27 +34,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
 
-const CompanyPanel = (params) => {
+const CompanyPanel = () => {
 
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
-
     const { currentUser, setCurrentUser } = useContext(AuthContext);
     console.log(currentUser);
-    var data = currentUser;
-    const navigation = useNavigation();
-
-    var guid = data.guid;
-
+    var guid = currentUser.guid;
 
     var initialContainer = {
         flex: 1,
         width: widthMax,
         height: heightMax
     };
-
-    const [container, setContainer] = useState(initialContainer);
 
     var sty = StyleSheet.create({});
 
@@ -134,7 +127,7 @@ const CompanyPanel = (params) => {
             backgroundColor:'#fff',
         },
         dataEditDesc: {
-            width:297,
+            // width:297,
             height:120,
             marginVertical:3,
             marginBottom:10,
@@ -188,19 +181,19 @@ const CompanyPanel = (params) => {
     });
 
     
-    const [rut, setRut] = useState(data.rut);
-    const [owner, setOwner] = useState(data.owner);
-    const [businessName, setBusinessName] = useState(data.businessName);
-    const [category, setCategory] = useState(data.category);
-    const [address, setAddress] = useState(data.address);
-    const [city, setCity] = useState(data.city);
-    const [description, setDescription] = useState(data.description);
+    const [rut, setRut] = useState(currentUser.rut);
+    const [owner, setOwner] = useState(currentUser.owner);
+    const [businessName, setBusinessName] = useState(currentUser.businessName);
+    const [category, setCategory] = useState(currentUser.category);
+    const [address, setAddress] = useState(currentUser.address);
+    const [city, setCity] = useState(currentUser.city);
+    const [description, setDescription] = useState(currentUser.description);
     
     const [logoBase, setLogoBase] = useState('');
-    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(data.logo));
+    const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(currentUser.logo));
     const [selectedPicture, setSelectedPicture] = useState(null);
 
-    const [location, setLocation] = useState({latitude:data.latitude, longitude:data.longitude});
+    const [location, setLocation] = useState({latitude:currentUser.latitude, longitude:currentUser.longitude});
 
 
 
@@ -311,11 +304,11 @@ const CompanyPanel = (params) => {
     };
 
 	useEffect(() => {
-		// setRut(data.docu);
-        // console.log(logoUrl);
-        // setLogoUrl(loadImageFromBase64());
-
+		
+        setLogoBase(currentUser.logo);
+        setLogoUrl(loadImageFromBase64(currentUser.logo));
         setSelectedPicture(logoUrl);
+
         Dimensions.addEventListener('change', handleOrientationChange);
 
         setTimeout(() => {
@@ -326,7 +319,7 @@ const CompanyPanel = (params) => {
             }
         }, 3000);
 
-	}, [data.latitude, data.longitude]);
+	}, [currentUser.latitude, currentUser.longitude]);
 
     return (
         <View style={sty.container}>
@@ -431,6 +424,7 @@ const CompanyPanel = (params) => {
                                     />
                             </View>
                         </View> 
+                        
                         <View style={sty.row}>
                             <SafeAreaView>
                                 <Text style={{fontWeight:'bold',paddingHorizontal:22,marginVertical:3,paddingVertical:5,}}
@@ -444,17 +438,17 @@ const CompanyPanel = (params) => {
                             </SafeAreaView>
                         </View> 
         
-                        <View style={sty.row}>
+                        {/* <View style={sty.row}>
                             <View style={sty.column}>
                                 <Text>  </Text>
                             </View>
                             <View style={sty.column}>
                                 <Text>  </Text>
                             </View>
-                        </View>
+                        </View> */}
         
                         <View style={sty.row}>
-                            <View style={sty.column}>
+                            <View>
                                 <View style={sty.imageContainer}>
                                     <TouchableOpacity 
                                         style={sty.imageButton}
@@ -470,7 +464,6 @@ const CompanyPanel = (params) => {
                                             }
                                         </View>
                                     </TouchableOpacity>
-                                    
                                 </View>
                             </View>
                             <View style={sty.column}>

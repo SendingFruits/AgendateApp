@@ -171,9 +171,9 @@ const HomeView = ( params ) => {
 		if (location !== null) {
 			setRatio(value);
 			
-			if (value == 0 )
+			if (value >= 0 && value < 2)
 				rango = 0.0200;
-			if (value == 5 )
+			if (value >= 2 && value < 10)
 				rango = 0.1100; 
 			if (value == 10)
 				rango = 0.2200; 
@@ -211,38 +211,48 @@ const HomeView = ( params ) => {
 
 						{imgLogo ? (
 							<View>
-								<Image source={{ uri: imgLogo }} style={{ width: 35, height: 35, borderWidth: 2, borderRadius: 10, borderColor:'#0af' }} />
+								<Image source={{ uri: imgLogo }} 
+									style={{ 
+										width: 35, 
+										height: 35, 
+										borderWidth: 2, 
+										borderRadius: 10, 
+										borderColor:'#0af',
+										zIndex: 10
+									}} />
 							</View>
 						) : (
 							<View>
-								<FontAwesomeIcon style={{ color:'#0af' }} icon={faBuilding} size={35} />
+								<FontAwesomeIcon icon={faBuilding} size={35} 
+									style={{ 
+										color:'#0af',
+										zIndex: 10
+									}} />
 							</View>
 						)}
 						
-						{
-							userLogin.type === 'customer' ? (
-								<Callout 
-									style={styles.openCallout}
-									onPress={() => handleReservation(userLogin, empresa)} 
-									>
-									<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
-										<Text style={styles.title}>{item.title}</Text>
-										{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
-									</View>
-									<Text style={styles.description}>{item.description}</Text>
-								</Callout>
-							) : (
-								<Callout style={styles.openCallout} 
-									onPress={() => handleReservation(null, null)} 
-									>
-									<Text style={styles.title}>{item.title}</Text>  
-									<Text style={styles.description}>{item.description}</Text>
-									{/* <Text style={{ color:'#f00', fontSize:16, alignSelf:'center' }}>
-										Debe ingresar como Cliente
-									</Text> */}
-								</Callout>
-							)
-						}
+						{userLogin.type === 'customer' ? (
+							<Callout 
+								style={styles.openCallout}
+								onPress={() => handleReservation(userLogin, empresa)} 
+								>
+								<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+									<Text style={styles.title}>{item.title}</Text>
+									{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+								</View>
+								<Text style={styles.description}>{item.description}</Text>
+							</Callout>
+						) : (
+							<Callout style={styles.openCallout} 
+								onPress={() => handleReservation(null, null)} 
+								>
+								<Text style={styles.title}>{item.title}</Text>  
+								<Text style={styles.description}>{item.description}</Text>
+								{/* <Text style={{ color:'#f00', fontSize:16, alignSelf:'center' }}>
+									Debe ingresar como Cliente
+								</Text> */}
+							</Callout>
+						)}
 
 					</Marker>
 				)
@@ -313,8 +323,8 @@ const HomeView = ( params ) => {
 					const newRegion = {
 						latitude: foundCompany.location.latitude,
 						longitude: foundCompany.location.longitude,
-						latitudeDelta: 0.00006,
-						longitudeDelta: 0.00006,
+						latitudeDelta: 0.0100,
+						longitudeDelta: 0.0100,
 					};
 					// Centra el mapa en la ubicación de la empresa encontrada
 					mapRef.current.animateToRegion(newRegion); 
@@ -387,8 +397,8 @@ const HomeView = ( params ) => {
 				var newCoord = {
 					latitude: coordinates.latitude,
 					longitude: coordinates.longitude,
-					latitudeDelta: 0.0010,
-					longitudeDelta: 0.0010,
+					latitudeDelta: 0.0200,
+					longitudeDelta: 0.0200,
 				};
 
 				mapRef.current.animateToRegion(newCoord); 
@@ -407,7 +417,7 @@ const HomeView = ( params ) => {
 	
 						<View>
 							<FontAwesomeIcon style={{ 
-								color:'#fa0', borderColor:'#0af', borderWidth: 1, 
+								color:'#fa0', borderColor:'#0af', borderWidth: 1, zIndex: 1
 								}} icon={faBuilding} size={35} />
 						</View>
 	
@@ -636,7 +646,7 @@ const styles = StyleSheet.create({
 	ratioPanelPortrait: {
 		position: 'absolute',
 		top: '88%',
-		left: '28%',
+		left: '25%',
 		zIndex: 2,
 	},	
 	ratioPanelLandscape: {

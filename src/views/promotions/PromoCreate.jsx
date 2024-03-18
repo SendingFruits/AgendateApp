@@ -1,3 +1,7 @@
+import { 
+    AuthContext 
+} from '../../context/AuthContext';
+
 import { useNavigation } from '@react-navigation/native';
 
 import AlertModal from '../utils/AlertModal';
@@ -8,7 +12,7 @@ import ServicesController from '../../controllers/ServicesController';
 import { Picker } from '@react-native-picker/picker';
 
 import { 
-    useState, useEffect 
+    useContext, useState, useEffect 
 } from 'react';
 
 import { 
@@ -28,11 +32,11 @@ const { width, height } = Dimensions.get('window');
 const PromoCreate = ( params ) => {
     
     var {
-        guid,
         isCreate,
         setIsCreate
     } = params.route.params;
 
+    const { currentUser } = useContext(AuthContext);
     const navigation = useNavigation();
 
     var jsonString = '{"Lunes": {"horaInicio": 0,"horaFin": 0},\n"Martes": {"horaInicio": null,"horaFin": null},\n"Miercoles": {"horaInicio": null,"horaFin": null},\n"Jueves": {"horaInicio": null,"horaFin": null},\n"Viernes": {"horaInicio": null,"horaFin": null},\n"Sabado": {"horaInicio": null,"horaFin": null},\n"Domingo": {"horaInicio": null,"horaFin": null}}';
@@ -40,13 +44,8 @@ const PromoCreate = ( params ) => {
 
     const [bodyHeight, setBodyHeight] = useState(480); 
 
-    const [nombre, setNombre] = useState('');
-    const [tipo, setTipo] = useState('');
-    const [costo, setCosto] = useState(0);
-    const [turno, setTurno] = useState(30);
-    const [descripcion, setDescription] = useState('');
-    const [dias, setDias] = useState(JSON.parse(jsonString));
-    // JSON.parse(item.jsonDiasHorariosDisponibilidadServicio)
+    const [asunto, setAsunto] = useState('');
+    const [mensaje, setMensaje] = useState('');
 
     const [marginStatusTop, setMarginStatusTop] = useState(0);
 
@@ -59,7 +58,7 @@ const PromoCreate = ( params ) => {
 			turno,
 			descripcion,
 			dias,
-            guid,
+            guid:currentUser.guid,
 		};
 
 		ServicesController.handlePromoCreate(formData)
@@ -80,13 +79,8 @@ const PromoCreate = ( params ) => {
 	useEffect(() => {
         setBodyHeight(560); 
 
-        setNombre('');
-        setTipo('');
-        setCosto(0.00);
-        setTurno(30);
-        setDescription('');
-
-        setDias(JSON.parse(jsonString));
+        setAsunto('');
+        setMensaje('');
 
         /**
          * esto sirve para controlar el teclado:
@@ -122,78 +116,28 @@ const PromoCreate = ( params ) => {
                         
                             <View style={styles.row}>
                                 <View style={styles.columnT}>
-                                    <Text style={styles.label}>Nombre:</Text>    
+                                    <Text style={styles.label}>Asunto:</Text>    
                                 </View>
                                 <View style={styles.columnV}>
                                     <TextInput 
                                         style={styles.dataEdit} 
-                                        value={nombre}
-                                        onChangeText={setNombre}
+                                        value={asunto}
+                                        onChangeText={setAsunto}
                                         />
                                 </View>
                             </View>
-                            <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Tipo:</Text>    
-                                </View>
-                                <View style={styles.columnV}>
-                                    <TextInput 
-                                        style={styles.dataEdit} 
-                                        value={tipo}
-                                        onChangeText={setTipo}
-                                        />
-                                </View>
-                            </View>
-                            <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Costo:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                <TextInput 
-                                    style={styles.dataEdit} 
-                                    value={costo.toString()}
-                                    onChangeText={setCosto}
-                                    />
-                                </View>
-                            </View>
-                           
-                            <View style={styles.row}>
-                                <View style={styles.columnT}>
-                                    <Text style={styles.label}>Descripción:</Text>
-                                </View>
-                                <View style={styles.columnV}>
-                                    <TextInput 
-                                        multiline
-                                        style={styles.dataEdit} 
-                                        value={descripcion}
-                                        onChangeText={setDescription}
-                                        />
-                                </View>
-                            </View>
-                            <View style={styles.row}>
-                                    <View style={styles.columnT}>
-                                        <Text style={styles.label}>Duración de Turnos:</Text>
-                                    </View>
-                                    <View style={styles.columnV}>
-                                        <Picker
-                                            // style={styles.picker}
-                                            // placeholder="Tipo"
-                                            selectedValue={turno}
-                                            onValueChange={(itemValue) => setTurno(itemValue)}
-                                            // onValueChange={(itemValue) => handleFieldChange(itemValue, 'userType')}
-                                            >
-                                            <Picker.Item label="30 min" value={30} />
-                                            <Picker.Item label="1 hora" value={1} />
-                                        </Picker>
-                                    </View>
-                            </View>
-                            <View style={styles.row}>
+                            <View>
                                 <View style={styles.column}>
-                                    <Text style={styles.label}>Dias de Actividad</Text>
+                                    <Text style={styles.label}>Mensaje:</Text>    
                                 </View>
-                            </View>
-                            <View style={styles.row}>
-                                <DaysSelector dias={dias} setDias={setDias} create={true} />
+                                <View>
+                                    <TextInput 
+                                        multiline={true}
+                                        style={styles.dataEdit} 
+                                        value={mensaje}
+                                        onChangeText={setMensaje}
+                                        />
+                                </View>
                             </View>
                         </ScrollView>
                     </View>
@@ -220,7 +164,7 @@ const PromoCreate = ( params ) => {
                                 <MenuButtonItem 
                                     icon = {null}
                                     text = {'Cancelar'}
-                                    onPress={() => navigation.navigate('Servicios')}
+                                    onPress={() => navigation.navigate('Promociones')}
                                 />
 
                             </View>

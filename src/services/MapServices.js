@@ -4,6 +4,7 @@ import axios from 'axios';
 class MapServices {
 
     getCompanies = async (lat, lng, cte) => {
+        // console.log(cte);
         return new Promise((resolve, reject) => {
         
             var method = 'Empresas/ObtenerEmpresasMapa';

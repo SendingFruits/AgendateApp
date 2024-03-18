@@ -46,7 +46,7 @@ const ProfileView = () => {
 
     const { currentUser, setCurrentUser } = useContext(AuthContext);
 
-    // console.log('ProfileView currentUser: ', currentUser);
+    console.log('ProfileView currentUser: ', currentUser);
     const [widthMax, setWidthMax] = useState(width);
     const [heightMax, setHeightMax] = useState(height);
 
@@ -63,7 +63,7 @@ const ProfileView = () => {
     const [movil, setMovil] = useState(currentUser.celu);
     const [email, setEmail] = useState(currentUser.mail);
 
-    const [logoBase, setLogoBase] = useState('');
+    const [logoBase, setLogoBase] = useState(currentUser.logo);
     const [logoUrl, setLogoUrl] = useState(loadImageFromBase64(currentUser.logo));
     const [selectedPicture, setSelectedPicture] = useState(null);
     
@@ -114,11 +114,15 @@ const ProfileView = () => {
 	}
 
     let openImageSavedAsync = async () => {
-        const storedImageUri = await AsyncStorage.getItem(username);
-        // console.log(storedImageUri);
-        if (storedImageUri) {
-            setSelectedPicture(storedImageUri);
-            setLogoUrl(storedImageUri);
+        try {
+            const storedImageUri = await AsyncStorage.getItem(username);
+            console.log('storedImageUri: ', storedImageUri);
+            if (storedImageUri) {
+                setSelectedPicture(storedImageUri);
+                setLogoUrl(storedImageUri);
+            }
+        } catch (error) {
+            AlertModal.showAlert('Error al cargar imagen. ', error);
         }
     }
 
@@ -235,6 +239,7 @@ const ProfileView = () => {
         setMovil(currentUser.celu);
         setEmail(currentUser.mail);
 
+        setLogoBase(currentUser.logo);
         setLogoUrl(loadImageFromBase64(currentUser.logo));
         setSelectedPicture(logoUrl);
 
@@ -245,7 +250,7 @@ const ProfileView = () => {
         setNewPass('');
 
         Dimensions.addEventListener('change', handleOrientationChange);
-        openImageSavedAsync();
+        // openImageSavedAsync();
 
         /**
          * esto sirve para controlar el teclado:
@@ -307,7 +312,7 @@ const ProfileView = () => {
                     />
                 </View>
  
-                { (user.type === 'customer') ? (      
+                { (user.type === 'customer') ? (
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}

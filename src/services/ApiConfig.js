@@ -3,7 +3,7 @@ class ApiConfig {
     constructor() {
         this.AZURE_HOST = 'https://agendateapp-api.azurewebsites.net/api/';
         this.LOCAL_HOST = 'https://186.48.52.221:9083/api/';
-        this.NGORK_HOST = 'https://c6fa-2800-a4-c13d-ec00-d84a-6ce4-66c9-f9a8.ngrok-free.app/api/';
+        this.NGORK_HOST = 'https://44ef-2800-a4-c0be-1300-ed5f-43dc-717c-86cd.ngrok-free.app/api/';
         this.API_BASE_URL = this.NGORK_HOST;
     }
 

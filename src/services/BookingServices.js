@@ -28,7 +28,7 @@ class BookingServices {
 
             axios.get(urlCompleta, options)
             .then(function (response) {
-                // console.log(response.data);
+                console.log(response.data);
                 if (response.status == 200) {
                     resolve(response.data);
                 } else {

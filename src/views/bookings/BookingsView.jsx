@@ -32,12 +32,12 @@ const BookingsView = ( params ) => {
     var type = currentUser.type;
 
     const [list, setList] = useState([]);
-    const [counter, setCounter] = useState([]);
+    const [counter, setCounter] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
+    const [showPanel, setShowPanel] = useState(true);
     const [dateSelected, setDateSelected] = useState(null);
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -55,15 +55,15 @@ const BookingsView = ( params ) => {
 
     const handleDateSelect = (day) => {
         var date = day.dateString;
-        console.log('date: ', date);
+        // console.log('date: ', date);
         setDateSelected(date);
-        console.log('dateSelected: ', dateSelected);
-     
+        // console.log('dateSelected: ', dateSelected);
+        setShowPanel(true);
         setShowModal(false);
     };
 
     const loadBookings = () => {
-        if (type !== 'none' && guid !== 'none') {
+        if (type !== 'none' && guid !== 'none' && dateSelected !== null) {
             if (type === 'customer') {
                 BookingController.getBookingsForCustomer(guid)
                 .then(bookingsReturn => {
@@ -75,6 +75,8 @@ const BookingsView = ( params ) => {
             } else {
                 ServicesController.getServicesForCompany(guid)
                 .then(serviceReturn => {
+                    // console.log('serviceReturn.id: ', serviceReturn.id);
+                    // console.log('dateSelected: ', dateSelected);
                     if (serviceReturn !== null) {
                         BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
                         .then(bookingsReturn => {
@@ -87,7 +89,7 @@ const BookingsView = ( params ) => {
                             }
                         })
                         .catch(error => {
-                            AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas de la Empresa '+error);
+                            AlertModal.showAlert('Mensaje', error);
                         });
                     }
                 })
@@ -98,11 +100,17 @@ const BookingsView = ( params ) => {
         }
     }
 
-    const showDatePicker= () => {
-        setDatePickerVisibility(true);      
+    const showDatePicker= (panel,modal) => {
+        setShowPanel(panel);
+        setShowModal(modal);
     }
 
     useEffect(() => {
+        console.log(navigation.getState());
+        const currentScreen = navigation.getState().key;
+        console.log(currentScreen);
+
+        setShowPanel(true);
         if (dateSelected === null) {
             setDateSelected(getFormattedDate());
         }
@@ -113,7 +121,7 @@ const BookingsView = ( params ) => {
 
     return (
         <View style={styles.container}>        
-            {type === 'company' ? (
+            {showPanel && type === 'company' ? (
                 <>
                     <FilterPanel 
                         onRefresh={onRefresh} 
@@ -121,6 +129,7 @@ const BookingsView = ( params ) => {
                         handleDateSelect={handleDateSelect} 
                         showModal={showModal}
                         setShowModal={setShowModal}
+                        showDatePicker={showDatePicker}
                         />
                     <View style={{ paddingVertical:25 }} />
                 </>

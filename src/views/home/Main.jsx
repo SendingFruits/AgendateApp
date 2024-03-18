@@ -18,6 +18,7 @@ import ProfileView from '../users/ProfileView';
 import PassChanger from '../users/PassChanger';
 import PassRecover from '../users/PassRecover';
 import ServiceCreate from '../services/ServiceCreate';
+import PromoCreate from '../promotions/PromoCreate';
 import Testing from '../utils/Testing';
 
 import React, { 
@@ -26,14 +27,16 @@ import React, {
 
 import { Keyboard } from 'react-native';
 
+import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Drawer = createDrawerNavigator();
- 
+
 const Main = ( params ) => {
+
+	const Drawer = createDrawerNavigator();
 
 	var {
 		isLogin,
@@ -78,7 +81,7 @@ const Main = ( params ) => {
 					}
 				}} > 
 				<Drawer.Navigator
-					options={{ title: null, headerShown: false, }}
+					// options={{ title: null, headerShown: false, }}
 					initialRouteName="Inicio"
 					drawerContent = { 
 						(props) => <Menu { ...props} params={menuParams} /> 
@@ -156,6 +159,20 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={PromosView} 
 						/>
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#135000', '#238162', '#dfe4ff']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="Crear Promo" 
+						// initialParams={ homeParams } 
+						component={PromoCreate} 
+						/>
+
+
 					<Drawer.Screen 
 						options={{
 							title: null,
