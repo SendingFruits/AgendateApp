@@ -2,9 +2,7 @@ import {
     AuthContext 
 } from '../../context/AuthContext';
 
-
-import { useNavigation } from '@react-navigation/native';
-import { getBase64FromUri, loadImageFromBase64, getOrientation } from '../utils/Functions'
+import { getBase64FromUri, loadImageFromBase64 } from '../utils/Functions'
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -27,6 +25,7 @@ import {
     TouchableOpacity,
     SafeAreaView,
     RefreshControl,
+    Keyboard,
     Image
 } from 'react-native';
 
@@ -36,28 +35,17 @@ const { width, height } = Dimensions.get('window');
 
 const CompanyPanel = () => {
 
-    const [widthMax, setWidthMax] = useState(width);
-    const [heightMax, setHeightMax] = useState(height);
-
     const { currentUser, setCurrentUser } = useContext(AuthContext);
-    console.log(currentUser);
+    // console.log(currentUser);
     var guid = currentUser.guid;
 
-    var initialContainer = {
-        flex: 1,
-        width: widthMax,
-        height: heightMax
-    };
-
     var sty = StyleSheet.create({});
-
     sty = StyleSheet.create({
         container: {
-            flex: 1,
-            width: widthMax, // o '100%'
-            height: heightMax, // o '100%'
-            // alignItems: 'center',
-            // borderRadius: 20,
+            top:-2,
+            width:width,
+            height:height,
+            flexDirection:'column',
         },
         header: {
             alignItems: 'center',
@@ -66,8 +54,8 @@ const CompanyPanel = () => {
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
             borderTopWidth: 2,
-            borderLeftWidth: 1,
-            borderRightWidth: 1,
+            // borderLeftWidth: 1,
+            // borderRightWidth: 1,
             borderColor: '#fff',
         },
         textHeader: {
@@ -76,7 +64,7 @@ const CompanyPanel = () => {
             padding: 10,
         },
         body: {
-            height: height - 225,
+            height: height-50,
             // marginTop: 20,
             marginHorizontal: 15,
             // borderRadius: 12,
@@ -127,7 +115,7 @@ const CompanyPanel = () => {
             backgroundColor:'#fff',
         },
         dataEditDesc: {
-            // width:297,
+            width:width-75.1,
             height:120,
             marginVertical:3,
             marginBottom:10,
@@ -166,7 +154,7 @@ const CompanyPanel = () => {
     
         footer: {
             position: 'absolute',
-            bottom: 0,
+            bottom: -15,
             left: -3,
             right: -3,
             
@@ -174,7 +162,7 @@ const CompanyPanel = () => {
             justifyContent: 'center', // Ajusta la alineación horizontal según tu diseño
             alignItems: 'center', // Ajusta la alineación vertical según tu diseño
             
-            marginTop: 10,
+            // marginTop: 10,
             borderWidth: 2,
             borderColor: '#fff',
         },
@@ -195,13 +183,14 @@ const CompanyPanel = () => {
 
     const [location, setLocation] = useState({latitude:currentUser.latitude, longitude:currentUser.longitude});
 
-
+    const [showSaveButtom, setShowSaveButtom] = useState(true);
+    
 
     const captureLocation = async () => {
         try {
             if (await MapController.requestLocationPermission() === 'granted') {
                 const region = await MapController.getLocation();
-                console.log(region);
+                // console.log(region);
                 setLocation(region);
             } else {
                 alert('No tiene permisos para obtener la ubicación.');
@@ -229,10 +218,9 @@ const CompanyPanel = () => {
 
 		UsersController.handleCompanyUpdate(formData)
 		.then(dataReturn => {
-			console.log('dataReturn: ', dataReturn);
+			// console.log('dataReturn: ', dataReturn);
 			if (dataReturn) {
 				AlertModal.showAlert('Envio Exitoso', 'Datos de la empresa Actualizados.');
-
                 // setRut('');
                 // setOwner('');
                 // setBusinessName('');
@@ -276,7 +264,7 @@ const CompanyPanel = () => {
 
     let openImageSavedAsync = async () => {
         const storedImageUri = await AsyncStorage.getItem(username);
-        console.log(storedImageUri);
+        // console.log(storedImageUri);
         if (storedImageUri) {
             setSelectedPicture(storedImageUri);
         }
@@ -287,29 +275,27 @@ const CompanyPanel = () => {
 		openLogoPickerAsync();
 	};
 
-    const handleOrientationChange = () => {
-        const { width, height } = Dimensions.get('window');
-        setWidthMax(width);
-        setHeightMax(height);
-
-        // if (getOrientation() === 'portrait') {
-        //     setContainer({
-        //         flex: 1,
-        //         width: widthMax,
-        //         height: heightMax
-        //     });
-        // } else {
-        //
-        // }
-    };
-
 	useEffect(() => {
 		
         setLogoBase(currentUser.logo);
         setLogoUrl(loadImageFromBase64(currentUser.logo));
         setSelectedPicture(logoUrl);
 
-        Dimensions.addEventListener('change', handleOrientationChange);
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', () => {
+                // console.log('Teclado abierto');
+				setShowSaveButtom(false);
+            }
+        );     
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                // console.log('Teclado cerrado');
+				setShowSaveButtom(true);
+            }
+        );
+
+        // Dimensions.addEventListener('change', handleOrientationChange);
 
         setTimeout(() => {
             if ((location.latitude === '' || location.latitude === 0)
@@ -323,10 +309,8 @@ const CompanyPanel = () => {
 
     return (
         <View style={sty.container}>
-            <LinearGradient
-                style={{flex: 1, padding: 8}}
-                colors={['#dfe4ff', '#238162', '#2ECC71']} 
-                >
+            <LinearGradient colors={['#dfe4ff', '#238162', '#2ECC71']} >
+                
                 <View style={sty.header}>
                     <Text style={sty.textHeader}>
                         Panel de Gestión
@@ -489,20 +473,41 @@ const CompanyPanel = () => {
                             </View>
                         </View>
         
+                        <View style={sty.row}>
+                            <View style={sty.column}>
+                                <Text>  </Text>
+                            </View>
+                            <View style={sty.column}>
+                                <Text>  </Text>
+                            </View>
+                        </View>
+
+                        <View style={sty.row}>
+                            <View style={sty.column}>
+                                <Text>  </Text>
+                            </View>
+                            <View style={sty.column}>
+                                <Text>  </Text>
+                            </View>
+                        </View>
+                        
                     </ScrollView>
                 </View>
 
-                <LinearGradient
-                    style={sty.footer}
-                    colors={['#2ECC71', '#238162', '#dfe4ff']} >
-                    <View style={{ marginTop :10}}>
-                        <MenuButtonItem 
-                            icon = {null}
-                            text = {'Guardar'}
-                            onPress={() => saveDataCompany()} />
-                    </View>
-                </LinearGradient>
-    
+                {showSaveButtom ? (
+                    <LinearGradient
+                        style={sty.footer}
+                        colors={['#2ECC71', '#238162', '#dfe4ff']} >
+                        <View style={{ marginTop :10}}>
+                            <MenuButtonItem 
+                                icon = {null}
+                                type = {'panel'}
+                                text = {'Guardar'}
+                                onPress={() => saveDataCompany()} />
+                        </View>
+                    </LinearGradient>
+                ): null}
+        
             </LinearGradient>
         </View>
     );

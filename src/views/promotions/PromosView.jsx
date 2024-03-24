@@ -32,7 +32,7 @@ const PromosView = ( params ) => {
     var guid = currentUser.guid; 
 
     const [list, setList] = useState(null);
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState({});
     const [isCreate, setIsCreate] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [orientation, setOrientation] = useState(getOrientation());
@@ -43,27 +43,17 @@ const PromosView = ( params ) => {
  
     const createItem = (guid) => {
         // console.log('create', guid);
-        navigation.navigate('Crear Promo', {isCreate, setIsCreate});
-    };
-
-    const premiumUpdate = () => {
-        console.log('premiumUpdate');
+        navigation.navigate('Crear Promo', {isCreate, setIsCreate, onRefresh });
     };
 
     const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
 			setRefreshing(false);
-            setEditing(false);
             getPromos();
 			// navigation.navigate('Servicios');
 		}, 2000);
-	}, []);
-
-    const handleOrientationChange = () => {
-		const newOrientation = getOrientation();
-		setOrientation(newOrientation);
-	};
+	}, [editMode,list]);
 
     const getPromos = async () => {
         if (guid !== 'none') {     
@@ -89,9 +79,11 @@ const PromosView = ( params ) => {
 					<PromoItem 
                         guid={guid}
                         key={index}
+                        index={index}
                         item={item} 
                         editMode={editMode}
-                        setEditMode={setEditMode}
+                        // setEditMode={setEditMode}
+                        setEditMode={() => toggleEditMode(index)}
                         onRefresh={onRefresh}
                         onPress={() => handleEditItem(item)}
                         navigation={navigation}
@@ -99,13 +91,24 @@ const PromosView = ( params ) => {
 				)
 			});
 		}
-		
 	};
     
+    const toggleEditMode = (index) => {
+        setEditMode((prevEditMode) => ({
+            ...prevEditMode,
+            [index]: !prevEditMode[index],
+        }));
+    };
 
     useEffect(() => {
         getPromos();
-        // console.log(list);
+        
+        if (list) {
+            const initialEditMode = list.reduce((acc, _, index) => {
+                return { ...acc, [index]: false };
+            }, {});
+            setEditMode(initialEditMode);
+        }
     }, [guid]);
 
 
@@ -126,22 +129,28 @@ const PromosView = ( params ) => {
                     alignItems:'center'
                 }}>
                     <Text>No tiene una promoción creada aún</Text>
-
-                    <LinearGradient
-                        colors={['#135054', '#a8ffff', '#fff']}
-                        start={{ x: 0.5, y: 0 }}
-                        end={{ x: 0.5, y: 1.5 }}
-                        style={styles.btnCreate}
-                        >
-                        <TouchableOpacity 
-                            styles={{ alignContent:'center' }}
-                            onPress={() => createItem(guid)} >
-                            <Text> Crear Promoción </Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
                 </View>
             )}
         
+            <View style={{ 
+                width: '100%',
+                // backgroundColor:'#555', 
+                justifyContent: 'flex-end', 
+                alignItems: 'center',
+            }}>
+                <LinearGradient
+                    colors={['#135054', '#a8ffff', '#fff']}
+                    start={{ x: 0.5, y: 0 }}
+                    end={{ x: 0.5, y: 1.5 }}
+                    style={styles.btnCreate}
+                    >
+                    <TouchableOpacity 
+                        styles={{ alignContent:'center' }}
+                        onPress={() => createItem(guid)} >
+                        <Text> Crear Promoción </Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+            </View>
         </View>
     );
 };

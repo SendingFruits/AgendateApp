@@ -16,14 +16,12 @@ import React, {
 import { 
 	Dimensions,
 	StyleSheet,
-	RefreshControl,
 	Text, 
 	View,
-	ScrollView,
 	Keyboard,
 	Image,
-	Button,
-	Modal
+	Modal,
+	TouchableOpacity
 } from 'react-native';
 
 import MapView, { Marker, Callout } from 'react-native-maps';
@@ -32,7 +30,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getOrientation } from '../../views/utils/Functions'; 
 
 import {
-	faBuilding
+	faBuilding, faLocationCrosshairs
 } from '@fortawesome/free-solid-svg-icons';
  
 import { 
@@ -46,7 +44,7 @@ const { width, height } = Dimensions.get('window');
 const HomeView = ( params ) => {
 	
 	const { currentUser } = useContext(AuthContext);
-	// console.log(params);
+
 	var {
 		coordinates,
 		item,
@@ -62,28 +60,17 @@ const HomeView = ( params ) => {
 
 	const mapRef = useRef(null);
 	var userLogin = currentUser;
-	
+	const navigation = useNavigation();
+
 	const [location, setLocation] = useState(null);
 	const [companies, setCompanies] = useState([]);
 	const [selectedMarker, setSelectedMarker] = useState(null);
-
-	
-	const navigation = useNavigation();
-
-	var otherLocation = {
-		latitude: -34.90477156839922,
-		latitudeDelta: 0.20354241619580193,
-		longitude: -56.180862206965685,
-		longitudeDelta: 0.13483230024576187
-	};
-
 	const [orientation, setOrientation] = useState(getOrientation());
-	const [refreshing, setRefreshing] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [ratio, setRatio] = useState(1);
 	const [fav, setFav] = useState(null);
-	
 	const [favoriteCallout, setFavoriteCallout] = useState(false);
+	const [showRatioPanel, setShowRatioPanel] = useState(true);
 
 
 	const errorPermission = async () => {
@@ -111,15 +98,6 @@ const HomeView = ( params ) => {
 		// console.log('error permisos');
 		AlertModal.showAlert('Mapa','No tiene permisos para obtener la ubicación.');
 	}
-
-	const onRefresh = React.useCallback(() => {
-		setRefreshing(true);
-		setTimeout(() => {
-			setRefreshing(false);
-			fetchData();
-			navigation.navigate('Inicio');
-		}, 2000);
-	}, []);
 
 	const fetchData = async () => {
 		try {
@@ -160,13 +138,8 @@ const HomeView = ( params ) => {
 		}
 	};
 
-	const handleOrientationChange = () => {
-		const newOrientation = getOrientation();
-		setOrientation(newOrientation);
-	};
- 
 	const handleRatioChange = (value) => {
-		console.log(value);
+		// console.log(value);
 		var rango = 0.0200;
 		if (location !== null) {
 			setRatio(value);
@@ -284,7 +257,6 @@ const HomeView = ( params ) => {
 	
 		return normalizedStr;
 	};
-
 
 	const handleSearch = (query) => {
 		try {
@@ -440,82 +412,119 @@ const HomeView = ( params ) => {
 		}
 	}
 	
-	const clearCache = async () => {
+	const myLocation = async () => {
 		try {
-			await AsyncStorage.clear();
-			console.log('Cache cleared successfully.');
+			const newRegion = {
+				latitude: location.latitude,
+				longitude: location.longitude,
+				latitudeDelta: 0.0200,
+				longitudeDelta: 0.0200,
+			};
+			// Centra el mapa en la ubicación de la empresa encontrada
+			mapRef.current.animateToRegion(newRegion); 
+			Keyboard.dismiss();
 		} catch (error) {
-		  	console.error('Error clearing cache:', error);
+		  	console.error('Error to set Location Device:', error);
 		}
 	};
 
 	useEffect(() => {
+
+		// navigation.dispatch(CommonActions.reset({
+		// 	index: 0,
+		// 	routes: [{ name: 'Inicio' }] 
+		// }));
+  
 		fetchData();
 		setShowModal(false);
 		setFavoriteCallout(false)
 
-		clearCache();
-
-		// console.log('favoriteCallout: ', favoriteCallout);
 		if ((coordinates !== null) && (coordinates !== undefined)) {
 			setFav(coordinates);
 		} 
 		else {
 			setFav(null);
 		}
-		Dimensions.addEventListener('change', handleOrientationChange);
+		
+		const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', () => {
+                // console.log('Teclado abierto');
+				setShowRatioPanel(false);
+            }
+        );     
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                // console.log('Teclado cerrado');
+				setShowRatioPanel(true);
+            }
+        );
+		
 	}, [ratio, countMap ]); // isConnected, ubicacion
 	// location - pasarle location para actualizar siempre que se geolocalice
 	// companies - pasarle companies para actualizar siempre las empresas - bug
 
 	return (
-		<ScrollView contentContainerStyle={styles.container} 
-			// refreshControl={
-			// 	<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-			// }
-		> 
+		<View style={styles.container}>
 			{userLogin.type === 'company' ? (
-				<View style={styles.conrolPanel}>
+				<>
 					<CompanyPanel dataCompany={userLogin} />
-				</View>
+				</>
 			) : (
-				<View>
-					{orientation === 'portrait' ? (
-						<View style={styles.search}>
-							<SearchPanel 
-								onSearch={handleSearch} 
-								mapRef={mapRef} 
-								width={width}
-								height={height}
-								/>
+				<>
+					<View style={styles.search}>
+						<SearchPanel 
+							onSearch={handleSearch} 
+							mapRef={mapRef} 
+							width={width}
+							height={height}
+							/>
+					</View>
+			
+					<View style={{
+							position:'absolute',
+							top: -43,
+							right: 14,
+							zIndex: 90,
+							// padding: 5
+						}}>
+						<TouchableOpacity style={{ flex:1,padding:6.2,borderRadius:15, backgroundColor:'#fff' }} 
+							onPress={() => myLocation()}>
+							<FontAwesomeIcon icon={faLocationCrosshairs} color={'#442'} size={24} />
+						</TouchableOpacity>
+					</View>
 
-							<Modal
-								visible={showModal} 
-								transparent={true}
-								animationIn="slideInRight" 
-								animationOut="slideOutRight"  
-								// animationType="fade" 
-								>
-								<View style={{ paddingHorizontal:85, paddingVertical:120 }}>	
-									<Text style={styles.alertNoLogin}> 
-										Debe ingresar como Cliente para poder realizar reservas
-									</Text>
-								</View>
-							</Modal>
+					<Modal
+						visible={showModal} 
+						transparent={true}
+						animationIn="slideInRight" 
+						animationOut="slideOutRight"  
+						// animationType="fade" 
+						>
+						<View style={{ paddingHorizontal:85, paddingVertical:120 }}>	
+							<Text style={styles.alertNoLogin}> 
+								Debe ingresar como Cliente para poder realizar reservas
+							</Text>
 						</View>
-					) : null }
-
+					</Modal>
+				
 					<MapView
 						ref={mapRef}
 						style={ orientation === 'portrait' 
 							? styles.mapPortrait : styles.mapLandscape 
 						}
+						tintColor={'#150'}
 						onRegionChange={onRegionChange}
 						initialRegion={location}
 						zoomEnabled={true}
 						zoomControlEnabled={true}
+						mapType={"standard"}
 						showsUserLocation={true}
-						showsMyLocationButton={true} 
+						showsMyLocationButton={false}
+						// followsUserLocation={true}
+						// paddingAdjustmentBehavior="automatic"
+						// minZoomLevel={0.0100}
+						// maxZoomLevel={0.0300}
 						>
 						{showCompanyLocations()}
 						{ userLogin.type === 'customer' ? (
@@ -523,64 +532,34 @@ const HomeView = ( params ) => {
 						) : null }
 					</MapView>
 					
-					<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
-						<RatioPanel onRatioChange={(newRatio) => handleRatioChange(newRatio)} />
-					</View>	
-				</View>
+					{showRatioPanel ? (
+						<View style={orientation === 'portrait' ? styles.ratioPanelPortrait : styles.ratioPanelLandscape}>
+							<RatioPanel onRatioChange={(newRatio) => handleRatioChange(newRatio)} />
+						</View>	
+					) : null }
+				</>
 			)}
-		</ScrollView>
+		</View>
 	);
 	
 };
 
 const styles = StyleSheet.create({
-	search: {
-		
-		// alignSelf:'center',
-		// marginHorizontal:50,
-		// marginVertical:15,
-		// width: width,
-
-		height: 1,
-		position:'absolute',
-        top: -20,
-        left: -50,
-        right: 0,
-        bottom: 0,
-        zIndex: 5,
-		backgroundColor:'#000'
-    },
 	container: {
-		flex: 1,
-		backgroundColor: '#fff',
+		flex: 0.92,
 		alignItems: 'center',
 		justifyContent: 'center',
-		margin: 8,
-		marginBottom: 16,
 	},
-	landscape: {
-		marginTop:25,
-	},
-	viewMap: {
+	search: {
+		position:'absolute',
+        zIndex: 90,
+        top: -77,
+		width:'80%',
+		// backgroundColor:'#000'
+    },
+	mapPortrait: {
 		width: width,
 		height: height,
-		alignItems: 'center',
-		justifyContent: 'center',
-		// backgroundColor:'#355B54',
-	},
-	map: {
-		flex: 1,
-		width: width-1,
-		height: height-1,
-		margin: 1,
-		padding: 1,
-	},
-	mapPortrait: {
-		flex: 1,
-		width: width-1,
-		height: height-1,
-		margin: 1,
-		padding: 1,
 	},
 	mapLandscape: {
 		flex: 2,
@@ -645,8 +624,8 @@ const styles = StyleSheet.create({
 	},
 	ratioPanelPortrait: {
 		position: 'absolute',
-		top: '88%',
-		left: '25%',
+		top: '96%',
+		left: '24%',
 		zIndex: 2,
 	},	
 	ratioPanelLandscape: {

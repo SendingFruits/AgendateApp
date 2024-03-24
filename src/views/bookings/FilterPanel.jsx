@@ -64,7 +64,7 @@ const FilterPanel = ( params ) => {
                         style={styles.closeModal}
                         onPress={() => setShowModal(false)} 
                         >
-                        <Text style={styles.cross}>x</Text>
+                        <Text style={styles.cross}>X</Text>
                     </TouchableOpacity>
                     <CalendarPicker handleDateSelect={handleDateSelect} />
                 </View>
@@ -102,15 +102,15 @@ const styles = StyleSheet.create({
 		marginHorizontal: 40,
 		marginVertical: 220,
 		paddingHorizontal: 20,
-		paddingVertical: 20,
+		paddingVertical: 50,
 		borderRadius: 20,
 		backgroundColor: 'white',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	closeModal: {
-        width:'90%',
-        marginTop: 10,
+        width:'97%',
+        marginTop: 8,
         flexDirection:'row',
 		justifyContent: 'flex-end',
 		alignItems: 'center',
@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
 	},
 	cross: {
 		color: 'gray',
-        fontSize: 20
+        fontSize: 20,
+        fontWeight:'bold'
 	},
 });
 

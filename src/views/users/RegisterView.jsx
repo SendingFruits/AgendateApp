@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 
 import UsersController from '../../controllers/UsersController';
+import MenuButtonItem from '../home/MenuButtonItem';
 import AlertModal from '../utils/AlertModal';
 
 import {
@@ -287,11 +288,14 @@ const RegisterView = () => {
 			<View style={styles.footer}>
 				{/* Button */}
 				<View style={styles.sendContainer}>
-					<Button
-						title="Enviar"
-						onPress={sendData}
-						color="#135944"
-					/>
+					
+					<MenuButtonItem 
+						icon = {null}
+						text = "Enviar"
+						type = 'panel'
+						color = {['#135000', '#2ECC71', '#dfe4ff']}
+						onPress = { () => login() }
+						/>
 				</View>
 			</View>
 

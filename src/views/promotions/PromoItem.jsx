@@ -1,10 +1,4 @@
-import { 
-    formatDate, convertHour, createDateTimeFromDecimalHour
-} from '../utils/Functions'; 
-
 import AlertModal from '../utils/AlertModal';
-import MultiPicker from '../utils/MultiPicker';
-import MenuButtonItem from '../home/MenuButtonItem';
 import PromosController from '../../controllers/PromosController';
 
 import { 
@@ -40,6 +34,7 @@ const PromoItem = (params) => {
 
     var {
         guid,
+        index,
         item,
         editMode,
         setEditMode,
@@ -53,7 +48,7 @@ const PromoItem = (params) => {
     const [asunto, setAsunto] = useState(item.asuntoMensaje);
     const [mensaje, setMensaje] = useState(item.cuerpoMensaje);
 
-
+    
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
@@ -70,9 +65,25 @@ const PromoItem = (params) => {
     };
 
     const deleteItem = () => {
-        var id = item.id;
-        console.log('quitar Promo: ', id);
-        onRefresh();
+        var id = params.item.id;
+        var text = '¿Seguro desea eliminar esta Promoción?';
+
+        AlertModal.showConfirmationAlert(text)
+		.then(alertRes => {
+			// console.log('alertRes: ', alertRes);
+			if (alertRes) {
+                PromosController.handlePromoDelete(id)
+                .then(deleted => {
+                    onRefresh();
+                })
+                .catch(error => {
+                	AlertModal.showAlert('Hubo un error', error);
+                });
+            }
+		})
+		.catch(error => {
+			AlertModal.showAlert('Hubo un error', error);
+		});
     };
 
     const saveItem = () => {
@@ -88,7 +99,7 @@ const PromoItem = (params) => {
             mensaje,
 		};
 
-		ServicesController.handleServiceUpdate(formData)
+		PromosController.handlePromoUpdate(formData)
 		.then(servReturn => {
 			// console.log('servReturn: ', servReturn);
 			if (servReturn) {
@@ -102,9 +113,36 @@ const PromoItem = (params) => {
 		});
     };
 
+    const sendPromo = () => {
+        console.log(item);
+        var text = 'Está a punto de enviar de forma masiva esta Promoción por Correo Electrónico.\n'
+            +'El envio soporta un limite máximo de 500 destinatarios y no podrás volver a enviar promociones por una semana.\n'
+            +'¿Desea continuar?';
+        AlertModal.showBoolAlert(text)
+		.then(alertRes => {
+			// console.log('alertRes: ', alertRes);
+			if (alertRes) {
+                PromosController.handlePromoSend(item.id)
+                .then(senReturn => {
+                    if (senReturn) {
+                        AlertModal.showAlert('Envio Exitoso','Se envió la promoción correctamente');
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    // AlertModal.showAlert('Errro de Envio', error);
+                });
+            }
+		})
+		.catch(error => {
+            console.log(error);
+			// AlertModal.showAlert('Hubo un error', error);
+		});
+    }
+
 
 	useEffect(() => {
-        setEditMode(false);
+        // setEditMode(false);
         setAsunto(item.asuntoMensaje);
         setMensaje(item.cuerpoMensaje);
         setBodyHeight(130);
@@ -112,7 +150,8 @@ const PromoItem = (params) => {
     
     return (
         <View style={styles.container}>
-            {!editMode ? (
+            {/* {console.log(editMode.key)} */}
+            {!editMode[index] ? (
                 <>
                     <TouchableOpacity onPress={() => toggleCollapse()} >
                         <LinearGradient
@@ -169,32 +208,6 @@ const PromoItem = (params) => {
                                             </View>
                                         </View>
 
-                                        {/* <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Direccion:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.direccionEmpresa}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Servicio:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.nombreServicio}</Text>
-                                            </View>
-                                        </View>
-                                        <View style={styles.row}>
-                                            <View style={styles.columnT}>
-                                                <Text style={styles.label}>Tipo:</Text>
-                                            </View>
-                                            <View style={styles.columnV}>
-                                                <Text> {item.tipoServicio}</Text>
-                                            </View>
-                                        </View> */}
-
-        
                                     </ScrollView>
                                 </View>
                             </LinearGradient>
@@ -206,7 +219,7 @@ const PromoItem = (params) => {
                                     start={{ x: 0.2, y: 1.2 }}
                                     end={{ x: 1.5, y: 0.5 }} 
                                     >
-                                    <>
+                                    <View style={styles.rowInvi}>
                                         <LinearGradient
                                             style={styles.cancel}
                                             colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
@@ -217,15 +230,26 @@ const PromoItem = (params) => {
                                             <TouchableOpacity
                                                 onPress={() => editItem()}> 
                                                 <Text style={{color:'#000', textAlign:'center' }}>Editar</Text>
-                                            </TouchableOpacity>   
+                                            </TouchableOpacity>
                                         </LinearGradient>
-                                    </>
+
+                                        <LinearGradient
+                                            style={styles.cancel}
+                                            colors={['#d8ffff', '#D0E4D0', '#2ECC71']}
+                                            // colors={['#135054', '#e9e9f8', '#efffff']} 
+                                            start={{ x: 0.2, y: 1.2 }}
+                                            end={{ x: 1.5, y: 0.5 }} 
+                                            >       
+                                            <TouchableOpacity
+                                                onPress={() => sendPromo()}> 
+                                                <Text style={{color:'#000', textAlign:'center' }}>Enviar</Text>
+                                            </TouchableOpacity>
+                                        </LinearGradient>
+                                    </View>
                                 </LinearGradient>
                             </View>
                         </View>
-                    ) : (
-                        null
-                    )}
+                    ) : ( null )}
                 </>
             ) : (
                 <>
@@ -391,6 +415,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderBottomWidth: 0.5,
         borderBottomColor: '#000',
+
+    },
+    rowInvi: {
+        flexDirection: 'row',
+        marginBottom: 10,
 
     },
 

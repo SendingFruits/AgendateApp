@@ -106,9 +106,9 @@ const BookingsView = ( params ) => {
     }
 
     useEffect(() => {
-        console.log(navigation.getState());
+        // console.log(navigation.getState());
         const currentScreen = navigation.getState().key;
-        console.log(currentScreen);
+        // console.log(currentScreen);
 
         setShowPanel(true);
         if (dateSelected === null) {

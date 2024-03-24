@@ -1,5 +1,5 @@
 import { 
-	AuthProvider 
+	AuthContext, AuthProvider
 } from '../../context/AuthContext';
 
 import HomeView from './HomeView';
@@ -22,7 +22,7 @@ import PromoCreate from '../promotions/PromoCreate';
 import Testing from '../utils/Testing';
 
 import React, { 
-	useEffect, useState 
+	useContext, useEffect 
 } from 'react';
 
 import { Keyboard } from 'react-native';
@@ -45,14 +45,12 @@ const Main = ( params ) => {
 		setIsConnected,
 	} = params;
 
-	const [currentUser, setCurrentUser] = useState({});
+	// const { currentUser, setCurrentUser } = useContext(AuthContext);
 
 	var menuParams = {
 		isLogin:isLogin,
 		setIsLogin:setIsLogin,
 		main:params,
-		currentUser:currentUser,
-		setCurrentUser:setCurrentUser
 	}
 
 	var homeParams = {
@@ -93,7 +91,8 @@ const Main = ( params ) => {
 							headerBackground: () =>
 								<LinearGradient 
 									colors={['#135000', '#238162', '#dfe4ff']} 
-									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+									style={{ width:50, }} 
+									/>, 
 						}}
 						name="Inicio" 
 						initialParams={homeParams} 
@@ -229,7 +228,7 @@ const Main = ( params ) => {
 							headerBackground: () =>
 								<LinearGradient 
 									colors={['#fff','#fff']} 
-									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+									style={{ opacity:50 }} />, 
 						}}
 						name="Login" 
 						// initialParams={ menuParams } 

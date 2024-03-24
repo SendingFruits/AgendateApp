@@ -51,7 +51,7 @@ const LoginView = ( params ) => {
 			if (userReturn != null) {
 
 				var user = JSON.parse(userReturn);
-				console.log('user: ', user);
+				// console.log('user: ', user);
 				var currentUser = {
 					guid: user.id,
 					name: user.nombre,
@@ -95,11 +95,19 @@ const LoginView = ( params ) => {
 
 	return (
 		<View style={styles.container}>
+			<View style={{
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0,
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}><Image source={require('../../../assets/greenBack.png')} style={styles.gif} />
+			</View>
 			<View style={styles.body}>
 				<Image source={require('../../../assets/icon.png')} style={styles.avatar} />
-
 				<Text style={styles.title}>Bienvenido</Text>
-
 				<View style={styles.inputContainer}>
 					{/* <Image source={require('../../resources/images/user_login_1.png')} style={styles.inputIcon} /> */}
 					<FontAwesomeIcon icon={faUser} style={styles.icon} />
@@ -108,9 +116,9 @@ const LoginView = ( params ) => {
 						value={username}
 						onChangeText={setUsername}
 						placeholder="Usuario"
+						placeholderTextColor="#565"
 					/>
 				</View>
-
 				<View style={styles.inputContainer}>
 					{/* <Image source={require('../../resources/images/pass_login_1.png')} style={styles.inputIcon} /> */}
 					<FontAwesomeIcon icon={faLock} style={styles.icon} />
@@ -119,42 +127,39 @@ const LoginView = ( params ) => {
 						value={password}
 						onChangeText={setPassword}
 						placeholder="Contraseña"
+						placeholderTextColor="#565"
 						secureTextEntry
 					/>
 				</View>
-
 				<View style={styles.checkboxContainer}>
 					{/* <CheckBox value={rememberMe} onValueChange={setRememberMe} /> */}
 					{/* <Text style={styles.checkboxText}>Recordar mi usuario</Text> */}
 					{/* <Text style={styles.forgotPasswordText}>¿Olvidaste la contraseña?</Text> */}
 				</View>
-
 				<MenuButtonItem 
 					icon = {null}
 					text = "Iniciar Sesión"
+					type = 'login'
 					// color = {['#dfe4ff', '#238162', '#2ECC71']}
-					color = {['#135f44', '#2ECC71', '#dfe4ff']}
+					color = {['#135000', '#2ECC71', '#dfe4ff']}
 					onPress = { () => login() }
 					/>
-
-
 				<View style={styles.recoveryContainer}>
 					<Text>¿Olvidaste tu contraseña?</Text>
 					<View style={{ flexDirection:'row' }}>
 						<TouchableOpacity
 							onPress = { () => navigation.navigate('Recuperar')} >
-							<Text style={{ color:"#135f44" }}> Recuperar</Text>
+							<Text style={{ color:"#f35f44", fontWeight:'bold' }}> Recuperar </Text>
 						</TouchableOpacity>
 					</View>
 				</View>
-
 				<View style={styles.registerContainer}>
 					<Text>¿Sos nuevo?</Text>
 					<View style={{ flexDirection:'row' }}>
-						<Text>Registrate </Text>
+						<Text> Registrate </Text>
 						<TouchableOpacity
 							onPress = { () => navigation.navigate('Registro de Usuario')} >
-							<Text style={{ color:"#135f44" }}>Aquí</Text>
+							<Text style={{ color:"#f35f44", fontWeight:'bold' }}>Aquí</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -218,6 +223,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		color: 'black',
 		fontWeight: 'bold',
+		color:'#000'
 	},
 	checkboxContainer: {
 		flexDirection: 'row',

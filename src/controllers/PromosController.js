@@ -6,7 +6,7 @@ class PromosController {
 		return new Promise((resolve, reject) => {
 			// console.log('getPromosForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
-				throw new Error('Debe pertenecer a una empresa.');
+				reject('Debe pertenecer a una empresa.');
 			}
 
 			PromosServices.getPromosList(guid)
@@ -28,20 +28,11 @@ class PromosController {
 	handlePromoUpdate(data) {
 		return new Promise((resolve, reject) => {
 		
-			if (data.nombre == '') {
-				throw new Error('Falta el Nombre.');
+			if (data.asunto == '') {
+				reject('Falta el Asunto.');
 			}
-			if (data.tipo == '') {
-				throw new Error('Falta el Tipo.');
-			}
-			if (data.comienzo == '') {
-				throw new Error('Falta la hora de Comienzo.');
-			}
-			if (data.termino == '') {
-				throw new Error('Falta la hora de Termino.');
-			}
-			if (data.dias == '') {
-				throw new Error('Falta seleccionar los dias.');
+			if (data.mensaje == '') {
+				reject('Falta el Mensaje.');
 			}
 
 			console.log('data: ', data);
@@ -49,32 +40,11 @@ class PromosController {
 
 			var dataConvert = {	
 				id: data.id,
-				nombre: data.nombre,
-				tipoServicio: data.tipo,
-				costo: data.costo,
-				horaInicio: data.comienzo,
-				horaFin: data.termino,
-				duracionTurno: data.turno,
-				descripcion: data.descripcion,
-				diasDefinidosSemana: data.selectedDias,
-				idEmpresa: data.guid
+				asuntoMensaje: data.asunto,
+				cuerpoMensaje: data.mensaje,
 			}
 
-			// console.log('dataConvert: ', dataConvert);
-
-			// {
-			// 	"costo": "1300",
-			// 	"descripcion": "Descripcion del Servicio de prueba...",
-			// 	"diasDefinidosSemana": "Lunes;Martes;Miercoles;Jueves;",
-			// 	"duracionTurno": 60,
-			// 	"horaFin": 17.5,
-			// 	"horaInicio": 8.5,
-			// 	"idEmpresa": 2,
-			// 	"nombre": "Prueba de Servicio asd asasd",
-			// 	"tipoServicio": "Prueba 2"
-			// }
-
-			PromosServices.putServiceData(dataConvert)
+			PromosServices.putPromo(dataConvert)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -87,7 +57,7 @@ class PromosController {
 	handlePromoDelete(guid) {
 		return new Promise((resolve, reject) => {
 		
-			PromosServices.deleteService(guid)
+			PromosServices.deletePromo(guid)
 			.then(servReturn => {
 				resolve(servReturn);
 			})
@@ -100,42 +70,39 @@ class PromosController {
 	handlePromoCreate(data) {
 		return new Promise((resolve, reject) => {
 			
-			if (data.nombre == '') {
-				throw new Error('Falta el Nombre.');
+			if (data.asunto == '') {
+				reject('Falta el Asunto.');
 			}
-			if (data.tipo == '') {
-				throw new Error('Falta el Tipo.');
+			if (data.mensaje == '') {
+				reject('Falta el Mensaje.');
 			}
-			if (data.comienzo == '') {
-				throw new Error('Falta la hora de Comienzo.');
-			}
-			if (data.termino == '') {
-				throw new Error('Falta la hora de Termino.');
-			}
-			if (data.dias == '') {
-				throw new Error('Falta seleccionar algun dia.');
-			}
-
-			// var dias = data.diasList.filter(Boolean).join(';');
-
-			descReplace = data.descripcion.replace(/\n/g, "\\n");
 
 			var dataConvert = {	
-				// id: data.id,
-				nombre: data.nombre,
-				tipoServicio: data.tipo,
-				costo: data.costo,
-				horaInicio: data.comienzo,
-				horaFin: data.termino,
-				duracionTurno: data.turno,
-				descripcion: descReplace,
-				diasDefinidosSemana: data.selectedDias,
-				idEmpresa: data.guid
+				asuntoMensaje: data.asunto,
+				cuerpoMensaje: data.mensaje,
+				empresaId: data.guid,
 			}
 			
 			console.log('dataConvert: ', dataConvert);
 
-			PromosServices.postServiceData(dataConvert)
+			PromosServices.postPromo(dataConvert)
+			.then(srvReturn => {
+				resolve(srvReturn);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
+	}
+
+	handlePromoSend(id) {
+		return new Promise((resolve, reject) => {
+			
+			if (id == '') {
+				reject('No hay promoción.');
+			}
+			
+			PromosServices.postSendPromo(id)
 			.then(srvReturn => {
 				resolve(srvReturn);
 			})

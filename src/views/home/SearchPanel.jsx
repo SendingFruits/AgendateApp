@@ -17,15 +17,12 @@ import {
 	FontAwesomeIcon 
 } from '@fortawesome/react-native-fontawesome';
 
-import { LinearGradient } from 'expo-linear-gradient';
 
 const SearchPanel = ( params ) => {
 
     var {
         onSearch,
-        mapRef,
         width,
-		height,
     } = params;
 
     const styles = StyleSheet.create({
@@ -37,8 +34,8 @@ const SearchPanel = ( params ) => {
             left: 0,
             right: 0,
             bottom: 0,
-            marginVertical:20,
-            marginHorizontal:100,
+            marginVertical:19,
+            marginHorizontal:23,
             borderWidth: 0.8,
             borderColor:'#393',
             borderRadius: 10,
@@ -59,21 +56,6 @@ const SearchPanel = ( params ) => {
         onSearch(searchQuery);
     };
     
-    // return (
-    //     // <LinearGradient colors={['#dfe4ff', '#238162', '#2ECC71']} >
-    //         <View style={styles.searchPanel}>
-    //             <LinearGradient colors={['#dfe4ff', '#238162', '#2ECC71']} ></LinearGradient>
-    //             <TextInput
-    //                 style={styles.input}
-    //                 // placeholder="Buscar Empresa"
-    //                 value={searchQuery}
-    //                 onChangeText={setSearchQuery}
-    //                 />
-    //             {/* <Button title="Buscar" color="#69ACDD" onPress={handleSearch} /> */}
-    //         </View>
-    //     // </LinearGradient>
-    // );
-
     return (
         // <LinearGradient colors={['#dfe4ff', '#ffffee']} style={styles.gradient}>
         <View style={styles.gradient}>

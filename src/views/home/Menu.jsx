@@ -15,6 +15,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
+import { CommonActions } from '@react-navigation/native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 
 import { 
@@ -37,7 +38,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Menu = ( params ) => {	
-
+	
 	const { navigation } = params;
     const { 
 		isLogin, setIsLogin, currentUser, setCurrentUser, setNavigation 
@@ -69,12 +70,23 @@ const Menu = ( params ) => {
 			'noti':'none', 
         });
 		clearCache();
-		navigation.reset({
+
+		/**
+		 * Hay dos metodos diferentes para resetear la navegacion, en esta ocasión cualquiera funciona
+		 */
+		// console.log('CommonActions',CommonActions);
+		navigation.dispatch(CommonActions.reset({
 			index: 0,
-			routes: [
-			  { name: 'Inicio' },
-			],
-		});
+			routes: [{ name: 'Inicio' }]
+		}));
+
+		// antes
+		// navigation.reset({
+		// 	index: 0,
+		// 	routes: [
+		// 	  { name: 'Inicio' },
+		// 	],
+		// });
 		setNavigation(navigation);
 	};
 	
@@ -212,12 +224,6 @@ const Menu = ( params ) => {
 }
 
 const styles = StyleSheet.create({
-	main: {
-		flex: 1,
-	},
-	touchMenu: {
-		flex: 1,
-	},
 	header: {
 		height: 30,
 		marginBottom: 25,

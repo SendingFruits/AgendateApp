@@ -5,11 +5,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import AlertModal from '../utils/AlertModal';
-import DaysSelector from '../utils/DaysSelector';
 import MenuButtonItem from '../home/MenuButtonItem';
-import ServicesController from '../../controllers/ServicesController';
-
-import { Picker } from '@react-native-picker/picker';
+import PromosController from '../../controllers/PromosController';
 
 import { 
     useContext, useState, useEffect 
@@ -33,13 +30,13 @@ const PromoCreate = ( params ) => {
     
     var {
         isCreate,
-        setIsCreate
+        setIsCreate,
+        onRefresh
     } = params.route.params;
 
     const { currentUser } = useContext(AuthContext);
     const navigation = useNavigation();
 
-    var jsonString = '{"Lunes": {"horaInicio": 0,"horaFin": 0},\n"Martes": {"horaInicio": null,"horaFin": null},\n"Miercoles": {"horaInicio": null,"horaFin": null},\n"Jueves": {"horaInicio": null,"horaFin": null},\n"Viernes": {"horaInicio": null,"horaFin": null},\n"Sabado": {"horaInicio": null,"horaFin": null},\n"Domingo": {"horaInicio": null,"horaFin": null}}';
     var edit = false;
 
     const [bodyHeight, setBodyHeight] = useState(480); 
@@ -52,27 +49,23 @@ const PromoCreate = ( params ) => {
     const saveItem = () => {
 
         const formData = {
-			nombre,
-			tipo,
-			costo,
-			turno,
-			descripcion,
-			dias,
-            guid:currentUser.guid,
+			asunto,
+			mensaje,
+            guid:currentUser.guid
 		};
 
-		ServicesController.handlePromoCreate(formData)
+		PromosController.handlePromoCreate(formData)
 		.then(servReturn => {
 			console.log('servReturn: ', servReturn);
 			if (servReturn) {
-                AlertModal.showAlert('Envio Exitoso', 'Se creó el Servicio');
+                AlertModal.showAlert('Envio Exitoso', 'Se creó la Promoción');
                 setIsCreate(true);
-                navigation.navigate('Servicios', { isCreate });
-                // navigation.goBack();
+                navigation.navigate('Promociones', { isCreate });
+                onRefresh();
 			}
 		})
 		.catch(error => {
-			alert(error);
+			AlertModal.showAlert('Error', 'No se pudo crear la Promoción\n'+ error);
 		});
     };
 
@@ -88,7 +81,7 @@ const PromoCreate = ( params ) => {
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow', () => {
                 // console.log('Teclado abierto');
-                setMarginStatusTop(20);
+                setMarginStatusTop(50);
                 setBodyHeight(450);
             }
         );     
@@ -280,7 +273,7 @@ const styles = StyleSheet.create({
         color:'#fff'
     },
     dataEdit: {
-        textAlign:'right',
+        textAlign:'left',
         paddingRight:5,
         backgroundColor:'#fff'
     }
