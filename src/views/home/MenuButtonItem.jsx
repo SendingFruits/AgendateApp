@@ -28,7 +28,7 @@ const MenuButtonItem = ({ icon, text, type, color, onPress }) => {
 
 	return (
 		<>
-			{ type === 'login' ? (
+			{   type === 'login' ? (
 				<LinearGradient
 					colors={colorButton}
 					start={{ x: 0.02, y: 0.50 }}
@@ -38,8 +38,6 @@ const MenuButtonItem = ({ icon, text, type, color, onPress }) => {
 					<TouchableOpacity onPress={onPress} >
 						<View style={styles.container}>
 							{icon && <FontAwesomeIcon icon={icon} style={styles.icon} />}
-							
-							{/* <Text style = {styles.text}>{text}</Text> */}
 							<Text style={[styles.text, icon ? null : { textAlign: 'center' }]}>{text}</Text>
 						</View>
 					</TouchableOpacity>
@@ -54,8 +52,20 @@ const MenuButtonItem = ({ icon, text, type, color, onPress }) => {
 					<TouchableOpacity onPress={onPress} >
 						<View style={styles.container}>
 							{icon && <FontAwesomeIcon icon={icon} style={styles.icon} />}
-							
-							{/* <Text style = {styles.text}>{text}</Text> */}
+							<Text style={[styles.text, icon ? null : { textAlign: 'center' }]}>{text}</Text>
+						</View>
+					</TouchableOpacity>
+				</LinearGradient>
+			) : type === 'capture' ? (
+				<LinearGradient
+					colors={colorButton}
+					start={{ x: 0.02, y: 0.50 }}
+					end={{ x: 1.55, y: 1.55 }}
+					style={styles.btnGral}
+					>
+					<TouchableOpacity onPress={onPress} >
+						<View style={styles.containerCapture}>
+							{icon && <FontAwesomeIcon icon={icon} style={styles.icon} />}
 							<Text style={[styles.text, icon ? null : { textAlign: 'center' }]}>{text}</Text>
 						</View>
 					</TouchableOpacity>
@@ -111,8 +121,13 @@ const styles = StyleSheet.create({
 		borderRadius: 15
 	},
 	container: {
-		flexDirection: 'row', // Alinea los elementos en una fila
-		alignItems: 'center', // Alinea los elementos verticalmente al centro
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	containerCapture: {
+		flexDirection: 'row',
+		justifyContent:'center',
+		alignItems: 'center',
 	},
 	image: {
 		height: 35,

@@ -83,6 +83,14 @@ const CompanyPanel = () => {
             flex: 1, // Ocupar espacio igual en ambas columnas
             paddingHorizontal: 5, // Espacio horizontal entre columnas
         },
+        columnT: {
+            flex: 0.65, 
+            paddingHorizontal: 5, 
+        },
+        columnV: {
+            flex: 1, 
+            paddingHorizontal: 5,
+        },
         space: {
             width: 20
         },
@@ -277,6 +285,7 @@ const CompanyPanel = () => {
 
 	useEffect(() => {
 		
+        // console.log(logoBase);
         setLogoBase(currentUser.logo);
         setLogoUrl(loadImageFromBase64(currentUser.logo));
         setSelectedPicture(logoUrl);
@@ -325,47 +334,44 @@ const CompanyPanel = () => {
                             <View style={sty.space}>
                             </View> 
         
-                            <View style={sty.column}>
-        
+                            <View style={sty.columnT}>
                                 <View style={sty.btnCaptureLocation}>
                                     <MenuButtonItem 
                                         icon = {null}
+                                        type = {'capture'}
                                         text = {'Captar Ubicación'}
                                         onPress={() => captureLocation()}
                                     />
                                 </View>
-                                
-                                {/* <TouchableOpacity 
-                                    style={sty.btnCaptureLocation}
-                                    onPress={() => captureLocation()}
-                                    >
-                                    <Text style={sty.txtbtnCapture}>Captar Ubicación</Text>
-                                </TouchableOpacity> */}
-                                
                             </View> 
         
-                            <View style={sty.column}>
-                                <Text style={sty.txtCoord}>Coordenadas:</Text>
-        
-                                {(location !== null) ? (
-                                    <View>
-                                        <Text style={sty.txtLat}> Lat:{location.latitude}</Text>
-                                        <Text style={sty.txtLng}> Lng:{location.longitude}</Text>
-                                    </View>
-                                ) : 
-                                    <View>
-                                        <Text style={sty.txtLat}> Lat:</Text>
-                                        <Text style={sty.txtLng}> Lng:</Text>
-                                        {/* {alert('No tiene una ubicación definida,'
-                                            +'\npuede indicar una con el botón'
-                                            +'\n"Capatar Ubicación"')} */}
-                                    </View>
-                                }
+                            <View style={sty.columnV}>
+                                <View style={{
+                                    marginHorizontal:20,
+                                    marginBottom:10
+                                }}>    
+                                    <Text style={sty.txtCoord}>Coordenadas:</Text>
+            
+                                    {(location !== null) ? (
+                                        <View>
+                                            <Text style={sty.txtLat}> Lat:{location.latitude}</Text>
+                                            <Text style={sty.txtLng}> Lng:{location.longitude}</Text>
+                                        </View>
+                                    ) : 
+                                        <View>
+                                            <Text style={sty.txtLat}> Lat:</Text>
+                                            <Text style={sty.txtLng}> Lng:</Text>
+                                            {/* {alert('No tiene una ubicación definida,'
+                                                +'\npuede indicar una con el botón'
+                                                +'\n"Capatar Ubicación"')} */}
+                                        </View>
+                                    }
+                                </View>
                             </View>
                         </View> 
         
                         <View style={sty.row}>
-                            <View style={sty.column}>
+                            <View style={sty.columnT}>
                                 <Text style={sty.dataLabel}>RUT:</Text>
                                 <Text style={sty.dataLabel}>Propietario:</Text>
                                 <Text style={sty.dataLabel}>Razón Social:</Text>
@@ -373,7 +379,7 @@ const CompanyPanel = () => {
                                 <Text style={sty.dataLabel}>Ciudad:</Text>
                                 <Text style={sty.dataLabel}>Dirección:</Text>
                             </View> 
-                            <View style={sty.column}>
+                            <View style={sty.columnV}>
                                 <TextInput 
                                     editable={false}
                                     keyboardType="numeric"
@@ -422,15 +428,6 @@ const CompanyPanel = () => {
                             </SafeAreaView>
                         </View> 
         
-                        {/* <View style={sty.row}>
-                            <View style={sty.column}>
-                                <Text>  </Text>
-                            </View>
-                            <View style={sty.column}>
-                                <Text>  </Text>
-                            </View>
-                        </View> */}
-        
                         <View style={sty.row}>
                             <View>
                                 <View style={sty.imageContainer}>
@@ -451,10 +448,14 @@ const CompanyPanel = () => {
                                 </View>
                             </View>
                             <View style={sty.column}>
-                                <Text>Elija el logo de su Empresa </Text>
+                                {logoBase === '' ? (
+                                    <Text>Elija el logo de su Empresa </Text>
+                                ) : null}
                             </View>
                         </View>
         
+
+
                         <View style={sty.row}>
                             <View style={sty.column}>
                                 <Text>  </Text>

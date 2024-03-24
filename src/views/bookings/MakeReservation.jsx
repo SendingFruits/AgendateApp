@@ -44,7 +44,7 @@ const MakeReservation = ( params ) => {
 	const navigation = useNavigation();
 	const { currentUser } = useContext(AuthContext);
 	var user = currentUser;
-	console.log('user: ', user);
+	// console.log('user: ', user);
 	const scrollViewRef = useRef(null);
 
 	const [days, setDays] = useState([]);

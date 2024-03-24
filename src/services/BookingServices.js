@@ -143,13 +143,13 @@ class BookingServices {
             var urlCompleta = `${ApiConfig.API_BASE_URL}`;
 
             if (status === 'cancel') {
-                method += 'Reservas/CancelarReserva';
-                urlCompleta += `${ApiConfig.API_BASE_URL}${method}?idReserva=${guid}`;
+                method = 'Reservas/CancelarReserva';
+                urlCompleta += `${method}?idReserva=${guid}`;
             }
             if (status === 'done') {
                 var sts = 'Realizada';
-                method += 'Reservas/CambiarEstadoReserva';
-                urlCompleta += `${ApiConfig.API_BASE_URL}${method}?idReserva=${guid}&estadoNuevo=${sts}`;
+                method = 'Reservas/CambiarEstadoReserva';
+                urlCompleta += `${method}?idReserva=${guid}&estadoNuevo=${sts}`;
             }
 
             const headers = {

@@ -155,7 +155,7 @@ const ProfileView = () => {
         // console.log('formData: ', formData);
         UsersController.handleUpdate(formData,currentUser.type)
         .then(userReturn => {
-			console.log('ProfileView userReturn: ', userReturn);
+			// console.log('ProfileView userReturn: ', userReturn);
 			if (userReturn) {
 				alert('Los datos del usuario se han actualizado.');
                 setCurrentUser({

@@ -81,7 +81,7 @@ const ScheduleList = ( params ) => {
     }
 
     const createReservation = (item) => {
-		console.log('item: ', item);
+		// console.log('item: ', item);
 		// setSelectedItem(item);
 		setSelectedHour(item.fechaHora);
 		setShowModal(true);
@@ -119,12 +119,12 @@ const ScheduleList = ( params ) => {
 	};
 
 	const scheduleList = () => {
-		console.log(idServer);
+		// console.log(idServer);
 		if (idServer !== '' && day !== '') {
 			SchedulesController.getSchedulesForService(idServer,day)
 			.then(schedulesReturn => {
 				// console.log('schedulesReturn: ', schedulesReturn);        
-				console.log('schedulesReturn.resultado: ', schedulesReturn.resultado);        
+				// console.log('schedulesReturn.resultado: ', schedulesReturn.resultado);        
 				if (typeof schedulesReturn.resultado !== 'string') {
 					setAvailableTimes(schedulesReturn.resultado);
 				} 

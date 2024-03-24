@@ -1,4 +1,4 @@
-import { formatDate, getDateFromString } from '../../views/utils/Functions'; 
+import { formatDate, getFormattedDate, getDateFromString } from '../../views/utils/Functions'; 
 
 import { 
     useState, useEffect 
@@ -55,10 +55,6 @@ const BookingItem = ( params ) => {
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
-  
-    const editItem = () => {
-        console.log('editItem');
-    };
 
     const editName = () => {
         console.log('editName');
@@ -66,28 +62,40 @@ const BookingItem = ( params ) => {
 
 
     const done = (id) => {
-        console.log('done of: ', id);
-        var text = '¿El cliente asitió en forma y hora al lugar?';
+        
+        // console.log('fechaHoraTurno:',item.fechaHoraTurno);
+        // console.log('fechaHoraHoy:',getFormattedDate(1));
+     
+        const fechaHoraTurno = new Date(item.fechaHoraTurno);
+        const fechaHoraHoy = new Date(getFormattedDate(1));
 
-        AlertModal.showBoolAlert(text)
-		.then(alertRes => {
-			console.log('alertRes: ', alertRes);
-			if (alertRes) {
-                BookingController.handleDoneBooking(id)
-                .then(resDone => {
-                    // console.log('userReturn: ', userReturn);
-                    if (resDone) {
-                        onRefresh();
-                    }
-                })
-                .catch(error => {
-                    AlertModal.showAlert('ERROR', error);
-                });
-            }
-		})
-		.catch(error => {
-			alert(error);
-		});
+        if (fechaHoraTurno >= fechaHoraHoy) {
+            console.log('El turno es mayor o igual a hoy.');
+            AlertModal.showAlert('Confirmación', 'El turno aún no ocurió, no puede darla por Realizada');
+        } else {
+            console.log('El turno es menor a hoy.');
+            var text = '¿El cliente asitió en forma y hora al lugar?';
+    
+            AlertModal.showBoolAlert(text)
+            .then(alertRes => {
+                if (alertRes) {
+                    BookingController.handleDoneBooking(id)
+                    .then(resDone => {
+                        // console.log('userReturn: ', userReturn);
+                        if (resDone) {
+                            onRefresh();
+                        }
+                    })
+                    .catch(error => {
+                        AlertModal.showAlert('ERROR', error);
+                    });
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
+        }
+
     };
 
     const cancellation = (id) => {

@@ -44,12 +44,7 @@ const BookingsView = ( params ) => {
 		setTimeout(() => {
 			setRefreshing(false);
             loadBookings(guid, type);
-
-            if (type === 'company') {
-                navigation.navigate('Agenda');
-            } else {
-                navigation.navigate('Reservas');
-            }
+            navigation.navigate('Reservas');
 		}, 2000);
 	}, []);
 
@@ -63,7 +58,7 @@ const BookingsView = ( params ) => {
     };
 
     const loadBookings = () => {
-        if (type !== 'none' && guid !== 'none' && dateSelected !== null) {
+        if (type !== 'none' && guid !== 'none') {
             if (type === 'customer') {
                 BookingController.getBookingsForCustomer(guid)
                 .then(bookingsReturn => {
@@ -73,29 +68,31 @@ const BookingsView = ( params ) => {
                     AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas del Cliente '+error);
                 });
             } else {
-                ServicesController.getServicesForCompany(guid)
-                .then(serviceReturn => {
-                    // console.log('serviceReturn.id: ', serviceReturn.id);
-                    // console.log('dateSelected: ', dateSelected);
-                    if (serviceReturn !== null) {
-                        BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
-                        .then(bookingsReturn => {
-                            if (bookingsReturn.length > 0) {
-                                setCounter(bookingsReturn.length);
-                                setList(bookingsReturn);
-                            } else {
-                                setCounter(0);
-                                setList([]);
-                            }
-                        })
-                        .catch(error => {
-                            AlertModal.showAlert('Mensaje', error);
-                        });
-                    }
-                })
-                .catch(error => {
-                    AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas de la Empresa '+error);
-                });
+                if (dateSelected !== null) {
+                    ServicesController.getServicesForCompany(guid)
+                    .then(serviceReturn => {
+                        // console.log('serviceReturn.id: ', serviceReturn.id);
+                        // console.log('dateSelected: ', dateSelected);
+                        if (serviceReturn !== null) {
+                            BookingController.getBookingsForCompany(serviceReturn.id,dateSelected)
+                            .then(bookingsReturn => {
+                                if (bookingsReturn.length > 0) {
+                                    setCounter(bookingsReturn.length);
+                                    setList(bookingsReturn);
+                                } else {
+                                    setCounter(0);
+                                    setList([]);
+                                }
+                            })
+                            .catch(error => {
+                                AlertModal.showAlert('Mensaje', error);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        AlertModal.showAlert('ERROR', 'No se pudo cargar las Reservas de la Empresa '+error);
+                    });
+                }
             }
         }
     }
