@@ -176,7 +176,7 @@ const CompanyPanel = () => {
         },
     });
 
-    
+
     const [rut, setRut] = useState(currentUser.rut);
     const [owner, setOwner] = useState(currentUser.owner);
     const [businessName, setBusinessName] = useState(currentUser.businessName);

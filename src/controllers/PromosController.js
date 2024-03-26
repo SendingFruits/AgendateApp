@@ -3,6 +3,7 @@ import PromosServices from '../services/PromoServices';
 class PromosController {
 
 	getPromosForCompany(guid) {
+		console.log('getPromosForCompany',guid);
 		return new Promise((resolve, reject) => {
 			// console.log('getPromosForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
@@ -24,8 +25,8 @@ class PromosController {
 		});
 	}
 
-
 	handlePromoUpdate(data) {
+		console.log('handlePromoUpdate',data);
 		return new Promise((resolve, reject) => {
 		
 			if (data.asunto == '') {
@@ -55,6 +56,7 @@ class PromosController {
 	}
 
 	handlePromoDelete(guid) {
+		console.log('handlePromoDelete',guid);
 		return new Promise((resolve, reject) => {
 		
 			PromosServices.deletePromo(guid)
@@ -68,6 +70,7 @@ class PromosController {
 	}
 
 	handlePromoCreate(data) {
+		console.log('handlePromoCreate',data);
 		return new Promise((resolve, reject) => {
 			
 			if (data.asunto == '') {
@@ -96,6 +99,7 @@ class PromosController {
 	}
 
 	handlePromoSend(id) {
+		console.log('handlePromoSend',id);
 		return new Promise((resolve, reject) => {
 			
 			if (id == '') {
@@ -112,6 +116,5 @@ class PromosController {
 		});
 	}
 }
-
 
 export default new PromosController();

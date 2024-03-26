@@ -1,15 +1,3 @@
-import AlertModal from '../utils/AlertModal';
-import MultiPicker from '../utils/MultiPicker';
-import MenuButtonItem from '../home/MenuButtonItem';
-import ServicesController from '../../controllers/ServicesController';
-
-import { 
-    formatDate, convertHour, createDateTimeFromDecimalHour
-} from '../utils/Functions'; 
-
-import { Picker } from '@react-native-picker/picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
 import { 
     useState, useEffect 
 } from 'react';
@@ -18,7 +6,6 @@ import {
     Dimensions,
     StyleSheet, 
     Text,
-    TextInput,
     View,
     ScrollView,
     TouchableOpacity,
@@ -26,7 +13,6 @@ import {
 
 import {
     faMapMarker,
-    faClose,
     faStar
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -36,18 +22,13 @@ import {
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-
 const { width, height } = Dimensions.get('window');
 
 const FavoriteItem = (params) => {
     
-    // console.log('FavoriteItem: ', params);
-
     var {
         item,
         edit,
-        guid,
-        onRefresh,
         navigation,
     } = params;
 
@@ -55,54 +36,19 @@ const FavoriteItem = (params) => {
     const [bodyHeight, setBodyHeight] = useState(280); 
     const [editMode, setEditMode] = useState(edit);
 
-    const [nombre, setNombre] = useState(item.nombre);
-    const [tipo, setTipo] = useState(item.tipoServicio);
-    const [costo, setCosto] = useState(item.costo);
-    const [comienzo, setComienzo] = useState(item.horaInicio);
-    const [termino, setTermino] = useState(item.horaFin);
-    const [turno, setTurno] = useState(item.duracionTurno);
-
-
-    const [comienzoHora,setComienzoHora]= useState(convertHour(item.horaInicio,'toHours'));
-    const [terminoHora, setTerminoHora] = useState(convertHour(item.horaFin, 'toHours'));
-
-    const [descripcion, setDescription] = useState(item.descripcion);
-
-
-    var [selectedDias, setSelectedDias] = useState(item.diasDefinidosSemana);
-    var [diasListArray, setDiasListArray] = useState([]);
-    
-
-
 
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
   
-    
     const goToMap = (coordinates, item) => {
         // console.log(coordinates);
         navigation.navigate('Inicio', {coordinates, item});
     }
    
-
-    const switchItem = () => {
-        console.log('quitar Favorito');
-        var id = params.item.id;
-        
-        onRefresh();
-    };
-
-
 	useEffect(() => {
         setBodyHeight(130);
-		// setIsCollapsed(true);
-
-        // console.log('selectedDias: ',selectedDias);
-        if ((selectedDias !== undefined) && (selectedDias.length > 0)) {
-            var listAux = selectedDias.split(';');
-            setDiasListArray(listAux);
-        }
+		
 	}, [edit]);
     
     return (
@@ -219,7 +165,6 @@ const FavoriteItem = (params) => {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {

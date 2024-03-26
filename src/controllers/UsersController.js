@@ -1,15 +1,10 @@
 import UserServices from '../services/UserServices';
 import CompanyServices from '../services/CompanyServices';
 
-
 class UsersController {
 
-	constructor(navigation) {
-		this.navigation = navigation;
-	}
-
-
 	handleLogin(username, password) {
+		console.log('handleLogin',username);
 		return new Promise((resolve, reject) => {
 
 			if (username == '') {
@@ -32,6 +27,7 @@ class UsersController {
 	}
 
 	handleRegister(data) {
+		console.log('handleRegister',data);
 		return new Promise((resolve, reject) => {
 			
 			// console.log(data);
@@ -110,6 +106,7 @@ class UsersController {
 	}
 
 	handleUpdate(data, type) {
+		console.log('handleUpdate', ' -'+data+' -'+type);
 		return new Promise((resolve, reject) => {
 		
 			if (data.type === 'customer' 
@@ -178,6 +175,7 @@ class UsersController {
 	}
 
 	handleUpdatePass(data) {
+		console.log('handleUpdatePass',data);
 		return new Promise((resolve, reject) => {
 
 			if (data.old === '') {
@@ -209,6 +207,7 @@ class UsersController {
 	}
 
 	handleRecoveryPass(dataJSON) {
+		console.log('handleRecoveryPass',dataJSON);
 		return new Promise((resolve, reject) => {
 
 			console.log('dataJSON: ', dataJSON);
@@ -242,8 +241,8 @@ class UsersController {
 		});
 	}
 
-
 	getCompanyData(guid) {
+		console.log('getCompanyData',guid);
 		return new Promise((resolve, reject) => {
 			// console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
@@ -266,26 +265,12 @@ class UsersController {
 	}
 
 	handleCompanyUpdate(data) {
+		console.log('handleCompanyUpdate',data);
 		return new Promise((resolve, reject) => {
 		
 			if (data.rut == '') {
 				reject('Falta el RUT.');
 			}
-			// if (data.owner == '') {
-			// 	reject('Falta el Nombre del Propietario.');
-			// }
-			// if (data.businessName == '') {
-			// 	reject('Falta el Razon Social.');
-			// }
-			// if (data.category == '') {
-			// 	reject('Falta el Rubro.');
-			// }
-			// if (data.address == '') {
-			// 	reject('Falta la Dirección.');
-			// }
-			// if (data.description == '') {
-			// 	reject('Falta la Ddescripción.');
-			// }
 
 			if (data.location.latitude === undefined) data.location.latitude = 0.0;
 			if (data.location.longitude === undefined) data.location.longitude = 0.0; 
@@ -320,6 +305,7 @@ class UsersController {
 	}
 
 	handleDelete(id) {
+		console.log('handleDelete',id);
 		return new Promise((resolve, reject) => {
 			UserServices.putDelete(id)
 			.then(userReturn => {
@@ -330,7 +316,6 @@ class UsersController {
 			});
 		});
 	}
-
 }
 
 export default new UsersController();

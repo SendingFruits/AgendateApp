@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 class MapController {
 
     getLocation = async () => {
-        // console.log('getLocation');
+        console.log('getLocation');
         try {
             const locationOptions = {
                 accuracy: Location.Accuracy.BestForNavigation,
@@ -31,6 +31,7 @@ class MapController {
     };
 
     requestLocationPermission = async () => {
+        console.log('requestLocationPermission');
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             throw new Error('Permiso de acceso a la ubicación denegado.');
@@ -39,6 +40,7 @@ class MapController {
     };
 
     searchCompany = async (name) => {
+        console.log('searchCompany');
         return new Promise((resolve, reject) => {
 			// console.log('getServicesForCompany', guid);
 			if ((name == '') || (name == undefined)) {
@@ -61,6 +63,7 @@ class MapController {
     };
 
     companyLocations = async (loc,cte) => {
+        console.log('companyLocations', loc);
         var list = await MapServices.getCompanies(loc.latitude,loc.longitude,cte);
         // console.log('list: ',list);
         if (list !== undefined) {
@@ -84,9 +87,6 @@ class MapController {
         } else {
             return null;
         }
-    };
-
-    getServicesForCompany = async (idCompany) =>  {
     };
 
 }

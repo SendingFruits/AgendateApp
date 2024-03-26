@@ -39,7 +39,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const MakeReservation = ( params ) => {
 	
 	var idSelect = params.route.params;
-	console.log(idSelect);
+	console.log('Seleccion de ID:',idSelect);
 
 	const navigation = useNavigation();
 	const { currentUser } = useContext(AuthContext);
@@ -68,11 +68,12 @@ const MakeReservation = ( params ) => {
 			setCalendarVisible(true);
 			setSchedulesVisible(false);
 			navigation.navigate('Realizar Reserva');
+			console.log(refreshing);
 		}, 2000);
 	}, []);
 	
-
 	const isFavorite = (serv_id) => {
+		console.log('isFavorite', serv_id);
 		if (user.guid !== 'none') {
 			FavoritesController.getFavorite(user.guid,serv_id)
 			.then(favoReturn => {
@@ -82,16 +83,14 @@ const MakeReservation = ( params ) => {
 				}
 			})
 			.catch(error => {
-				alert(error);
+				AlertModal.showAlert('ERROR',error);
 			});
 		}
 	}
 
 	const switchFavorite = (idServicio) => {
 
-		// console.log(user);
-		// console.log(idServicio);
-
+		console.log('switchFavorite',idServicio);
         var idCliente = user.guid;
 		var idServicio = idServicio;
 
@@ -101,16 +100,16 @@ const MakeReservation = ( params ) => {
 				setFavorite(false);
 			})
 			.catch(error => {
-				alert(error);
+				AlertModal.showAlert('ERROR',error);
 			});
 		} else {
 			FavoritesController.handleFavoriteCreate({idCliente,idServicio})
 			.then(favoReturn => {
-				// console.log('return create: ', favoReturn);
+				console.log('return create: ', favoReturn);
 				setFavorite(true);
 			})
 			.catch(error => {
-				alert(error);
+				AlertModal.showAlert('ERROR',error);
 			});
 		}
     };
@@ -148,7 +147,6 @@ const MakeReservation = ( params ) => {
 			// Manejar errores aquí
 		}
 	};
-
 
 	useEffect(() => {
 		fetchData();

@@ -1,10 +1,9 @@
 import CompanyServices from '../services/CompanyServices';
 
-
 class ServicesController {
 
-
 	getServicesForCompany(guid) {
+		console.log('getServicesForCompany',guid);
 		return new Promise((resolve, reject) => {
 			// console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
@@ -28,6 +27,7 @@ class ServicesController {
 	}
 
 	getServicesOfCompany(guid) {
+		console.log('getServicesOfCompany',guid);
 		return new Promise((resolve, reject) => {
 			console.log('getServicesForCompany', guid);
 			if ((guid == '') || (guid == undefined)) {
@@ -50,9 +50,8 @@ class ServicesController {
 		});
 	}
 
-
-
 	handleServiceUpdate(data) {
+		console.log('handleServiceUpdate',data);
 		return new Promise((resolve, reject) => {
 		
 			if (data.nombre == '') {
@@ -98,6 +97,7 @@ class ServicesController {
 	}
 
 	handleServiceDelete(guid) {
+		console.log('handleServiceDelete',guid);
 		return new Promise((resolve, reject) => {
 		
 			CompanyServices.deleteService(guid)
@@ -111,6 +111,7 @@ class ServicesController {
 	}
 
 	handleServiceCreate(data) {
+		console.log('handleServiceCreate',data);
 		return new Promise((resolve, reject) => {
 			
 			if (data.nombre == '') {
@@ -150,6 +151,5 @@ class ServicesController {
 		});
 	}
 }
-
 
 export default new ServicesController();

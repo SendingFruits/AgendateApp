@@ -3,6 +3,7 @@ import BookingServices from '../services/BookingServices';
 class SchedulesController {
 
 	getSchedulesForService(guid, date) {
+		console.log('getSchedulesForService',' -'+guid+' -'+date);
 		return new Promise((resolve, reject) => {
 
 			// console.log('service', guid);

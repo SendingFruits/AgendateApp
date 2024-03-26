@@ -3,17 +3,23 @@
     "version": "7.4.0"
   },
   "build": {
+    "ngrok": {
+      "android": {
+        "buildType":"apk"
+      },
+      "channel": "ngrok"
+    },
+    "azure": {
+      "android": {
+        "buildType":"apk"
+      },
+      "channel": "azure"
+    },
     "testing": {
       "android": {
         "buildType":"apk"
       },
       "channel": "testing"
-    },
-    "testing_ngrok": {
-      "android": {
-        "buildType":"apk"
-      },
-      "channel": "testing_ngrok"
     },
     "preview": {
       "android": {

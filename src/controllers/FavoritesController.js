@@ -3,6 +3,7 @@ import FavoriteServices from '../services/FavoriteServices';
 class FavoriteController {
 
 	getFavoritesForService(guid) {
+		console.log('getFavoritesForService',guid);
 		return new Promise((resolve, reject) => {
 		
 			if ((guid == '') || (guid == undefined)) {
@@ -25,6 +26,7 @@ class FavoriteController {
 	}
 
 	getFavorite(idCliente,idServicio) {
+		console.log('getFavorite',' -'+idCliente+' -'+idServicio);
 		return new Promise((resolve, reject) => {
 		
 			if ((idServicio == '') || (idServicio == undefined)) {
@@ -49,8 +51,8 @@ class FavoriteController {
 		});
 	}
 
-
 	handleFavoriteDelete(guid) {
+		console.log('handleFavoriteDelete',guid);
 		return new Promise((resolve, reject) => {
 		
 			FavoriteServices.deleteFavorite(guid)
@@ -64,6 +66,7 @@ class FavoriteController {
 	}
 
 	handleFavoriteCreate(data) {
+		console.log('handleFavoriteCreate',data);
 		return new Promise((resolve, reject) => {
 			
 			if (data.idcliente == '') {

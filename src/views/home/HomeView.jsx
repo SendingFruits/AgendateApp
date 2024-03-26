@@ -52,8 +52,7 @@ const HomeView = ( params ) => {
 		setIsConnected,
 	} = params.route.params || {};
 
-	
-	// console.log('isConnected: ', isConnected);
+	console.log('isConnected: ', isConnected);
 	// console.log('setIsConnected: ', setIsConnected);
 
 	var countMap = 0;
@@ -362,8 +361,9 @@ const HomeView = ( params ) => {
 	const favoriteTarget = (coordinates, item) => {
 		if (item !== null && item !== undefined) {
 			if (coordinates !== null) {
-				// console.log(coordinates);
-				// console.log(item);
+				console.log('companies',companies);
+				console.log('coordinates',coordinates);
+				console.log('item',item);
 				var empresa = item;
 
 				var newCoord = {
@@ -374,39 +374,44 @@ const HomeView = ( params ) => {
 				};
 
 				mapRef.current.animateToRegion(newCoord); 
-			
+				const idEmpresaExistente = companies.some(company => company.id === item.idEmpresa);
+
 				return (
-					<Marker
-						// key={index}
-						pinColor='#0af'
-						coordinate={newCoord}
-						onPress={() => {
-							setSelectedMarker(item)
-							setFavoriteCallout(true)
-						}}
-						anchor={{ x: 0.5, y: 0.5 }} 
-						>
-	
-						<View>
-							<FontAwesomeIcon style={{ 
-								color:'#fa0', borderColor:'#0af', borderWidth: 1, zIndex: 1
-								}} icon={faBuilding} size={35} />
-						</View>
-	
-						{favoriteCallout && (
-							<Callout 
-								style={styles.openCallout}
-								onPress={() => handleReservation(userLogin, empresa)} 
+					<>
+						{!idEmpresaExistente ? (
+							<Marker
+								// key={index}
+								pinColor='#0af'
+								coordinate={newCoord}
+								onPress={() => {
+									setSelectedMarker(item)
+									setFavoriteCallout(true)
+								}}
+								anchor={{ x: 0.5, y: 0.5 }} 
 								>
-								<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
-									<Text style={styles.title}>{item.razonSocial}</Text>
-									{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+			
+								<View>
+									<FontAwesomeIcon style={{ 
+										color:'#fa0', borderColor:'#0af', borderWidth: 1, zIndex: 1
+										}} icon={faBuilding} size={35} />
 								</View>
-								<Text style={styles.description}>{item.descripcionEmpresa}</Text>
-							</Callout>
-						)}
-						
-					</Marker>
+			
+								{favoriteCallout && (
+									<Callout 
+										style={styles.openCallout}
+										onPress={() => handleReservation(userLogin, empresa)} 
+										>
+										<View style={{ flexDirection:'row', alignContent:'space-between', alignItems:'center' }}>
+											<Text style={styles.title}>{item.razonSocial}</Text>
+											{/* <FontAwesomeIcon style={{ color:'#fa0' }} icon={faStar} /> */}
+										</View>
+										<Text style={styles.description}>{item.descripcionEmpresa}</Text>
+									</Callout>
+								)}
+								
+							</Marker>
+						) : null }
+					</>
 				);
 			}
 		}
@@ -446,6 +451,9 @@ const HomeView = ( params ) => {
 			setFav(null);
 		}
 		
+		console.log('favorites Coordinates',fav);
+		// console.log('selectedMarker',selectedMarker);
+
 		const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow', () => {
                 // console.log('Teclado abierto');

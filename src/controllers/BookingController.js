@@ -1,10 +1,9 @@
-// import ServiceModel from '../models/ServiceModel';
 import BookingServices from '../services/BookingServices';
-import { getFormattedDate } from '../views/utils/Functions'; 
 
 class BookingController {
 
     getBookingsForCustomer = async (guid) => {
+		console.log('getBookingsForCustomer',guid);
 		return new Promise((resolve, reject) => {
 			// console.log('guid', guid);
 			if ((guid == '') || (guid == undefined)) {
@@ -27,6 +26,7 @@ class BookingController {
     };
 
     getBookingsForCompany = async (guid, date) => {
+		console.log('getBookingsForCompany',guid);
 		return new Promise((resolve, reject) => {
 
 			// console.log('guid', guid);
@@ -50,8 +50,8 @@ class BookingController {
 		});
     };
 
-
 	handleCreateBooking(data) {
+		console.log('handleCreateBooking',data);
 		return new Promise((resolve, reject) => {
 			
 			console.log('data: ', data);
@@ -82,6 +82,7 @@ class BookingController {
 	}
 
 	handleCancelBooking(guid) {
+		console.log('handleCancelBooking',guid);
 		return new Promise((resolve, reject) => {
 			
 			BookingServices.putBookingStatus(guid, 'cancel')
@@ -95,6 +96,7 @@ class BookingController {
 	}
 
 	handleDoneBooking(guid) {
+		console.log('handleDoneBooking',guid);
 		return new Promise((resolve, reject) => {
 			
 			BookingServices.putBookingStatus(guid, 'done')

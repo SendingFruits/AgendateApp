@@ -294,7 +294,7 @@ const RegisterView = () => {
 						text = "Enviar"
 						type = 'panel'
 						color = {['#135000', '#2ECC71', '#dfe4ff']}
-						onPress = { () => login() }
+						onPress = { () => sendData() }
 						/>
 				</View>
 			</View>
