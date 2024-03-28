@@ -5,13 +5,18 @@ import React, { useState } from 'react';
 const App = () => {
 
 	const [isConnected, setIsConnected] = useState(true);
-	
+	// const [navigation, setNavigation] = useState(null);
+	// console.log(navigation);
 	return (
 		<>
 			{isConnected ? <>
-				<Main isConnected={isConnected} setIsConnected={setIsConnected} />
+				<Main isConnected={isConnected} setIsConnected={setIsConnected} 
+				// setNavigation={setNavigation} 
+				/>
 			</> : <>
-				<BaseError errorType={'api'} setIsConnected={setIsConnected} />
+				<BaseError errorType={'api'} setIsConnected={setIsConnected} 
+				// navigation={navigation}
+				/>
 			</> }
 		</>
 	);

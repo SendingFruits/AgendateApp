@@ -16,7 +16,6 @@ import {
 	ScrollView,
 	RefreshControl,
 	TextInput,
-	Button,
 } from 'react-native';
 
 const RegisterView = () => {

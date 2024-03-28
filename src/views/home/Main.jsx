@@ -20,6 +20,7 @@ import PassRecover from '../users/PassRecover';
 import ServiceCreate from '../services/ServiceCreate';
 import PromoCreate from '../promotions/PromoCreate';
 import Testing from '../utils/Testing';
+import BaseError from '../utils/BaseError';
 
 import React, { 
 	useContext, useEffect 
@@ -37,15 +38,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 const Main = ( params ) => {
 
 	const Drawer = createDrawerNavigator();
-
+	console.log(params);
 	var {
 		isLogin,
 		setIsLogin,
 		isConnected,
 		setIsConnected,
+		// setNavigation,
 	} = params;
 
-	// const { currentUser, setCurrentUser } = useContext(AuthContext);
+	// const { navigation } = useContext(AuthContext);
 
 	var menuParams = {
 		isLogin:isLogin,
@@ -60,6 +62,7 @@ const Main = ( params ) => {
 
 	useEffect(() => {
 		// setCurrentUser(current_User);
+		// setNavigation(navigation);
 	}, []);
 
 	return (
@@ -221,6 +224,19 @@ const Main = ( params ) => {
 						// initialParams={ homeParams } 
 						component={Testing} 
 						/>
+
+					<Drawer.Screen 
+						options={{
+							title: null,
+							headerBackground: () =>
+								<LinearGradient 
+									colors={['#135000', '#238162', '#dfe4ff']} 
+									style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />, 
+						}}
+						name="BaseError" 
+						// initialParams={ homeParams } 
+						component={BaseError} 
+						/>	
 		
 					<Drawer.Screen 
 						options={{

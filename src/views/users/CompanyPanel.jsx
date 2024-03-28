@@ -201,7 +201,7 @@ const CompanyPanel = () => {
                 // console.log(region);
                 setLocation(region);
             } else {
-                alert('No tiene permisos para obtener la ubicación.');
+                AlertModal.showAlert('No tiene permisos para obtener la ubicación.','');
             }
         } catch (error) {
             console.log('ERROR captureLocation: '+error);
@@ -250,7 +250,7 @@ const CompanyPanel = () => {
 		let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 		// console.log(permissionResult.granted);
 		if (permissionResult.granted === false) {
-			alert('Se requiere permisos de acceso a la camara.');
+			AlertModal.showAlert('Se requiere permisos de acceso a la camara.', '');
 			return;
 		}
 
@@ -310,7 +310,7 @@ const CompanyPanel = () => {
             if ((location.latitude === '' || location.latitude === 0)
              && (location.longitude === '' || location.longitude === 0)
             ) {
-                alert('Tu empresa no se verá en el mapa hasta que captures tu ubicación y la guardes.');
+                AlertModal.showAlert('','Tu empresa no se verá en el mapa hasta que captures tu ubicación y la guardes.');
             }
         }, 3000);
 
@@ -361,9 +361,6 @@ const CompanyPanel = () => {
                                         <View>
                                             <Text style={sty.txtLat}> Lat:</Text>
                                             <Text style={sty.txtLng}> Lng:</Text>
-                                            {/* {alert('No tiene una ubicación definida,'
-                                                +'\npuede indicar una con el botón'
-                                                +'\n"Capatar Ubicación"')} */}
                                         </View>
                                     }
                                 </View>
